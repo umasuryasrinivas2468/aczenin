@@ -1,8 +1,19 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://images.dmca.com/Badges/DMCABadgeHelper.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const footerLinks = [
     {
@@ -96,12 +107,27 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm mb-4 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+            <p className="text-gray-400 text-sm">
               © {currentYear} Aczen. All rights reserved.
             </p>
-            <div className="text-sm text-gray-500">
-              Aczen Technologies Private Limited
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <span className="text-sm text-gray-500">
+                Aczen Technologies Private Limited
+              </span>
+              <a
+                href="//www.dmca.com/Protection/Status.aspx?ID=90f39a87-413e-4014-8582-665d422b6871"
+                title="DMCA.com Protection Status"
+                className="dmca-badge"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://images.dmca.com/Badges/dmca-badge-w100-2x1-02.png?ID=90f39a87-413e-4014-8582-665d422b6871"
+                  alt="DMCA.com Protection Status"
+                  className="h-6"
+                />
+              </a>
             </div>
           </div>
         </div>
@@ -111,3 +137,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

@@ -12,6 +12,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Compliance from "./pages/Compliance";
 import Careers from "./pages/Careers";
+import Agoda from "./pages/Agoda";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/compliance" element={<Compliance />} />
           <Route path="/careers" element={<Careers />} />
+          <Route path="/agoda" element={<Agoda />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

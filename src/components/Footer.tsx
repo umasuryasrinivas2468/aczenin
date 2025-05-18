@@ -20,6 +20,7 @@ const Footer = () => {
       title: "Company",
       links: [
         { name: "About Us", href: "/about" },
+        { name: "Our Story", href: "/our-story" },
         { name: "Careers", href: "https://tally.so/r/3XB2PO" },
         { name: "Press", href: "/press" },
         { name: "Blog", href: "/blog" },

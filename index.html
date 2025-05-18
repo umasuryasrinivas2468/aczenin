@@ -8,14 +8,14 @@
     <meta name="description" content="Experience hassle-free banking tailored for your business growth with SMEPower. Get smart invoicing, instant loans, and 24/7 dedicated support." />
     <meta name="author" content="SMEPower" />
 
-    <meta property="og:title" content="SMEPower - Banking Simplified for Indian SMEs" />
+    <meta property="og:title" content="Aczen - Banking Simplified for Indian SMEs" />
     <meta property="og:description" content="Experience hassle-free banking tailored for your business growth with SMEPower. Get smart invoicing, instant loans, and 24/7 dedicated support." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:image" content="https://media.licdn.com/dms/image/v2/D560BAQFOTeQhIGaxPg/company-logo_200_200/company-logo_200_200/0/1712337246601?e=2147483647&v=beta&t=B1VBeH0wgcMDzozDp59T_ladTTrmcVFa_SXjbEpgPZQ" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@smepower" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:image" content="https://media.licdn.com/dms/image/v2/D560BAQFOTeQhIGaxPg/company-logo_200_200/company-logo_200_200/0/1712337246601?e=2147483647&v=beta&t=B1VBeH0wgcMDzozDp59T_ladTTrmcVFa_SXjbEpgPZQ" />
 
     <!-- Verification Meta Tag -->
     <meta name="agd-partner-manual-verification" />
@@ -31,6 +31,43 @@
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Chatbase Chatbot Integration -->
+    <script>
+      (function(){
+        if(!window.chatbase||window.chatbase("getState")!=="initialized"){
+          window.chatbase=(...arguments)=>{
+            if(!window.chatbase.q){window.chatbase.q=[]}
+            window.chatbase.q.push(arguments)
+          };
+          window.chatbase=new Proxy(window.chatbase,{
+            get(target,prop){
+              if(prop==="q"){return target.q}
+              return(...args)=>target(prop,...args)
+            }
+          })
+        }
+        const onLoad=function(){
+          const script=document.createElement("script");
+          script.src="https://www.chatbase.co/embed.min.js";
+          script.id="YREz_QoD10_nSG2H8WN6Y";
+          script.domain="www.chatbase.co";
+          document.body.appendChild(script)
+        };
+        if(document.readyState==="complete"){
+          onLoad()
+        }else{
+          window.addEventListener("load",onLoad)
+        }
+      })();
+      
+      // Configure chatbot to customize footer text
+      window.addEventListener('chatbase:ready', function() {
+        window.chatbase('updateBranding', {
+          poweredByText: 'Powered by Aczen'
+        });
+      });
+    </script>
   </body>
 </html>
 

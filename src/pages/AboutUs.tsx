@@ -10,7 +10,7 @@ const AboutUs = () => {
       id: 1,
       name: "Uma Surya Srinivas B",
       title: "Executive Chairman",
-      image: "https://media.licdn.com/dms/image/v2/D5603AQE-le_OLA6O1g/profile-displayphoto-shrink_400_400/B56ZNwmo36G4Ag-/0/1732761018809?e=1750896000&v=beta&t=xtiLvg3Tx69qj3pRgNt4PMYarrAMmMMzUYvqooLU3XU",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQG_sPsDzDElVQ/profile-displayphoto-shrink_400_400/B56ZbjEPWuH4Ag-/0/1747566262232?e=1753315200&v=beta&t=SsC7qe3xyqNaKZ3kugtTzO7UtMTxloa6V5ZwpjCB9wI",
       bio: "Uma Surya Srinivas B is a young and visionary entrepreneur currently serving as the Managing Director of Aczen Technologies Pvt. Ltd. since April 2nd, 2024. At just 18 years old, he founded Aczen with a mission to build innovative, tech-driven financial solutions that empower Small and Medium-sized Businesses (SMBs) across India."
     },
     {
@@ -31,7 +31,7 @@ const AboutUs = () => {
       id: 4,
       name: "Kalyan Y Nuthan",
       title: "Chief Technology Officer ",
-      image: "https://media.licdn.com/dms/image/v2/D5603AQFwESSq-QaDFg/profile-displayphoto-shrink_800_800/B56ZZeZlGyGkAg-/0/1745340487132?e=1750896000&v=beta&t=bTFLGg6i6eF5XBoZL__tWlsXWdgQ0e4XhUhKva1J5T8",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQFdumfkZDnOcw/profile-displayphoto-shrink_400_400/B56ZaaLx6.HAAg-/0/1746343502192?e=1753315200&v=beta&t=Z4zMezKFb84NKUoPPkYpb0g7ngrftIjBhvlATh8iBj0",
       bio: "Kalyan Y Nuthan is the Chief Technology Officer (CTO) of Aczen Technologies Pvt. Ltd., where he leads the company's technology strategy and innovation. With a strong background in software development and cloud solutions, Kalyan brings a deep understanding of technology trends and their application to real-world business challenges."
     }
   ];
@@ -66,10 +66,41 @@ const AboutUs = () => {
             </div>
             <div className="md:w-1/2">
               <img
-                src="https://media.licdn.com/dms/image/v2/D5622AQGfpj1e3Pe1Qg/feedshare-shrink_800/feedshare-shrink_800/0/1728460175327?e=1748476800&v=beta&t=mrYbhEdmPqChL5feq6M_AKdRJ8VB7LRylEFbaWaVUQM" 
+                src="https://media.licdn.com/dms/image/v2/D5622AQGlJiYAdUSA4Q/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377881226?e=1750291200&v=beta&t=8e_mTVKtUofJ4i5HpNC-Zsgd0Xck2h-0_XYDz--VUPc" 
                 alt="Leadership Team"
                 className="rounded-lg shadow-xl w-full"
               />
+            </div>
+          </div>
+        </section>
+
+        {/* Our Story Section - Brief Introduction */}
+        <section className="container mx-auto px-4 py-16 bg-gray-50 rounded-xl mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Story</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              From a small team of ambitious students to a growing fintech company with 15 members, 
+              our journey has been defined by innovation, determination, and a vision to revolutionize 
+              financial technology for businesses.
+            </p>
+            <div className="mt-8">
+              <Link to="/our-story" className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-md uppercase tracking-wide inline-block">
+                Read Our Story
+              </Link>
+            </div>
+          </div>
+          
+          {/* Timeline Preview - Just show first two milestones */}
+          <div className="max-w-2xl mx-auto flex flex-col md:flex-row gap-6 justify-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg md:w-1/2">
+              <span className="text-red-500 font-bold">April 2, 2024</span>
+              <h3 className="text-xl font-bold text-gray-900 mt-2">Company Incorporation</h3>
+              <p className="text-gray-600 mt-2">Aczen Technologies Pvt. Ltd. was officially incorporated with Uma Surya Srinivas appointed as CEO at just 18 years old.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-lg md:w-1/2">
+              <span className="text-red-500 font-bold">July 2024</span>
+              <h3 className="text-xl font-bold text-gray-900 mt-2">Aczen Connect Launch</h3>
+              <p className="text-gray-600 mt-2">Successfully launched Aczen Connect, our flagship platform connecting businesses with financial solutions.</p>
             </div>
           </div>
         </section>

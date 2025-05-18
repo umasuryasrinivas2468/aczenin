@@ -10,8 +10,8 @@ const SecuritySection = () => {
     },
     {
       icon: Lock,
-      title: "RBI Compliant",
-      description: "We follow all RBI guidelines and maintain strict compliance standards"
+      title: "Compliance-First Approach",
+      description: "We follow industry best practices and work with RBI-authorized platforms to keep your money safe."
     },
     {
       icon: CheckCircle,

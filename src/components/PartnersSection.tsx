@@ -10,6 +10,11 @@ const PartnersSection = () => {
       alt: "Axis Bank logo"
     },
     {
+      name: "Augomont",
+      logo: "https://augmont.com/assets/logos/augmont-logo.webp",
+      alt: "go"
+    },
+    {
       name: "Cashfree Payments",
       logo: "https://mma.prnewswire.com/media/1714361/Cashfree_Payments_Logo.jpg?p=facebook",
       alt: "Cashfree Payments logo"

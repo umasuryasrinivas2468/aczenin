@@ -38,9 +38,9 @@ const FeaturesSection = () => {
     },
     {
       icon: CreditCard,
-      title: "Instant Loans",
+      title: "GST Reprorting",
       description:
-        "Get quick business loans with minimal documentation and competitive interest rates.",
+        "Comprehensive GST reporting with real-time tracking, automated filing, and compliance monitoring.",
     },
     {
       icon: LineChart,

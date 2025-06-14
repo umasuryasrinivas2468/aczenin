@@ -1,56 +1,84 @@
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
-const HeroSection = () => {
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight, Play } from "lucide-react";
+
+const Hero = () => {
+  const handleDownloadClick = () => {
+    window.open('https://www.dropbox.com/scl/fi/zfbuvfjmkc3fgk50u8zuc/AczenBilz.exe?rlkey=kfxa4px1g4fp8lddo9kpymgig&st=63rr0fgv&dl=0', '_blank');
+  };
+
+  const handleRequestDemoClick = () => {
+    window.open('https://aczen.zohobookings.in/#/279356000000041052', '_blank');
+  };
+
   return (
-    <section className="relative pt-28 pb-20 md:pt-36 md:pb-28 hero-gradient overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-12 md:mb-0">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              <span className="text-smebank-800">Banking. Simplified.</span>{" "}
-              <br />
-              <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 text-transparent bg-clip-text">
-                For Every Indian SME.
-              </span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-lg">
-              Experience hassle-free banking tailored for your business growth.
-              Get smart invoicing, instant loans, and 24/7 dedicated support.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a href="https://tally.so/r/wzgekZ" target="_blank" rel="noopener noreferrer">
-                <Button className="cta-button">
-                  <span>Join Waitlist</span>
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </a>
-              <a href="https://calendar.app.google/LYLxHLHNE7T4QnkY9" target="_blank" rel="noopener noreferrer">
-                <Button className="border border-smebank-600 text-smebank-600 hover:bg-smebank-50 px-6 py-3 rounded-full font-medium bg-transparent">
-                  Schedule a Call
-                </Button>
-              </a>
-            </div>
+    <section className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-32 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-32 w-80 h-80 bg-gradient-to-br from-indigo-400/20 to-blue-600/20 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative">
+        <div className="text-center max-w-4xl mx-auto">
+          <Badge className="mb-6 bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200">
+            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+            Now Live • Trusted by 10,000+ SMBs
+          </Badge>
+          
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+            Simplify Invoicing & GST with{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              One Powerful Platform
+            </span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Automate your invoicing, streamline GST compliance, and manage financial workflows 
+            with our intelligent fintech platform designed for growing businesses.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold group"
+              onClick={handleDownloadClick}
+            >
+              Download for Windows
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="px-8 py-4 text-lg font-semibold border-2 hover:bg-gray-50 group"
+              onClick={handleRequestDemoClick}
+            >
+              <Play className="mr-2 h-5 w-5" />
+              Request Demo
+            </Button>
           </div>
-          <div className="md:w-1/2 md:pl-10 relative">
-            <div className="relative z-10">
-              <img
-                src="https://i.pinimg.com/736x/36/b1/e9/36b1e94c55871271406ddf1461d2dc02.jpg"
-                alt="SME Banking Dashboard"
-                className="rounded-xl shadow-2xl"
-              />
+
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              No setup fees
             </div>
-            <div className="absolute top-1/4 -right-10 w-20 h-20 bg-smeorange-500 rounded-full blur-2xl opacity-30" />
-            <div className="absolute bottom-1/3 -left-10 w-32 h-32 bg-smebank-500 rounded-full blur-3xl opacity-20" />
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              45-day free trial
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              Cancel anytime
+            </div>
           </div>
         </div>
+
+
       </div>
-      
-      {/* Gradient circles decorations */}
-      <div className="absolute top-20 left-10 w-64 h-64 bg-smebank-500 rounded-full blur-3xl opacity-10" />
-      <div className="absolute bottom-20 right-10 w-64 h-64 bg-smeteal-500 rounded-full blur-3xl opacity-10" />
     </section>
   );
 };
 
-export default HeroSection;
+export default Hero;

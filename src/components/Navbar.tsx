@@ -47,6 +47,18 @@ const Navbar = () => {
           </nav>
         )}
 
+        {/* Get Started Button - Desktop */}
+        {!isMobile && (
+          <a
+            href="https://app.aczen.tech/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-300 hover:scale-105"
+          >
+            Get Started
+          </a>
+        )}
+
         {/* Mobile Menu Toggle */}
         {isMobile && (
           <button
@@ -68,6 +80,14 @@ const Navbar = () => {
             <NavItem mobile label="Partners" href="#partners" />
             <NavItem mobile label="FAQ" href="#faq" />
             <NavItem mobile label="Contact" href="#contact" />
+            <a
+              href="https://app.aczen.tech/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-3 rounded-lg font-medium text-center hover:shadow-lg transition-all duration-300"
+            >
+              Get Started
+            </a>
           </div>
         </div>
       )}

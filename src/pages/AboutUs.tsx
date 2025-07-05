@@ -17,23 +17,30 @@ const AboutUs = () => {
       id: 2,
       name: "M Venkatesh",
       title: "Chief Financial Officer ",
-      image: "https://media.licdn.com/dms/image/v2/D5603AQHatSD_HgUKdg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1711353808457?e=1750896000&v=beta&t=GCWBGmNddkGu38eR5fJUBB5Mx6Ik5YnOSzxq7Ize6H4",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQHatSD_HgUKdg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1711353808457?e=1756944000&v=beta&t=Ymb_-iLpInEYN-PUg1CNncL-cJaNqdxA7Isu_TpmjvE",
       bio: "Venkatesh is the Chief Financial Officer (CFO) and Co-Founder of Aczen Technologies Pvt. Ltd., where he plays a key role in shaping the company's financial strategy and operational scalability. From managing investor relations to overseeing budgeting, compliance, and growth planning, Venkatesh ensures the financial backbone of Aczen remains strong and future-ready."
     },
     {
       id: 3,
       name: "Krishna Chaitanya",
       title: "Chief Operations Officer ",
-      image: "https://media.licdn.com/dms/image/v2/C5603AQFwga61yX4DtQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1667915558282?e=1750896000&v=beta&t=aiouYCN5bv35ngnSFtITMHexQFEkJ_NBl1pW0vfg9DA",
+      image: "https://media.licdn.com/dms/image/v2/C5603AQFwga61yX4DtQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1667915558282?e=1756944000&v=beta&t=QECoPDnCP6BxMLrY9FtChKnnhv2yypupYk9Hi-dmYPI",
       bio: "Krishna Chaitanya is the Chief Operating Officer (COO) of Aczen Technologies Pvt. Ltd., where he plays a pivotal role in driving the company's operational strategies, scaling internal processes, and leading global partnership efforts. An ex-Amazon professional, Krishna brings a wealth of experience in building efficient, tech-driven solutions. During his time at Amazon, he developed a strong foundation in operations, systems optimization, and product innovation — skills that now fuel Aczen's growth journey."
     },
     {
       id: 4,
       name: "Kalyan Y Nuthan",
       title: "Chief Technology Officer ",
-      image: "https://media.licdn.com/dms/image/v2/D5603AQFdumfkZDnOcw/profile-displayphoto-shrink_400_400/B56ZaaLx6.HAAg-/0/1746343502192?e=1753315200&v=beta&t=Z4zMezKFb84NKUoPPkYpb0g7ngrftIjBhvlATh8iBj0",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQFm8-wOdypR6w/profile-displayphoto-shrink_400_400/B56ZcU5l4uHgAg-/0/1748402332367?e=1756944000&v=beta&t=sK90fCoI7B5GafpsGSkOEpZEuXP0cP6xNr07SK1fQiY",
       bio: "Kalyan Y Nuthan is the Chief Technology Officer (CTO) of Aczen Technologies Pvt. Ltd., where he leads the company's technology strategy and innovation. With a strong background in software development and cloud solutions, Kalyan brings a deep understanding of technology trends and their application to real-world business challenges."
-    }
+    },
+    {
+    id: 5,
+    name: "Devanshi",
+    title: "Chief Marketing Officer",
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQF9Ti7Cm_mxyw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1687241681951?e=1756944000&v=beta&t=mCjXtg86cx9aSJxEgFR2YUjC4jOcnIO-kUwyd_m5uLY", // replace with real image URL
+    bio: "Devanshi is the Chief Marketing Officer (CMO) at Aczen Technologies Pvt. Ltd. With a creative mind and strong strategic skills, she leads the company's branding, digital marketing, and outreach initiatives. Her marketing vision plays a key role in driving awareness and engagement for Aczen's fintech innovations."
+  }
   ];
 
   return (
@@ -133,28 +140,28 @@ const AboutUs = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQGzAdS99391Jw/feedshare-shrink_800/feedshare-shrink_800/0/1723666468266?e=1748476800&v=beta&t=et9Mix_ufnK5Y1wKqE_elrPjruv5aeA10RtmU-LfdPk" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQFCCpmcJsFmew/feedshare-shrink_800/feedshare-shrink_800/0/1729187811330?e=1754524800&v=beta&t=tT5SL8WETsWY--j0sIUeQ9eRTVAL0ZiDKHCkJyNRjWU" 
                       alt="Team Photo 1"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1748476800&v=beta&t=X4hUzsO9NxoEe1Ru998H5eOQ5yEtlN8nJ473pOwRJ5U" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQGzAdS99391Jw/feedshare-shrink_800/feedshare-shrink_800/0/1723666468266?e=1754524800&v=beta&t=_zS80JUxodXMBl2Ab-gaXfWKAlAR955ExNV4ukMxjXw" 
                       alt="Team Photo 2"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQHbfO3wOsgb3w/feedshare-shrink_1280/feedshare-shrink_1280/0/1729187810901?e=1748476800&v=beta&t=Ken35YwdniE8hA5qTV1c9Z_hfC8INuLK7d9Ju97IlWA" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQHqX-LF99xJ5Q/feedshare-shrink_800/feedshare-shrink_800/0/1729860765990?e=1754524800&v=beta&t=5iJuMHTpung3Dhl9omUyHmAgj_5SgdJoyfXSSfteKH0" 
                       alt="Team Photo 3"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_800/B4EZVx0uoaGYAk-/0/1741371404086?e=1748476800&v=beta&t=AiwG2Wxg5qpgjDe-HAGAd66Pe9mWWS5osBHc3uQg5_s" 
+                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_800/B4EZVx0uoaGYAk-/0/1741371404086?e=1754524800&v=beta&t=hnovz-A2mOGe8NoMWO1CdCRcYLoXWDLjHE-sqJTVtEw" 
                       alt="Team Photo 4"
                       className="w-full h-40 object-cover grayscale"
                     />

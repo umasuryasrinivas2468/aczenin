@@ -37,7 +37,7 @@ const AboutUs = () => {
     {
     id: 5,
     name: "Devanshi",
-    title: "Chief Marketing Officer",
+    title: "Chief Marketing Officer (I)",
     image: "https://media.licdn.com/dms/image/v2/D4D03AQF9Ti7Cm_mxyw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1687241681951?e=1756944000&v=beta&t=mCjXtg86cx9aSJxEgFR2YUjC4jOcnIO-kUwyd_m5uLY", // replace with real image URL
     bio: "Devanshi is the Chief Marketing Officer (CMO) at Aczen Technologies Pvt. Ltd. With a creative mind and strong strategic skills, she leads the company's branding, digital marketing, and outreach initiatives. Her marketing vision plays a key role in driving awareness and engagement for Aczen's fintech innovations."
   }

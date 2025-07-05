@@ -73,7 +73,7 @@ const AboutUs = () => {
             </div>
             <div className="md:w-1/2">
               <img
-                src="https://media.licdn.com/dms/image/v2/D5622AQGlJiYAdUSA4Q/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377881226?e=1750291200&v=beta&t=8e_mTVKtUofJ4i5HpNC-Zsgd0Xck2h-0_XYDz--VUPc" 
+                src="https://media.licdn.com/dms/image/v2/D5622AQFKUAB4V4xSbQ/feedshare-shrink_800/feedshare-shrink_800/0/1730377876911?e=1754524800&v=beta&t=OEfWr38Q7tVuSvDOK96bTsl4xTRxtlJKXPZzZiI8dlE" 
                 alt="Leadership Team"
                 className="rounded-lg shadow-xl w-full"
               />

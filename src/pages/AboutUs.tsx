@@ -40,6 +40,13 @@ const AboutUs = () => {
     title: "Chief Marketing Officer (I)",
     image: "https://media.licdn.com/dms/image/v2/D4D03AQF9Ti7Cm_mxyw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1687241681951?e=1756944000&v=beta&t=mCjXtg86cx9aSJxEgFR2YUjC4jOcnIO-kUwyd_m5uLY", // replace with real image URL
     bio: "Devanshi is the Chief Marketing Officer (CMO) at Aczen Technologies Pvt. Ltd. With a creative mind and strong strategic skills, she leads the company's branding, digital marketing, and outreach initiatives. Her marketing vision plays a key role in driving awareness and engagement for Aczen's fintech innovations."
+  },
+    {
+    id: 6,
+    name: "Charitha",
+    title: "Head UI/UX Designer",
+    image: "https://media.licdn.com/dms/image/v2/D4E03AQEX5mKNJwyqiw/profile-displayphoto-shrink_800_800/B4EZZmsOnpH0Ac-/0/1745479592961?e=1757548800&v=beta&t=gzxIQETF2JPq2tjU_gnxl3klZvqsReidHpalsr6pH10", // replace with real image URL
+    bio: "Charitha leads UI/UX at Aczen with 4+ years of experience in designing intuitive, user-friendly interfaces. She has worked with top companies, shaping seamless digital experiences across platforms. Her design vision ensures every Aczen product is both visually engaging and functionally efficient."
   }
   ];
 

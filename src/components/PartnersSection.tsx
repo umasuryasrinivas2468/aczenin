@@ -11,7 +11,7 @@ const PartnersSection = () => {
     },
     {
       name: "RBIH",
-      logo: "https://www.google.com/url?sa=i&url=https%3A%2F%2Frbihub.in%2F&psig=AOvVaw2XiW3K8pdbLA16F0PukoWJ&ust=1753024177009000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCLDF69WayY4DFQAAAAAdAAAAABA2",
+      logo: "https://rbihub.in/wp-content/uploads/2025/04/RBiH-logo.png",
       alt: "go"
     },
     {

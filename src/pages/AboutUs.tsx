@@ -48,13 +48,6 @@ const AboutUs = () => {
     image: "https://media.licdn.com/dms/image/v2/D4E03AQEX5mKNJwyqiw/profile-displayphoto-shrink_800_800/B4EZZmsOnpH0Ac-/0/1745479592961?e=1757548800&v=beta&t=gzxIQETF2JPq2tjU_gnxl3klZvqsReidHpalsr6pH10", // replace with real image URL
     bio: "Charitha leads UI/UX at Aczen with 4+ years of experience in designing intuitive, user-friendly interfaces. She has worked with top companies, shaping seamless digital experiences across platforms. Her design vision ensures every Aczen product is both visually engaging and functionally efficient."
   },
-    {
-      id: 7,
-      name: "Sai Varshith",
-      title: "Business Manager ",
-      image: "https://media.licdn.com/dms/image/v2/D5635AQGAFPpDTMZ37Q/profile-framedphoto-shrink_400_400/B56ZgPL7I_HQAk-/0/1752601441595?e=1753207200&v=beta&t=lLbxDPhSR7iM4zHEbX76o6XMC1wGDq6bxPcAVR9dr90",
-      bio: "Varshith serves as the Business Manager at Aczen Technologies, where he plays a key role in overseeing operations, managing strategic partnerships, and driving business growth. With a sharp understanding of market trends and a strong focus on execution, Varshith ensures that our teams stay aligned with company goals while optimizing performance across departments. His leadership and coordination skills make him an essential part of Aczen’s mission to deliver impactful fintech solutions for SMBs."
-    },
   ];
 
   return (

@@ -17,7 +17,7 @@ const AboutUs = () => {
       id: 2,
       name: "M Venkatesh",
       title: "Chief Financial Officer ",
-      image: "https://media.licdn.com/dms/image/v2/D5603AQHatSD_HgUKdg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1711353808457?e=1756944000&v=beta&t=Ymb_-iLpInEYN-PUg1CNncL-cJaNqdxA7Isu_TpmjvE",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQEc7JxlspKI8Q/profile-displayphoto-scale_400_400/B56ZgtEx9MHUAg-/0/1753102887969?e=1756339200&v=beta&t=vhcl97KPWXP9kVH213euQ1_GqU_W4Ow22kuvd_9bkZU",
       bio: "Venkatesh is the Chief Financial Officer (CFO) and Co-Founder of Aczen Technologies Pvt. Ltd., where he plays a key role in shaping the company's financial strategy and operational scalability. From managing investor relations to overseeing budgeting, compliance, and growth planning, Venkatesh ensures the financial backbone of Aczen remains strong and future-ready."
     },
     {
@@ -44,9 +44,9 @@ const AboutUs = () => {
     {
     id: 6,
     name: "Charitha",
-    title: "Head UI/UX Designer",
+    title: "Chief Design Officer",
     image: "https://media.licdn.com/dms/image/v2/D4E03AQEX5mKNJwyqiw/profile-displayphoto-shrink_800_800/B4EZZmsOnpH0Ac-/0/1745479592961?e=1757548800&v=beta&t=gzxIQETF2JPq2tjU_gnxl3klZvqsReidHpalsr6pH10", // replace with real image URL
-    bio: "Charitha leads UI/UX at Aczen with 4+ years of experience in designing intuitive, user-friendly interfaces. She has worked with top companies, shaping seamless digital experiences across platforms. Her design vision ensures every Aczen product is both visually engaging and functionally efficient."
+    bio: "As our Chief Design Officer, Neelam Charitha leads and shapes the creative direction of the company. She oversees UI/UX design, ensuring our digital products deliver intuitive and engaging user experiences. In addition, she manages graphic design, brand identity, and videography, bringing a cohesive visual language to everything we create. With a thoughtful approach and a keen eye for detail, she helps translate our brand vision into designs that resonate with our audience and drive meaningful impact."
   },
   ];
 

@@ -35,14 +35,21 @@ const AboutUs = () => {
       bio: "Kalyan Y Nuthan is the Chief Technology Officer (CTO) of Aczen Technologies Pvt. Ltd., where he leads the company's technology strategy and innovation. With a strong background in software development and cloud solutions, Kalyan brings a deep understanding of technology trends and their application to real-world business challenges."
     },
     {
-    id: 5,
+      id: 5,
+      name: "Sai N Kathik",
+      title: "Chief People Officer ",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQGse4TATJyNWQ/profile-displayphoto-shrink_400_400/B56Za6X6B.GUAg-/0/1746883552079?e=1756339200&v=beta&t=jh3baO258msd3UTFdzGqn2Fa1FHsQe2UMzGxTUTwp7I",
+      bio: " Karthik is the Chief Product Officer at Aczen Technologies, driving product innovation and user experience.He leads the development of fintech tools that simplify banking, payments, and automation for SMBs.With a passion for impact, he ensures Aczen’s products are intuitive, scalable, and built for India's future."
+    },
+    {
+    id: 6,
     name: "Devanshi",
     title: "Chief Marketing Officer (I)",
     image: "https://media.licdn.com/dms/image/v2/D4D03AQGffd6zwLCp1g/profile-displayphoto-scale_400_400/B4DZgJq2XXGsAw-/0/1752508887481?e=1758153600&v=beta&t=icMOdMyq11U7k3t5TblbPn2q9J7AjuYUny51pDLt3yQ", // replace with real image URL
     bio: "Devanshi is the Chief Marketing Officer (CMO) at Aczen Technologies Pvt. Ltd. With a creative mind and strong strategic skills, she leads the company's branding, digital marketing, and outreach initiatives. Her marketing vision plays a key role in driving awareness and engagement for Aczen's fintech innovations."
   },
     {
-    id: 6,
+    id: 7,
     name: "Charitha",
     title: "Chief Design Officer",
     image: "https://media.licdn.com/dms/image/v2/D4E03AQEX5mKNJwyqiw/profile-displayphoto-shrink_800_800/B4EZZmsOnpH0Ac-/0/1745479592961?e=1757548800&v=beta&t=gzxIQETF2JPq2tjU_gnxl3klZvqsReidHpalsr6pH10", // replace with real image URL

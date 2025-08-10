@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,12 +44,14 @@ const Navbar = () => {
         {/* Desktop Navigation - Centered */}
         {!isMobile && (
           <nav className="flex-1 flex items-center justify-center space-x-6">
-            <NavItem label="Features" href="#features" />
             <NavItem label="About Us" href="/about" />
-            <NavItem label="Security" href="#video" />
-            <NavItem label="Partners" href="#partners" />
-            <NavItem label="FAQ" href="#faq" />
-            <NavItem label="Contact" href="#contact" />
+            <NavItem label="Security" href="/security" />
+            <SolutionsDropdown />
+            <ProductsDropdown />
+            <NavItem label="Social Impact" href="/social-impact" />
+            <NavItem label="Partners" href="/partners" />
+            <NavItem label="FAQ" href="/faq" />
+            <NavItem label="Contact" href="/contacts" />
           </nav>
         )}
 
@@ -74,12 +82,14 @@ const Navbar = () => {
       {isMobile && isOpen && (
         <div className="md:hidden bg-white">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <NavItem mobile label="Features" href="#features" />
             <NavItem mobile label="About Us" href="/about" />
-            <NavItem mobile label="Security" href="#video" />
-            <NavItem mobile label="Partners" href="#partners" />
-            <NavItem mobile label="FAQ" href="#faq" />
-            <NavItem mobile label="Contact" href="#contact" />
+            <NavItem mobile label="Security" href="/security" />
+            <MobileSolutionsMenu />
+            <MobileProductsMenu />
+            <NavItem mobile label="Social Impact" href="/social-impact" />
+            <NavItem mobile label="Partners" href="/partners" />
+            <NavItem mobile label="FAQ" href="/faq" />
+            <NavItem mobile label="Contact" href="/contacts" />
             <a
               href="https://app.aczen.tech/"
               target="_blank"
@@ -105,17 +115,159 @@ const NavItem = ({
   href: string;
   mobile?: boolean;
 }) => {
+  const isInternalLink = href.startsWith('/');
+  const className = `font-medium transition-colors ${
+    mobile
+      ? "block py-2 text-smebank-700"
+      : "text-gray-700 hover:text-smebank-600"
+  }`;
+
+  if (isInternalLink) {
+    return (
+      <Link to={href} className={className}>
+        {label}
+      </Link>
+    );
+  }
+
   return (
-    <a
-      href={href}
-      className={`font-medium transition-colors ${
-        mobile
-          ? "block py-2 text-smebank-700"
-          : "text-gray-700 hover:text-smebank-600"
-      }`}
-    >
+    <a href={href} className={className}>
       {label}
     </a>
+  );
+};
+
+// Solutions Dropdown Component
+const SolutionsDropdown = () => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center font-medium text-gray-700 hover:text-smebank-600 transition-colors">
+        Solutions
+        <ChevronDown className="ml-1 h-4 w-4" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="center" className="w-48">
+        <DropdownMenuItem asChild>
+          <Link to="/solutions/smes" className="w-full cursor-pointer">
+            SME's
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/solutions/ca" className="w-full cursor-pointer">
+            CA
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/solutions/startups" className="w-full cursor-pointer">
+            Startups
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/solutions/enterprises" className="w-full cursor-pointer">
+            Enterprises
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/solutions/freelancers" className="w-full cursor-pointer">
+            Freelancers
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+// Products Dropdown Component
+const ProductsDropdown = () => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center font-medium text-gray-700 hover:text-smebank-600 transition-colors">
+        Products
+        <ChevronDown className="ml-1 h-4 w-4" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="center" className="w-48">
+        <DropdownMenuItem asChild>
+          <Link to="/products/aczen-crm" className="w-full cursor-pointer">
+            Aczen CRM
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/products/aczen-ide" className="w-full cursor-pointer">
+            Aczen IDE
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/products/aczen-os" className="w-full cursor-pointer">
+            Aczen OS
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+// Mobile Solutions Menu Component
+const MobileSolutionsMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full py-2 text-smebank-700 font-medium"
+      >
+        Solutions
+        <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <div className="pl-4 space-y-2">
+          <Link to="/solutions/smes" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            SME's
+          </Link>
+          <Link to="/solutions/ca" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            CA
+          </Link>
+          <Link to="/solutions/startups" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            Startups
+          </Link>
+          <Link to="/solutions/enterprises" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            Enterprises
+          </Link>
+          <Link to="/solutions/freelancers" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            Freelancers
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Mobile Products Menu Component
+const MobileProductsMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full py-2 text-smebank-700 font-medium"
+      >
+        Products
+        <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <div className="pl-4 space-y-2">
+          <Link to="/products/aczen-crm" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            Aczen CRM
+          </Link>
+          <Link to="/products/aczen-ide" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            Aczen IDE
+          </Link>
+          <Link to="/products/aczen-os" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            Aczen OS
+          </Link>
+        </div>
+      )}
+    </div>
   );
 };
 

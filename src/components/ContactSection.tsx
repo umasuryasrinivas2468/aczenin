@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Send, MessageSquare } from "lucide-react";
+import { Send, MessageSquare, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -68,7 +68,9 @@ const ContactSection = () => {
             
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-64">
-                <div className="text-smebank-600 text-5xl mb-4">✓</div>
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
+                </div>
                 <h4 className="text-xl font-semibold mb-2">Thank you!</h4>
                 <p className="text-gray-600 text-center">
                   Your message has been sent successfully. We'll get back to you shortly.

@@ -186,6 +186,12 @@ const ProductsDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="w-48">
         <DropdownMenuItem asChild>
+          <Link to="/start" className="w-full cursor-pointer flex items-center justify-between">
+            <span>Aczen Orbit</span>
+            <span className="bg-gradient-to-r from-smebank-500 to-smeteal-500 text-white text-xs px-2 py-1 rounded-full font-semibold">New</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <Link to="/products/aczen-crm" className="w-full cursor-pointer">
             Aczen CRM
           </Link>
@@ -256,6 +262,10 @@ const MobileProductsMenu = () => {
       </button>
       {isOpen && (
         <div className="pl-4 space-y-2">
+          <Link to="/start" className="flex items-center justify-between py-1 text-sm text-gray-600 hover:text-smebank-600">
+            <span>Aczen Orbit</span>
+            <span className="bg-gradient-to-r from-smebank-500 to-smeteal-500 text-white text-xs px-2 py-1 rounded-full font-semibold">New</span>
+          </Link>
           <Link to="/products/aczen-crm" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             Aczen CRM
           </Link>

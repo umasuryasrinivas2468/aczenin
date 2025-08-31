@@ -29,6 +29,7 @@ import Products from "./pages/Products";
 import AczenCRM from "./pages/products/AczenCRM";
 import AczenIDE from "./pages/products/AczenIDE";
 import AczenOS from "./pages/products/AczenOS";
+import Start from "./pages/Start";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const App = () => (
           <Route path="/products/aczen-crm" element={<AczenCRM />} />
           <Route path="/products/aczen-ide" element={<AczenIDE />} />
           <Route path="/products/aczen-os" element={<AczenOS />} />
+          <Route path="/start" element={<Start />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

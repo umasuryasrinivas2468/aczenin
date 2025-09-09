@@ -50,6 +50,7 @@ const Navbar = () => {
             <ProductsDropdown />
             <NavItem label="Social Impact" href="/social-impact" />
             <NavItem label="Partners" href="/partners" />
+            <NavItem label="Pricing" href="/pricing" />
             <NavItem label="FAQ" href="/faq" />
             <NavItem label="Contact" href="/contacts" />
           </nav>
@@ -88,6 +89,7 @@ const Navbar = () => {
             <MobileProductsMenu />
             <NavItem mobile label="Social Impact" href="/social-impact" />
             <NavItem mobile label="Partners" href="/partners" />
+            <NavItem mobile label="Pricing" href="/pricing" />
             <NavItem mobile label="FAQ" href="/faq" />
             <NavItem mobile label="Contact" href="/contacts" />
             <a

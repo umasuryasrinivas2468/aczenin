@@ -44,13 +44,11 @@ const Navbar = () => {
         {/* Desktop Navigation - Centered */}
         {!isMobile && (
           <nav className="flex-1 flex items-center justify-center space-x-6">
-            <NavItem label="About Us" href="/about" />
-            <NavItem label="Security" href="/security" />
             <SolutionsDropdown />
             <ProductsDropdown />
-            <NavItem label="Social Impact" href="/social-impact" />
             <NavItem label="Partners" href="/partners" />
             <NavItem label="Pricing" href="/pricing" />
+            <NavItem label="About Us" href="/about" />
             <NavItem label="FAQ" href="/faq" />
             <NavItem label="Contact" href="/contacts" />
           </nav>
@@ -83,13 +81,11 @@ const Navbar = () => {
       {isMobile && isOpen && (
         <div className="md:hidden bg-white">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <NavItem mobile label="About Us" href="/about" />
-            <NavItem mobile label="Security" href="/security" />
             <MobileSolutionsMenu />
             <MobileProductsMenu />
-            <NavItem mobile label="Social Impact" href="/social-impact" />
             <NavItem mobile label="Partners" href="/partners" />
             <NavItem mobile label="Pricing" href="/pricing" />
+            <NavItem mobile label="About Us" href="/about" />
             <NavItem mobile label="FAQ" href="/faq" />
             <NavItem mobile label="Contact" href="/contacts" />
             <a

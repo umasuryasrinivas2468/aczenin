@@ -292,7 +292,14 @@ const Pricing = () => {
                         ? 'bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white shadow-lg hover:shadow-xl'
                         : 'bg-gray-900 hover:bg-gray-800 text-white'
                     } transition-all duration-300`}
-                    onClick={() => window.open('https://cashfree.com/123', '_blank')}
+                    onClick={() => {
+                      const links = {
+                        'starter': 'https://payments.cashfree.com/forms/aczenbilz_rate_599',
+                        'growth': 'https://payments.cashfree.com/forms/aczenbilz_rate_1799',
+                        'scale': 'https://payments.cashfree.com/forms/aczenbilz_rate_2799'
+                      };
+                      window.open(links[plan.id as keyof typeof links], '_blank');
+                    }}
                   >
                     <CreditCard className="h-5 w-5 mr-2" />
                     Buy Now
@@ -377,7 +384,7 @@ const Pricing = () => {
                       <Button 
                         size="lg"
                         className="bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white px-8 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-                        onClick={() => window.open('https://calendly.com/your-company/consultation', '_blank')}
+                        onClick={() => window.open('https://cal.com/aczen-technologies-pvt-ltd-t7jdhz/30min', '_blank')}
                       >
                         <Phone className="h-5 w-5 mr-2" />
                         Book Free Consultation

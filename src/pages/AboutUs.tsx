@@ -27,13 +27,7 @@ const AboutUs = () => {
       image: "https://bflplaygroundstore.blob.core.windows.net/files/8f366794-5498-4787-b0a9-7cf19f07341c/generations/b3031f15-041a-4e07-89d6-9a91cbd4a191/raw?sv=2025-05-05&se=2025-08-17T08%3A27%3A24Z&sr=b&sp=r&sig=eLpaN%2FjhIHp2voCvCdQjKp9uLQwouOu%2FH2%2F8LstwSZo%3D",
       bio: "Krishna Chaitanya is the Chief Operating Officer (COO) of Aczen Technologies Pvt. Ltd., where he plays a pivotal role in driving the company's operational strategies, scaling internal processes, and leading global partnership efforts. An ex-Amazon professional, Krishna brings a wealth of experience in building efficient, tech-driven solutions. During his time at Amazon, he developed a strong foundation in operations, systems optimization, and product innovation — skills that now fuel Aczen's growth journey."
     },
-    {
-      id: 4,
-      name: "Kalyan Y Nuthan",
-      title: "Chief Technology Officer ",
-      image: "https://bflplaygroundstore.blob.core.windows.net/files/8f366794-5498-4787-b0a9-7cf19f07341c/generations/9d9dcab2-fcae-4442-baf7-7c5ce7cdac35/raw?sv=2025-05-05&se=2025-08-17T08%3A25%3A34Z&sr=b&sp=r&sig=ckRcZrXN3a9oSgoG2MshuUFiEmTY9mzfELTdxuFPnnM%3D",
-      bio: "Kalyan Y Nuthan is the Chief Technology Officer (CTO) of Aczen Technologies Pvt. Ltd., where he leads the company's technology strategy and innovation. With a strong background in software development and cloud solutions, Kalyan brings a deep understanding of technology trends and their application to real-world business challenges."
-    },
+    
     {
       id: 5,
       name: "Sai N Kathik",

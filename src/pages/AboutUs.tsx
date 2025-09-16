@@ -88,7 +88,7 @@ const AboutUs = () => {
             </div>
             <div className="md:w-1/2">
               <img
-                src="https://media.licdn.com/dms/image/v2/D5622AQFKUAB4V4xSbQ/feedshare-shrink_800/feedshare-shrink_800/0/1730377876911?e=1757548800&v=beta&t=JLkvKhpL3tPL_ecoNKJkMLF4K4dOgvCP21bNt_JTzTE" 
+                src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1761177600&v=beta&t=bR3Mmhfbl9B69wGPt5vAYUdwCYIQWLsvyOw-5duYs98" 
                 alt="Leadership Team"
                 className="rounded-lg shadow-xl w-full"
               />
@@ -155,28 +155,28 @@ const AboutUs = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1757548800&v=beta&t=g8i1F5zSjhWf32nQYC-B5rZ67jsvKrOjUVcz4yvLqdI" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQFCCpmcJsFmew/feedshare-shrink_1280/feedshare-shrink_1280/0/1729187811377?e=1761177600&v=beta&t=jsdnz7L4Lqk8F-VVfSi7s3wj9k2VoLZ-Sm1K8NQ12mY" 
                       alt="Team Photo 1"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_480/B4EZVx0uoaGYAc-/0/1741371404083?e=1757548800&v=beta&t=-l_hJY9CAsdeHMK1P_timQRZLcguoJ9g-HVAMSmuAYM" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQE8JP5bQuO5JA/feedshare-shrink_1280/feedshare-shrink_1280/0/1688715217408?e=1761177600&v=beta&t=hQzvPFD9Wd6QZawT6P8n3XLauc0Nql2e8HPZeydI-sM" 
                       alt="Team Photo 2"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQFCCpmcJsFmew/feedshare-shrink_1280/feedshare-shrink_1280/0/1729187811377?e=1757548800&v=beta&t=6QXGhf0yWLxU29Fsqbvs-H4iOXvWgOhYI3VF0HcO-M0" 
+                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_800/B4EZVx0uoaGYAk-/0/1741371404086?e=1761177600&v=beta&t=CWYUNg79c_MTWh0g0XWu_TuKGZrz763fs2LgAkZPKMM" 
                       alt="Team Photo 3"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQFuvNQv1Nfggw/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566627?e=1757548800&v=beta&t=9Kb45ejQpSic9RVeLN8FvMOGflhFz1uq5BkHVJKT9Y4" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1761177600&v=beta&t=ph1tXzQR9or_fg07u5HHVAW7tGX2L-ixxPQ_pViHn4Q" 
                       alt="Team Photo 4"
                       className="w-full h-40 object-cover grayscale"
                     />

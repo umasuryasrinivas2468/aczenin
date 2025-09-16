@@ -10,21 +10,21 @@ const AboutUs = () => {
       id: 1,
       name: "Uma Surya Srinivas B",
       title: "Executive Chairman",
-      image: "https://bflplaygroundstore.blob.core.windows.net/files/646d7550-acfe-4695-8f15-bfbc056b70cf/generations/c18f24d6-1058-4edb-9026-aefbe743a7d0/raw?sv=2025-05-05&se=2025-08-17T15%3A06%3A43Z&sr=b&sp=r&sig=Ajov%2Bz266ndXfBGcssTaKiV9slQlf0d5yd3vBg88c1M%3D",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQG_sPsDzDElVQ/profile-displayphoto-shrink_400_400/B56ZbjEPWuH4Ag-/0/1747566262232?e=1761177600&v=beta&t=_HsaVNm4iUFmZHNUj645HiTPUnZN9xs5fQ-L0gR5iYc",
       bio: "Uma Surya Srinivas B is a young and visionary entrepreneur currently serving as the Managing Director of Aczen Technologies Pvt. Ltd. since April 2nd, 2024. At just 18 years old, he founded Aczen with a mission to build innovative, tech-driven financial solutions that empower Small and Medium-sized Businesses (SMBs) across India."
     },
     {
       id: 2,
       name: "M Venkatesh",
       title: "Chief Financial Officer ",
-      image: "https://bflplaygroundstore.blob.core.windows.net/files/646d7550-acfe-4695-8f15-bfbc056b70cf/generations/ba59b11b-9e2d-4b7f-a3b2-6ec265a92cee/raw?sv=2025-05-05&se=2025-08-17T15%3A13%3A06Z&sr=b&sp=r&sig=V5QN8B%2F0dfgE6NfRlzgETK7w73%2BeA%2FDsDohydH%2FhdwA%3D",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQEc7JxlspKI8Q/profile-displayphoto-scale_400_400/B56ZgtEx9MHUAg-/0/1753102887969?e=1761177600&v=beta&t=bvDs1AzBIr3hePwPfKZoSNnlg9FYD4vFMq3f9UhYBXU",
       bio: "Venkatesh is the Chief Financial Officer (CFO) and Co-Founder of Aczen Technologies Pvt. Ltd., where he plays a key role in shaping the company's financial strategy and operational scalability. From managing investor relations to overseeing budgeting, compliance, and growth planning, Venkatesh ensures the financial backbone of Aczen remains strong and future-ready."
     },
     {
       id: 3,
       name: "Krishna Chaitanya",
       title: "Chief Operations Officer ",
-      image: "https://bflplaygroundstore.blob.core.windows.net/files/8f366794-5498-4787-b0a9-7cf19f07341c/generations/b3031f15-041a-4e07-89d6-9a91cbd4a191/raw?sv=2025-05-05&se=2025-08-17T08%3A27%3A24Z&sr=b&sp=r&sig=eLpaN%2FjhIHp2voCvCdQjKp9uLQwouOu%2FH2%2F8LstwSZo%3D",
+      image: "https://media.licdn.com/dms/image/v2/C5603AQFwga61yX4DtQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1667915558282?e=1761177600&v=beta&t=x0feT9UZOnH9jiMEyeIAuiD4uLIJRTI2VtYnoHL0yIw",
       bio: "Krishna Chaitanya is the Chief Operating Officer (COO) of Aczen Technologies Pvt. Ltd., where he plays a pivotal role in driving the company's operational strategies, scaling internal processes, and leading global partnership efforts. An ex-Amazon professional, Krishna brings a wealth of experience in building efficient, tech-driven solutions. During his time at Amazon, he developed a strong foundation in operations, systems optimization, and product innovation — skills that now fuel Aczen's growth journey."
     },
     
@@ -32,21 +32,28 @@ const AboutUs = () => {
       id: 5,
       name: "Sai N Kathik",
       title: "Chief People Officer ",
-      image: "https://bflplaygroundstore.blob.core.windows.net/files/8f366794-5498-4787-b0a9-7cf19f07341c/generations/9fe82d93-349b-4b4e-a2c8-d9b1159ef0a0/raw?sv=2025-05-05&se=2025-08-17T08%3A23%3A28Z&sr=b&sp=r&sig=HWeLT%2F1y3538HE92WiMo86onSiDHVc2CMmqnG2I11S8%3D",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQGse4TATJyNWQ/profile-displayphoto-shrink_400_400/B56Za6X6B.GUAg-/0/1746883552079?e=1761177600&v=beta&t=7gZpSuuunTckUmzv8chugnTsqc3xo7T5Pyd1KOEsgWo",
       bio: " Karthik is the Chief Product Officer at Aczen Technologies, driving product innovation and user experience.He leads the development of fintech tools that simplify banking, payments, and automation for SMBs.With a passion for impact, he ensures Aczen’s products are intuitive, scalable, and built for India's future."
+    },
+    {
+      id: 5,
+      name: "G Hemanth",
+      title: "Chief Bussiness Officer ",
+      image: "https://media.licdn.com/dms/image/v2/D4E03AQE7Cdo_qYqcUw/profile-displayphoto-scale_400_400/B4EZlTsV41GUAk-/0/1758045758230?e=1761177600&v=beta&t=DfASHGdfTZfeCWXisYnxys5f6auDxkfBuuzVaF2VQyM",
+      bio: "Hemanth serves as the Chief Business Officer at Aczen, driving strategic growth and business expansion.He focuses on building strong partnerships and shaping innovative financial solutions for SMBs."
     },
     {
     id: 6,
     name: "Devanshi",
     title: "Chief Marketing Officer (I)",
-    image: "https://i.ibb.co/hF0jZym3/generation-98fb31ec-0f6b-45bc-83a4-852d4f2d6ec5.png", // replace with real image URL
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQGGzK_Rd-6_vw/profile-displayphoto-scale_400_400/B4DZgTBMU2GgAg-/0/1752665738696?e=1761177600&v=beta&t=Iz8y8hqCO2hMld5l5xw4aOaDzHcP4u_zlq4Cv0HuD7U", // replace with real image URL
     bio: "Devanshi is the Chief Marketing Officer (CMO) at Aczen Technologies Pvt. Ltd. With a creative mind and strong strategic skills, she leads the company's branding, digital marketing, and outreach initiatives. Her marketing vision plays a key role in driving awareness and engagement for Aczen's fintech innovations."
   },
     {
     id: 7,
     name: "Charitha",
     title: "Chief Design Officer",
-    image: "https://bflplaygroundstore.blob.core.windows.net/files/646d7550-acfe-4695-8f15-bfbc056b70cf/generations/77877a8b-3868-4e2b-932d-5bd6e326e5ce/raw?sv=2025-05-05&se=2025-08-17T15%3A10%3A19Z&sr=b&sp=r&sig=6BYV%2BP7p6X6R2r4Ys0iGeqfaGe4dHDSTrpUgX0zvvds%3D", // replace with real image URL
+    image: "https://media.licdn.com/dms/image/v2/D4E03AQEX5mKNJwyqiw/profile-displayphoto-shrink_400_400/B4EZZmsOnpH0Ag-/0/1745479592961?e=1761177600&v=beta&t=xJOFxpWfdzgR-2LY1R8NfCxuf4VKLwfaXlu46I42nAc", // replace with real image URL
     bio: "As our Chief Design Officer, Neelam Charitha leads and shapes the creative direction of the company. She oversees UI/UX design, ensuring our digital products deliver intuitive and engaging user experiences. In addition, she manages graphic design, brand identity, and videography, bringing a cohesive visual language to everything we create. With a thoughtful approach and a keen eye for detail, she helps translate our brand vision into designs that resonate with our audience and drive meaningful impact."
   },
   ];

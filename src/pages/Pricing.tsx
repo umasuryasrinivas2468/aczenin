@@ -294,9 +294,9 @@ const Pricing = () => {
                     } transition-all duration-300`}
                     onClick={() => {
                       const links = {
-                        'starter': 'https://payments.cashfree.com/forms/aczenbilz_rate_599',
-                        'growth': 'https://payments.cashfree.com/forms/aczenbilz_rate_1799',
-                        'scale': 'https://payments.cashfree.com/forms/aczenbilz_rate_2799'
+                        'starter': 'https://rzp.io/rzp/start-180-1',
+                        'growth': 'https://rzp.io/rzp/grow-180-2',
+                        'scale': 'https://rzp.io/rzp/start-180-1'
                       };
                       window.open(links[plan.id as keyof typeof links], '_blank');
                     }}

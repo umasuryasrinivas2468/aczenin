@@ -183,6 +183,49 @@ const Partners = () => {
         </div>
       </section>
 
+      {/* Regulation & Compliance Cards (matches screenshot) */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            <div className="rounded-2xl bg-yellow-50 p-8 shadow-md flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl font-bold mb-4">Smart Regulation Library</h3>
+                <p className="text-gray-700 mb-6">Access a comprehensive repository of chapter-wise regulations, master circulars, and real-time amendment updates, fully linked and queryable for effortless navigation.</p>
+              </div>
+
+              <div className="mt-4 bg-white rounded-xl p-6 shadow-inner">
+                <div className="flex items-start gap-4">
+                  <div className="text-green-500 mt-1">
+                    <CheckCircle className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Securities and Exchange Board of India (Market Infrastructure Institutions) Regulations, 2023</div>
+                    <div className="text-sm text-gray-500 mt-3">
+                      <div className="flex items-center gap-2"><span className="font-medium">Latest Gazette:</span> <a className="text-indigo-600" href="#">GAZ-2023-125</a></div>
+                      <div className="mt-2">3 Amendments · 24 applicable regulations</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-neutral-900 p-8 shadow-md text-white relative overflow-hidden">
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold mb-3">AI-Powered Compliance Reporting</h3>
+                <p className="text-gray-200">Generate audit-ready reports, compliance decks, and MIS presentations in seconds, saving weeks of manual effort.</p>
+              </div>
+
+              <div className="mt-auto">
+                <div className="bg-gradient-to-r from-purple-400 to-pink-300 text-neutral-900 rounded-2xl p-8 shadow-lg w-full">
+                  <div className="text-4xl font-bold">Compliance Actionables</div>
+                  <div className="mt-4 text-sm text-neutral-800">January 6, 2025 - January 11, 2025</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Partnership Types Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">

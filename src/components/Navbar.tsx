@@ -57,12 +57,12 @@ const Navbar = () => {
         {/* Get Started Button - Desktop */}
         {!isMobile && (
           <a
-            href="https://app.aczen.tech/"
+            href="https://cal.com/aczen-technologies-pvt-ltd-t7jdhz/30min"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-300 hover:scale-105"
           >
-            Get Started
+            Book a Demo
           </a>
         )}
 

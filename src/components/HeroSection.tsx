@@ -1,15 +1,16 @@
-
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const Hero = () => {
-  const handleDownloadClick = () => {
-    window.open('https://www.dropbox.com/scl/fi/zfbuvfjmkc3fgk50u8zuc/AczenBilz.exe?rlkey=kfxa4px1g4fp8lddo9kpymgig&st=63rr0fgv&dl=0', '_blank');
-  };
+  const [phone, setPhone] = useState("");
 
-  const handleRequestDemoClick = () => {
-    window.open('https://aczen.zohobookings.in/#/279356000000041052', '_blank');
+  const handleGetStarted = () => {
+    if (phone.trim() === "") {
+      alert("Please enter your phone number.");
+      return;
+    }
+    alert(`Thank you! We’ll contact you soon at +91 ${phone}`);
   };
 
   return (
@@ -26,37 +27,46 @@ const Hero = () => {
             <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
             Now Live • Trusted by 10,000+ SMBs
           </Badge>
-          
+
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
             One Accounting Platform to{" "}
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Manage Invoices, Expenses & Taxes
             </span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
             Automate your invoicing, streamline GST compliance, and manage financial workflows 
             with our intelligent fintech platform designed for growing businesses.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold group"
-              onClick={handleDownloadClick}
-            >
-              Download for Windows
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="px-8 py-4 text-lg font-semibold border-2 hover:bg-gray-50 group"
-              onClick={handleRequestDemoClick}
-            >
-              <Play className="mr-2 h-5 w-5" />
-              Request Demo
-            </Button>
+          {/* Phone Input Section with India Flag */}
+          <div className="flex justify-center mb-12">
+            <div className="flex items-center bg-white shadow-sm border border-gray-200 rounded-full overflow-hidden w-full max-w-md">
+              
+              {/* Country code section */}
+              <div className="flex items-center gap-2 pl-5 pr-3 border-r border-gray-200 bg-gray-50">
+                <span className="text-lg">🇮🇳</span>
+                <span className="text-gray-700 font-medium">+91</span>
+              </div>
+
+              {/* Phone input */}
+              <input
+                type="tel"
+                placeholder="Enter your phone number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="flex-1 px-4 py-3 text-gray-700 focus:outline-none text-base"
+              />
+
+              {/* Button */}
+              <Button
+                onClick={handleGetStarted}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full"
+              >
+                Get Started
+              </Button>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
@@ -74,8 +84,6 @@ const Hero = () => {
             </div>
           </div>
         </div>
-
-
       </div>
     </section>
   );

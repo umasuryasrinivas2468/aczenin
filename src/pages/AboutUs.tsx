@@ -67,7 +67,7 @@ const AboutUs = () => {
             </div>
             <div className="md:w-1/2">
               <img
-                src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1761177600&v=beta&t=bR3Mmhfbl9B69wGPt5vAYUdwCYIQWLsvyOw-5duYs98" 
+                src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1762992000&v=beta&t=6RVP6qRS9iEY1abZA97yWNkIcnYZ7h_0SDN7WILA8u4" 
                 alt="Leadership Team"
                 className="rounded-lg shadow-xl w-full"
               />
@@ -134,28 +134,28 @@ const AboutUs = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQFCCpmcJsFmew/feedshare-shrink_1280/feedshare-shrink_1280/0/1729187811377?e=1761177600&v=beta&t=jsdnz7L4Lqk8F-VVfSi7s3wj9k2VoLZ-Sm1K8NQ12mY" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1762992000&v=beta&t=6RVP6qRS9iEY1abZA97yWNkIcnYZ7h_0SDN7WILA8u4" 
                       alt="Team Photo 1"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQE8JP5bQuO5JA/feedshare-shrink_1280/feedshare-shrink_1280/0/1688715217408?e=1761177600&v=beta&t=hQzvPFD9Wd6QZawT6P8n3XLauc0Nql2e8HPZeydI-sM" 
+                      src="https://i.postimg.cc/fRYqZPhm/1741371404086.jpg" 
                       alt="Team Photo 2"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_800/B4EZVx0uoaGYAk-/0/1741371404086?e=1761177600&v=beta&t=CWYUNg79c_MTWh0g0XWu_TuKGZrz763fs2LgAkZPKMM" 
+                      src="https://i.postimg.cc/d3mRpbCh/1725199566804.jpg" 
                       alt="Team Photo 3"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1761177600&v=beta&t=ph1tXzQR9or_fg07u5HHVAW7tGX2L-ixxPQ_pViHn4Q" 
+                      src="https://i.postimg.cc/wTjs9R84/1722181927876.jpg" 
                       alt="Team Photo 4"
                       className="w-full h-40 object-cover grayscale"
                     />

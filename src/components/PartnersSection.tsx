@@ -11,7 +11,7 @@ const PartnersSection = () => {
     },
     {
       name: "RBIH",
-      logo: "https://rbihub.in/wp-content/uploads/2025/04/RBiH-logo.png",
+      logo: "https://media.licdn.com/dms/image/v2/D4D12AQFQclxtCM_eMQ/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1735745294409?e=2147483647&v=beta&t=9OGoHWAnFJXjG-Qd8o-IsM8RXZ_SMUDuQxWSif-JQxs",
       alt: "go"
     },
     {

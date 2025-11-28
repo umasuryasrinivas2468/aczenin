@@ -25,7 +25,7 @@ const AboutUs = () => {
       id: 5,
       name: "Sai N Kathik",
       title: "Chief People Officer ",
-      image: "https://i.postimg.cc/2yX3XT6m/1746883552079.jpg",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQGse4TATJyNWQ/profile-displayphoto-shrink_400_400/B56Za6X6B.GUAg-/0/1746883552079?e=1766016000&v=beta&t=_DGDfJ5smvQlxyvhMMNVVoKVsxTyiTJssc9FxAGVpvo",
       bio: " Karthik is the Chief Product Officer at Aczen Technologies, driving product innovation and user experience.He leads the development of fintech tools that simplify banking, payments, and automation for SMBs.With a passion for impact, he ensures Aczen’s products are intuitive, scalable, and built for India's future."
     },
     {
@@ -67,7 +67,7 @@ const AboutUs = () => {
             </div>
             <div className="md:w-1/2">
               <img
-                src="https://media.licdn.com/dms/image/v2/D5603AQGse4TATJyNWQ/profile-displayphoto-shrink_400_400/B56Za6X6B.GUAg-/0/1746883552079?e=1766016000&v=beta&t=_DGDfJ5smvQlxyvhMMNVVoKVsxTyiTJssc9FxAGVpvo" 
+                src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1766016000&v=beta&t=nvlFj_QmUlWYntc-QJwBLojreFC0xLgXryJILixZazo" 
                 alt="Leadership Team"
                 className="rounded-lg shadow-xl w-full"
               />

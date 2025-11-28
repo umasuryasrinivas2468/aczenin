@@ -67,7 +67,7 @@ const AboutUs = () => {
             </div>
             <div className="md:w-1/2">
               <img
-                src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1762992000&v=beta&t=6RVP6qRS9iEY1abZA97yWNkIcnYZ7h_0SDN7WILA8u4" 
+                src="https://media.licdn.com/dms/image/v2/D5603AQGse4TATJyNWQ/profile-displayphoto-shrink_400_400/B56Za6X6B.GUAg-/0/1746883552079?e=1766016000&v=beta&t=_DGDfJ5smvQlxyvhMMNVVoKVsxTyiTJssc9FxAGVpvo" 
                 alt="Leadership Team"
                 className="rounded-lg shadow-xl w-full"
               />

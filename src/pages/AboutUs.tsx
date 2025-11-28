@@ -180,7 +180,7 @@ const AboutUs = () => {
         
           <div className="mt-12 flex justify-center">
             <a 
-              href="https://tally.so/r/3XB2PO" 
+              href="https://tally.so/r/3yANa8" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-10 rounded-md uppercase tracking-wide"

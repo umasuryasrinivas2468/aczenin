@@ -10,14 +10,14 @@ const AboutUs = () => {
       id: 1,
       name: "Uma Surya Srinivas B",
       title: "Executive Chairman",
-      image: "https://i.postimg.cc/wjXD48hM/DSC00517-removebg-preview-1.png",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQG_sPsDzDElVQ/profile-displayphoto-shrink_400_400/B56ZbjEPWuH4Ag-/0/1747566262232?e=1766016000&v=beta&t=CJ0CMjeFYzbN9bTvZipAQaElYDEYqSW_CXoZjORdQ_4",
       bio: "Uma Surya Srinivas B is a young and visionary entrepreneur currently serving as the Managing Director of Aczen Technologies Pvt. Ltd. since April 2nd, 2024. At just 18 years old, he founded Aczen with a mission to build innovative, tech-driven financial solutions that empower Small and Medium-sized Businesses (SMBs) across India."
     },
     {
       id: 2,
       name: "M Venkatesh",
       title: "Chief Financial Officer ",
-      image: "https://i.postimg.cc/G2GBtvqt/1753102887969.jpg",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQEc7JxlspKI8Q/profile-displayphoto-scale_400_400/B56ZgtEx9MHUAg-/0/1753102887969?e=1766016000&v=beta&t=Kkat0B6_60QNosqOwurEHNK5z4jniFUEYhy6Lnv5xU4",
       bio: "Venkatesh is the Chief Financial Officer (CFO) and Co-Founder of Aczen Technologies Pvt. Ltd., where he plays a key role in shaping the company's financial strategy and operational scalability. From managing investor relations to overseeing budgeting, compliance, and growth planning, Venkatesh ensures the financial backbone of Aczen remains strong and future-ready."
     },
     
@@ -32,7 +32,7 @@ const AboutUs = () => {
     id: 7,
     name: "Charitha",
     title: "Chief Design Officer",
-    image: "https://i.postimg.cc/j51rp1zJ/1745479592961.jpg", // replace with real image URL
+    image: "https://media.licdn.com/dms/image/v2/D4E03AQEX5mKNJwyqiw/profile-displayphoto-shrink_400_400/B4EZZmsOnpH0Ag-/0/1745479592961?e=1766016000&v=beta&t=g3coEAFqshLq9y_H_bTiNr4IzvZUXBwmzMu-ac3ZkTs", // replace with real image URL
     bio: "As our Chief Design Officer, Neelam Charitha leads and shapes the creative direction of the company. She oversees UI/UX design, ensuring our digital products deliver intuitive and engaging user experiences. In addition, she manages graphic design, brand identity, and videography, bringing a cohesive visual language to everything we create. With a thoughtful approach and a keen eye for detail, she helps translate our brand vision into designs that resonate with our audience and drive meaningful impact."
   },
   ];
@@ -134,28 +134,28 @@ const AboutUs = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1762992000&v=beta&t=6RVP6qRS9iEY1abZA97yWNkIcnYZ7h_0SDN7WILA8u4" 
+                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_480/B4EZVx0uoaGYAc-/0/1741371404083?e=1766016000&v=beta&t=DTvIg5yGb1sZcVYLd5YKK-PudPAGl9m568RYnYia9v8" 
                       alt="Team Photo 1"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://i.postimg.cc/fRYqZPhm/1741371404086.jpg" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQFCCpmcJsFmew/feedshare-shrink_480/feedshare-shrink_480/0/1729187811377?e=1766016000&v=beta&t=yvdrEwzSiQXXl-Bob5JUjf9CKochfJHnEWedsSBNGpo" 
                       alt="Team Photo 2"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://i.postimg.cc/d3mRpbCh/1725199566804.jpg" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1766016000&v=beta&t=LPXD_n4kezM1X4lApGEDVGk4nZ6W7YSqCY8A8miVNT8" 
                       alt="Team Photo 3"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://i.postimg.cc/wTjs9R84/1722181927876.jpg" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQE8JP5bQuO5JA/feedshare-shrink_1280/feedshare-shrink_1280/0/1688715217408?e=1766016000&v=beta&t=rEN_TB-wimAxrJe3w41-zNbaW-vwufBtyk2SsUe9p98" 
                       alt="Team Photo 4"
                       className="w-full h-40 object-cover grayscale"
                     />

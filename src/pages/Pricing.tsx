@@ -88,7 +88,7 @@ const Pricing = () => {
       id: 'scale',
       name: 'Scale',
       tagline: 'Best for Established SMEs & enterprises',
-      monthlyPrice: 2799,
+      monthlyPrice: 2999,
       annualPrice: 27990,
       originalMonthlyPrice: 4999,
       originalAnnualPrice: 49990,

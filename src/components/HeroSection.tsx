@@ -1,18 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 const Hero = () => {
-  const [phone, setPhone] = useState("");
-
-  const handleGetStarted = () => {
-    if (phone.trim() === "") {
-      alert("Please enter your phone number.");
-      return;
-    }
-    alert(`Thank you! We’ll contact you soon at +91 ${phone}`);
-  };
-
   return (
     <section className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background decorative elements */}
@@ -40,33 +29,16 @@ const Hero = () => {
             with our intelligent fintech platform designed for growing businesses.
           </p>
 
-          {/* Phone Input Section with India Flag */}
+          {/* CTA Button */}
           <div className="flex justify-center mb-12">
-            <div className="flex items-center bg-white shadow-sm border border-gray-200 rounded-full overflow-hidden w-full max-w-md">
-              
-              {/* Country code section */}
-              <div className="flex items-center gap-2 pl-5 pr-3 border-r border-gray-200 bg-gray-50">
-                <span className="text-lg">🇮🇳</span>
-                <span className="text-gray-700 font-medium">+91</span>
-              </div>
-
-              {/* Phone input */}
-              <input
-                type="tel"
-                placeholder="Enter your phone number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="flex-1 px-4 py-3 text-gray-700 focus:outline-none text-base"
-              />
-
-              {/* Button */}
-              <Button
-                onClick={handleGetStarted}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full"
-              >
-                Get Started
-              </Button>
-            </div>
+            <Button 
+              asChild 
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <a href="https://app.aczen.tech" target="_blank" rel="noopener noreferrer">
+                Get Started for Free
+              </a>
+            </Button>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">

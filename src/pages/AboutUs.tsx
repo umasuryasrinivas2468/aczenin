@@ -10,7 +10,7 @@ const AboutUs = () => {
       id: 1,
       name: "Uma Surya Srinivas B",
       title: "Executive Chairman",
-      image: "https://media.licdn.com/dms/image/v2/D5603AQG_sPsDzDElVQ/profile-displayphoto-shrink_400_400/B56ZbjEPWuH4Ag-/0/1747566262232?e=1766016000&v=beta&t=CJ0CMjeFYzbN9bTvZipAQaElYDEYqSW_CXoZjORdQ_4",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQG_sPsDzDElVQ/profile-displayphoto-shrink_400_400/B56ZbjEPWuH4Ag-/0/1747566262232?e=1767830400&v=beta&t=Ra90KNirKKHbLPa8qyqgcWMnT_3QSBQGvRikSg-f9w8",
       bio: "Uma Surya Srinivas B is a young and visionary entrepreneur currently serving as the Managing Director of Aczen Technologies Pvt. Ltd. since April 2nd, 2024. At just 18 years old, he founded Aczen with a mission to build innovative, tech-driven financial solutions that empower Small and Medium-sized Businesses (SMBs) across India."
     },
     {

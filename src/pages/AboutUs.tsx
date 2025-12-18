@@ -134,21 +134,21 @@ const AboutUs = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_480/B4EZVx0uoaGYAc-/0/1741371404083?e=1766016000&v=beta&t=DTvIg5yGb1sZcVYLd5YKK-PudPAGl9m568RYnYia9v8" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQF7DeK-KaaSsg/feedshare-shrink_1280/feedshare-shrink_1280/0/1729144545365?e=1767830400&v=beta&t=cYVd2V2evWHuPdd41i7TiCt6tIZM0ZwsoJMSjZm0lcQ" 
                       alt="Team Photo 1"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQFCCpmcJsFmew/feedshare-shrink_480/feedshare-shrink_480/0/1729187811377?e=1766016000&v=beta&t=yvdrEwzSiQXXl-Bob5JUjf9CKochfJHnEWedsSBNGpo" 
+                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_800/B4EZVx0uoaGYAk-/0/1741371404086?e=1767830400&v=beta&t=nXbrBguelhaXVyq0UrYmlTVjFvE3W6M5Vd0RdmyK41Y" 
                       alt="Team Photo 2"
                       className="w-full h-40 object-cover grayscale"
                     />
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1766016000&v=beta&t=LPXD_n4kezM1X4lApGEDVGk4nZ6W7YSqCY8A8miVNT8" 
+                      src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1767830400&v=beta&t=yULhS5tcyMt_J9MB7V9_vIC3_-yDHKm9om0ExXS3NZ0" 
                       alt="Team Photo 3"
                       className="w-full h-40 object-cover grayscale"
                     />

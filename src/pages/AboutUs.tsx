@@ -17,7 +17,7 @@ const AboutUs = () => {
       id: 2,
       name: "M Venkatesh",
       title: "Chief Financial Officer ",
-      image: "https://media.licdn.com/dms/image/v2/D5603AQEc7JxlspKI8Q/profile-displayphoto-scale_400_400/B56ZgtEx9MHUAg-/0/1753102887969?e=1766016000&v=beta&t=Kkat0B6_60QNosqOwurEHNK5z4jniFUEYhy6Lnv5xU4",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQEc7JxlspKI8Q/profile-displayphoto-scale_400_400/B56ZgtEx9MHUAg-/0/1753102887969?e=1767830400&v=beta&t=SS38fOeyefJMeosnMjqyqWZCXRHKauoURDCMUP8MlQQ",
       bio: "Venkatesh is the Chief Financial Officer (CFO) and Co-Founder of Aczen Technologies Pvt. Ltd., where he plays a key role in shaping the company's financial strategy and operational scalability. From managing investor relations to overseeing budgeting, compliance, and growth planning, Venkatesh ensures the financial backbone of Aczen remains strong and future-ready."
     },
     
@@ -32,7 +32,7 @@ const AboutUs = () => {
     id: 7,
     name: "Charitha",
     title: "Chief Design Officer",
-    image: "https://media.licdn.com/dms/image/v2/D4E03AQEX5mKNJwyqiw/profile-displayphoto-shrink_400_400/B4EZZmsOnpH0Ag-/0/1745479592961?e=1766016000&v=beta&t=g3coEAFqshLq9y_H_bTiNr4IzvZUXBwmzMu-ac3ZkTs", // replace with real image URL
+    image: "https://media.licdn.com/dms/image/v2/D4E03AQEX5mKNJwyqiw/profile-displayphoto-shrink_400_400/B4EZZmsOnpH0Ag-/0/1745479592961?e=1767830400&v=beta&t=9shnkXOOihqlDMpFYZ5cm_Qo05Z7e0sgcO-GfNiN2Wo", // replace with real image URL
     bio: "As our Chief Design Officer, Neelam Charitha leads and shapes the creative direction of the company. She oversees UI/UX design, ensuring our digital products deliver intuitive and engaging user experiences. In addition, she manages graphic design, brand identity, and videography, bringing a cohesive visual language to everything we create. With a thoughtful approach and a keen eye for detail, she helps translate our brand vision into designs that resonate with our audience and drive meaningful impact."
   },
   ];

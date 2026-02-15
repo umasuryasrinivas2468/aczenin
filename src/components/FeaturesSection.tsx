@@ -38,7 +38,7 @@ const FeaturesSection = () => {
     },
     {
       icon: CreditCard,
-      title: "GST Reprorting",
+      title: "GST Reporting",
       description:
         "Comprehensive GST reporting with real-time tracking, automated filing, and compliance monitoring.",
     },

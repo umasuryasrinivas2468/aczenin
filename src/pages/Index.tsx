@@ -5,7 +5,6 @@ import FeaturesSection from "@/components/FeaturesSection";
 import PartnersSection from "@/components/PartnersSection";
 import VideoSection from "@/components/VideoSection";
 import SecuritySection from "@/components/SecuritySection";
-import InteractiveFeaturesSection from "@/components/InteractiveFeaturesSection";
 import IndustrySection from "@/components/IndustrySection";
 import FAQSection from "@/components/FAQSection";
 import ContactSection from "@/components/ContactSection";
@@ -22,7 +21,6 @@ const Index = () => {
         <PartnersSection />
         <VideoSection />
         <SecuritySection />
-        <InteractiveFeaturesSection />
         <IndustrySection />
         <FAQSection />
         <ContactSection />
@@ -34,3 +32,5 @@ const Index = () => {
 };
 
 export default Index;
+
+

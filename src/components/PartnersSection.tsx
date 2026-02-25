@@ -28,7 +28,17 @@ const PartnersSection = () => {
       name: "Meri Pehchan",
       logo: "https://img1.digitallocker.gov.in/ndh/smart/images/meripehchaan-logo.png",
       alt: "Meri Pehchan logo"
-    }
+    },
+    {
+      name: "mistral",
+      logo: "https://www.datocms-assets.com/14946/1760515594-mistral-ai-logo.jpg?auto=format&fit=max&w=1200",
+      alt: "Meri Pehchan logo"
+    },
+    {
+      name: "trust",
+      logo: "https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/280215/TrustCloud-cloud-logo-78288c52-9e8b-482f-abc2-83cda4f3722c.png",
+      alt: "Meri Pehchan logo"
+    },
   ];
 
   // Placeholder function for responsive logos

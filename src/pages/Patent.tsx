@@ -54,7 +54,7 @@ const Patent = () => {
     {
       stage: "Publication Queue",
       date: "In Progress",
-      status: "In Review",
+      status: "Completed",
       detail:
         "Application is progressing through standard publication and examiner workflow.",
     },

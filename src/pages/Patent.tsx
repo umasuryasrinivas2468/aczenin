@@ -112,7 +112,7 @@ const Patent = () => {
                       202641019639
                     </p>
                     <span className="rounded-full border border-smeteal-300 bg-smeteal-100 px-3 py-1 text-sm text-smeteal-800">
-                      Pending
+                      Published
                     </span>
                   </div>
 

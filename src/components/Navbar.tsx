@@ -35,7 +35,14 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center gap-2" aria-label="Aczen home">
+          <img
+            src="/images/aczenimg.jpeg"
+            alt="Aczen logo"
+            width={36}
+            height={36}
+            className="h-9 w-9 rounded-md object-cover"
+          />
           <span className="text-2xl font-bold bg-gradient-to-r from-smebank-700 to-smeteal-600 text-transparent bg-clip-text">
             Aczen
           </span>
@@ -51,6 +58,7 @@ const Navbar = () => {
             <NavItem label="Patents" href="/patent" />
             <NavItem label="Security" href="https://aczen.trustshare.com/" />
             <NavItem label="About Us" href="/about" />
+            <NavItem label="Blog" href="/blog" />
             <NavItem label="FAQ" href="/faq" />
             <NavItem label="Contact" href="/contacts" />
           </nav>
@@ -90,6 +98,7 @@ const Navbar = () => {
             <NavItem mobile label="Patents" href="/patent" />
             <NavItem mobile label="Security" href="https://aczen.trustshare.com/" />
             <NavItem mobile label="About Us" href="/about" />
+            <NavItem mobile label="Blog" href="/blog" />
             <NavItem mobile label="FAQ" href="/faq" />
             <NavItem mobile label="Contact" href="/contacts" />
             <a

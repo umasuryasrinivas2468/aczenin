@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -141,6 +142,12 @@ const Pricing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <SEO
+        title="Aczen Pricing — Plans for SMEs, CAs, Startups & Enterprises"
+        description="Transparent pricing for Aczen's unified financial OS. Start free, upgrade as you grow. Includes GST invoicing, expense tracking, B2B payments and CRM."
+        keywords="Aczen pricing, accounting software pricing India, GST invoicing cost, SME software plans, startup accounting pricing"
+        path="/pricing"
+      />
       <Navbar />
       
       <main className="pt-16 pb-16">

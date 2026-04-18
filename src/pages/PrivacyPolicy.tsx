@@ -1,11 +1,17 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Privacy Policy — Aczen Technologies"
+        description="Aczen's privacy policy explains how we collect, use, store and protect your data across our financial OS products."
+        path="/privacy"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

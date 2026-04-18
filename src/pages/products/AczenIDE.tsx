@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Code, GitBranch, Bug, Users, Terminal, Zap, ArrowRight, Check, Play } from "lucide-react";
 
 const AczenIDE = () => {
@@ -56,6 +57,12 @@ const AczenIDE = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen IDE — Integrated Development Environment for Modern Teams"
+        description="Aczen IDE is a cloud-native IDE with AI code completion, debugging, version control and real-time collaboration."
+        keywords="Aczen IDE, online IDE, AI code editor, cloud IDE, Aczen developer tools, collaborative coding"
+        path="/products/aczen-ide"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Breadcrumb */}

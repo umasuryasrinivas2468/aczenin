@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Heart, Shield, Users, Target, Award, ArrowRight, AlertTriangle, MapPin, UserCheck, BookOpen } from "lucide-react";
 
 const SocialImpact = () => {
@@ -80,6 +81,12 @@ const SocialImpact = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen Social Impact — Women Safety, Education & Community"
+        description="Aczen's social impact initiatives — women safety, digital literacy, financial inclusion, and community-driven programs across India."
+        keywords="Aczen social impact, CSR fintech India, women safety program, financial inclusion India, digital literacy"
+        path="/social-impact"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Breadcrumb */}

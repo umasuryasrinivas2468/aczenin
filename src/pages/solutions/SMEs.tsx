@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const SMEs = () => {
   const features = [
@@ -55,6 +56,12 @@ const SMEs = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen for SMEs — Banking, Invoicing & Payments for Indian SMEs"
+        description="Aczen gives small and medium enterprises everything they need: current accounts, GST invoicing, expense tracking, B2B payments and compliance."
+        keywords="SME accounting software India, Aczen for SMEs, SME banking solutions, small business software, MSME digital banking"
+        path="/solutions/smes"
+      />
       <Navbar />
       
       {/* Hero Section */}

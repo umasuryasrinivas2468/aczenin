@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const CA = () => {
   const features = [
@@ -78,6 +79,12 @@ const CA = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen for Chartered Accountants — Practice Management Software"
+        description="Built for CAs: multi-client dashboards, GST filings, TDS compliance, financial reports and secure document storage."
+        keywords="CA software India, chartered accountant software, practice management CA, GST filing software, TDS filing CA"
+        path="/solutions/ca"
+      />
       <Navbar />
       
       {/* Hero Section */}

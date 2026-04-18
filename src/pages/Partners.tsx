@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Partners = () => {
   // Partner logos with responsive sizing
@@ -112,6 +113,12 @@ const Partners = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen Partners — Banking, Payments & Channel Partnerships"
+        description="Aczen partners with leading banks, payment providers and channel partners — Axis Bank, Cashfree, Augoment and more — to power India's financial OS."
+        keywords="Aczen partners, fintech partnerships India, Axis Bank Aczen, Cashfree Aczen, channel partner program"
+        path="/partners"
+      />
       <Navbar />
       
       {/* Hero Section */}

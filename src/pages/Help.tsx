@@ -1,11 +1,18 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { HelpCircle, Video, FileText, MessagesSquare } from "lucide-react";
 
 const Help = () => {
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen Help Center — Tutorials, Guides & Support"
+        description="Get help with Aczen — video tutorials, product guides, and live support for accounting, GST, payments and CRM."
+        keywords="Aczen help, Aczen tutorials, accounting software help, Aczen guide, GST help"
+        path="/help"
+      />
       <Navbar />
       <main className="py-20">
         <div className="container mx-auto px-4">

@@ -32,6 +32,8 @@ import AczenOS from "./pages/products/AczenOS";
 import Start from "./pages/Start";
 import Pricing from "./pages/Pricing";
 import Patent from "./pages/Patent";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,8 @@ const App = () => (
           <Route path="/start" element={<Start />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/patent" element={<Patent />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

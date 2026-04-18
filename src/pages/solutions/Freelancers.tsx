@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Freelancers = () => {
   const features = [
@@ -80,6 +81,12 @@ const Freelancers = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen for Freelancers — Invoicing, GST & Payments"
+        description="Everything freelancers need: GST-compliant invoicing, client payments, expense tracking and simple tax filings — in one app."
+        keywords="freelancer invoicing India, Aczen for freelancers, GST for freelancers, independent contractor accounting"
+        path="/solutions/freelancers"
+      />
       <Navbar />
       
       {/* Hero Section */}

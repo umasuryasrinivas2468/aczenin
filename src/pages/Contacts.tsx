@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { useState } from "react";
 
 const Contacts = () => {
@@ -80,6 +81,12 @@ const Contacts = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Contact Aczen — Sales, Support & Partnerships"
+        description="Get in touch with Aczen for sales, product support, partnerships and press. Email, phone and office locations across India."
+        keywords="contact Aczen, Aczen support, Aczen sales, Aczen partnerships, Aczen office India"
+        path="/contacts"
+      />
       <Navbar />
       
       {/* Hero Section */}

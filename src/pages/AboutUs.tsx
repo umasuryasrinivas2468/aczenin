@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const AboutUs = () => {
   // Leadership team data
@@ -32,6 +33,12 @@ const AboutUs = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="About Aczen — Leadership Team & Mission"
+        description="Meet the Aczen leadership team and learn our mission to build India's unified financial OS for SMEs, CAs, startups and enterprises."
+        keywords="About Aczen, Aczen leadership, Aczen team, Aczen founders, Uma Surya Srinivas, fintech India company"
+        path="/about"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Simple Breadcrumb */}

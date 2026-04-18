@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import {
   Carousel,
   CarouselContent,
@@ -40,6 +41,12 @@ const Careers = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Careers at Aczen — Join India's Unified Financial OS Team"
+        description="Build the future of fintech with Aczen. Explore open engineering, design, sales and operations roles across our India offices."
+        keywords="Aczen careers, fintech jobs India, Aczen hiring, engineering jobs, product jobs, startup careers"
+        path="/careers"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Breadcrumb */}

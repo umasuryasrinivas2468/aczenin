@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Patent = () => {
   const [activeFeature, setActiveFeature] = useState(0);
@@ -76,6 +77,12 @@ const Patent = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-smebank-50 via-white to-smeteal-50 text-smebank-950">
+      <SEO
+        title="Aczen Patents — Innovation in Financial Automation"
+        description="Explore Aczen's patent portfolio covering financial automation, compliance workflows and AI-driven accounting technologies."
+        keywords="Aczen patents, fintech patents India, financial automation IP, Aczen innovation"
+        path="/patent"
+      />
       <Navbar />
 
       <main className="pt-24 pb-16">

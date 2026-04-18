@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Database, Code, Monitor, ArrowRight, Star, Users, Zap } from "lucide-react";
 
 const Products = () => {
@@ -46,6 +47,12 @@ const Products = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen Products — CRM, IDE, OS & Orbit for Indian Businesses"
+        description="Explore the Aczen product suite: Aczen CRM, Aczen IDE, Aczen OS and Aczen Orbit — built to run accounting, payments, compliance and customer workflows end to end."
+        keywords="Aczen products, Aczen CRM, Aczen IDE, Aczen OS, Aczen Orbit, business software India, accounting platform, CRM for SMEs"
+        path="/products"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Breadcrumb */}

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Enterprises = () => {
   const features = [
@@ -80,6 +81,12 @@ const Enterprises = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen for Enterprises — Corporate Banking & Finance Automation"
+        description="Aczen Enterprise: multi-entity accounting, corporate banking integrations, approvals workflow, audit trails and dedicated support."
+        keywords="enterprise accounting India, Aczen for enterprise, corporate banking software, multi-entity accounting, finance automation"
+        path="/solutions/enterprises"
+      />
       <Navbar />
       
       {/* Hero Section */}

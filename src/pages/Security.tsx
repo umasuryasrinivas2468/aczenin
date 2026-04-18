@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Security = () => {
   const securityFeatures = [
@@ -91,6 +92,12 @@ const Security = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen Security — Bank-Grade Encryption, 2FA & Compliance"
+        description="Aczen protects your business data with 256-bit SSL encryption, biometric and two-factor authentication, and full compliance with Indian data standards."
+        keywords="Aczen security, fintech security India, 2FA accounting, encrypted banking, RBI compliance, ISO 27001"
+        path="/security"
+      />
       <Navbar />
       
       {/* Hero Section */}

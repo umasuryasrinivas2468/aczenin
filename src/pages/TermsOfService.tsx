@@ -1,11 +1,17 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 
 const TermsOfService = () => {
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Terms of Service — Aczen Technologies"
+        description="Read the terms of service that govern your use of Aczen's unified financial OS, products and APIs."
+        path="/terms"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

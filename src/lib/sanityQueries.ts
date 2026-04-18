@@ -71,3 +71,12 @@ export async function getRecentPosts(limit = 3): Promise<BlogPost[]> {
     { limit }
   );
 }
+
+export async function getMorePosts(excludeId: string, limit = 3): Promise<BlogPost[]> {
+  return sanityClient.fetch(
+    `*[_type == "post" && defined(slug.current) && _id != $excludeId] | order(publishedAt desc)[0...$limit]{
+      ${POST_PROJECTION}
+    }`,
+    { excludeId, limit }
+  );
+}

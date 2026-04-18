@@ -47,5 +47,50 @@ export default defineType({
       options: { hotspot: true },
       fields: [{ name: "alt", title: "Alt text", type: "string" }],
     }),
+    defineArrayMember({
+      type: "object",
+      name: "cta",
+      title: "Button / Call-to-action",
+      fields: [
+        { name: "label", type: "string", title: "Button text", validation: (Rule) => Rule.required() },
+        {
+          name: "href",
+          type: "url",
+          title: "Link URL",
+          validation: (Rule) => Rule.required().uri({ scheme: ["http", "https", "mailto", "tel"] }),
+        },
+        {
+          name: "variant",
+          type: "string",
+          title: "Style",
+          options: {
+            list: [
+              { title: "Primary (filled blue)", value: "primary" },
+              { title: "Secondary (outline)", value: "secondary" },
+            ],
+            layout: "radio",
+          },
+          initialValue: "primary",
+        },
+        {
+          name: "align",
+          type: "string",
+          title: "Alignment",
+          options: {
+            list: [
+              { title: "Left", value: "left" },
+              { title: "Center", value: "center" },
+              { title: "Right", value: "right" },
+            ],
+            layout: "radio",
+          },
+          initialValue: "center",
+        },
+      ],
+      preview: {
+        select: { label: "label", href: "href" },
+        prepare: ({ label, href }) => ({ title: label || "Button", subtitle: href }),
+      },
+    }),
   ],
 });

@@ -1,11 +1,18 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 
 const Status = () => {
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen Status — System Uptime & Incident Reports"
+        description="Real-time status of Aczen platform services, incidents and scheduled maintenance."
+        keywords="Aczen status, Aczen uptime, system status fintech"
+        path="/status"
+      />
       <Navbar />
       <main className="py-20">
         <div className="container mx-auto px-4">

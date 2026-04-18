@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Monitor, Shield, Cloud, Cpu, Smartphone, Zap, ArrowRight, Check, Download, Laptop, Tablet, Home } from "lucide-react";
 
 const AczenOS = () => {
@@ -68,6 +69,12 @@ const AczenOS = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen OS — Unified Financial Operating System for Business"
+        description="Aczen OS ties accounting, invoicing, payments, compliance and CRM into a single operating system for Indian businesses."
+        keywords="Aczen OS, financial operating system, business OS India, unified accounting platform"
+        path="/products/aczen-os"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Breadcrumb */}

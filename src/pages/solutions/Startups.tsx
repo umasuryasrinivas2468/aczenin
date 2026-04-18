@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Startups = () => {
   const features = [
@@ -76,6 +77,12 @@ const Startups = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen for Startups — Accounting, Banking & Cap Table Ready"
+        description="Startup-ready: zero-fee current accounts, investor-friendly reports, burn tracking, GST invoicing and cap table integrations."
+        keywords="startup accounting India, Aczen for startups, startup banking, cap table India, zero-fee current account"
+        path="/solutions/startups"
+      />
       <Navbar />
       
       {/* Hero Section */}

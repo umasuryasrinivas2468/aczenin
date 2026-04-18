@@ -1,11 +1,18 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 
 const Compliance = () => {
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen Compliance — GST, TDS, RBI & Data Protection"
+        description="Aczen helps Indian businesses stay compliant with GST, TDS, RBI and data protection regulations — automated filings, audit trails and secure storage."
+        keywords="Aczen compliance, GST compliance India, TDS filing, RBI compliance, DPDP Act, audit trail accounting"
+        path="/compliance"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

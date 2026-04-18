@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -127,6 +128,12 @@ const Start = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <SEO
+        title="Aczen Orbit — Start Your Company & Open a Business Account"
+        description="Launch your Pvt Ltd, LLP or OPC with Aczen Orbit. Get incorporation, PAN/TAN, GST, current account and compliance — all in one place."
+        keywords="Aczen Orbit, start a company India, company incorporation online, Pvt Ltd registration, LLP registration, business current account"
+        path="/start"
+      />
       <Navbar />
       
       <main className="pt-16 pb-16">

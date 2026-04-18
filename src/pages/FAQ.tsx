@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { useState } from "react";
 
 const FAQ = () => {
@@ -185,8 +186,14 @@ const FAQ = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen FAQ — Answers on Accounting, GST, Payments & Security"
+        description="Frequently asked questions about Aczen's accounting platform: account opening, GST invoicing, B2B payments, fees, security and onboarding support."
+        keywords="Aczen FAQ, Aczen help, accounting software FAQ, GST invoicing questions, Aczen support"
+        path="/faq"
+      />
       <Navbar />
-      
+
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-smebank-50 to-smeteal-50">
         <div className="container mx-auto px-4">

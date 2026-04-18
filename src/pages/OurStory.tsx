@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const OurStory = () => {
   // Timeline data
@@ -40,6 +41,12 @@ const OurStory = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Our Story — The Journey of Aczen Technologies"
+        description="Founded in April 2024, Aczen is building India's unified financial OS. Follow our milestones — Web3 partnerships, Aczen Connect, Cashfree integration, and more."
+        keywords="Aczen story, Aczen history, Aczen Technologies journey, fintech startup India"
+        path="/our-story"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Simple Breadcrumb */}

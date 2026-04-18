@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Database, Users, BarChart3, Settings, Phone, Mail, Calendar, Target, ArrowRight, Check } from "lucide-react";
 
 const AczenCRM = () => {
@@ -51,6 +52,12 @@ const AczenCRM = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Aczen CRM — Customer Relationship Management for Indian Businesses"
+        description="Aczen CRM helps SMEs manage contacts, sales pipeline, analytics and customer communications — integrated with invoicing and payments."
+        keywords="Aczen CRM, CRM software India, sales pipeline tool, contact management, CRM for SMEs, lead management"
+        path="/products/aczen-crm"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Breadcrumb */}

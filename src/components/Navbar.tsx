@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
@@ -35,7 +37,7 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2" aria-label="Aczen home">
+        <Link href="/" className="flex items-center gap-2" aria-label="Aczen home">
           <img
             src="/images/aczenimg.jpeg"
             alt="Aczen logo"
@@ -135,7 +137,7 @@ const NavItem = ({
 
   if (isInternalLink) {
     return (
-      <Link to={href} className={className}>
+      <Link href={href} className={className}>
         {label}
       </Link>
     );
@@ -158,27 +160,27 @@ const SolutionsDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="w-48">
         <DropdownMenuItem asChild>
-          <Link to="/solutions/smes" className="w-full cursor-pointer">
+          <Link href="/solutions/smes" className="w-full cursor-pointer">
             SME's
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/solutions/ca" className="w-full cursor-pointer">
+          <Link href="/solutions/ca" className="w-full cursor-pointer">
             CA
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/solutions/startups" className="w-full cursor-pointer">
+          <Link href="/solutions/startups" className="w-full cursor-pointer">
             Startups
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/solutions/enterprises" className="w-full cursor-pointer">
+          <Link href="/solutions/enterprises" className="w-full cursor-pointer">
             Enterprises
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/solutions/freelancers" className="w-full cursor-pointer">
+          <Link href="/solutions/freelancers" className="w-full cursor-pointer">
             Freelancers
           </Link>
         </DropdownMenuItem>
@@ -197,23 +199,23 @@ const ProductsDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="w-48">
         <DropdownMenuItem asChild>
-          <Link to="/start" className="w-full cursor-pointer flex items-center justify-between">
+          <Link href="/start" className="w-full cursor-pointer flex items-center justify-between">
             <span>Aczen Orbit</span>
             <span className="bg-gradient-to-r from-smebank-500 to-smeteal-500 text-white text-xs px-2 py-1 rounded-full font-semibold">New</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/products/aczen-crm" className="w-full cursor-pointer">
+          <Link href="/products/aczen-crm" className="w-full cursor-pointer">
             Aczen CRM
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/products/aczen-ide" className="w-full cursor-pointer">
+          <Link href="/products/aczen-ide" className="w-full cursor-pointer">
             Aczen IDE
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/products/aczen-os" className="w-full cursor-pointer">
+          <Link href="/products/aczen-os" className="w-full cursor-pointer">
             Aczen OS
           </Link>
         </DropdownMenuItem>
@@ -237,19 +239,19 @@ const MobileSolutionsMenu = () => {
       </button>
       {isOpen && (
         <div className="pl-4 space-y-2">
-          <Link to="/solutions/smes" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/solutions/smes" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             SME's
           </Link>
-          <Link to="/solutions/ca" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/solutions/ca" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             CA
           </Link>
-          <Link to="/solutions/startups" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/solutions/startups" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             Startups
           </Link>
-          <Link to="/solutions/enterprises" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/solutions/enterprises" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             Enterprises
           </Link>
-          <Link to="/solutions/freelancers" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/solutions/freelancers" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             Freelancers
           </Link>
         </div>
@@ -273,17 +275,17 @@ const MobileProductsMenu = () => {
       </button>
       {isOpen && (
         <div className="pl-4 space-y-2">
-          <Link to="/start" className="flex items-center justify-between py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/start" className="flex items-center justify-between py-1 text-sm text-gray-600 hover:text-smebank-600">
             <span>Aczen Orbit</span>
             <span className="bg-gradient-to-r from-smebank-500 to-smeteal-500 text-white text-xs px-2 py-1 rounded-full font-semibold">New</span>
           </Link>
-          <Link to="/products/aczen-crm" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/products/aczen-crm" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             Aczen CRM
           </Link>
-          <Link to="/products/aczen-ide" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/products/aczen-ide" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             Aczen IDE
           </Link>
-          <Link to="/products/aczen-os" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+          <Link href="/products/aczen-os" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             Aczen OS
           </Link>
         </div>

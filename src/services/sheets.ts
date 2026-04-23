@@ -5,7 +5,7 @@ export interface SheetSubmissionResponse {
 
 export const submitPhoneNumber = async (phone: string): Promise<SheetSubmissionResponse> => {
   try {
-    const webhook = import.meta.env.VITE_SHEET_WEBHOOK_URL as string | undefined;
+    const webhook = process.env.NEXT_PUBLIC_SHEET_WEBHOOK_URL;
     if (!webhook) {
       throw new Error('Webhook URL not configured');
     }

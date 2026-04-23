@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 const Footer = () => {
@@ -59,7 +61,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
           <div className="col-span-2">
-            <Link to="/" className="inline-block mb-6">
+            <Link href="/" className="inline-block mb-6">
               <span className="text-2xl font-bold text-white">Aczen</span>
             </Link>
             <p className="text-gray-400 mb-6 max-w-xs">

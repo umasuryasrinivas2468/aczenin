@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import BlogPost from "@/views/BlogPost";
 import { getAllPosts, getPostBySlug } from "@/lib/sanityQueries";
 import { urlFor, isSanityConfigured } from "@/lib/sanity";
 
 type Params = { slug: string };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   if (!isSanityConfigured()) return [];
@@ -79,6 +81,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       post = null;
     }
   }
+  if (!post) notFound();
   const coverUrl = post?.coverImage?.asset
     ? urlFor(post.coverImage).width(1200).height(630).url()
     : undefined;

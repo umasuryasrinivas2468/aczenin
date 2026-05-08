@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Blog from "@/views/Blog";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Aczen Blog — Insights on Accounting, GST, Fintech & SME Growth",
   description:

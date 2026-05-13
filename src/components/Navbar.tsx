@@ -53,15 +53,13 @@ const Navbar = () => {
         {/* Desktop Navigation - Centered */}
         {!isMobile && (
           <nav className="flex-1 flex items-center justify-center space-x-6">
+            <PlatformDropdown />
             <SolutionsDropdown />
-            <ProductsDropdown />
-            <NavItem label="Partners" href="/partners" />
             <NavItem label="Pricing" href="/pricing" />
-            <NavItem label="Patents" href="/patent" />
-            <NavItem label="Security" href="https://aczen.trustshare.com/" />
+            <NavItem label="Partners" href="/partners" />
             <NavItem label="About Us" href="/about" />
             <NavItem label="Blog" href="/blog" />
-            <NavItem label="FAQ" href="/faq" />
+            <NavItem label="Docs" href="https://aczen-d43c4738.mintlify.app" />
             <NavItem label="Contact" href="/contacts" />
           </nav>
         )}
@@ -93,14 +91,15 @@ const Navbar = () => {
       {isMobile && isOpen && (
         <div className="md:hidden bg-white">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+            <MobilePlatformMenu />
             <MobileSolutionsMenu />
-            <MobileProductsMenu />
-            <NavItem mobile label="Partners" href="/partners" />
             <NavItem mobile label="Pricing" href="/pricing" />
+            <NavItem mobile label="Partners" href="/partners" />
             <NavItem mobile label="Patents" href="/patent" />
             <NavItem mobile label="Security" href="https://aczen.trustshare.com/" />
             <NavItem mobile label="About Us" href="/about" />
             <NavItem mobile label="Blog" href="/blog" />
+            <NavItem mobile label="Docs" href="https://aczen-d43c4738.mintlify.app" />
             <NavItem mobile label="FAQ" href="/faq" />
             <NavItem mobile label="Contact" href="/contacts" />
             <a
@@ -144,9 +143,43 @@ const NavItem = ({
   }
 
   return (
-    <a href={href} className={className}>
+    <a href={href} className={className} target="_blank" rel="noopener noreferrer">
       {label}
     </a>
+  );
+};
+
+// Platform Dropdown Component (SEO landing pages)
+const PlatformDropdown = () => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center font-medium text-gray-700 hover:text-smebank-600 transition-colors">
+        Platform
+        <ChevronDown className="ml-1 h-4 w-4" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="center" className="w-64">
+        <DropdownMenuItem asChild>
+          <Link href="/accounting-software" className="w-full cursor-pointer">
+            Accounting Software
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/b2b-payments" className="w-full cursor-pointer">
+            B2B Payments
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/gst-compliance-software" className="w-full cursor-pointer">
+            GST Compliance Software
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/business-banking" className="w-full cursor-pointer">
+            Business Banking
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
@@ -189,38 +222,36 @@ const SolutionsDropdown = () => {
   );
 };
 
-// Products Dropdown Component
-const ProductsDropdown = () => {
+// Mobile Platform Menu Component
+const MobilePlatformMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center font-medium text-gray-700 hover:text-smebank-600 transition-colors">
-        Products
-        <ChevronDown className="ml-1 h-4 w-4" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="center" className="w-48">
-        <DropdownMenuItem asChild>
-          <Link href="/start" className="w-full cursor-pointer flex items-center justify-between">
-            <span>Aczen Orbit</span>
-            <span className="bg-gradient-to-r from-smebank-500 to-smeteal-500 text-white text-xs px-2 py-1 rounded-full font-semibold">New</span>
+    <div>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full py-2 text-smebank-700 font-medium"
+      >
+        Platform
+        <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <div className="pl-4 space-y-2">
+          <Link href="/accounting-software" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            Accounting Software
           </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/products/aczen-crm" className="w-full cursor-pointer">
-            Aczen CRM
+          <Link href="/b2b-payments" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            B2B Payments
           </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/products/aczen-ide" className="w-full cursor-pointer">
-            Aczen IDE
+          <Link href="/gst-compliance-software" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            GST Compliance Software
           </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/products/aczen-os" className="w-full cursor-pointer">
-            Aczen OS
+          <Link href="/business-banking" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
+            Business Banking
           </Link>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -253,40 +284,6 @@ const MobileSolutionsMenu = () => {
           </Link>
           <Link href="/solutions/freelancers" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
             Freelancers
-          </Link>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// Mobile Products Menu Component
-const MobileProductsMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full py-2 text-smebank-700 font-medium"
-      >
-        Products
-        <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-      {isOpen && (
-        <div className="pl-4 space-y-2">
-          <Link href="/start" className="flex items-center justify-between py-1 text-sm text-gray-600 hover:text-smebank-600">
-            <span>Aczen Orbit</span>
-            <span className="bg-gradient-to-r from-smebank-500 to-smeteal-500 text-white text-xs px-2 py-1 rounded-full font-semibold">New</span>
-          </Link>
-          <Link href="/products/aczen-crm" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
-            Aczen CRM
-          </Link>
-          <Link href="/products/aczen-ide" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
-            Aczen IDE
-          </Link>
-          <Link href="/products/aczen-os" className="block py-1 text-sm text-gray-600 hover:text-smebank-600">
-            Aczen OS
           </Link>
         </div>
       )}

@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\out\\\\blog\\\\ *)"
+      "Bash(dir C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\out\\\\blog\\\\ *)",
+      "Bash(npx next *)"
     ]
   }
 }

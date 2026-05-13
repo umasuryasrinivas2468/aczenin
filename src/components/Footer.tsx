@@ -19,6 +19,16 @@ const Footer = () => {
 
   const footerLinks = [
     {
+      title: "Platform",
+      links: [
+        { name: "Accounting Software", href: "/accounting-software" },
+        { name: "B2B Payments", href: "/b2b-payments" },
+        { name: "GST Compliance Software", href: "/gst-compliance-software" },
+        { name: "Business Banking", href: "/business-banking" },
+        { name: "Pricing", href: "/pricing" }
+      ]
+    },
+    {
       title: "Company",
       links: [
         { name: "About Us", href: "/about" },
@@ -59,7 +69,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-16">
           <div className="col-span-2">
             <Link href="/" className="inline-block mb-6">
               <span className="text-2xl font-bold text-white">Aczen</span>

@@ -20,6 +20,11 @@ const PartnersSection = () => {
       alt: "Cashfree Payments logo"
     },
     {
+      name: "Razorpay Payments",
+      logo: "https://w7.pngwing.com/pngs/93/992/png-transparent-razorpay-logo-tech-companies.png",
+      alt: " Payments logo"
+    },
+    {
       name: "DigiLocker",
       logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRJ1dekE-1WtmOmfZl_UTAIeUMV450jmAE9g&s",
       alt: "DigiLocker logo"

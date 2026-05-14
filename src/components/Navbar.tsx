@@ -59,7 +59,7 @@ const Navbar = () => {
             <NavItem label="Partners" href="/partners" />
             <NavItem label="About Us" href="/about" />
             <NavItem label="Blog" href="/blog" />
-            <NavItem label="Docs" href="https://aczen-d43c4738.mintlify.app" />
+            <NavItem label="Docs" href="/docs" />
             <NavItem label="Contact" href="/contacts" />
           </nav>
         )}
@@ -99,7 +99,7 @@ const Navbar = () => {
             <NavItem mobile label="Security" href="https://aczen.trustshare.com/" />
             <NavItem mobile label="About Us" href="/about" />
             <NavItem mobile label="Blog" href="/blog" />
-            <NavItem mobile label="Docs" href="https://aczen-d43c4738.mintlify.app" />
+            <NavItem mobile label="Docs" href="/docs" />
             <NavItem mobile label="FAQ" href="/faq" />
             <NavItem mobile label="Contact" href="/contacts" />
             <a

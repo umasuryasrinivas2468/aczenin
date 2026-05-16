@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 
 Write-Host ""
 Write-Host "    ___    ______  ______  ______ _   __"
@@ -7,7 +7,7 @@ Write-Host "  / /| | / /        / / / __/ /  |/ / "
 Write-Host " / ___ |/ /___    / /__/ /___/ /|  /  "
 Write-Host "/_/  |_|\____/   /____/_____/_/ |_/   "
 Write-Host ""
-Write-Host "🚀 Developed by Aczen India" -ForegroundColor Cyan
+Write-Host ">> Developed by Aczen India" -ForegroundColor Cyan
 Write-Host ""
 
 function Fail($msg) {
@@ -29,26 +29,26 @@ if (Test-Path $projectDir) {
     if (-not (Test-Path (Join-Path $projectDir "package.json"))) {
         Fail "'$projectDir' exists but is not a valid project (no package.json). Remove it and re-run."
     }
-    Write-Host "Project already cloned at $projectDir" -ForegroundColor Green
+    Write-Host "-> Project already cloned at $projectDir" -ForegroundColor Green
 } else {
-    Write-Host "📥 Cloning Aczen..." -ForegroundColor Yellow
+    Write-Host "-> Cloning Aczen..." -ForegroundColor Yellow
     git clone $repoUrl $projectDir
     if ($LASTEXITCODE -ne 0) { Fail "git clone failed (exit code $LASTEXITCODE)." }
 }
 
 Set-Location $projectDir
 
-Write-Host "📦 Installing dependencies..." -ForegroundColor Yellow
+Write-Host "-> Installing dependencies..." -ForegroundColor Yellow
 npm install
 if ($LASTEXITCODE -ne 0) { Fail "npm install failed (exit code $LASTEXITCODE)." }
 
-Write-Host "🚀 Starting Aczen dev server on port $devPort..." -ForegroundColor Green
+Write-Host "-> Starting Aczen dev server on port $devPort..." -ForegroundColor Green
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$projectDir'; npm run dev"
 
 $url = "http://localhost:$devPort"
 $timeoutSec = 60
 $elapsed = 0
-Write-Host "Waiting for $url ..." -ForegroundColor Yellow
+Write-Host "-> Waiting for $url ..." -ForegroundColor Yellow
 while ($elapsed -lt $timeoutSec) {
     try {
         Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 2 -ErrorAction Stop | Out-Null
@@ -62,6 +62,6 @@ while ($elapsed -lt $timeoutSec) {
 if ($elapsed -ge $timeoutSec) {
     Write-Host "Dev server did not respond within ${timeoutSec}s. Open $url manually once it's ready." -ForegroundColor Yellow
 } else {
-    Write-Host "Dev server is up. Opening browser..." -ForegroundColor Green
+    Write-Host "-> Dev server is up. Opening browser..." -ForegroundColor Green
     Start-Process $url
 }

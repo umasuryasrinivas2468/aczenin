@@ -1,3 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /partner-portal
+
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +14,4 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+Sitemap: https://aczen.in/sitemap.xml

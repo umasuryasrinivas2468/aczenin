@@ -1,73 +1,44 @@
-# Welcome to your Lovable projectv
+# Aczen — Unified Financial OS
 
-## Project info
+Aczen is India's unified financial operating system for SMEs, CAs, startups,
+freelancers, and enterprises. This repository contains the marketing site and
+blog for **aczen.in**.
 
-**URL**: https://lovable.dev/projects/3bd30c44-eb85-4ddf-a3af-b787dac2545c
+## Tech stack
 
-## How can I edit this code?
+- Vite + React 18 + TypeScript
+- Tailwind CSS + shadcn/ui
+- React Router
+- Sanity (headless CMS for the blog)
+- react-helmet-async (per-page SEO)
 
-There are several ways of editing your application.
+## Local development
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/3bd30c44-eb85-4ddf-a3af-b787dac2545c) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Requires Node.js 18+ and npm.
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The site runs at http://localhost:8080.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Blog (Sanity)
 
-**Use GitHub Codespaces**
+Blog posts are authored in Sanity Studio and fetched at runtime via the
+Sanity CDN.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- Studio folder: `studio/` (run `npm run dev` inside to open the dashboard)
+- Runtime client: `src/lib/sanity.ts`
+- Public routes: `/blog`, `/blog/:slug`
 
-## What technologies are used for this project?
+Set the Sanity project ID and dataset in `.env`:
 
-This project is built with:
+```
+VITE_SANITY_PROJECT_ID=your_project_id
+VITE_SANITY_DATASET=production
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Deployment
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/3bd30c44-eb85-4ddf-a3af-b787dac2545c) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+The site is deployed on Vercel via `vercel.json`.

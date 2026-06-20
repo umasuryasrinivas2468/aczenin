@@ -1,0 +1,44 @@
+Section,Metric,Value,Notes
+Plan Overview,Total days,30,
+Plan Overview,Total tasks,120,~4 tasks per day
+Plan Overview,Total estimated hours,~145,~4.8 hrs per day
+Plan Overview,Total cash budget (INR),20500,"Reviews incentives (10000) + LinkedIn ad (2000) + Google Ads (2000) + Press release (5000) + LinkedIn boost (1500). Everything else free."
+,,,
+Week Breakdown,Week 1 - Foundation & Indexing,Days 1-7,"GSC, Bing, GMB, schema validation, directory listings, GA4, baseline metrics."
+Week Breakdown,Week 2 - Content Push,Days 8-14,"6 high-quality blog posts: pillar guides + comparison content (vs Tally, Zoho, etc.)"
+Week Breakdown,Week 3 - Authority & Reviews,Days 15-21,"Reviews on G2/Capterra/GMB, Quora answers, Reddit, guest post outreach, press release."
+Week Breakdown,Week 4 - Optimize & Scale,Days 22-30,"Analyze data, fix underperformers, more content, paid micro-tests, planning Month 2."
+,,,
+Target KPIs Day 30,Pages indexed,35-40,Currently ~30
+Target KPIs Day 30,Keywords ranking in top 100,40-80,Currently 0-5
+Target KPIs Day 30,Keywords ranking in top 10 (long-tail/branded),5-15,
+Target KPIs Day 30,Referring domains (backlinks),20-40,From directories + content + outreach
+Target KPIs Day 30,Reviews on G2 + Capterra + GMB,15-30,Star ratings unlocked at 5+
+Target KPIs Day 30,Monthly organic sessions,200-500,Baseline likely <50
+Target KPIs Day 30,Monthly branded searches,500-1000,Currently low
+Target KPIs Day 30,Page Speed - mobile,90+,Track each landing page
+,,,
+Realistic Ranking Targets,'Aczen' / branded queries,#1 by Day 5-7,Easy
+Realistic Ranking Targets,'Aczen vs Tally' / 'Aczen vs Zoho',#1-3 by Day 14,Branded comparison
+Realistic Ranking Targets,'Aczen accounting software',#1-2 by Day 7,Branded
+Realistic Ranking Targets,'GST software for [niche]',Top 20 by Day 21,Long-tail niche
+Realistic Ranking Targets,'best accounting software India',Page 5-10 by Day 30,Head term - takes 3-6 months
+Realistic Ranking Targets,'accounting software India',Page 8-15 by Day 30,Head term - takes 3-6 months
+Realistic Ranking Targets,Local pack 'accounting software [city]',Top 3 by Day 14,IF GMB verified
+,,,
+Critical Success Factors,Consistency over intensity,High,"Better to do 4 hours every day than 28 hours one day."
+Critical Success Factors,Don't fake reviews or backlinks,Critical,Google penalties hurt for years.
+Critical Success Factors,Track everything with UTM,High,Otherwise you can't tell what worked.
+Critical Success Factors,Genuine engagement on Quora/Reddit,High,Spam = bans. Value = compounds.
+Critical Success Factors,Founder-voice content,High,Personal posts outperform company-page posts 3-5x.
+Critical Success Factors,Re-request indexing after every meaningful update,Medium,Speeds up Google's response by days.
+,,,
+Tools Used,Free,Google Search Console; Bing Webmaster Tools; Google Analytics 4; Google Business Profile; Schema.org Validator; Rich Results Test; PageSpeed Insights; Screaming Frog (free 500-URL); Ahrefs Backlink Checker (free); Looker Studio,
+Tools Used,Paid optional,LinkedIn Ads; Google Ads; PR distribution,Total ~10500 INR
+Tools Used,Already in stack,Sanity Studio; Vercel; Cal.com; Chatbase,
+,,,
+Risk Factors,No customer reviews coming in,High impact,"Have a backup customer-success plan. Personal asks > automated emails."
+Risk Factors,GMB verification rejected,Medium impact,"Try alternate verification (video). Have backup local citations."
+Risk Factors,Pages not indexed in 7 days,Medium impact,"Re-request indexing. Check robots.txt + canonical tags. Add internal links."
+Risk Factors,Content not driving impressions by Week 3,Medium impact,"Audit: is content matching search intent? Adjust headers/keywords."
+Risk Factors,Founder bandwidth crunch,High impact,"Pre-record video content for LinkedIn. Batch outreach. Hire freelance writer for blogs (~5000 INR/post)."

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\out\\\\blog\\\\ *)",
+      "Bash(npx next *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git ls-remote *)",
+      "Bash(git checkout *)",
+      "Bash(git merge *)",
+      "Bash(git push *)",
+      "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\public\\\\install.ps1\"\\); Write-Output \"First 4 bytes \\(hex\\):\"; $bytes[0..3] | ForEach-Object { \"{0:X2}\" -f $_ }; Write-Output \"Total bytes: $\\($bytes.Length\\)\")",
+      "PowerShell($content = [System.IO.File]::ReadAllText\\(\"C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\public\\\\install.ps1\"\\); $hasCRLF = $content -match \"`r`n\"; $hasLFonly = \\($content -match \"`n\"\\) -and -not \\($content -match \"`r`n\"\\); Write-Output \"Has CRLF: $hasCRLF\"; Write-Output \"Has LF only: $hasLFonly\"; Write-Output \"---\"; $content.Substring\\(0,200\\) -replace \"`r\",\"\\\\r\" -replace \"`n\",\"\\\\n`n\")"
+    ]
+  }
+}

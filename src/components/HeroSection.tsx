@@ -18,9 +18,9 @@ const Hero = () => {
           </Badge>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-            One Accounting Platform to{" "}
+            One AI Accounting Platform to{" "}
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Manage Invoices, Expenses & Taxes
+              Finance & Legals
             </span>
           </h1>
 

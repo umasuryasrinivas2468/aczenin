@@ -62,9 +62,9 @@ const FeaturesSection = () => {
     },
     {
       icon: Headphones,
-      title: "24/7 Expert Support",
+      title: "Agentic AI ",
       description:
-        "Dedicated relationship manager and round-the-clock customer service.",
+        "Agentic AI mode operates autonomously through intelligent prompt-driven execution.",
     },
   ];
 

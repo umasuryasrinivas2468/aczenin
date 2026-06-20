@@ -20,6 +20,11 @@ const PartnersSection = () => {
       alt: "Cashfree Payments logo"
     },
     {
+      name: "Razorpay Payments",
+      logo: "https://w7.pngwing.com/pngs/93/992/png-transparent-razorpay-logo-tech-companies.png",
+      alt: " Payments logo"
+    },
+    {
       name: "DigiLocker",
       logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRJ1dekE-1WtmOmfZl_UTAIeUMV450jmAE9g&s",
       alt: "DigiLocker logo"
@@ -28,7 +33,17 @@ const PartnersSection = () => {
       name: "Meri Pehchan",
       logo: "https://img1.digitallocker.gov.in/ndh/smart/images/meripehchaan-logo.png",
       alt: "Meri Pehchan logo"
-    }
+    },
+    {
+      name: "mistral",
+      logo: "https://www.datocms-assets.com/14946/1760515594-mistral-ai-logo.jpg?auto=format&fit=max&w=1200",
+      alt: "Meri Pehchan logo"
+    },
+    {
+      name: "trust",
+      logo: "https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/280215/TrustCloud-cloud-logo-78288c52-9e8b-482f-abc2-83cda4f3722c.png",
+      alt: "Meri Pehchan logo"
+    },
   ];
 
   // Placeholder function for responsive logos

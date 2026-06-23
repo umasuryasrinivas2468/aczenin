@@ -1,153 +1,164 @@
+"use client";
 
-import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence, type PanInfo } from "framer-motion";
+import { Quote, Star, Building2 } from "lucide-react";
 
-const testimonials = [
+type Testimonial = {
+  id: number;
+  company: string;
+  director: string;
+  role: string;
+  initials: string;
+  accent: string;
+  quote: string;
+  rating: number;
+};
+
+const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: "Rajesh Kumar",
-    position: "Founder, TechSpark Solutions",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHByb2ZpbGUlMjBpbmRpYW58ZW58MHx8MHx8&auto=format&fit=crop&w=200&q=80",
-    quote: "SMEPower has been a game-changer for our business. The automated invoicing and payment tracking helped us streamline operations when we needed it most.",
+    company: "Novify",
+    director: "Karthik",
+    role: "Director, Novify",
+    initials: "NV",
+    accent: "from-indigo-500 to-blue-500",
+    quote:
+      "Aczen changed the way we close our books. What used to take a week now wraps up in a single afternoon — invoicing, GST, reconciliations, all in one flow.",
     rating: 5,
   },
   {
     id: 2,
-    name: "Priya Sharma",
-    position: "CEO, Artisan Handicrafts",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=200&q=80",
-    quote: "The cash flow insights feature gives me visibility I never had before. I can now make confident decisions about investments and expenses.",
+    company: "Raksha Higine",
+    director: "Rishitha",
+    role: "Director, Raksha Higine",
+    initials: "RH",
+    accent: "from-emerald-500 to-teal-500",
+    quote:
+      "The cash-flow insights surface decisions before I even ask. Aczen is less like accounting software and more like a finance teammate that never sleeps.",
     rating: 5,
   },
   {
     id: 3,
-    name: "Amit Patel",
-    position: "Director, Sunrise Electronics",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=200&q=80",
-    quote: "Managing our GST invoices was always a hassle until we switched to SMEPower. The automation saves us hours every week.",
-    rating: 4,
-  },
-  {
-    id: 4,
-    name: "Meera Iyer",
-    position: "Founder, Organic Essentials",
-    image: "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzB8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=200&q=80",
-    quote: "The 24/7 support is exceptional. Our dedicated relationship manager understands our business needs and is always available to help.",
+    company: "Employee Galaxy",
+    director: "Sandeep",
+    role: "Director, Employee Galaxy",
+    initials: "EG",
+    accent: "from-fuchsia-500 to-purple-500",
+    quote:
+      "From compliance to vendor payments, Aczen handles the heavy lifting. Our team finally gets to focus on growth instead of paperwork.",
     rating: 5,
   },
 ];
 
+const SWIPE_THRESHOLD = 80;
+
 const TestimonialsSection = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  
-  const nextTestimonial = () => {
-    setActiveIndex((current) => (current + 1) % testimonials.length);
-  };
-  
-  const prevTestimonial = () => {
-    setActiveIndex((current) => 
-      current === 0 ? testimonials.length - 1 : current - 1
-    );
+  const [[index, direction], setState] = useState<[number, number]>([0, 0]);
+
+  const paginate = (dir: number) => {
+    setState(([i]) => [
+      (i + dir + testimonials.length) % testimonials.length,
+      dir,
+    ]);
   };
 
-  // Auto-rotate testimonials
-  useEffect(() => {
-    if (!isPaused) {
-      const interval = setInterval(nextTestimonial, 5000);
-      return () => clearInterval(interval);
-    }
-    return undefined;
-  }, [isPaused]);
+  const onDragEnd = (_: unknown, info: PanInfo) => {
+    const offset = info.offset.x;
+    const velocity = info.velocity.x;
+    if (offset < -SWIPE_THRESHOLD || velocity < -500) paginate(1);
+    else if (offset > SWIPE_THRESHOLD || velocity > 500) paginate(-1);
+  };
+
+  const t = testimonials[index];
 
   return (
-    <section id="testimonials" className="py-20 bg-gradient-to-b from-white to-gray-50">
+    <section
+      id="testimonials"
+      className="relative py-24 md:py-28 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden"
+    >
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="section-title">What Our Customers Say</h2>
-          <p className="section-subtitle max-w-2xl mx-auto">
-            Join thousands of satisfied SME owners who've transformed their business banking experience
-          </p>
-        </div>
-        
-        <div 
-          className="relative max-w-4xl mx-auto"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
         >
-          <div className="overflow-hidden relative">
-            <div 
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-            >
-              {testimonials.map((testimonial) => (
-                <div 
-                  key={testimonial.id} 
-                  className="w-full flex-shrink-0 px-4"
-                >
-                  <div className="bg-white rounded-2xl p-8 shadow-lg">
-                    <div className="flex items-center gap-4 mb-6">
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name} 
-                        className="w-16 h-16 rounded-full object-cover"
-                      />
-                      <div>
-                        <h4 className="font-semibold text-xl">{testimonial.name}</h4>
-                        <p className="text-gray-500">{testimonial.position}</p>
-                      </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
+            Real teams.{" "}
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent">
+              Real results.
+            </span>
+          </h2>
+          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+            Hear from the founders running their businesses on Aczen.
+          </p>
+        </motion.div>
+
+        <div className="relative max-w-3xl mx-auto select-none">
+          <div className="relative h-[360px] md:h-[320px]">
+            <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+              <motion.div
+                key={t.id}
+                custom={direction}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={onDragEnd}
+                initial={{ x: direction >= 0 ? 320 : -320, opacity: 0, scale: 0.96 }}
+                animate={{ x: 0, opacity: 1, scale: 1 }}
+                exit={{ x: direction >= 0 ? -320 : 320, opacity: 0, scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 260, damping: 30 }}
+                className="absolute inset-0 cursor-grab active:cursor-grabbing"
+              >
+                <div className="relative h-full bg-white border border-gray-100 rounded-2xl p-7 md:p-10 shadow-md">
+                  <Quote
+                    className="absolute top-6 right-6 w-10 h-10 text-gray-100"
+                    strokeWidth={1.5}
+                  />
+
+                  <div className="flex items-center gap-4 mb-6">
+                    <div
+                      className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${t.accent} flex items-center justify-center text-white text-lg font-bold shrink-0`}
+                    >
+                      {t.initials}
+                      <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-md flex items-center justify-center shadow-sm">
+                        <Building2 className="w-3 h-3 text-gray-700" />
+                      </span>
                     </div>
-                    
-                    <p className="text-gray-700 italic mb-6">"{testimonial.quote}"</p>
-                    
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`h-5 w-5 ${
-                            i < testimonial.rating 
-                              ? "text-smeorange-500 fill-smeorange-500" 
-                              : "text-gray-300"
-                          }`} 
-                        />
-                      ))}
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        {t.director}
+                      </h3>
+                      <p className="text-sm text-gray-500 truncate">{t.role}</p>
                     </div>
                   </div>
+
+                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <Star
+                        key={idx}
+                        className={`w-4 h-4 ${
+                          idx < t.rating
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-gray-200"
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
-          
-          {/* Navigation buttons */}
-          <button 
-            onClick={prevTestimonial}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white shadow-md rounded-full p-2 z-10"
-            aria-label="Previous testimonial"
-          >
-            <ChevronLeft className="h-6 w-6 text-gray-600" />
-          </button>
-          
-          <button 
-            onClick={nextTestimonial}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white shadow-md rounded-full p-2 z-10"
-            aria-label="Next testimonial"
-          >
-            <ChevronRight className="h-6 w-6 text-gray-600" />
-          </button>
-          
-          {/* Indicators */}
-          <div className="flex justify-center mt-8 gap-2">
-            {testimonials.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveIndex(i)}
-                className={`w-3 h-3 rounded-full ${
-                  i === activeIndex ? "bg-smebank-600" : "bg-gray-300"
-                }`}
-                aria-label={`Go to testimonial ${i + 1}`}
-              />
-            ))}
-          </div>
+
+          <p className="text-center text-xs text-gray-400 mt-4">
+            Swipe to see more
+          </p>
         </div>
       </div>
     </section>

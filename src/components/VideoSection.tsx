@@ -12,7 +12,7 @@ const VideoSection = () => {
         <div className="max-w-4xl mx-auto">
           <div className="relative rounded-2xl overflow-hidden bg-gray-900 aspect-video cursor-pointer group" onClick={() => setIsOpen(true)}>
             <img
-              src="https://i3.ytimg.com/vi/bjEVBEt_0h4/maxresdefault.jpg"
+              src="https://i3.ytimg.com/vi/Wp9gK5SMe_c/maxresdefault.jpg"
               alt="Video thumbnail"
               className="w-full h-full object-cover group-hover:opacity-75 transition-opacity"
             />
@@ -39,7 +39,7 @@ const VideoSection = () => {
           <iframe
             width="100%"
             height="515"
-            src={isOpen ? "https://www.youtube.com/embed/bjEVBEt_0h4?autoplay=1" : ""}
+            src={isOpen ? "https://www.youtube.com/embed/Wp9gK5SMe_c?autoplay=1" : ""}
             title="SMEAczen Demo Video"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

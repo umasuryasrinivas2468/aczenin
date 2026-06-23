@@ -60,6 +60,7 @@ const Navbar = () => {
             <NavItem label="About Us" href="/about" />
             <NavItem label="Blog" href="/blog" />
             <NavItem label="Docs" href="/docs" />
+            <NavItem label="Security" href="https://aczen.trustshare.com/" />
             <NavItem label="Contact" href="/contacts" />
           </nav>
         )}

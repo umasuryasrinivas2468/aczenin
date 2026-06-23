@@ -42,11 +42,6 @@ const FAQSection = () => {
       answer: "To open a business account with Aczen, you'll need your GST registration certificate, PAN card, Aadhaar card, address proof of your business, and proof of business incorporation (such as partnership deed, registration certificate, or memorandum of association).",
     },
     {
-      id: 2,
-      question: "How long does it take to get approved for a business loan?",
-      answer: "Our loan approval process is fast and efficient. For pre-qualified customers, approvals can happen within minutes. For new customers, the process typically takes 24-48 hours after all required documents are submitted.",
-    },
-    {
       id: 3,
       question: "Are there any minimum balance requirements?",
       answer: "No, Aczen accounts do not have minimum balance requirements. We believe in helping businesses grow without unnecessary restrictions.",

@@ -18,7 +18,7 @@ const Startups = () => {
     {
       icon: <Zap className="h-8 w-8 text-smebank-600" />,
       title: "Quick Funding",
-      description: "Fast-track loan approvals and venture debt options to fuel your startup's growth and expansion."
+      description: "Fast-track funding access and venture debt options to fuel your startup's growth and expansion."
     },
     {
       icon: <Target className="h-8 w-8 text-smebank-600" />,
@@ -37,7 +37,6 @@ const Startups = () => {
     "Free digital payment gateway integration",
     "Dedicated startup relationship manager",
     "Access to exclusive investor meetups",
-    "Flexible loan terms with competitive rates",
     "Free financial planning and advisory services"
   ];
 
@@ -51,7 +50,7 @@ const Startups = () => {
     {
       title: "Growth Capital",
       amount: "₹50L - ₹5Cr",
-      description: "Scale your operations with working capital and expansion loans",
+      description: "Scale your operations with working capital and expansion support",
       features: ["Revenue-based", "Asset-light", "Growth-focused"]
     },
     {

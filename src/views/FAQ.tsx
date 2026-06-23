@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, HelpCircle, MessageCircle, Phone, Mail, User, DollarSign, Smartphone, CreditCard, TrendingUp, Headphones, FileText, BarChart3, Shield } from "lucide-react";
+import { Search, HelpCircle, MessageCircle, Phone, Mail, User, Smartphone, CreditCard, TrendingUp, Headphones, FileText, BarChart3, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,28 +43,6 @@ const FAQ = () => {
       ]
     },
     {
-      title: "Loans & Credit",
-      icon: <DollarSign className="h-6 w-6 text-smebank-600" />,
-      faqs: [
-        {
-          question: "What types of loans do you offer?",
-          answer: "We offer personal loans, business loans, home loans, vehicle loans, education loans, and working capital financing. Each loan type has specific eligibility criteria and interest rates."
-        },
-        {
-          question: "How quickly can I get loan approval?",
-          answer: "Pre-approved customers can get instant approval. For new applications, approval typically takes 24-48 hours for personal loans and 3-7 days for business loans, depending on documentation completeness."
-        },
-        {
-          question: "What is the interest rate for business loans?",
-          answer: "Business loan interest rates start from 8.5% per annum and vary based on your credit profile, business vintage, turnover, and loan amount. We offer competitive rates for SMEs and startups."
-        },
-        {
-          question: "Can I prepay my loan without penalties?",
-          answer: "Yes, we allow partial and full prepayment of loans. For floating rate loans, there are no prepayment charges. For fixed rate loans, minimal charges may apply as per the loan agreement."
-        }
-      ]
-    },
-    {
       title: "Digital Banking",
       icon: <Smartphone className="h-6 w-6 text-smebank-600" />,
       faqs: [
@@ -78,7 +56,7 @@ const FAQ = () => {
         },
         {
           question: "What services are available on mobile banking?",
-          answer: "You can check balances, transfer funds, pay bills, recharge mobile, book FDs, apply for loans, track investments, and access customer support through our comprehensive mobile banking platform."
+          answer: "You can check balances, transfer funds, pay bills, recharge mobile, book FDs, track investments, and access customer support through our comprehensive mobile banking platform."
         },
         {
           question: "Are there any charges for digital transactions?",
@@ -210,8 +188,8 @@ const FAQ = () => {
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Find quick answers to common questions about our banking services, 
-              account management, loans, and digital banking features.
+              Find quick answers to common questions about our banking services,
+              account management, and digital banking features.
             </p>
             
             {/* Search Bar */}
@@ -355,7 +333,7 @@ const FAQ = () => {
               <CardContent className="p-6 text-center">
                 <BarChart3 className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Interest Rates</h3>
-                <p className="text-sm text-gray-600 mb-4">Current rates for deposits and loans</p>
+                <p className="text-sm text-gray-600 mb-4">Current rates for deposits</p>
                 <Button variant="outline" size="sm">View Rates</Button>
               </CardContent>
             </Card>

@@ -43,11 +43,6 @@ const CA = () => {
 
   const services = [
     {
-      title: "Business Loans",
-      description: "Help your clients access working capital and term loans",
-      commission: "Up to 1.2%"
-    },
-    {
       title: "Current Accounts",
       description: "Zero balance current accounts with premium features",
       commission: "₹500 per account"

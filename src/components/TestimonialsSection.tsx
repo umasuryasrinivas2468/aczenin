@@ -8,7 +8,7 @@ const testimonials = [
     name: "Rajesh Kumar",
     position: "Founder, TechSpark Solutions",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHByb2ZpbGUlMjBpbmRpYW58ZW58MHx8MHx8&auto=format&fit=crop&w=200&q=80",
-    quote: "SMEPower has been a game-changer for our business. The instant loan feature helped us expand operations when we needed it most.",
+    quote: "SMEPower has been a game-changer for our business. The automated invoicing and payment tracking helped us streamline operations when we needed it most.",
     rating: 5,
   },
   {

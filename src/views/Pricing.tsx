@@ -44,19 +44,15 @@ const Pricing = () => {
       discount: '45%',
       popular: false,
       features: [
-        { name: 'GST-Compliant Invoicing', included: true, detail: 'Unlimited' },
-        { name: 'Payment Reminders', included: true, detail: 'Email only' },
-        { name: 'GST Tracking & Filing Alerts', included: true, detail: 'Basic' },
-        { name: 'Expense Recording', included: true, detail: 'Manual' },
+        { name: 'Sales', included: true, detail: 'GST invoices, quotes & payment reminders (email)' },
+        { name: 'Purchases', included: true, detail: 'Basic bills & vendor entries' },
+        { name: 'Inventory', included: true, detail: 'Manual stock tracking, single warehouse' },
+        { name: 'Assets', included: false, detail: 'Not included' },
+        { name: 'Banking', included: true, detail: 'Manual bank entries & customer ledgers' },
+        { name: 'Compliance', included: true, detail: 'GST tracking & filing alerts (basic)' },
         { name: 'Multi-User Access', included: false, detail: 'Not included' },
         { name: 'Business Analytics', included: true, detail: 'Basic Dashboard' },
-        { name: 'Payment Gateway', included: false, detail: 'Not included' },
-        { name: 'Vendor & Customer Ledgers', included: true, detail: 'Yes' },
-        { name: 'Cash Flow Forecasting', included: false, detail: 'Not included' },
-        { name: 'ERP/CRM API Access', included: false, detail: 'Not included' },
-        { name: 'Account Manager', included: false, detail: 'Not included' },
-        { name: 'Support', included: true, detail: 'Email' },
-        { name: 'Extras', included: true, detail: 'PDF bulk invoice download' }
+        { name: 'Support', included: true, detail: 'Email' }
       ]
     },
     {
@@ -70,45 +66,37 @@ const Pricing = () => {
       discount: '40%',
       popular: true,
       features: [
-        { name: 'GST-Compliant Invoicing', included: true, detail: 'Unlimited' },
-        { name: 'Payment Reminders', included: true, detail: 'Email + SMS' },
-        { name: 'GST Tracking & Filing Alerts', included: true, detail: 'Advanced (Auto Reconciliation)' },
-        { name: 'Expense Recording', included: true, detail: 'Manual + Bulk Upload' },
+        { name: 'Sales', included: true, detail: 'Unlimited invoices, quotes, credit notes + email/SMS reminders' },
+        { name: 'Purchases', included: true, detail: 'Bills, debit notes, vendor management & bulk upload' },
+        { name: 'Inventory', included: true, detail: 'Multi-warehouse, low-stock alerts & barcode' },
+        { name: 'Assets', included: true, detail: 'Fixed asset register with depreciation' },
+        { name: 'Banking', included: true, detail: 'Bank feed integration, auto reconciliation, payment gateway' },
+        { name: 'Compliance', included: true, detail: 'GST auto reconciliation + TDS filing alerts' },
         { name: 'Multi-User Access', included: true, detail: 'Up to 5 users' },
         { name: 'Business Analytics', included: true, detail: 'Advanced Dashboard' },
-        { name: 'Payment Gateway', included: true, detail: 'Included' },
-        { name: 'Vendor & Customer Ledgers', included: true, detail: 'Yes' },
-        { name: 'Cash Flow Forecasting', included: false, detail: 'Not included' },
-        { name: 'ERP/CRM API Access', included: false, detail: 'Not included' },
-        { name: 'Account Manager', included: false, detail: 'Not included' },
-        { name: 'Support', included: true, detail: 'Email + Chat' },
-        { name: 'Extras', included: true, detail: 'White-labeled invoices' }
+        { name: 'Support', included: true, detail: 'Email + Chat' }
       ]
     },
     {
       id: 'scale',
       name: 'Scale',
       tagline: 'Best for Established SMEs & enterprises',
-      monthlyPrice: 2999,
-      annualPrice: 27990,
+      monthlyPrice: 3999,
+      annualPrice: 35990,
       originalMonthlyPrice: 4999,
       originalAnnualPrice: 49990,
       discount: '44%',
       popular: false,
       features: [
-        { name: 'GST-Compliant Invoicing', included: true, detail: 'Unlimited' },
-        { name: 'Payment Reminders', included: true, detail: 'Email + SMS + WhatsApp' },
-        { name: 'GST Tracking & Filing Alerts', included: true, detail: 'Advanced + AI Error Checks' },
-        { name: 'Expense Recording', included: true, detail: 'Auto Categorization' },
+        { name: 'Sales', included: true, detail: 'Multi-branch sales, custom workflows + Email/SMS/WhatsApp reminders' },
+        { name: 'Purchases', included: true, detail: 'Advanced approvals, multi-currency & auto-categorization' },
+        { name: 'Inventory', included: true, detail: 'Batch/serial tracking, multi-location, BoM & manufacturing' },
+        { name: 'Assets', included: true, detail: 'Full asset lifecycle, depreciation schedules & disposal' },
+        { name: 'Banking', included: true, detail: 'Multi-account auto-reconciliation, payment gateway with custom branding & payments API' },
+        { name: 'Compliance', included: true, detail: 'GST + TDS + e-invoicing with AI error checks' },
         { name: 'Multi-User Access', included: true, detail: 'Unlimited users' },
-        { name: 'Business Analytics', included: true, detail: 'Advanced + Downloadable Reports' },
-        { name: 'Payment Gateway', included: true, detail: 'Included + Custom Branding' },
-        { name: 'Vendor & Customer Ledgers', included: true, detail: 'Yes' },
-        { name: 'Cash Flow Forecasting', included: true, detail: 'AI-Based' },
-        { name: 'ERP/CRM API Access', included: true, detail: 'Yes' },
-        { name: 'Account Manager', included: true, detail: 'Dedicated' },
-        { name: 'Support', included: true, detail: 'Priority + Dedicated Manager' },
-        { name: 'Extras', included: true, detail: 'Branch Consolidation' }
+        { name: 'Business Analytics', included: true, detail: 'Advanced + AI cash-flow forecasting & downloadable reports' },
+        { name: 'Support', included: true, detail: 'Priority + Dedicated Manager' }
       ]
     }
   ];

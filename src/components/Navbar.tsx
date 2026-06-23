@@ -57,6 +57,7 @@ const Navbar = () => {
             <SolutionsDropdown />
             <NavItem label="Pricing" href="/pricing" />
             <NavItem label="Partners" href="/partners" />
+            <NavItem label="Patents" href="/patent" />
             <NavItem label="About Us" href="/about" />
             <NavItem label="Blog" href="/blog" />
             <NavItem label="Docs" href="/docs" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -13,29 +13,10 @@ import {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const isMobile = useIsMobile();
 
-  // Handle scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled || isOpen ? "bg-white shadow-md" : "bg-transparent"
-      }`}
-    >
+    <header className="fixed top-0 w-full z-50 transition-all duration-300 bg-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" aria-label="Aczen home">
           <img
@@ -64,16 +45,30 @@ const Navbar = () => {
           </nav>
         )}
 
-        {/* Get Started Button - Desktop */}
+        {/* Auth Buttons - Desktop */}
         {!isMobile && (
-          <a
-            href="https://calendar.app.google/35oXzzfrvsPCBkUi6"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-300 hover:scale-105"
-          >
-            Book a Demo
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://dashboard.aczen.in/login"
+              className="text-smebank-700 font-medium px-3 py-2 hover:text-smebank-800 transition-colors"
+            >
+              Login
+            </a>
+            <a
+              href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2Vf659Nu3Ni3wVnJnBvHW3wOqnF9sDiZLKmIRvip2cH_qWGZWuDoGrSibH4wEBadGDdqgUoZBJ"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-smebank-200 text-smebank-700 px-5 py-2 rounded-lg font-medium hover:bg-smebank-50 transition-all duration-300"
+            >
+              Book a Demo
+            </a>
+            <a
+              href="https://dashboard.aczen.in/signup"
+              className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-300 hover:scale-105"
+            >
+              Get Started
+            </a>
+          </div>
         )}
 
         {/* Mobile Menu Toggle */}
@@ -103,9 +98,13 @@ const Navbar = () => {
             <NavItem mobile label="FAQ" href="/faq" />
             <NavItem mobile label="Contact" href="/contacts" />
             <a
-              href="https://app.aczen.tech/"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="https://dashboard.aczen.in/login"
+              className="border border-smebank-200 text-smebank-700 px-6 py-3 rounded-lg font-medium text-center hover:bg-smebank-50 transition-all duration-300"
+            >
+              Login
+            </a>
+            <a
+              href="https://dashboard.aczen.in/signup"
               className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-3 rounded-lg font-medium text-center hover:shadow-lg transition-all duration-300"
             >
               Get Started

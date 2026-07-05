@@ -222,7 +222,7 @@ const Navbar = () => {
           {/* Get Started Button - Desktop */}
           {!isMobile && (
             <a
-              href="https://cal.com/aczen-technologies-pvt-ltd-t7jdhz/30min"
+              href="https://calendar.app.google/35oXzzfrvsPCBkUi6"
               target="_blank"
               rel="noopener noreferrer"
               onMouseEnter={closeMega}

@@ -4,14 +4,12 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
-import PlatformSection from "@/components/PlatformSection";
 import PartnersSection from "@/components/PartnersSection";
 import VideoSection from "@/components/VideoSection";
 import SecuritySection from "@/components/SecuritySection";
 import IndustrySection from "@/components/IndustrySection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
-import ContactSection from "@/components/ContactSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -41,7 +39,6 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
-        <PlatformSection />
         <FeaturesSection />
         <PartnersSection />
         <VideoSection />
@@ -49,7 +46,6 @@ const Index = () => {
         <IndustrySection />
         <TestimonialsSection />
         <FAQSection />
-        <ContactSection />
         <CTASection />
       </main>
       <Footer />

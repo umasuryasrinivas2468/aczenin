@@ -35,7 +35,7 @@ const Hero = () => {
               asChild 
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              <a href="https://app.aczen.tech" target="_blank" rel="noopener noreferrer">
+              <a href="https://dashboard.aczen.in" target="_blank" rel="noopener noreferrer">
                 Get Started for Free
               </a>
             </Button>

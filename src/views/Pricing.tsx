@@ -8,98 +8,154 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Check, 
-  X, 
-  Star, 
-  Phone, 
-  Mail, 
-  MessageCircle, 
-  FileText,
-  CreditCard,
-  BarChart3,
-  Users,
-  Building,
-  Smartphone,
-  Calendar,
-  Headphones,
-  Crown,
-  Zap,
-  Shield,
-  Clock
-} from "lucide-react";
+import { Check, X, Star, CreditCard, Crown } from "lucide-react";
 
 const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annually'>('monthly');
 
   const pricingPlans = [
     {
+      id: 'freemium',
+      name: 'Freemium',
+      tagline: 'Best for Evaluation & freelancers',
+      monthlyPrice: 0,
+      annualPrice: 0,
+      popular: false,
+      cta: { label: 'Get Started Free', url: 'https://dashboard.aczen.in/signup' },
+    },
+    {
       id: 'starter',
       name: 'Starter',
-      tagline: 'Best for Solo entrepreneurs & small businesses',
+      tagline: 'Best for Small businesses',
       monthlyPrice: 549,
       annualPrice: 5490,
       originalMonthlyPrice: 999,
-      originalAnnualPrice: 9999,
+      originalAnnualPrice: 9990,
       discount: '45%',
       popular: false,
-      features: [
-        { name: 'Sales', included: true, detail: 'GST invoices, quotes & payment reminders (email)' },
-        { name: 'Purchases', included: true, detail: 'Basic bills & vendor entries' },
-        { name: 'Inventory', included: true, detail: 'Manual stock tracking, single warehouse' },
-        { name: 'Assets', included: false, detail: 'Not included' },
-        { name: 'Banking', included: true, detail: 'Manual bank entries & customer ledgers' },
-        { name: 'Compliance', included: true, detail: 'GST tracking & filing alerts (basic)' },
-        { name: 'Multi-User Access', included: false, detail: 'Not included' },
-        { name: 'Business Analytics', included: true, detail: 'Basic Dashboard' },
-        { name: 'Support', included: true, detail: 'Email' }
-      ]
+      cta: { label: 'Buy Now', url: 'https://rzp.io/rzp/start-180-1' },
     },
     {
       id: 'growth',
       name: 'Growth',
-      tagline: 'Best for Growing SMEs with teams',
+      tagline: 'Best for Growing SMEs',
       monthlyPrice: 1799,
       annualPrice: 17990,
       originalMonthlyPrice: 2999,
       originalAnnualPrice: 29990,
       discount: '40%',
       popular: true,
-      features: [
-        { name: 'Sales', included: true, detail: 'Unlimited invoices, quotes, credit notes + email/SMS reminders' },
-        { name: 'Purchases', included: true, detail: 'Bills, debit notes, vendor management & bulk upload' },
-        { name: 'Inventory', included: true, detail: 'Multi-warehouse, low-stock alerts & barcode' },
-        { name: 'Assets', included: true, detail: 'Fixed asset register with depreciation' },
-        { name: 'Banking', included: true, detail: 'Bank feed integration, auto reconciliation, payment gateway' },
-        { name: 'Compliance', included: true, detail: 'GST auto reconciliation + TDS filing alerts' },
-        { name: 'Multi-User Access', included: true, detail: 'Up to 5 users' },
-        { name: 'Business Analytics', included: true, detail: 'Advanced Dashboard' },
-        { name: 'Support', included: true, detail: 'Email + Chat' }
-      ]
+      cta: { label: 'Buy Now', url: 'https://rzp.io/rzp/grow-180-2' },
     },
     {
       id: 'scale',
       name: 'Scale',
-      tagline: 'Best for Established SMEs & enterprises',
+      tagline: 'Best for Established businesses',
       monthlyPrice: 3999,
-      annualPrice: 35990,
+      annualPrice: 39990,
       originalMonthlyPrice: 4999,
       originalAnnualPrice: 49990,
-      discount: '44%',
+      discount: '20%',
       popular: false,
-      features: [
-        { name: 'Sales', included: true, detail: 'Multi-branch sales, custom workflows + Email/SMS/WhatsApp reminders' },
-        { name: 'Purchases', included: true, detail: 'Advanced approvals, multi-currency & auto-categorization' },
-        { name: 'Inventory', included: true, detail: 'Batch/serial tracking, multi-location, BoM & manufacturing' },
-        { name: 'Assets', included: true, detail: 'Full asset lifecycle, depreciation schedules & disposal' },
-        { name: 'Banking', included: true, detail: 'Multi-account auto-reconciliation, payment gateway with custom branding & payments API' },
-        { name: 'Compliance', included: true, detail: 'GST + TDS + e-invoicing with AI error checks' },
-        { name: 'Multi-User Access', included: true, detail: 'Unlimited users' },
-        { name: 'Business Analytics', included: true, detail: 'Advanced + AI cash-flow forecasting & downloadable reports' },
-        { name: 'Support', included: true, detail: 'Priority + Dedicated Manager' }
-      ]
-    }
+      cta: { label: 'Buy Now', url: 'https://rzp.io/rzp/start-180-1' },
+    },
   ];
+
+  // Feature matrix from Aczen Bliz Pricing Strategy (v1.0). Value 'No' = not included.
+  const featureCategories = [
+    {
+      category: 'Business & Users',
+      features: [
+        { name: 'Locations', values: { freemium: '1', starter: '3', growth: '5', scale: '10' } },
+        { name: 'Users', values: { freemium: '1', starter: '2', growth: '5', scale: 'Unlimited' } },
+        { name: 'Clients', values: { freemium: '25', starter: '500', growth: 'Unlimited', scale: 'Unlimited' } },
+        { name: 'Vendors', values: { freemium: '25', starter: '500', growth: 'Unlimited', scale: 'Unlimited' } },
+        { name: 'Products', values: { freemium: '50', starter: '1000', growth: 'Unlimited', scale: 'Unlimited' } },
+      ],
+    },
+    {
+      category: 'Sales',
+      features: [
+        { name: 'Invoices', values: { freemium: '25/mo', starter: '500/mo', growth: 'Unlimited', scale: 'Unlimited' } },
+        { name: 'Quotations', values: { freemium: '20/mo', starter: 'Unlimited', growth: 'Unlimited', scale: 'Unlimited' } },
+        { name: 'Sales Orders', values: { freemium: '20/mo', starter: 'Unlimited', growth: 'Unlimited', scale: 'Unlimited' } },
+        { name: 'Delivery Challans', values: { freemium: '20/mo', starter: 'Unlimited', growth: 'Unlimited', scale: 'Unlimited' } },
+      ],
+    },
+    {
+      category: 'Purchases',
+      features: [
+        { name: 'Bills', values: { freemium: '20/mo', starter: '500/mo', growth: 'Unlimited', scale: 'Unlimited' } },
+        { name: 'Expenses', values: { freemium: '20/mo', starter: '500/mo', growth: 'Unlimited', scale: 'Unlimited' } },
+      ],
+    },
+    {
+      category: 'OCR',
+      features: [
+        { name: 'OCR Captures', values: { freemium: '5', starter: '25', growth: '50', scale: '75' } },
+      ],
+    },
+    {
+      category: 'Accounting',
+      features: [
+        { name: 'Journal Entries', values: { freemium: '20/mo', starter: 'Unlimited', growth: 'Unlimited', scale: 'Unlimited' } },
+        { name: 'General Ledger', values: { freemium: 'Yes', starter: 'Yes', growth: 'Yes', scale: 'Yes' } },
+        { name: 'Sub-Ledgers', values: { freemium: 'Yes', starter: 'Yes', growth: 'Yes', scale: 'Yes' } },
+        { name: 'Trial Balance', values: { freemium: 'Yes', starter: 'Yes', growth: 'Yes', scale: 'Yes' } },
+      ],
+    },
+    {
+      category: 'GST & Compliance',
+      features: [
+        { name: 'GST Calculation', values: { freemium: 'Yes', starter: 'Yes', growth: 'Yes', scale: 'Yes' } },
+        { name: 'GSTR-1', values: { freemium: 'Preview', starter: 'Generate', growth: 'Generate+Export', scale: 'Auto Ready' } },
+        { name: 'GSTR-3B', values: { freemium: 'Preview', starter: 'Generate', growth: 'Generate+Export', scale: 'Auto Ready' } },
+        { name: 'GSTR-2A/2B', values: { freemium: 'No', starter: 'View', growth: 'Reconcile', scale: 'Smart Reconcile' } },
+        { name: 'Compliance Calendar', values: { freemium: 'No', starter: 'Yes', growth: 'Yes', scale: 'Smart Alerts' } },
+      ],
+    },
+    {
+      category: 'Tax',
+      features: [
+        { name: 'TDS', values: { freemium: 'No', starter: 'Basic', growth: 'Advanced', scale: 'Enterprise' } },
+        { name: 'TCS', values: { freemium: 'No', starter: 'Basic', growth: 'Advanced', scale: 'Enterprise' } },
+        { name: 'ITR', values: { freemium: 'No', starter: 'No', growth: 'Basic', scale: 'Advanced' } },
+      ],
+    },
+    {
+      category: 'Reports',
+      features: [
+        { name: 'Balance Sheet', values: { freemium: 'Yes', starter: 'Yes', growth: 'Yes', scale: 'Yes' } },
+        { name: 'Profit & Loss', values: { freemium: 'Yes', starter: 'Yes', growth: 'Yes', scale: 'Yes' } },
+        { name: 'Cash Flow', values: { freemium: 'No', starter: 'Yes', growth: 'Yes', scale: 'Yes' } },
+        { name: 'MIS', values: { freemium: 'No', starter: 'Basic', growth: 'Advanced', scale: 'Executive' } },
+      ],
+    },
+    {
+      category: 'AI',
+      features: [
+        { name: 'AI OCR', values: { freemium: '5', starter: '25', growth: '50', scale: '75' } },
+        { name: 'AI Journal Suggestions', values: { freemium: 'No', starter: 'Yes', growth: 'Yes', scale: 'Yes' } },
+        { name: 'AI CFO', values: { freemium: 'No', starter: 'No', growth: 'Limited', scale: 'Unlimited' } },
+      ],
+    },
+  ];
+
+  const addOns = [
+    { name: 'Extra OCR (100 captures)', price: '₹199/mo' },
+    { name: 'Additional User', price: '₹299/user/mo' },
+    { name: 'Additional Business', price: '₹499/mo' },
+    { name: 'Payroll Module', price: '₹499/mo' },
+    { name: 'AI CFO Pro', price: '₹999/mo' },
+    { name: 'Bank Auto Sync', price: '₹299/mo' },
+    { name: 'API Access Upgrade', price: '₹999/mo' },
+  ];
+
+  // 'No' -> not included; 'Yes'/'No' need no detail text, everything else shows the value.
+  const resolveFeature = (value: string) => ({
+    included: value !== 'No',
+    detail: value === 'Yes' || value === 'No' ? '' : value,
+  });
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -136,7 +192,7 @@ const Pricing = () => {
         path="/pricing"
       />
       <Navbar />
-      
+
       <main className="pt-16 pb-16">
         {/* Breadcrumb */}
         <div className="container mx-auto px-4 mb-8">
@@ -154,7 +210,7 @@ const Pricing = () => {
               <Crown className="h-5 w-5 text-smebank-600 mr-2" />
               <span className="text-sm font-semibold text-smebank-700">Choose Your Business Growth Plan</span>
             </div>
-            
+
             <h1 className="text-5xl lg:text-6xl font-bold mb-6">
               <span className="text-gray-900">Simple, Transparent</span>
               <br />
@@ -162,15 +218,16 @@ const Pricing = () => {
                 Pricing
               </span>
             </h1>
-            
+
             <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-              Scale your business with our comprehensive financial management platform. 
+              Scale your business with our comprehensive financial management platform.
               Choose the plan that fits your business needs and grow without limits.
             </p>
 
             {/* Billing Toggle */}
             <div className="flex items-center justify-center bg-white rounded-full p-1 shadow-md mb-16 max-w-xs mx-auto">
               <button
+                type="button"
                 onClick={() => setBillingCycle('monthly')}
                 className={`px-6 py-3 rounded-full font-semibold transition-all ${
                   billingCycle === 'monthly'
@@ -181,6 +238,7 @@ const Pricing = () => {
                 Monthly
               </button>
               <button
+                type="button"
                 onClick={() => setBillingCycle('annually')}
                 className={`px-6 py-3 rounded-full font-semibold transition-all flex items-center ${
                   billingCycle === 'annually'
@@ -199,13 +257,13 @@ const Pricing = () => {
 
         {/* Pricing Cards */}
         <section className="container mx-auto px-4 pb-16">
-          <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             {pricingPlans.map((plan) => (
-              <Card 
-                key={plan.id} 
+              <Card
+                key={plan.id}
                 className={`relative overflow-hidden ${
-                  plan.popular 
-                    ? 'ring-2 ring-smebank-500 shadow-2xl scale-105' 
+                  plan.popular
+                    ? 'ring-2 ring-smebank-500 shadow-2xl scale-105'
                     : 'shadow-lg hover:shadow-xl'
                 } transition-all duration-300`}
               >
@@ -215,33 +273,35 @@ const Pricing = () => {
                     Most Popular
                   </div>
                 )}
-                
-                <CardHeader className={plan.popular ? 'pt-16' : 'pt-8'}>
+
+                <CardHeader className={plan.popular ? 'pt-14' : 'pt-6'}>
                   <div className="text-center">
-                    <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+                    <CardTitle className="text-xl font-bold text-gray-900 mb-1">
                       {plan.name}
                     </CardTitle>
-                    <p className="text-sm text-gray-600 mb-6">{plan.tagline}</p>
-                    
+                    <p className="text-xs text-gray-600 mb-4">{plan.tagline}</p>
+
                     <div className="space-y-2">
                       <div className="flex items-center justify-center">
-                        <span className="text-4xl font-bold text-gray-900">
+                        <span className="text-3xl font-bold text-gray-900">
                           {formatPrice(getCurrentPrice(plan))}
                         </span>
                         <span className="text-gray-600 ml-2">
                           /{billingCycle === 'monthly' ? 'month' : 'year'}
                         </span>
                       </div>
-                      
-                      <div className="flex items-center justify-center gap-2">
-                        <span className="text-lg text-gray-400 line-through">
-                          {formatPrice(getOriginalPrice(plan))}
-                        </span>
-                        <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
-                          {plan.discount} OFF
-                        </Badge>
-                      </div>
-                      
+
+                      {plan.originalMonthlyPrice && (
+                        <div className="flex items-center justify-center gap-2">
+                          <span className="text-lg text-gray-400 line-through">
+                            {formatPrice(getOriginalPrice(plan))}
+                          </span>
+                          <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
+                            {plan.discount} OFF
+                          </Badge>
+                        </div>
+                      )}
+
                       {billingCycle === 'annually' && getSavings(plan) > 0 && (
                         <p className="text-sm text-green-600 font-medium">
                           Save {formatPrice(getSavings(plan))} annually
@@ -250,61 +310,88 @@ const Pricing = () => {
                     </div>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="px-6 pb-8">
                   {/* Features List */}
-                  <div className="space-y-4 mb-8">
-                    {plan.features.map((feature, index) => (
-                      <div key={index} className="flex items-start">
-                        <div className="flex-shrink-0 mt-1">
-                          {feature.included ? (
-                            <Check className="h-4 w-4 text-green-500" />
-                          ) : (
-                            <X className="h-4 w-4 text-gray-300" />
-                          )}
-                        </div>
-                        <div className="ml-3 flex-1">
-                          <p className={`text-sm font-medium ${
-                            feature.included ? 'text-gray-900' : 'text-gray-400'
-                          }`}>
-                            {feature.name}
-                          </p>
-                          <p className={`text-xs ${
-                            feature.included ? 'text-gray-600' : 'text-gray-300'
-                          }`}>
-                            {feature.detail}
-                          </p>
-                        </div>
+                  <div className="space-y-4 mb-6">
+                    {featureCategories.map((cat) => (
+                      <div key={cat.category} className="space-y-1.5">
+                        <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-400">
+                          {cat.category}
+                        </p>
+                        {cat.features.map((feature) => {
+                          const { included, detail } = resolveFeature(
+                            feature.values[plan.id as keyof typeof feature.values]
+                          );
+                          return (
+                            <div key={feature.name} className="flex items-center gap-2">
+                              {included ? (
+                                <Check className="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
+                              ) : (
+                                <X className="h-3.5 w-3.5 flex-shrink-0 text-gray-300" />
+                              )}
+                              <span className={`flex-1 text-xs ${
+                                included ? 'text-gray-800' : 'text-gray-400'
+                              }`}>
+                                {feature.name}
+                              </span>
+                              {detail && (
+                                <span className="text-right text-xs font-medium text-gray-500">
+                                  {detail}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     ))}
                   </div>
-                  
-                  {/* Buy Now Button */}
-                  <Button 
-                    className={`w-full py-6 font-semibold text-lg ${
+
+                  {/* CTA Button */}
+                  <Button
+                    className={`w-full py-4 font-semibold text-base ${
                       plan.popular
                         ? 'bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white shadow-lg hover:shadow-xl'
-                        : 'bg-gray-900 hover:bg-gray-800 text-white'
+                        : 'bg-smebank-600 hover:bg-smebank-700 text-white'
                     } transition-all duration-300`}
-                    onClick={() => {
-                      const links = {
-                        'starter': 'https://rzp.io/rzp/start-180-1',
-                        'growth': 'https://rzp.io/rzp/grow-180-2',
-                        'scale': 'https://rzp.io/rzp/start-180-1'
-                      };
-                      window.open(links[plan.id as keyof typeof links], '_blank');
-                    }}
+                    onClick={() => window.open(plan.cta.url, plan.cta.url.includes('dashboard.aczen.in') ? '_self' : '_blank')}
                   >
                     <CreditCard className="h-5 w-5 mr-2" />
-                    Buy Now
+                    {plan.cta.label}
                   </Button>
-                  
+
                   <p className="text-xs text-gray-500 text-center mt-3">
                     No setup fees • Cancel anytime • 14-day money-back guarantee
                   </p>
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </section>
+
+        {/* Recommended Add-ons */}
+        <section className="container mx-auto px-4 pb-16">
+          <div className="max-w-5xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Recommended Add-ons
+            </h2>
+            <p className="text-gray-600 mb-12">
+              Extend any plan with modular upgrades as your business grows
+            </p>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
+              {addOns.map((addOn) => (
+                <div
+                  key={addOn.name}
+                  className="flex items-center justify-between bg-white rounded-xl border border-gray-100 shadow-sm p-4"
+                >
+                  <span className="text-sm font-medium text-gray-900">{addOn.name}</span>
+                  <span className="text-sm font-semibold text-smebank-600 whitespace-nowrap ml-3">
+                    {addOn.price}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -317,7 +404,7 @@ const Pricing = () => {
             <p className="text-gray-600 mb-12">
               Everything you need to know about our pricing and plans
             </p>
-            
+
             <div className="grid md:grid-cols-2 gap-8 text-left">
               <div className="space-y-6">
                 <div>
@@ -326,14 +413,14 @@ const Pricing = () => {
                     Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.
                   </p>
                 </div>
-                
+
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Is there a setup fee?</h3>
                   <p className="text-gray-600 text-sm">
                     No setup fees, no hidden costs. What you see is what you pay.
                   </p>
                 </div>
-                
+
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Do you offer refunds?</h3>
                   <p className="text-gray-600 text-sm">
@@ -341,7 +428,7 @@ const Pricing = () => {
                   </p>
                 </div>
               </div>
-              
+
               <div className="space-y-6">
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">What payment methods do you accept?</h3>
@@ -349,14 +436,14 @@ const Pricing = () => {
                     We accept all major credit cards, debit cards, UPI, and net banking through our secure payment gateway.
                   </p>
                 </div>
-                
+
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Is my data secure?</h3>
                   <p className="text-gray-600 text-sm">
                     Absolutely. We use bank-grade security with SSL encryption and comply with all data protection regulations.
                   </p>
                 </div>
-                
+
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Can I get a custom plan?</h3>
                   <p className="text-gray-600 text-sm">

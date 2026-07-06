@@ -119,7 +119,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <Providers>{children}</Providers>
 
         <Script id="chatbase-embed" strategy="afterInteractive">

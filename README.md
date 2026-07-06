@@ -2,7 +2,7 @@
 
 Aczen is India's unified financial operating system for SMEs, CAs, startups,
 freelancers, and enterprises. This repository contains the marketing site and
-blog for **aczen.in**.
+blog for **aczen.in**.    
 
 ## Tech stack
 

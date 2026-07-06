@@ -41,7 +41,7 @@ const PrivacyPolicy = () => {
               </p>
               <ul className="list-disc pl-6 mb-4">
                 <li>Register for an account</li>
-                <li>Apply for a loan or financial product</li>
+                <li>Apply for a financial product</li>
                 <li>Fill out a form</li>
                 <li>Use our chat or messaging features</li>
                 <li>Subscribe to our newsletter</li>
@@ -65,7 +65,7 @@ const PrivacyPolicy = () => {
               </p>
               <ul className="list-disc pl-6 mb-4">
                 <li>Provide, maintain, and improve our services</li>
-                <li>Process and fulfill your loan applications and financial requests</li>
+                <li>Process and fulfill your financial requests</li>
                 <li>Verify your identity and eligibility for our services</li>
                 <li>Communicate with you about your account and our services</li>
                 <li>Send you technical notices, updates, security alerts, and support messages</li>
@@ -80,7 +80,6 @@ const PrivacyPolicy = () => {
                 We may share your information with the following parties:
               </p>
               <ul className="list-disc pl-6 mb-4">
-                <li>Financial institution partners for loan processing and disbursement</li>
                 <li>Third-party service providers who provide services such as payment processing, data analysis, IT services, customer service, and marketing assistance</li>
                 <li>Professional advisors such as lawyers, bankers, auditors, and insurers</li>
                 <li>Government bodies, regulators, and law enforcement agencies, as required by law</li>

@@ -18,7 +18,7 @@ const SMEs = () => {
     {
       icon: <TrendingUp className="h-8 w-8 text-smebank-600" />,
       title: "Growth Financing",
-      description: "Access working capital, equipment loans, and expansion funding to fuel your business growth and scale operations."
+      description: "Access working capital, equipment financing, and expansion funding to fuel your business growth and scale operations."
     },
     {
       icon: <Shield className="h-8 w-8 text-smebank-600" />,
@@ -33,8 +33,8 @@ const SMEs = () => {
   ];
 
   const benefits = [
-    "Quick loan approvals within 24-48 hours",
-    "Competitive interest rates starting from 8.5%",
+    "Quick approvals within 24-48 hours",
+    "Competitive rates and flexible terms",
     "Minimal documentation requirements",
     "Digital banking platform for easy management",
     "Cash flow management tools",

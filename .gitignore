@@ -31,3 +31,9 @@ next-env.d.ts
 *.njsproj
 *.sln
 *.sw?
+.next/
+out/
+node_modules/
+.env
+next-env.d.ts
+studio/

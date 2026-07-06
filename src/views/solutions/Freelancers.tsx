@@ -37,7 +37,6 @@ const Freelancers = () => {
     "Free debit card with global acceptance",
     "Instant payment notifications",
     "Tax-saving investment options",
-    "Personal loan up to ₹10 lakhs",
     "24/7 customer support via chat"
   ];
 

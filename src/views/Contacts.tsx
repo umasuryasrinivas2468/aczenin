@@ -201,7 +201,6 @@ const Contacts = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="account">Account Related</SelectItem>
-                            <SelectItem value="loans">Loans & Credit</SelectItem>
                             <SelectItem value="digital">Digital Banking</SelectItem>
                             <SelectItem value="investment">Investment Services</SelectItem>
                             <SelectItem value="complaint">Complaint</SelectItem>

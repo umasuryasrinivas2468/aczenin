@@ -201,7 +201,7 @@ const Patent = () => {
                       onClick={() => setActiveFeature(index)}
                       className={`rounded-2xl border p-5 text-left transition-all duration-300 ${
                         isActive
-                          ? "border-smebank-400 bg-smebank-50 shadow-[0_12px_28px_rgba(9,103,227,0.12)]"
+                          ? "border-smebank-400 bg-smebank-50 shadow-[0_12px_28px_rgba(46,119,255,0.12)]"
                           : "border-smebank-200 bg-white hover:border-smeteal-300 hover:bg-smeteal-50/40"
                       }`}
                     >

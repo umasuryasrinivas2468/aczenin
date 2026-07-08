@@ -50,11 +50,11 @@ const ComplianceAndSecurity = () => {
   return (
     <>
       {/* Regulation & Compliance Section */}
-      <section className="py-20 bg-gradient-to-b from-purple-50 via-indigo-50/60 to-white overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-smebank-50 via-smebank-50/60 to-white overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
             {/* Smart Regulation Library */}
-            <div className="rounded-3xl bg-white p-10 shadow-[0_18px_50px_-24px_rgba(88,60,180,0.35)] flex flex-col justify-between border border-purple-100/70">
+            <div className="rounded-3xl bg-white p-10 shadow-[0_18px_50px_-24px_rgba(46,119,255,0.35)] flex flex-col justify-between border border-smebank-100/70">
               <div>
                 <h3 className="text-3xl font-extrabold text-gray-900 mb-4">
                   Smart Regulation Library
@@ -76,7 +76,7 @@ const ComplianceAndSecurity = () => {
                     <div className="text-sm text-gray-500 mt-3 space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="font-medium">Latest Gazette:</span>{" "}
-                        <a className="text-indigo-600 hover:underline" href="#">
+                        <a className="text-smebank-600 hover:underline" href="#">
                           GAZ-2023-125
                         </a>
                       </div>
@@ -88,7 +88,7 @@ const ComplianceAndSecurity = () => {
             </div>
 
             {/* AI-Powered Compliance Reporting */}
-            <div className="rounded-3xl bg-gradient-to-br from-purple-700 via-purple-900 to-indigo-900 p-10 shadow-xl text-white relative overflow-hidden border border-purple-800">
+            <div className="rounded-3xl bg-gradient-to-br from-smebank-700 via-smebank-900 to-smebank-900 p-10 shadow-xl text-white relative overflow-hidden border border-smebank-800">
               <div>
                 <h3 className="text-3xl font-extrabold mb-4">
                   AI-Powered Compliance Reporting
@@ -99,7 +99,7 @@ const ComplianceAndSecurity = () => {
               </div>
 
               <div className="mt-auto">
-                <div className="bg-gradient-to-r from-purple-300 via-indigo-200 to-purple-100 text-neutral-900 rounded-3xl p-8 shadow-lg w-full">
+                <div className="bg-gradient-to-r from-smebank-300 via-smebank-200 to-smebank-100 text-neutral-900 rounded-3xl p-8 shadow-lg w-full">
                   <div className="text-4xl font-extrabold">Compliance Actionables</div>
                   <div className="mt-3 text-sm text-neutral-700">
                     January 6, 2025 - January 11, 2025
@@ -112,7 +112,7 @@ const ComplianceAndSecurity = () => {
       </section>
 
       {/* Security Section */}
-      <section className="py-20 bg-gradient-to-b from-purple-50 via-indigo-50/60 to-white overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-smebank-50 via-smebank-50/60 to-white overflow-hidden">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -121,7 +121,7 @@ const ComplianceAndSecurity = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-14"
           >
-            <span className="inline-flex items-center gap-2 rounded-full bg-purple-100 text-purple-700 px-3 py-1 text-xs font-semibold tracking-[0.16em] uppercase mb-4">
+            <span className="inline-flex items-center gap-2 rounded-full bg-smebank-100 text-smebank-700 px-3 py-1 text-xs font-semibold tracking-[0.16em] uppercase mb-4">
               <Shield className="h-3.5 w-3.5" />
               Security
             </span>
@@ -143,10 +143,10 @@ const ComplianceAndSecurity = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.45, delay: index * 0.08 }}
-                  className="group bg-white p-8 rounded-3xl border border-purple-100/70 shadow-[0_18px_50px_-24px_rgba(88,60,180,0.35)] hover:shadow-[0_26px_60px_-20px_rgba(88,60,180,0.45)] hover:-translate-y-1 transition-all duration-300"
+                  className="group bg-white p-8 rounded-3xl border border-smebank-100/70 shadow-[0_18px_50px_-24px_rgba(46,119,255,0.35)] hover:shadow-[0_26px_60px_-20px_rgba(46,119,255,0.45)] hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
-                    <Icon className="h-7 w-7 text-purple-600" />
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-smebank-50 to-smebank-100 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+                    <Icon className="h-7 w-7 text-smebank-600" />
                   </div>
                   <h3 className="text-xl font-semibold mb-2 text-gray-900">
                     {feature.title}
@@ -161,7 +161,7 @@ const ComplianceAndSecurity = () => {
                         key={point}
                         className="flex items-center gap-2 text-sm text-gray-700"
                       >
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-smebank-100 text-smebank-600">
                           <Check className="h-3 w-3" strokeWidth={3} />
                         </span>
                         {point}
@@ -184,7 +184,7 @@ const ComplianceAndSecurity = () => {
             {trustBadges.map((badge) => (
               <span
                 key={badge}
-                className="inline-flex items-center gap-2 rounded-full bg-white border border-purple-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-full bg-white border border-smebank-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm"
               >
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                   <Check className="h-2.5 w-2.5" strokeWidth={3} />

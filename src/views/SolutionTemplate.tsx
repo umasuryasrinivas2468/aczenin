@@ -110,7 +110,7 @@ const SolutionTemplate = ({ content }: { content: SolutionContent }) => {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-purple-50 via-indigo-50/60 to-white pt-28 pb-20">
+      <section className="relative overflow-hidden bg-gradient-to-b from-smebank-50 via-smebank-50/60 to-white pt-28 pb-20">
         <div className="container mx-auto px-4">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <motion.div
@@ -121,7 +121,7 @@ const SolutionTemplate = ({ content }: { content: SolutionContent }) => {
             >
               <motion.span
                 variants={item}
-                className="inline-flex items-center gap-2 rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-purple-700"
+                className="inline-flex items-center gap-2 rounded-full bg-smebank-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-smebank-700"
               >
                 <HeroIcon className="h-3.5 w-3.5" />
                 {eyebrow}
@@ -159,9 +159,9 @@ const SolutionTemplate = ({ content }: { content: SolutionContent }) => {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="relative"
             >
-              <div className="rounded-3xl border border-white bg-white p-8 shadow-[0_30px_80px_-30px_rgba(88,60,180,0.45)]">
+              <div className="rounded-3xl border border-white bg-white p-8 shadow-[0_30px_80px_-30px_rgba(46,119,255,0.45)]">
                 <div className="mb-6 flex items-center gap-4">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-smebank-100 to-smebank-100 text-smebank-600">
                     <HeroIcon className="h-7 w-7" />
                   </span>
                   <div>
@@ -186,7 +186,7 @@ const SolutionTemplate = ({ content }: { content: SolutionContent }) => {
                 </div>
               </div>
               {stats[0] && (
-                <div className="absolute -bottom-5 -left-5 hidden rounded-2xl border border-purple-100 bg-white px-5 py-4 shadow-lg sm:block">
+                <div className="absolute -bottom-5 -left-5 hidden rounded-2xl border border-smebank-100 bg-white px-5 py-4 shadow-lg sm:block">
                   <p className="text-2xl font-bold text-smebank-700">{stats[0].value}</p>
                   <p className="text-xs text-gray-500">{stats[0].label}</p>
                 </div>
@@ -220,7 +220,7 @@ const SolutionTemplate = ({ content }: { content: SolutionContent }) => {
       </section>
 
       {/* Features */}
-      <section className="bg-gradient-to-b from-white to-purple-50/40 py-20">
+      <section className="bg-gradient-to-b from-white to-smebank-50/40 py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto mb-12 max-w-2xl text-center">
             <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
@@ -243,9 +243,9 @@ const SolutionTemplate = ({ content }: { content: SolutionContent }) => {
                 <motion.div
                   key={f.title}
                   variants={item}
-                  className="group rounded-3xl border border-purple-100/70 bg-white p-7 shadow-[0_18px_50px_-24px_rgba(88,60,180,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-20px_rgba(88,60,180,0.45)]"
+                  className="group rounded-3xl border border-smebank-100/70 bg-white p-7 shadow-[0_18px_50px_-24px_rgba(46,119,255,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-20px_rgba(46,119,255,0.45)]"
                 >
-                  <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-50 to-indigo-100 text-purple-600 transition-transform group-hover:scale-105">
+                  <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-smebank-50 to-smebank-100 text-smebank-600 transition-transform group-hover:scale-105">
                     <Icon className="h-6 w-6" />
                   </span>
                   <h3 className="mb-2 text-lg font-semibold text-gray-900">
@@ -294,11 +294,11 @@ const SolutionTemplate = ({ content }: { content: SolutionContent }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5 }}
-              className="rounded-3xl bg-gradient-to-br from-purple-700 via-purple-900 to-indigo-900 p-8 text-white shadow-xl md:p-10"
+              className="rounded-3xl bg-gradient-to-br from-smebank-700 via-smebank-900 to-smebank-900 p-8 text-white shadow-xl md:p-10"
             >
-              <HeroIcon className="mb-5 h-9 w-9 text-purple-200" />
+              <HeroIcon className="mb-5 h-9 w-9 text-smebank-200" />
               <p className="text-2xl font-semibold leading-snug">{content.title} {titleHighlight}</p>
-              <p className="mt-3 text-purple-100/80">{subtitle}</p>
+              <p className="mt-3 text-smebank-100/80">{subtitle}</p>
               <div className="mt-8 grid grid-cols-2 gap-4">
                 {stats.slice(0, 2).map((s) => (
                   <div
@@ -306,7 +306,7 @@ const SolutionTemplate = ({ content }: { content: SolutionContent }) => {
                     className="rounded-2xl bg-white/10 p-4 backdrop-blur"
                   >
                     <p className="text-2xl font-bold">{s.value}</p>
-                    <p className="text-xs text-purple-100/70">{s.label}</p>
+                    <p className="text-xs text-smebank-100/70">{s.label}</p>
                   </div>
                 ))}
               </div>

@@ -89,10 +89,10 @@ const SubProcessors = () => {
             </p>
 
             {/* Sub-processors table */}
-            <div className="overflow-x-auto rounded-2xl border border-purple-100 shadow-[0_18px_50px_-24px_rgba(88,60,180,0.25)]">
+            <div className="overflow-x-auto rounded-2xl border border-smebank-100 shadow-[0_18px_50px_-24px_rgba(46,119,255,0.25)]">
               <table className="w-full min-w-[640px] border-collapse text-left">
                 <thead>
-                  <tr className="bg-gradient-to-r from-purple-50 via-indigo-50/60 to-white">
+                  <tr className="bg-gradient-to-r from-smebank-50 via-smebank-50/60 to-white">
                     <th className="px-6 py-4 text-sm font-semibold text-gray-900">
                       Sub-processor
                     </th>

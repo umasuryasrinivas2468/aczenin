@@ -48,7 +48,7 @@ const PartnerPortal = () => {
 
           {/* Welcome Section */}
           <section className="container mx-auto px-4 mb-16">
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8">
+            <div className="bg-gradient-to-r from-blue-50 to-smebank-50 rounded-xl p-8">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -101,14 +101,14 @@ const PartnerPortal = () => {
 
               {/* Support Center */}
               <div className="bg-white p-6 rounded-lg shadow-lg border">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-smebank-100 rounded-lg flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-smebank-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z" />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Partner Support</h3>
                 <p className="text-gray-600 mb-4">Get dedicated support for your partnership needs and technical issues.</p>
-                <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-medium">
+                <button className="bg-smebank-600 hover:bg-smebank-700 text-white px-4 py-2 rounded-md font-medium">
                   Contact Support
                 </button>
               </div>

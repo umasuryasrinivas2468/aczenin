@@ -45,7 +45,7 @@ const MockShell = ({
 /* ---------- tiny presentational helpers ---------- */
 
 const Pill = ({ children }: { children: ReactNode }) => (
-  <span className="inline-flex items-center rounded-full bg-purple-50 text-purple-700 text-[11px] font-medium px-2.5 py-1">
+  <span className="inline-flex items-center rounded-full bg-smebank-50 text-smebank-700 text-[11px] font-medium px-2.5 py-1">
     {children}
   </span>
 );
@@ -58,7 +58,7 @@ const Badge = ({
   tone?: "purple" | "green" | "amber";
 }) => {
   const tones = {
-    purple: "bg-purple-100 text-purple-700",
+    purple: "bg-smebank-100 text-smebank-700",
     green: "bg-emerald-100 text-emerald-700",
     amber: "bg-amber-100 text-amber-700",
   } as const;
@@ -132,8 +132,8 @@ const AgentMock = () => {
       ref={ref}
       className="rounded-2xl bg-gray-50/80 border border-gray-100 p-4 space-y-3"
     >
-      <div className="rounded-xl bg-purple-600 text-white p-3">
-        <p className="text-[11px] uppercase tracking-wide text-purple-200 mb-1">
+      <div className="rounded-xl bg-smebank-600 text-white p-3">
+        <p className="text-[11px] uppercase tracking-wide text-smebank-200 mb-1">
           Prompt
         </p>
         <p className="text-sm font-medium min-h-[1.25rem]">
@@ -156,7 +156,7 @@ const AgentMock = () => {
             >
               {r.pending ? (
                 <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-smebank-100 text-smebank-600">
                     <Sparkles className="h-3 w-3" />
                   </span>
                   {r.label}
@@ -213,7 +213,7 @@ const GstMock = () => (
           key={t.k}
           className={`flex-1 text-center text-xs font-medium rounded-lg py-2 ${
             t.active
-              ? "bg-purple-600 text-white"
+              ? "bg-smebank-600 text-white"
               : "bg-white text-gray-500 border border-gray-100"
           }`}
         >
@@ -233,7 +233,7 @@ const GstMock = () => (
         className="flex items-center justify-between text-sm text-gray-700"
       >
         <span className="flex items-center gap-2">
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-100 text-purple-600 text-[10px] font-bold">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-smebank-100 text-smebank-600 text-[10px] font-bold">
             %
           </span>
           GSTR-2B reconciled
@@ -258,7 +258,7 @@ const CashFlowMock = () => {
             key={i}
             variants={barItem}
             style={{ height: `${h}%`, transformOrigin: "bottom" }}
-            className={`flex-1 rounded-t-md ${i % 2 ? "bg-purple-200" : "bg-purple-500"}`}
+            className={`flex-1 rounded-t-md ${i % 2 ? "bg-smebank-200" : "bg-smebank-500"}`}
           />
         ))}
       </div>
@@ -267,10 +267,10 @@ const CashFlowMock = () => {
         className="mt-3 flex items-center gap-4 text-xs text-gray-500"
       >
         <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-purple-500" /> Inflow
+          <span className="h-2 w-2 rounded-full bg-smebank-500" /> Inflow
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-purple-200" /> Outflow
+          <span className="h-2 w-2 rounded-full bg-smebank-200" /> Outflow
         </span>
       </motion.div>
     </MockShell>
@@ -292,7 +292,7 @@ const ScheduleMock = () => (
           <span
             key={m}
             className={`flex-1 text-center text-xs font-semibold py-2 ${
-              i === 0 ? "bg-purple-600 text-white" : "bg-white text-gray-500"
+              i === 0 ? "bg-smebank-600 text-white" : "bg-white text-gray-500"
             }`}
           >
             {m}
@@ -321,7 +321,7 @@ const SecureMock = () => (
       variants={item}
       className="rounded-xl bg-white border border-gray-100 p-3 flex items-center gap-3"
     >
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 text-purple-600">
+      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-smebank-100 text-smebank-600">
         <ShieldCheck className="h-5 w-5" />
       </span>
       <div>
@@ -420,7 +420,7 @@ const FeaturesSection = () => {
   return (
     <section
       id="features"
-      className="py-20 bg-gradient-to-b from-purple-50 via-indigo-50/60 to-white overflow-hidden"
+      className="py-20 bg-gradient-to-b from-smebank-50 via-smebank-50/60 to-white overflow-hidden"
     >
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
@@ -435,7 +435,7 @@ const FeaturesSection = () => {
               type="button"
               aria-label="Previous"
               onClick={() => scrollByCard(-1)}
-              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-600 hover:text-purple-600 hover:border-purple-300 transition-colors"
+              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-600 hover:text-smebank-600 hover:border-smebank-300 transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -443,7 +443,7 @@ const FeaturesSection = () => {
               type="button"
               aria-label="Next"
               onClick={() => scrollByCard(1)}
-              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-600 hover:text-purple-600 hover:border-purple-300 transition-colors"
+              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-600 hover:text-smebank-600 hover:border-smebank-300 transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -464,11 +464,11 @@ const FeaturesSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.45, delay: (i % 4) * 0.06 }}
-            className="snap-start shrink-0 w-[86vw] sm:w-[400px] lg:w-[420px] min-h-[560px] flex flex-col rounded-3xl bg-white p-7 md:p-8 border border-white shadow-[0_18px_50px_-24px_rgba(88,60,180,0.35)]"
+            className="snap-start shrink-0 w-[86vw] sm:w-[400px] lg:w-[420px] min-h-[560px] flex flex-col rounded-3xl bg-white p-7 md:p-8 border border-white shadow-[0_18px_50px_-24px_rgba(46,119,255,0.35)]"
           >
-            <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase text-purple-500 mb-5">
+            <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase text-smebank-500 mb-5">
               <span>{f.no}</span>
-              <span className="text-purple-300">·</span>
+              <span className="text-smebank-300">·</span>
               <span>{f.eyebrow}</span>
             </p>
             <h3 className="text-2xl md:text-[28px] leading-tight font-bold text-gray-900 mb-3">

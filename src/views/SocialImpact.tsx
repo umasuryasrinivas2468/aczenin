@@ -118,7 +118,7 @@ const SocialImpact = () => {
               alt="Social Impact"
               className="w-full h-96 object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-purple-900/70 flex items-center justify-center">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-smebank-900/70 flex items-center justify-center">
               <div className="text-center text-white">
                 <h2 className="text-3xl font-bold mb-4">Technology for Good</h2>
                 <p className="text-lg">Building a safer, more inclusive digital future</p>
@@ -151,7 +151,7 @@ const SocialImpact = () => {
 
         {/* Women Safety Project Highlight */}
         <section className="container mx-auto px-4 mb-16">
-          <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-8 md:p-12">
+          <div className="bg-gradient-to-r from-pink-50 to-smebank-50 rounded-xl p-8 md:p-12">
             <div className="flex flex-col lg:flex-row gap-12 items-center">
               <div className="lg:w-1/2">
                 <div className="flex items-center mb-4">
@@ -217,7 +217,7 @@ const SocialImpact = () => {
 
         {/* Impact Statistics */}
         <section className="container mx-auto px-4 mb-16">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 md:p-12 text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-xl p-8 md:p-12 text-white">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Our Impact in Numbers</h2>
               <p className="text-lg opacity-90">

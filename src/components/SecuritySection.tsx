@@ -2,6 +2,7 @@
 
 import { CheckCircle, Shield, Lock, Check } from "lucide-react";
 import { motion } from "framer-motion";
+import CountUp from "@/components/motion/CountUp";
 
 const ComplianceAndSecurity = () => {
   const features = [
@@ -40,11 +41,11 @@ const ComplianceAndSecurity = () => {
     },
   ];
 
-  const trustBadges = [
-    "99.9% uptime SLA",
-    "256-bit AES",
-    "SOC 2 Type II",
-    "GDPR-ready",
+  const trustBadges: { label: string; count?: { value: number; decimals: number; suffix: string } }[] = [
+    { label: "99.9% uptime SLA", count: { value: 99.9, decimals: 1, suffix: "% uptime SLA" } },
+    { label: "256-bit AES" },
+    { label: "SOC 2 Type II" },
+    { label: "GDPR-ready" },
   ];
 
   return (
@@ -183,13 +184,21 @@ const ComplianceAndSecurity = () => {
           >
             {trustBadges.map((badge) => (
               <span
-                key={badge}
+                key={badge.label}
                 className="inline-flex items-center gap-2 rounded-full bg-white border border-purple-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm"
               >
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                   <Check className="h-2.5 w-2.5" strokeWidth={3} />
                 </span>
-                {badge}
+                {badge.count ? (
+                  <CountUp
+                    value={badge.count.value}
+                    decimals={badge.count.decimals}
+                    suffix={badge.count.suffix}
+                  />
+                ) : (
+                  badge.label
+                )}
               </span>
             ))}
           </motion.div>

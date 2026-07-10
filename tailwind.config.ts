@@ -91,6 +91,11 @@ export default {
                     900: '#7d290c',
                     950: '#461302',
                 },
+                // Retainable-style dark pill CTA ink (landing-page redesign only)
+                ink: {
+                    DEFAULT: '#121212',
+                    foreground: '#ffffff',
+                },
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -106,6 +111,10 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			boxShadow: {
+				soft: '0 20px 60px -24px rgba(76, 61, 130, 0.16)',
+				'soft-lg': '0 32px 90px -28px rgba(76, 61, 130, 0.22)',
 			},
 			keyframes: {
 				'accordion-down': {

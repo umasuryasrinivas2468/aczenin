@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, useInView, AnimatePresence, type Variants } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+  type Variants,
+} from "framer-motion";
 import { ChevronLeft, ChevronRight, Check, ShieldCheck, Sparkles } from "lucide-react";
 
 /* ---------- shared stagger variants (drives the "streaming result" feel) ---------- */
@@ -404,6 +411,45 @@ const features: Feature[] = [
   },
 ];
 
+/* ---------- individual card (owns its own scroll-linked parallax) ---------- */
+
+const FeatureCard = ({ f, index }: { f: Feature; index: number }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  });
+  // Isolated on the inner mock wrapper only, so it never fights the card's
+  // own whileInView/whileHover "y" animation on the outer article.
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [-8, 8]);
+
+  return (
+    <motion.article
+      ref={cardRef}
+      data-card
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.45, delay: (index % 4) * 0.06 }}
+      whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+      className="snap-start shrink-0 w-[86vw] sm:w-[400px] lg:w-[420px] min-h-[560px] flex flex-col rounded-3xl bg-white p-7 md:p-8 border border-white shadow-[0_18px_50px_-24px_rgba(88,60,180,0.35)]"
+    >
+      <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase text-purple-500 mb-5">
+        <span>{f.no}</span>
+        <span className="text-purple-300">·</span>
+        <span>{f.eyebrow}</span>
+      </p>
+      <h3 className="text-2xl md:text-[28px] leading-tight font-bold text-gray-900 mb-3">
+        {f.title}
+      </h3>
+      <p className="text-gray-500 leading-relaxed">{f.description}</p>
+      <motion.div style={{ y: parallaxY }} className="mt-auto pt-8">
+        {f.mock}
+      </motion.div>
+    </motion.article>
+  );
+};
+
 /* ---------- section ---------- */
 
 const FeaturesSection = () => {
@@ -457,26 +503,7 @@ const FeaturesSection = () => {
         className="no-scrollbar flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 md:px-8 lg:px-[max(1rem,calc((100%-72rem)/2))] pb-4 [scrollbar-width:none] [-ms-overflow-style:none]"
       >
         {features.map((f, i) => (
-          <motion.article
-            key={f.no}
-            data-card
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.45, delay: (i % 4) * 0.06 }}
-            className="snap-start shrink-0 w-[86vw] sm:w-[400px] lg:w-[420px] min-h-[560px] flex flex-col rounded-3xl bg-white p-7 md:p-8 border border-white shadow-[0_18px_50px_-24px_rgba(88,60,180,0.35)]"
-          >
-            <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase text-purple-500 mb-5">
-              <span>{f.no}</span>
-              <span className="text-purple-300">·</span>
-              <span>{f.eyebrow}</span>
-            </p>
-            <h3 className="text-2xl md:text-[28px] leading-tight font-bold text-gray-900 mb-3">
-              {f.title}
-            </h3>
-            <p className="text-gray-500 leading-relaxed">{f.description}</p>
-            <div className="mt-auto pt-8">{f.mock}</div>
-          </motion.article>
+          <FeatureCard key={f.no} f={f} index={i} />
         ))}
       </div>
     </section>

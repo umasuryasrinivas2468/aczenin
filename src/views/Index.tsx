@@ -3,6 +3,8 @@
 
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import IntegrationsStrip from "@/components/IntegrationsStrip";
+import HeroDashboardMockup from "@/components/HeroDashboardMockup";
 import FeaturesSection from "@/components/FeaturesSection";
 import PartnersSection from "@/components/PartnersSection";
 import VideoSection from "@/components/VideoSection";
@@ -16,7 +18,7 @@ import SEO from "@/components/SEO";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-wash-gradient">
       <SEO
         title="Aczen — Unified Financial OS for SMEs, CAs & Startups in India"
         description="Aczen brings GST invoicing, expense management, B2B payments, accounting and CRM into one platform for Indian businesses. Bank smarter. Scale faster."
@@ -39,6 +41,8 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <IntegrationsStrip />
+        <HeroDashboardMockup />
         <FeaturesSection />
         <PartnersSection />
         <VideoSection />

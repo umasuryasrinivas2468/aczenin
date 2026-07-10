@@ -135,4 +135,27 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* --- Retainable-style landing-page tokens (scoped to homepage, not global) --- */
+
+  /* Soft light-grey wash with faint lavender/blue/pink blobs concentrated near the top. */
+  .bg-wash-gradient {
+    background-color: #f5f5f7;
+    background-image:
+      radial-gradient(60% 50% at 15% 0%, rgba(150, 190, 255, 0.32), transparent 60%),
+      radial-gradient(50% 45% at 85% 4%, rgba(255, 190, 230, 0.28), transparent 60%),
+      radial-gradient(40% 40% at 55% 12%, rgba(200, 170, 255, 0.24), transparent 65%);
+  }
+
+  .eyebrow-label {
+    @apply inline-block text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-400;
+  }
+
+  .surface-card {
+    @apply bg-white rounded-3xl border border-gray-100 shadow-soft;
+  }
+
+  .cta-pill-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-2.5 text-sm font-medium text-ink-foreground shadow-soft transition-all duration-300 hover:opacity-90 hover:shadow-soft-lg;
+  }
 }

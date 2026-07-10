@@ -1,6 +1,8 @@
+"use client";
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import Reveal from "@/components/motion/Reveal";
 
 interface FAQItemProps {
   question: string;
@@ -72,22 +74,25 @@ const FAQSection = () => {
   return (
     <section id="faq" className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="section-title">Frequently Asked Questions</h2>
-          <p className="section-subtitle max-w-2xl mx-auto">
-            Find quick answers to common questions about our services
-          </p>
-        </div>
-        
+        <Reveal>
+          <div className="text-center mb-12">
+            <h2 className="section-title">Frequently Asked Questions</h2>
+            <p className="section-subtitle max-w-2xl mx-auto">
+              Find quick answers to common questions about our services
+            </p>
+          </div>
+        </Reveal>
+
         <div className="max-w-3xl mx-auto">
           {faqs.map((faq, index) => (
-            <FAQItem
-              key={faq.id}
-              question={faq.question}
-              answer={faq.answer}
-              isOpen={openIndex === index}
-              onClick={() => toggleFAQ(index)}
-            />
+            <Reveal key={faq.id}>
+              <FAQItem
+                question={faq.question}
+                answer={faq.answer}
+                isOpen={openIndex === index}
+                onClick={() => toggleFAQ(index)}
+              />
+            </Reveal>
           ))}
         </div>
         

@@ -10,7 +10,6 @@ import SecuritySection from "@/components/SecuritySection";
 import IndustrySection from "@/components/IndustrySection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
-import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 
@@ -46,7 +45,6 @@ const Index = () => {
         <IndustrySection />
         <TestimonialsSection />
         <FAQSection />
-        <CTASection />
       </main>
       <Footer />
     </div>
@@ -54,5 +52,6 @@ const Index = () => {
 };
 
 export default Index;
+
 
 

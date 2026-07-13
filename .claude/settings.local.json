@@ -10,7 +10,15 @@
       "Bash(git merge *)",
       "Bash(git push *)",
       "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\public\\\\install.ps1\"\\); Write-Output \"First 4 bytes \\(hex\\):\"; $bytes[0..3] | ForEach-Object { \"{0:X2}\" -f $_ }; Write-Output \"Total bytes: $\\($bytes.Length\\)\")",
-      "PowerShell($content = [System.IO.File]::ReadAllText\\(\"C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\public\\\\install.ps1\"\\); $hasCRLF = $content -match \"`r`n\"; $hasLFonly = \\($content -match \"`n\"\\) -and -not \\($content -match \"`r`n\"\\); Write-Output \"Has CRLF: $hasCRLF\"; Write-Output \"Has LF only: $hasLFonly\"; Write-Output \"---\"; $content.Substring\\(0,200\\) -replace \"`r\",\"\\\\r\" -replace \"`n\",\"\\\\n`n\")"
+      "PowerShell($content = [System.IO.File]::ReadAllText\\(\"C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\public\\\\install.ps1\"\\); $hasCRLF = $content -match \"`r`n\"; $hasLFonly = \\($content -match \"`n\"\\) -and -not \\($content -match \"`r`n\"\\); Write-Output \"Has CRLF: $hasCRLF\"; Write-Output \"Has LF only: $hasLFonly\"; Write-Output \"---\"; $content.Substring\\(0,200\\) -replace \"`r\",\"\\\\r\" -replace \"`n\",\"\\\\n`n\")",
+      "PowerShell(git merge *)",
+      "PowerShell($errs = npx tsc --noEmit 2>&1 | Where-Object { $_ -match \"Navbar\" }; if \\($errs\\) { $errs } else { \"Navbar clean.\" })",
+      "PowerShell(git push *)",
+      "PowerShell(git status -sb | Select-Object -First 3; \"---\"; git log --oneline -3)",
+      "Bash(node -e \"try{require.resolve\\('framer-motion'\\);console.log\\('framer-motion OK'\\)}catch\\(e\\){console.log\\('MISSING framer-motion'\\)}\")",
+      "PowerShell(node \"C:\\\\Users\\\\54712\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-54712-Downloads-Cursor-Projects-aczenin-3\\\\23c1a063-96b7-445e-bdc2-6aab945d7d1f\\\\scratchpad\\\\sweep.js\" \"C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\app\")",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 30; Write-Output \"EXIT: $LASTEXITCODE\")",
+      "PowerShell(node \"C:\\\\Users\\\\54712\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-54712-Downloads-Cursor-Projects-aczenin-3\\\\23c1a063-96b7-445e-bdc2-6aab945d7d1f\\\\scratchpad\\\\fixspaces.js\" \"C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\src\"; node \"C:\\\\Users\\\\54712\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-54712-Downloads-Cursor-Projects-aczenin-3\\\\23c1a063-96b7-445e-bdc2-6aab945d7d1f\\\\scratchpad\\\\fixspaces.js\" \"C:\\\\Users\\\\54712\\\\Downloads\\\\Cursor Projects\\\\aczenin-3\\\\app\")"
     ]
   }
 }

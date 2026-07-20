@@ -22,7 +22,7 @@ const CTASection = () => {
               <span className="text-base">Join Waitlist</span>
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button variant="outline" className="border-blue-500 text-white px-8 py-6 rounded-full bg-transparent">
+            <Button variant="outline" className="border-white/30 text-white px-8 py-6 rounded-full bg-transparent hover:bg-white/10">
               <span className="text-base">Schedule a Demo</span>
             </Button>
           </div>

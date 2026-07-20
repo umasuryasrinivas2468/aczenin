@@ -4,11 +4,11 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210 30% 98.5%;
+    --foreground: 215 40% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 40% 12%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
@@ -19,8 +19,8 @@
     --secondary: 174 100% 29%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 38% 96.5%;
+    --muted-foreground: 215 18% 47%;
 
     --accent: 30 100% 50%;
     --accent-foreground: 210 40% 98%;
@@ -97,15 +97,28 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-inter), 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, .section-title {
+    font-family: var(--font-jakarta), var(--font-inter), sans-serif;
   }
 
   .hero-gradient {
     background: linear-gradient(180deg, rgba(33, 134, 251, 0.05) 0%, rgba(0, 208, 192, 0.05) 100%);
   }
 
+  /* Soft-premium depth — gentle, low-contrast, calm */
+  .shadow-soft {
+    box-shadow: 0 1px 2px rgba(15, 40, 70, .04), 0 12px 32px -16px rgba(15, 40, 70, .12);
+  }
+  .shadow-soft-lg {
+    box-shadow: 0 2px 4px rgba(15, 40, 70, .04), 0 40px 80px -32px rgba(15, 40, 70, .18);
+  }
+
   .feature-card {
-    @apply p-6 rounded-xl border border-border bg-white shadow-sm hover:shadow-md transition-all duration-300;
+    @apply p-6 rounded-2xl border border-black/[0.06] bg-white shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300;
   }
 
   .cta-button {

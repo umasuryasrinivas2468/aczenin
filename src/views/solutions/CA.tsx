@@ -131,7 +131,7 @@ const CA = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit">
                     {feature.icon}
@@ -163,7 +163,7 @@ const CA = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-t-4 border-t-smebank-600">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 border-t-4 border-t-smebank-600">
                 <CardHeader>
                   <CardTitle className="text-lg">{service.title}</CardTitle>
                   <Badge className="w-fit bg-green-100 text-green-800">
@@ -189,7 +189,7 @@ const CA = () => {
               <img 
                 src="/placeholder.svg" 
                 alt="CA Professional" 
-                className="rounded-lg shadow-xl w-full h-96 object-cover"
+                className="rounded-lg shadow-soft w-full h-96 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-smebank-600/20 to-smeteal-600/20 rounded-lg"></div>
             </div>
@@ -228,7 +228,7 @@ const CA = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (

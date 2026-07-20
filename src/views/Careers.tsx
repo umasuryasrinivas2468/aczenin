@@ -78,7 +78,7 @@ const Careers = () => {
               <img
                 src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1761177600&v=beta&t=bR3Mmhfbl9B69wGPt5vAYUdwCYIQWLsvyOw-5duYs98" 
                 alt="Team"
-                className="rounded-lg shadow-xl w-full"
+                className="rounded-lg shadow-soft w-full"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ const Careers = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+              <div key={index} className="bg-white p-6 rounded-lg shadow-soft">
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{benefit.title}</h3>
                 <p className="text-gray-600">{benefit.description}</p>
               </div>
@@ -120,7 +120,7 @@ const Careers = () => {
             >
               <CarouselContent>
                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
+                  <div className="rounded-lg overflow-hidden shadow-soft h-80">
                     <img
                       src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1761177600&v=beta&t=bR3Mmhfbl9B69wGPt5vAYUdwCYIQWLsvyOw-5duYs98"
                       alt="Team collaboration"
@@ -129,7 +129,7 @@ const Careers = () => {
                   </div>
                 </CarouselItem>
                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
+                  <div className="rounded-lg overflow-hidden shadow-soft h-80">
                     <img
                       src="https://media.licdn.com/dms/image/v2/D5622AQE8JP5bQuO5JA/feedshare-shrink_1280/feedshare-shrink_1280/0/1688715217408?e=1761177600&v=beta&t=hQzvPFD9Wd6QZawT6P8n3XLauc0Nql2e8HPZeydI-sM"
                       alt="Team meeting"
@@ -138,7 +138,7 @@ const Careers = () => {
                   </div>
                 </CarouselItem>
                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
+                  <div className="rounded-lg overflow-hidden shadow-soft h-80">
                     <img
                       src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_800/B4EZVx0uoaGYAk-/0/1741371404086?e=1761177600&v=beta&t=CWYUNg79c_MTWh0g0XWu_TuKGZrz763fs2LgAkZPKMM"
                       alt="Office space"
@@ -147,7 +147,7 @@ const Careers = () => {
                   </div>
                 </CarouselItem>
                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
+                  <div className="rounded-lg overflow-hidden shadow-soft h-80">
                     <img
                       src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1761177600&v=beta&t=ph1tXzQR9or_fg07u5HHVAW7tGX2L-ixxPQ_pViHn4Q"
                       alt="Team building"
@@ -156,7 +156,7 @@ const Careers = () => {
                   </div>
                 </CarouselItem>
                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
+                  <div className="rounded-lg overflow-hidden shadow-soft h-80">
                     <img
                       src="https://media.licdn.com/dms/image/v2/D5622AQFCCpmcJsFmew/feedshare-shrink_1280/feedshare-shrink_1280/0/1729187811377?e=1761177600&v=beta&t=jsdnz7L4Lqk8F-VVfSi7s3wj9k2VoLZ-Sm1K8NQ12mY"
                       alt="Office culture"

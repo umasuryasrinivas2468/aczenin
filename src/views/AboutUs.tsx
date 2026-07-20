@@ -64,7 +64,7 @@ const AboutUs = () => {
               <img
                 src="/images/SPEAKER.jpg" 
                 alt="Leadership Team"
-                className="rounded-lg shadow-xl w-full"
+                className="rounded-lg shadow-soft w-full"
               />
             </div>
           </div>
@@ -88,12 +88,12 @@ const AboutUs = () => {
           
           {/* Timeline Preview - Just show first two milestones */}
           <div className="max-w-2xl mx-auto flex flex-col md:flex-row gap-6 justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg md:w-1/2">
+            <div className="bg-white p-6 rounded-lg shadow-soft md:w-1/2">
               <span className="text-red-500 font-bold">April 2, 2024</span>
               <h3 className="text-xl font-bold text-gray-900 mt-2">Company Incorporation</h3>
               <p className="text-gray-600 mt-2">Aczen Technologies Pvt. Ltd. was officially incorporated with Uma Surya Srinivas appointed as CEO at just 18 years old.</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-lg md:w-1/2">
+            <div className="bg-white p-6 rounded-lg shadow-soft md:w-1/2">
               <span className="text-red-500 font-bold">July 2024</span>
               <h3 className="text-xl font-bold text-gray-900 mt-2">Aczen Connect Launch</h3>
               <p className="text-gray-600 mt-2">Successfully launched Aczen Connect, our flagship platform connecting businesses with financial solutions.</p>
@@ -109,7 +109,7 @@ const AboutUs = () => {
                 <img 
                   src={leader.image} 
                   alt={leader.name} 
-                  className="w-full h-72 object-cover rounded-lg shadow-md"
+                  className="w-full h-72 object-cover rounded-lg shadow-soft"
                 />
               </div>
               <div className="md:w-2/3">

@@ -196,7 +196,7 @@ const Partners = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-            <div className="rounded-2xl bg-yellow-50 p-8 shadow-md flex flex-col justify-between">
+            <div className="rounded-2xl bg-yellow-50 p-8 shadow-soft flex flex-col justify-between">
               <div>
                 <h3 className="text-2xl font-bold mb-4">Smart Regulation Library</h3>
                 <p className="text-gray-700 mb-6">Access a comprehensive repository of chapter-wise regulations, master circulars, and real-time amendment updates, fully linked and queryable for effortless navigation.</p>
@@ -210,7 +210,7 @@ const Partners = () => {
                   <div>
                     <div className="font-semibold text-gray-900">Securities and Exchange Board of India (Market Infrastructure Institutions) Regulations, 2023</div>
                     <div className="text-sm text-gray-500 mt-3">
-                      <div className="flex items-center gap-2"><span className="font-medium">Latest Gazette:</span> <a className="text-indigo-600" href="#">GAZ-2023-125</a></div>
+                      <div className="flex items-center gap-2"><span className="font-medium">Latest Gazette:</span> <a className="text-smeteal-600" href="#">GAZ-2023-125</a></div>
                       <div className="mt-2">3 Amendments · 24 applicable regulations</div>
                     </div>
                   </div>
@@ -218,14 +218,14 @@ const Partners = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl bg-neutral-900 p-8 shadow-md text-white relative overflow-hidden">
+            <div className="rounded-2xl bg-neutral-900 p-8 shadow-soft text-white relative overflow-hidden">
               <div className="mb-6">
                 <h3 className="text-2xl font-bold mb-3">AI-Powered Compliance Reporting</h3>
                 <p className="text-gray-200">Generate audit-ready reports, compliance decks, and MIS presentations in seconds, saving weeks of manual effort.</p>
               </div>
 
               <div className="mt-auto">
-                <div className="bg-gradient-to-r from-purple-400 to-pink-300 text-neutral-900 rounded-2xl p-8 shadow-lg w-full">
+                <div className="bg-gradient-to-r from-smebank-400 to-pink-300 text-neutral-900 rounded-2xl p-8 shadow-soft w-full">
                   <div className="text-4xl font-bold">Compliance Actionables</div>
                   <div className="mt-4 text-sm text-neutral-800">January 6, 2025 - January 11, 2025</div>
                 </div>
@@ -249,7 +249,7 @@ const Partners = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {partnershipTypes.map((type, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 text-center">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 text-center">
                 <CardHeader>
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit">
                     {type.icon}
@@ -278,7 +278,7 @@ const Partners = () => {
               <img 
                 src="/placeholder.svg" 
                 alt="Partnership Benefits" 
-                className="rounded-lg shadow-xl w-full h-96 object-cover"
+                className="rounded-lg shadow-soft w-full h-96 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-smebank-600/20 to-smeteal-600/20 rounded-lg"></div>
               <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-4">
@@ -350,7 +350,7 @@ const Partners = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (

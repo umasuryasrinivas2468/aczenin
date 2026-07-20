@@ -149,7 +149,7 @@ const Security = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {securityFeatures.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit">
                     {feature.icon}
@@ -197,7 +197,7 @@ const Security = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {securityTips.map((tip, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
                 <CardHeader>
                   <div className="flex items-center mb-4">
                     <div className="p-2 bg-green-50 rounded-full mr-3">
@@ -233,7 +233,7 @@ const Security = () => {
               <img 
                 src="/placeholder.svg" 
                 alt="Security Infrastructure" 
-                className="rounded-lg shadow-xl w-full h-96 object-cover"
+                className="rounded-lg shadow-soft w-full h-96 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-smebank-600/20 to-smeteal-600/20 rounded-lg"></div>
               <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-4">

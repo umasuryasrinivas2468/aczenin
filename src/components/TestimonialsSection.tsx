@@ -22,7 +22,7 @@ const testimonials: Testimonial[] = [
     director: "Karthik",
     role: "Director, Novify",
     initials: "NV",
-    accent: "from-indigo-500 to-blue-500",
+    accent: "from-smeteal-500 to-blue-500",
     quote:
       "Aczen changed the way we close our books. What used to take a week now wraps up in a single afternoon — invoicing, GST, reconciliations, all in one flow.",
     rating: 5,
@@ -44,7 +44,7 @@ const testimonials: Testimonial[] = [
     director: "Sandeep",
     role: "Director, Employee Galaxy",
     initials: "EG",
-    accent: "from-fuchsia-500 to-purple-500",
+    accent: "from-smeteal-500 to-smebank-500",
     quote:
       "From compliance to vendor payments, Aczen handles the heavy lifting. Our team finally gets to focus on growth instead of paperwork.",
     rating: 5,
@@ -87,7 +87,7 @@ const TestimonialsSection = () => {
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
             Real teams.{" "}
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 via-smebank-600 to-smeteal-600 bg-clip-text text-transparent">
               Real results.
             </span>
           </h2>
@@ -112,7 +112,7 @@ const TestimonialsSection = () => {
                 transition={{ type: "spring", stiffness: 260, damping: 30 }}
                 className="absolute inset-0 cursor-grab active:cursor-grabbing"
               >
-                <div className="relative h-full bg-white border border-gray-100 rounded-2xl p-7 md:p-10 shadow-md">
+                <div className="relative h-full bg-white border border-gray-100 rounded-2xl p-7 md:p-10 shadow-soft">
                   <Quote
                     className="absolute top-6 right-6 w-10 h-10 text-gray-100"
                     strokeWidth={1.5}

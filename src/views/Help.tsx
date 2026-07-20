@@ -22,7 +22,7 @@ const Help = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Video Tutorials */}
-            <div className="p-6 rounded-xl border hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border hover:shadow-soft transition-shadow">
               <Video className="w-12 h-12 text-smebank-600 mb-4" />
               <h3 className="text-xl font-semibold mb-2">Video Tutorials</h3>
               <p className="text-gray-600 mb-4">Learn how to use SMEPower through our detailed video guides</p>
@@ -30,7 +30,7 @@ const Help = () => {
             </div>
 
             {/* Documentation */}
-            <div className="p-6 rounded-xl border hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border hover:shadow-soft transition-shadow">
               <FileText className="w-12 h-12 text-smebank-600 mb-4" />
               <h3 className="text-xl font-semibold mb-2">Documentation</h3>
               <p className="text-gray-600 mb-4">Detailed guides and documentation for all SMEPower features</p>
@@ -38,7 +38,7 @@ const Help = () => {
             </div>
 
             {/* Support */}
-            <div className="p-6 rounded-xl border hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border hover:shadow-soft transition-shadow">
               <MessagesSquare className="w-12 h-12 text-smebank-600 mb-4" />
               <h3 className="text-xl font-semibold mb-2">Live Support</h3>
               <p className="text-gray-600 mb-4">Get help from our support team 24/7</p>

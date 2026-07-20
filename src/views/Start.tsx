@@ -95,7 +95,7 @@ const Start = () => {
       description: "2 min process", 
       detail: "Complete secure payment for registration fees and government charges",
       icon: <CreditCard className="h-6 w-6" />,
-      color: "bg-purple-100 text-purple-700",
+      color: "bg-smebank-100 text-smebank-700",
       time: "2 min process"
     },
     {
@@ -193,7 +193,7 @@ const Start = () => {
                     <Shield className="h-4 w-4 mr-2" />
                     100% Legal
                   </Badge>
-                  <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100 px-4 py-2">
+                  <Badge className="bg-smebank-100 text-smebank-800 hover:bg-smebank-100 px-4 py-2">
                     <Users className="h-4 w-4 mr-2" />
                     Expert Support
                   </Badge>
@@ -201,7 +201,7 @@ const Start = () => {
 
                 {/* Pricing & CTA */}
                 <div className="space-y-6">
-                  <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-soft border border-white/50">
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-smebank-600 to-smeteal-600 bg-clip-text text-transparent">
@@ -220,7 +220,7 @@ const Start = () => {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button 
                       size="lg" 
-                      className="bg-gradient-to-r from-smebank-600 to-smebank-700 hover:from-smebank-700 hover:to-smebank-800 text-white px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                      className="bg-gradient-to-r from-smebank-600 to-smebank-700 hover:from-smebank-700 hover:to-smebank-800 text-white px-8 py-4 text-lg font-semibold shadow-soft hover:shadow-soft transform hover:-translate-y-1 transition-all duration-300"
                       onClick={() => window.open('https://tally.so/r/w2pOKL', 'popup', 'width=800,height=600,scrollbars=yes,resizable=yes')}
                     >
                       Start Registration Now
@@ -244,26 +244,26 @@ const Start = () => {
                 <div className="relative w-full max-w-md mx-auto">
                   {/* Central Circle with Company Icons */}
                   <div className="relative flex items-center justify-center">
-                    <div className="w-40 h-40 lg:w-48 lg:h-48 bg-gradient-to-br from-smebank-500 to-smeteal-500 rounded-full flex items-center justify-center shadow-2xl relative z-10">
+                    <div className="w-40 h-40 lg:w-48 lg:h-48 bg-gradient-to-br from-smebank-500 to-smeteal-500 rounded-full flex items-center justify-center shadow-soft relative z-10">
                       <Building className="h-12 w-12 lg:h-16 lg:w-16 text-white" />
                     </div>
                     
                     {/* Floating Company Type Cards */}
-                    <div className="absolute -top-6 -left-12 lg:-top-8 lg:-left-16 bg-white rounded-xl p-3 shadow-lg animate-bounce z-20" style={{animationDelay: '1s'}}>
+                    <div className="absolute -top-6 -left-12 lg:-top-8 lg:-left-16 bg-white rounded-xl p-3 shadow-soft animate-bounce z-20" style={{animationDelay: '1s'}}>
                       <div className="text-center">
                         <div className="text-sm lg:text-lg font-bold text-smebank-700">Pvt Ltd</div>
                         <div className="text-xs text-gray-500">Most Popular</div>
                       </div>
                     </div>
                     
-                    <div className="absolute -top-4 -right-12 lg:-top-6 lg:-right-16 bg-white rounded-xl p-3 shadow-lg animate-bounce z-20" style={{animationDelay: '2s'}}>
+                    <div className="absolute -top-4 -right-12 lg:-top-6 lg:-right-16 bg-white rounded-xl p-3 shadow-soft animate-bounce z-20" style={{animationDelay: '2s'}}>
                       <div className="text-center">
                         <div className="text-sm lg:text-lg font-bold text-smeteal-700">LLP</div>
                         <div className="text-xs text-gray-500">Professional</div>
                       </div>
                     </div>
                     
-                    <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white rounded-xl p-3 shadow-lg animate-bounce z-20" style={{animationDelay: '3s'}}>
+                    <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white rounded-xl p-3 shadow-soft animate-bounce z-20" style={{animationDelay: '3s'}}>
                       <div className="text-center">
                         <div className="text-sm lg:text-lg font-bold text-smeorange-700">OPC</div>
                         <div className="text-xs text-gray-500">Solo Entrepreneur</div>
@@ -282,19 +282,19 @@ const Start = () => {
                   </div>
 
                   {/* Process Steps Around - Fixed positioning */}
-                  <div className="absolute -left-8 lg:-left-16 top-33 lg:top-16 bg-white/90 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow-lg z-15">
+                  <div className="absolute -left-8 lg:-left-16 top-33 lg:top-16 bg-white/90 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow-soft z-15">
                     <Phone className="h-4 w-4 lg:h-10 lg:w-6 text-blue-600 mx-auto mb-1" />
                     <div className="text-xs font-medium text-center">Consultation</div>
                   </div>
                   
         
                   
-                  <div className="absolute -right-6 lg:-right-12 bottom-12 lg:bottom-16 bg-white/90 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow-lg z-15">
-                    <CreditCard className="h-4 w-4 lg:h-6 lg:w-6 text-purple-600 mx-auto mb-1" />
+                  <div className="absolute -right-6 lg:-right-12 bottom-12 lg:bottom-16 bg-white/90 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow-soft z-15">
+                    <CreditCard className="h-4 w-4 lg:h-6 lg:w-6 text-smebank-600 mx-auto mb-1" />
                     <div className="text-xs font-medium text-center">Payment</div>
                   </div>
                   
-                  <div className="absolute -left-6 lg:-left-12 bottom-8 lg:bottom-12 bg-white/90 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow-lg z-15">
+                  <div className="absolute -left-6 lg:-left-12 bottom-8 lg:bottom-12 bg-white/90 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow-soft z-15">
                     <Activity className="h-4 w-4 lg:h-6 lg:w-6 text-orange-600 mx-auto mb-1" />
                     <div className="text-xs font-medium text-center">Track Progress</div>
                   </div>
@@ -337,10 +337,10 @@ const Start = () => {
             {companyTypes.map((type) => (
               <Card 
                 key={type.id} 
-                className={`relative cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                className={`relative cursor-pointer transition-all duration-300 hover:shadow-soft ${
                   selectedCompanyType === type.id 
-                    ? 'ring-2 ring-smebank-500 shadow-lg' 
-                    : 'hover:shadow-md'
+                    ? 'ring-2 ring-smebank-500 shadow-soft' 
+                    : 'hover:shadow-soft'
                 }`}
                 onClick={() => setSelectedCompanyType(type.id)}
               >

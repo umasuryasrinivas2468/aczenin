@@ -89,7 +89,7 @@ const Patent = () => {
 
       <main className="pt-24 pb-16">
         <section className="container mx-auto px-4">
-          <div className="rounded-3xl border border-smebank-200 bg-white/90 p-6 md:p-10 shadow-xl backdrop-blur">
+          <div className="rounded-3xl border border-smebank-200 bg-white/90 p-6 md:p-10 shadow-soft backdrop-blur">
             <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
               <div>
                 <span className="inline-flex items-center rounded-full border border-smebank-200 bg-smebank-50 px-4 py-2 text-sm text-smebank-800">

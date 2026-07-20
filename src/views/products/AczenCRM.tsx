@@ -98,7 +98,7 @@ const AczenCRM = () => {
                   href="https://crm.aczen.tech" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-md font-medium hover:shadow-lg transition-all duration-300 text-center"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-md font-medium hover:shadow-soft transition-all duration-300 text-center"
                 >
                   Try Live Demo
                 </a>
@@ -116,7 +116,7 @@ const AczenCRM = () => {
               <img
                 src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2015&q=80"
                 alt="Aczen CRM Dashboard"
-                className="rounded-lg shadow-xl w-full"
+                className="rounded-lg shadow-soft w-full"
               />
             </div>
           </div>
@@ -133,7 +133,7 @@ const AczenCRM = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-lg border hover:shadow-xl transition-shadow">
+              <div key={index} className="bg-white p-6 rounded-lg shadow-soft border hover:shadow-soft transition-shadow">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                   <feature.icon className="w-6 h-6 text-blue-600" />
                 </div>
@@ -146,7 +146,7 @@ const AczenCRM = () => {
 
         {/* Benefits Section */}
         <section className="container mx-auto px-4 mb-16">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 md:p-12">
+          <div className="bg-gradient-to-r from-blue-50 to-smeteal-50 rounded-xl p-8 md:p-12">
             <div className="flex flex-col lg:flex-row gap-12 items-center">
               <div className="lg:w-1/2">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">
@@ -169,7 +169,7 @@ const AczenCRM = () => {
                 <img
                   src="https://images.unsplash.com/photo-1553484771-371a605b060b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                   alt="CRM Benefits"
-                  className="rounded-lg shadow-xl w-full"
+                  className="rounded-lg shadow-soft w-full"
                 />
               </div>
             </div>
@@ -199,7 +199,7 @@ const AczenCRM = () => {
 
         {/* Call to Action */}
         <section className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-xl p-8 md:p-12 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">
               Ready to Transform Your Customer Relationships?
             </h2>

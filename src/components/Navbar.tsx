@@ -16,7 +16,7 @@ const Navbar = () => {
   const isMobile = useIsMobile();
 
   return (
-    <header className="fixed top-0 w-full z-50 transition-all duration-300 bg-white shadow-md">
+    <header className="fixed top-0 w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-black/[0.06]">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" aria-label="Aczen home">
           <img
@@ -64,7 +64,7 @@ const Navbar = () => {
             </a>
             <a
               href="https://dashboard.aczen.in/signup"
-              className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-300 hover:scale-105"
+              className="bg-smebank-600 text-white px-6 py-2 rounded-xl font-medium shadow-soft hover:bg-smebank-700 hover:-translate-y-0.5 hover:shadow-soft-lg transition-all duration-300"
             >
               Get Started
             </a>
@@ -105,7 +105,7 @@ const Navbar = () => {
             </a>
             <a
               href="https://dashboard.aczen.in/signup"
-              className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-3 rounded-lg font-medium text-center hover:shadow-lg transition-all duration-300"
+              className="bg-gradient-to-r from-smebank-700 to-smeteal-600 text-white px-6 py-3 rounded-lg font-medium text-center hover:shadow-soft transition-all duration-300"
             >
               Get Started
             </a>

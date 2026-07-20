@@ -86,7 +86,7 @@ const Blog = () => {
               <Link
                 key={post._id}
                 href={`/blog/${post.slug}`}
-                className="group rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 hover:shadow-lg transition-shadow"
+                className="group rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 hover:shadow-soft transition-shadow"
               >
                 {post.coverImage?.asset && (
                   <img

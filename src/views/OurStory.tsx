@@ -79,7 +79,7 @@ const OurStory = () => {
               <img
                 src="https://media.licdn.com/dms/image/v2/D5622AQGfpj1e3Pe1Qg/feedshare-shrink_800/feedshare-shrink_800/0/1728460175327?e=1748476800&v=beta&t=mrYbhEdmPqChL5feq6M_AKdRJ8VB7LRylEFbaWaVUQM" 
                 alt="Leadership Team"
-                className="rounded-lg shadow-xl w-full"
+                className="rounded-lg shadow-soft w-full"
               />
             </div>
           </div>
@@ -123,7 +123,7 @@ const OurStory = () => {
                     <div className="w-8 h-8 bg-red-500 rounded-full border-4 border-white shadow"></div>
                   </div>
                   <div className={`w-1/2 ${index % 2 === 0 ? 'pr-16' : 'pl-16'}`}>
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <div className="bg-white p-6 rounded-lg shadow-soft">
                       <span className="text-red-500 font-bold">{event.date}</span>
                       <h3 className="text-xl font-bold text-gray-900 mt-2">{event.title}</h3>
                       <p className="text-gray-600 mt-2">{event.description}</p>

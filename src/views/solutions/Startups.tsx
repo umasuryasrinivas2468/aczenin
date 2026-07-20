@@ -133,7 +133,7 @@ const Startups = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit">
                     {feature.icon}
@@ -165,7 +165,7 @@ const Startups = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {fundingOptions.map((option, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-smebank-600 to-smeteal-600"></div>
                 <CardHeader>
                   <CardTitle className="text-xl">{option.title}</CardTitle>
@@ -213,7 +213,7 @@ const Startups = () => {
               <img 
                 src="/placeholder.svg" 
                 alt="Startup Growth" 
-                className="rounded-lg shadow-xl w-full h-96 object-cover"
+                className="rounded-lg shadow-soft w-full h-96 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-smebank-600/20 to-smeteal-600/20 rounded-lg"></div>
               <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-4">
@@ -244,7 +244,7 @@ const Startups = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (

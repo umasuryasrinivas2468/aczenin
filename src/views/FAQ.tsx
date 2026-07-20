@@ -213,7 +213,7 @@ const FAQ = () => {
           {searchTerm === "" && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
               {faqCategories.map((category, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow duration-300 cursor-pointer text-center">
+                <Card key={index} className="hover:shadow-soft transition-shadow duration-300 cursor-pointer text-center">
                   <CardContent className="p-4">
                     <div className="flex justify-center mb-2">{category.icon}</div>
                     <h3 className="font-semibold text-sm">{category.title}</h3>
@@ -277,7 +277,7 @@ const FAQ = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {supportChannels.map((channel, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 text-center">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 text-center">
                 <CardHeader>
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit text-smebank-600">
                     {channel.icon}
@@ -311,7 +311,7 @@ const FAQ = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="hover:shadow-lg transition-shadow duration-300">
+            <Card className="hover:shadow-soft transition-shadow duration-300">
               <CardContent className="p-6 text-center">
                 <FileText className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Account Opening Guide</h3>
@@ -320,7 +320,7 @@ const FAQ = () => {
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-lg transition-shadow duration-300">
+            <Card className="hover:shadow-soft transition-shadow duration-300">
               <CardContent className="p-6 text-center">
                 <Smartphone className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Digital Banking Guide</h3>
@@ -329,7 +329,7 @@ const FAQ = () => {
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-lg transition-shadow duration-300">
+            <Card className="hover:shadow-soft transition-shadow duration-300">
               <CardContent className="p-6 text-center">
                 <BarChart3 className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Interest Rates</h3>
@@ -338,7 +338,7 @@ const FAQ = () => {
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-lg transition-shadow duration-300">
+            <Card className="hover:shadow-soft transition-shadow duration-300">
               <CardContent className="p-6 text-center">
                 <Shield className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Security Tips</h3>

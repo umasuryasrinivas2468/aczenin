@@ -63,7 +63,7 @@ const ContactSection = () => {
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="bg-white rounded-xl shadow-md p-8">
+          <div className="bg-white rounded-xl shadow-soft p-8">
             <h3 className="text-xl font-semibold mb-6">Send us a message</h3>
             
             {submitted ? (
@@ -176,7 +176,7 @@ const ContactSection = () => {
 
           {/* Contact Info */}
           <div>
-            <div className="bg-gradient-to-br from-smebank-600 to-smebank-800 text-white rounded-xl shadow-md p-8 h-full">
+            <div className="bg-gradient-to-br from-smebank-600 to-smebank-800 text-white rounded-xl shadow-soft p-8 h-full">
               <div className="mb-8">
                 <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
                 <p className="mb-6">

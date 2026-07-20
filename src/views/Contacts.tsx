@@ -46,7 +46,7 @@ const Contacts = () => {
       description: "Chat with our support agents",
       contact: "Available on website & app",
       availability: "24/7 Available",
-      color: "bg-purple-50 text-purple-600"
+      color: "bg-smebank-50 text-smebank-600"
     },
     {
       icon: <Building className="h-6 w-6" />,
@@ -126,7 +126,7 @@ const Contacts = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {contactMethods.map((method, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 text-center">
+              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 text-center">
                 <CardHeader>
                   <div className={`mx-auto mb-4 p-3 rounded-full w-fit ${method.color}`}>
                     {method.icon}
@@ -252,7 +252,7 @@ const Contacts = () => {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Office</h2>
               <div className="space-y-4">
                 {officeLocations.map((office, index) => (
-                  <Card key={index} className="hover:shadow-md transition-shadow duration-300">
+                  <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="text-xl font-semibold text-gray-900">{office.city}</h3>

@@ -169,7 +169,7 @@ const SecurityCaseReport = () => {
       <section className="-mt-10 pb-12 relative z-10">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <Card className="shadow-2xl border-slate-200/80">
+            <Card className="shadow-soft border-slate-200/80">
               <CardContent className="p-6 md:p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                   {metaRows.map((row) => (
@@ -278,16 +278,16 @@ const SecurityCaseReport = () => {
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<Activity className="h-5 w-5" />} eyebrow="Section 03" title="Event Timeline" />
             <div className="relative">
-              <div className="absolute left-4 top-2 bottom-2 w-px bg-gradient-to-b from-indigo-400 via-slate-300 to-slate-200" />
+              <div className="absolute left-4 top-2 bottom-2 w-px bg-gradient-to-b from-smeteal-400 via-slate-300 to-slate-200" />
               <ol className="space-y-6">
                 {timeline.map((event, idx) => (
                   <li key={event.title} className="relative pl-12">
-                    <div className="absolute left-0 top-1.5 h-8 w-8 rounded-full bg-white border-2 border-indigo-500 shadow-md flex items-center justify-center">
-                      <span className="text-xs font-bold text-indigo-600">{idx + 1}</span>
+                    <div className="absolute left-0 top-1.5 h-8 w-8 rounded-full bg-white border-2 border-smeteal-500 shadow-soft flex items-center justify-center">
+                      <span className="text-xs font-bold text-smeteal-600">{idx + 1}</span>
                     </div>
                     <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-mono text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">
+                        <span className="text-xs font-mono text-smeteal-600 bg-smeteal-50 px-2 py-0.5 rounded">
                           {event.time}
                         </span>
                         <h4 className="font-semibold text-slate-900">{event.title}</h4>
@@ -411,7 +411,7 @@ const SecurityCaseReport = () => {
                 <Card key={qa.q} className="border-slate-200">
                   <CardContent className="p-5">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-smeteal-50 text-smeteal-600 flex items-center justify-center">
                         {qa.icon}
                       </div>
                       <div className="flex-1">
@@ -454,7 +454,7 @@ const SecurityCaseReport = () => {
                       key={action}
                       className="flex items-start gap-3 p-3 rounded-lg border border-slate-200 bg-slate-50/60 hover:bg-slate-50 transition-colors"
                     >
-                      <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white text-xs font-semibold flex items-center justify-center">
+                      <div className="flex-shrink-0 h-6 w-6 rounded-full bg-smeteal-600 text-white text-xs font-semibold flex items-center justify-center">
                         {idx + 1}
                       </div>
                       <span className="text-sm text-slate-700">{action}</span>
@@ -495,7 +495,7 @@ const SecurityCaseReport = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <div className="rounded-2xl bg-slate-900 text-slate-100 p-8 md:p-10 shadow-xl">
+            <div className="rounded-2xl bg-slate-900 text-slate-100 p-8 md:p-10 shadow-soft">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
                   <div className="text-xs uppercase tracking-[0.2em] text-slate-400 mb-2">
@@ -538,7 +538,7 @@ const SectionHeading = ({
   title: string;
 }) => (
   <div className="mb-6">
-    <div className="flex items-center gap-2 text-indigo-600 text-xs uppercase tracking-[0.2em] font-medium mb-2">
+    <div className="flex items-center gap-2 text-smeteal-600 text-xs uppercase tracking-[0.2em] font-medium mb-2">
       {icon}
       <span>{eyebrow}</span>
     </div>

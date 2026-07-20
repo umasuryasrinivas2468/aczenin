@@ -225,13 +225,13 @@ const Pricing = () => {
             </p>
 
             {/* Billing Toggle */}
-            <div className="flex items-center justify-center bg-white rounded-full p-1 shadow-md mb-16 max-w-xs mx-auto">
+            <div className="flex items-center justify-center bg-white rounded-full p-1 shadow-soft mb-16 max-w-xs mx-auto">
               <button
                 type="button"
                 onClick={() => setBillingCycle('monthly')}
                 className={`px-6 py-3 rounded-full font-semibold transition-all ${
                   billingCycle === 'monthly'
-                    ? 'bg-smebank-600 text-white shadow-lg'
+                    ? 'bg-smebank-600 text-white shadow-soft'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -242,7 +242,7 @@ const Pricing = () => {
                 onClick={() => setBillingCycle('annually')}
                 className={`px-6 py-3 rounded-full font-semibold transition-all flex items-center ${
                   billingCycle === 'annually'
-                    ? 'bg-smebank-600 text-white shadow-lg'
+                    ? 'bg-smebank-600 text-white shadow-soft'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -263,8 +263,8 @@ const Pricing = () => {
                 key={plan.id}
                 className={`relative overflow-hidden ${
                   plan.popular
-                    ? 'ring-2 ring-smebank-500 shadow-2xl scale-105'
-                    : 'shadow-lg hover:shadow-xl'
+                    ? 'ring-2 ring-smebank-500 shadow-soft scale-105'
+                    : 'shadow-soft hover:shadow-soft'
                 } transition-all duration-300`}
               >
                 {plan.popular && (
@@ -351,7 +351,7 @@ const Pricing = () => {
                   <Button
                     className={`w-full py-4 font-semibold text-base ${
                       plan.popular
-                        ? 'bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white shadow-lg hover:shadow-xl'
+                        ? 'bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white shadow-soft hover:shadow-soft'
                         : 'bg-smebank-600 hover:bg-smebank-700 text-white'
                     } transition-all duration-300`}
                     onClick={() => window.open(plan.cta.url, plan.cta.url.includes('dashboard.aczen.in') ? '_self' : '_blank')}

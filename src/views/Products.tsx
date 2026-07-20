@@ -34,8 +34,8 @@ const Products = () => {
       name: "Aczen OS",
       description: "Next-generation operating system built for performance, security, and user experience.",
       icon: Monitor,
-      color: "bg-purple-100 text-purple-600",
-      gradient: "from-purple-600 to-purple-700",
+      color: "bg-smebank-100 text-smebank-600",
+      gradient: "from-smebank-600 to-smebank-700",
       features: ["Modern Interface", "Enhanced Security", "Cloud Integration", "Developer Tools"],
       link: "/products/aczen-os"
     }
@@ -96,7 +96,7 @@ const Products = () => {
         <section className="container mx-auto px-4 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {products.map((product, index) => (
-              <div key={product.id} className="bg-white rounded-xl shadow-lg border hover:shadow-xl transition-all duration-300 overflow-hidden">
+              <div key={product.id} className="bg-white rounded-xl shadow-soft border hover:shadow-soft transition-all duration-300 overflow-hidden">
                 <div className={`h-2 bg-gradient-to-r ${product.gradient}`}></div>
                 <div className="p-8">
                   <div className={`w-16 h-16 rounded-lg flex items-center justify-center mb-6 ${product.color}`}>
@@ -120,7 +120,7 @@ const Products = () => {
                   
                   <Link
                     href={product.link}
-                    className={`inline-flex items-center bg-gradient-to-r ${product.gradient} text-white px-6 py-3 rounded-md font-medium hover:shadow-lg transition-all duration-300 group`}
+                    className={`inline-flex items-center bg-gradient-to-r ${product.gradient} text-white px-6 py-3 rounded-md font-medium hover:shadow-soft transition-all duration-300 group`}
                   >
                     Learn More
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -161,8 +161,8 @@ const Products = () => {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Star className="w-8 h-8 text-purple-600" />
+                <div className="w-16 h-16 bg-smebank-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Star className="w-8 h-8 text-smebank-600" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Enterprise Ready</h3>
                 <p className="text-gray-600">Scalable solutions that grow with your business needs.</p>
@@ -200,7 +200,7 @@ const Products = () => {
                   <span className="text-gray-700">Third-party integrations</span>
                 </li>
               </ul>
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-md font-medium hover:shadow-lg transition-all duration-300">
+              <button className="bg-gradient-to-r from-blue-600 to-smebank-600 text-white px-8 py-3 rounded-md font-medium hover:shadow-soft transition-all duration-300">
                 View Integration Guide
               </button>
             </div>
@@ -208,7 +208,7 @@ const Products = () => {
               <img
                 src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                 alt="Integration"
-                className="rounded-lg shadow-xl w-full"
+                className="rounded-lg shadow-soft w-full"
               />
             </div>
           </div>
@@ -216,7 +216,7 @@ const Products = () => {
 
         {/* Call to Action */}
         <section className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-xl p-8 md:p-12 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">
               Ready to Get Started?
             </h2>

@@ -102,7 +102,7 @@ const AczenIDE = () => {
                   href="https://code.aczen.tech" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-md font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center"
+                  className="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-md font-medium hover:shadow-soft transition-all duration-300 flex items-center justify-center"
                 >
                   <Play className="w-4 h-4 mr-2" />
                   Try Online IDE
@@ -121,7 +121,7 @@ const AczenIDE = () => {
               <img
                 src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
                 alt="Aczen IDE Interface"
-                className="rounded-lg shadow-xl w-full"
+                className="rounded-lg shadow-soft w-full"
               />
             </div>
           </div>
@@ -138,7 +138,7 @@ const AczenIDE = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-lg border hover:shadow-xl transition-shadow">
+              <div key={index} className="bg-white p-6 rounded-lg shadow-soft border hover:shadow-soft transition-shadow">
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                   <feature.icon className="w-6 h-6 text-green-600" />
                 </div>
@@ -176,7 +176,7 @@ const AczenIDE = () => {
               <img
                 src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                 alt="Developer Productivity"
-                className="rounded-lg shadow-xl w-full"
+                className="rounded-lg shadow-soft w-full"
               />
             </div>
             <div className="lg:w-1/2">

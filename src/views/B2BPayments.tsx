@@ -99,20 +99,20 @@ const B2BPayments = () => {
       iconBg: "bg-green-100"
     },
     {
-      icon: <CreditCard className="h-10 w-10 text-purple-600" />,
+      icon: <CreditCard className="h-10 w-10 text-smebank-600" />,
       title: "Multiple Payment Rails",
       description: "Accept and send payments via UPI, cards, net banking, RTGS, NEFT, and offline methods for complete payment flexibility.",
       badge: "Multi-channel",
-      bgColor: "from-purple-500 to-pink-500",
-      iconBg: "bg-purple-100"
+      bgColor: "from-smebank-500 to-pink-500",
+      iconBg: "bg-smebank-100"
     },
     {
-      icon: <TrendingUp className="h-10 w-10 text-indigo-600" />,
+      icon: <TrendingUp className="h-10 w-10 text-smeteal-600" />,
       title: "Built-in Financing Options",
       description: "Access credit support, flexible payment terms, and working capital solutions to optimize cash flow for sustained growth.",
       badge: "Credit Ready",
-      bgColor: "from-indigo-500 to-blue-500",
-      iconBg: "bg-indigo-100"
+      bgColor: "from-smeteal-500 to-blue-500",
+      iconBg: "bg-smeteal-100"
     },
     {
       icon: <FileText className="h-10 w-10 text-red-600" />,
@@ -145,12 +145,12 @@ const B2BPayments = () => {
     },
     {
       step: "03",
-      icon: <Globe className="h-16 w-16 text-purple-600" />,
+      icon: <Globe className="h-16 w-16 text-smebank-600" />,
       title: "Link Business Partners",
       description: "Connect with customers and vendors using their Aczen Bilz IDs for instant, secure, and traceable transactions.",
       time: "Real-time",
-      bgColor: "from-purple-400 to-purple-600",
-      iconBg: "bg-purple-100"
+      bgColor: "from-smebank-400 to-smebank-600",
+      iconBg: "bg-smebank-100"
     },
     {
       step: "04",
@@ -167,7 +167,7 @@ const B2BPayments = () => {
     { value: "99.9%", label: "Uptime SLA", icon: <Shield className="h-6 w-6" />, color: "text-green-600" },
     { value: "< 2s", label: "Transaction Speed", icon: <Zap className="h-6 w-6" />, color: "text-yellow-600" },
     { value: "256-bit", label: "Bank-grade Security", icon: <Lock className="h-6 w-6" />, color: "text-blue-600" },
-    { value: "24/7", label: "Enterprise Support", icon: <Users className="h-6 w-6" />, color: "text-purple-600" }
+    { value: "24/7", label: "Enterprise Support", icon: <Users className="h-6 w-6" />, color: "text-smebank-600" }
   ];
 
   return (
@@ -175,17 +175,17 @@ const B2BPayments = () => {
       {/* Header */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isSticky 
-          ? 'bg-white/95 backdrop-blur-xl shadow-2xl border-b border-slate-200/50' 
+          ? 'bg-white/95 backdrop-blur-xl shadow-soft border-b border-slate-200/50' 
           : 'bg-white/80 backdrop-blur-sm'
       }`}>
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-smebank-600 rounded-xl flex items-center justify-center">
                 <span className="text-white font-bold">BC</span>
               </div>
-              <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-smebank-600 bg-clip-text text-transparent">
                 Aczen Bilz
               </Link>
             </div>
@@ -194,15 +194,15 @@ const B2BPayments = () => {
             <nav className="hidden lg:flex items-center space-x-12">
               <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 relative group">
                 Home
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all group-hover:w-full"></span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-smebank-500 transition-all group-hover:w-full"></span>
               </Link>
               <Link href="/pricing" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 relative group">
                 Pricing
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all group-hover:w-full"></span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-smebank-500 transition-all group-hover:w-full"></span>
               </Link>
               <Link href="/contacts" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 relative group">
                 Contact
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all group-hover:w-full"></span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-smebank-500 transition-all group-hover:w-full"></span>
               </Link>
               {/* Sign In / Sign Up removed as requested */}
             </nav>
@@ -239,8 +239,8 @@ const B2BPayments = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-20 bg-white relative overflow-hidden">
         {/* Clean, bold hero background */}
-        <div className="absolute left-0 bottom-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-full blur-3xl -z-10"></div>
-        <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute left-0 bottom-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-100 via-smebank-100 to-pink-100 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-100 via-smebank-100 to-pink-100 rounded-full blur-3xl -z-10"></div>
         <div className="container mx-auto px-6">
           <div className="flex flex-col items-center justify-center text-center">
             {/* Status badge */}
@@ -253,11 +253,11 @@ const B2BPayments = () => {
             {/* Headline */}
             <h1 className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight">
               <span className="block text-gray-900">Effortlessly manage</span>
-              <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">B2B transactions</span>
-              <span className="block text-gray-800 mt-2">with <span className="bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent">Bharat Connect</span></span>
+              <span className="block bg-gradient-to-r from-blue-600 via-smebank-600 to-pink-600 bg-clip-text text-transparent">B2B transactions</span>
+              <span className="block text-gray-800 mt-2">with <span className="bg-gradient-to-r from-smebank-600 via-blue-600 to-pink-600 bg-clip-text text-transparent">Bharat Connect</span></span>
             </h1>
             {/* Decorative underline */}
-            <div className="mx-auto h-1 w-56 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 mb-6" />
+            <div className="mx-auto h-1 w-56 rounded-full bg-gradient-to-r from-blue-500 to-smebank-500 mb-6" />
             {/* Description */}
             <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
               Manage bills, invoices, and payments on a single secure platform—integrate with your business apps, accept cards, UPI, and NetBanking, and automate reconciliation and financing so you can focus on growth.
@@ -274,7 +274,7 @@ const B2BPayments = () => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     placeholder="Enter your phone number to get started"
-                    className="flex-1 h-14 rounded-full border-2 border-purple-200 px-6 text-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-xl"
+                    className="flex-1 h-14 rounded-full border-2 border-smebank-200 px-6 text-lg focus:outline-none focus:ring-2 focus:ring-smebank-500 focus:border-transparent shadow-soft"
                   />
                   <Button
                     size="lg"
@@ -304,7 +304,7 @@ const B2BPayments = () => {
                         setPhoneError(err?.message || 'Failed to submit phone number');
                       }
                     }}
-                    className="h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 text-lg font-semibold hover:opacity-90 transition-opacity shadow-xl hover:shadow-2xl"
+                    className="h-14 rounded-full bg-gradient-to-r from-smebank-600 to-blue-600 text-white px-8 text-lg font-semibold hover:opacity-90 transition-opacity shadow-soft hover:shadow-soft"
                   >
                     Get Started
                   </Button>
@@ -312,7 +312,7 @@ const B2BPayments = () => {
                 <div className="mt-3 text-center min-h-[24px]">
                   {phoneStatus === 'sending' && (
                     <span className="text-gray-600 inline-flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-smebank-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -358,12 +358,12 @@ const B2BPayments = () => {
       </section>
 
       {/* Key Features Section */}
-      <section className="py-24 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      <section className="py-24 bg-gradient-to-br from-smeteal-50 via-smebank-50 to-pink-50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full px-4 py-2 mb-6">
-              <Layers className="h-4 w-4 text-indigo-600 mr-2" />
-              <span className="text-sm font-medium bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Enterprise Features</span>
+            <div className="inline-flex items-center bg-gradient-to-r from-smeteal-100 to-smebank-100 rounded-full px-4 py-2 mb-6">
+              <Layers className="h-4 w-4 text-smeteal-600 mr-2" />
+              <span className="text-sm font-medium bg-gradient-to-r from-smeteal-600 to-smebank-600 bg-clip-text text-transparent">Enterprise Features</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
               Powerful Features for Modern B2B Payments
@@ -377,12 +377,12 @@ const B2BPayments = () => {
             {features.map((feature, index) => (
               <Card 
                 key={index} 
-                className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden relative"
+                className="group hover:shadow-soft transition-all duration-500 hover:-translate-y-3 border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden relative"
               >
                 <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.bgColor}`}></div>
                 <CardHeader className="text-center pb-6 pt-8">
                   <div className="relative mx-auto mb-6">
-                    <div className={`w-20 h-20 ${feature.iconBg} group-hover:scale-110 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg`}>
+                    <div className={`w-20 h-20 ${feature.iconBg} group-hover:scale-110 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-soft`}>
                       {feature.icon}
                     </div>
                   </div>
@@ -402,7 +402,7 @@ const B2BPayments = () => {
       {/* How it Works Section */}
       <section className="py-24 bg-white relative overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/30 to-purple-100/30 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/30 to-smebank-100/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-br from-pink-100/30 to-orange-100/30 rounded-full blur-3xl"></div>
         
         <div className="container mx-auto px-6 relative z-10">
@@ -421,18 +421,18 @@ const B2BPayments = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
             {/* Connection Lines */}
-            <div className="hidden lg:block absolute top-24 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-blue-200 via-purple-300 to-orange-200"></div>
+            <div className="hidden lg:block absolute top-24 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-blue-200 via-smebank-300 to-orange-200"></div>
             
             {howItWorksSteps.map((step, index) => (
               <div key={index} className="text-center group relative">
                 <div className="relative mb-8">
-                  <div className={`${step.iconBg} group-hover:scale-110 transition-all duration-500 rounded-3xl w-32 h-32 flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl`}>
+                  <div className={`${step.iconBg} group-hover:scale-110 transition-all duration-500 rounded-3xl w-32 h-32 flex items-center justify-center mx-auto mb-6 shadow-soft group-hover:shadow-soft`}>
                     {step.icon}
                   </div>
-                  <div className={`absolute -top-3 -right-3 bg-gradient-to-r ${step.bgColor} text-white text-sm font-bold rounded-full w-10 h-10 flex items-center justify-center shadow-lg`}>
+                  <div className={`absolute -top-3 -right-3 bg-gradient-to-r ${step.bgColor} text-white text-sm font-bold rounded-full w-10 h-10 flex items-center justify-center shadow-soft`}>
                     {step.step}
                   </div>
-                  <Badge className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 font-medium shadow-md">
+                  <Badge className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 font-medium shadow-soft">
                     {step.time}
                   </Badge>
                 </div>
@@ -449,7 +449,7 @@ const B2BPayments = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-blue-600 via-smebank-600 to-pink-600 relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]"></div>
         <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full blur-3xl"></div>
@@ -512,7 +512,7 @@ const B2BPayments = () => {
                       setPhoneError(err?.message || 'Failed to submit phone number');
                     }
                   }}
-                  className="rounded-full bg-white text-purple-600 hover:bg-gray-100 px-6 py-3"
+                  className="rounded-full bg-white text-smebank-600 hover:bg-gray-100 px-6 py-3"
                 >
                   Request Call Back
                 </Button>
@@ -543,18 +543,18 @@ const B2BPayments = () => {
       </section>
 
       {/* Flight Offers Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/30 to-purple-100/30 rounded-full blur-3xl"></div>
+      <section className="py-20 bg-gradient-to-br from-blue-50 via-smebank-50 to-pink-50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/30 to-smebank-100/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-br from-pink-100/30 to-orange-100/30 rounded-full blur-3xl"></div>
         
         <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-purple-100 rounded-full px-4 py-2 mb-6">
+            <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-smebank-100 rounded-full px-4 py-2 mb-6">
               <Plane className="h-4 w-4 text-blue-600 mr-2" />
-              <span className="text-sm font-medium bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Exclusive Travel Benefits</span>
+              <span className="text-sm font-medium bg-gradient-to-r from-blue-600 to-smebank-600 bg-clip-text text-transparent">Exclusive Travel Benefits</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
-              Unlock <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Complimentary Flight Offers</span>
+              Unlock <span className="bg-gradient-to-r from-blue-600 to-smebank-600 bg-clip-text text-transparent">Complimentary Flight Offers</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               With every IT filing through Aczen Bilz, get exclusive access to premium flight deals and travel rewards
@@ -562,7 +562,7 @@ const B2BPayments = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden">
+            <Card className="group hover:shadow-soft transition-all duration-500 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden">
               <CardHeader className="text-center pb-6 pt-8">
                 <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Globe className="h-8 w-8 text-blue-600" />
@@ -576,10 +576,10 @@ const B2BPayments = () => {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden">
+            <Card className="group hover:shadow-soft transition-all duration-500 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden">
               <CardHeader className="text-center pb-6 pt-8">
-                <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Plane className="h-8 w-8 text-purple-600" />
+                <div className="w-16 h-16 bg-smebank-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Plane className="h-8 w-8 text-smebank-600" />
                 </div>
                 <CardTitle className="text-xl font-bold text-gray-900">International Travel</CardTitle>
               </CardHeader>
@@ -590,7 +590,7 @@ const B2BPayments = () => {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden">
+            <Card className="group hover:shadow-soft transition-all duration-500 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden">
               <CardHeader className="text-center pb-6 pt-8">
                 <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Star className="h-8 w-8 text-green-600" />
@@ -606,7 +606,7 @@ const B2BPayments = () => {
           </div>
 
           <div className="mt-12 text-center">
-            <div className="inline-flex items-center gap-6 bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+            <div className="inline-flex items-center gap-6 bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-soft">
               <div className="flex items-center text-gray-600">
                 <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
                 <span>Valid on all airlines</span>

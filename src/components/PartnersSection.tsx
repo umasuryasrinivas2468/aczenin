@@ -50,42 +50,47 @@ const PartnersSection = () => {
   const marquee = [...partners, ...partners];
 
   return (
-    <section id="partners" className="py-16 bg-white overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
-            Trusted Partners
-          </h2>
-          <p className="text-gray-600">Building India's financial future together</p>
+    <section id="partners" className="py-24 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10">
+        <div className="border-2 border-slate-900 bg-smebank-50 shadow-soft p-6 md:p-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+          <div>
+            <span className="eyebrow mb-4">
+              <span className="h-1.5 w-1.5 bg-smeteal-400" />
+              Our network
+            </span>
+            <h2 className="section-title text-slate-900">Trusted Partners</h2>
+          </div>
+          <p className="text-slate-900 md:text-right md:max-w-xs">
+            Building India's financial future together
+          </p>
         </div>
       </div>
 
-      {/* Continuously swiping logo marquee */}
-      <div className="relative w-full overflow-hidden">
-        {/* edge fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 md:w-32 bg-gradient-to-r from-white to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 md:w-32 bg-gradient-to-l from-white to-transparent" />
-
+      {/* Full-width bordered ticker band of partner cells */}
+      <div className="relative w-full overflow-hidden border-y-2 border-slate-900 bg-white">
         <motion.div
-          className="flex w-max items-center gap-12 md:gap-20"
+          className="flex w-max"
           animate={{ x: ["0%", "-50%"] }}
           transition={{ duration: 28, ease: "linear", repeat: Infinity }}
         >
           {marquee.map((partner, index) => (
-            <div key={index} className="flex shrink-0 items-center justify-center">
+            <div
+              key={index}
+              className="flex shrink-0 items-center justify-center gap-3 border-r-2 border-slate-900 bg-white px-8 md:px-12 py-8"
+            >
               <img
                 src={partner.logo}
                 alt={partner.alt}
-                className="h-10 md:h-14 w-auto object-contain mix-blend-multiply opacity-80 hover:opacity-100 transition-opacity duration-300"
+                className="h-10 md:h-12 w-auto object-contain"
               />
             </div>
           ))}
         </motion.div>
       </div>
 
-      <div className="container mx-auto px-4">
-        <div className="mt-12 text-center">
-          <p className="text-sm md:text-base text-gray-500 max-w-2xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mt-12 border-2 border-slate-900 bg-white shadow-soft p-6 md:p-8 max-w-2xl mx-auto text-center">
+          <p className="text-sm md:text-base text-slate-900">
             We've partnered with India's leading financial institutions to provide you
             with the best banking services tailored for SMEs.
           </p>

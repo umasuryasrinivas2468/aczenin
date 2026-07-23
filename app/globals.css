@@ -4,35 +4,41 @@
 
 @layer base {
   :root {
-    --background: 210 30% 98.5%;
-    --foreground: 215 40% 12%;
+    /* Ledger Precision — institutional financial identity */
+    --background: 216 33% 97%;      /* cool paper #F5F7FA */
+    --foreground: 215 68% 14%;      /* ink navy #0B1F3A */
 
     --card: 0 0% 100%;
-    --card-foreground: 215 40% 12%;
+    --card-foreground: 215 68% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 215 68% 14%;
 
-    --primary: 212 90% 45%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 214 92% 46%;         /* brand blue #0967e3 — actions only */
+    --primary-foreground: 210 40% 99%;
 
-    --secondary: 174 100% 29%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 174 100% 33%;      /* teal #00A69C — data/positive */
+    --secondary-foreground: 210 40% 99%;
 
-    --muted: 210 38% 96.5%;
-    --muted-foreground: 215 18% 47%;
+    --muted: 214 30% 95%;
+    --muted-foreground: 215 19% 43%;  /* #5A6B82 */
 
     --accent: 30 100% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 210 40% 99%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 212 90% 45%;
+    --border: 214 24% 88%;          /* hairline #D8DFE8 */
+    --input: 214 24% 88%;
+    --ring: 214 92% 46%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;              /* crisp 4px */
+
+    /* Ledger tokens */
+    --ink: 215 68% 14%;
+    --line: 214 24% 88%;
+    --data: 174 100% 33%;
 
     --sidebar-background: 0 0% 98%;
 
@@ -105,40 +111,125 @@
     font-family: var(--font-jakarta), var(--font-inter), sans-serif;
   }
 
-  .hero-gradient {
-    background: linear-gradient(180deg, rgba(33, 134, 251, 0.05) 0%, rgba(0, 208, 192, 0.05) 100%);
+  /* ============================================================
+     LEDGER PRECISION — institutional financial design language
+     Ruled hairlines over floating cards · tabular monospace
+     numerals as the personality · disciplined column grid ·
+     crisp corners · near-flat depth. Same brand palette.
+     ============================================================ */
+
+  h1, h2, h3, h4, .section-title {
+    letter-spacing: -0.022em;
   }
 
-  /* Soft-premium depth — gentle, low-contrast, calm */
+  /* Monospace tabular figures — the signature. Use on every number. */
+  .tabular, .mono {
+    font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', 'Cascadia Code',
+      'Roboto Mono', Menlo, Consolas, monospace;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+    font-variant-numeric: tabular-nums slashed-zero;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-gradient {
+    background: linear-gradient(180deg, rgba(9, 103, 227, 0.04) 0%, rgba(0, 166, 156, 0.03) 100%);
+  }
+
+  /* Near-flat institutional elevation */
   .shadow-soft {
-    box-shadow: 0 1px 2px rgba(15, 40, 70, .04), 0 12px 32px -16px rgba(15, 40, 70, .12);
+    box-shadow: 0 1px 0 0 hsl(var(--line)), 0 1px 2px rgba(11, 31, 58, .04);
   }
   .shadow-soft-lg {
-    box-shadow: 0 2px 4px rgba(15, 40, 70, .04), 0 40px 80px -32px rgba(15, 40, 70, .18);
+    box-shadow: 0 0 0 1px hsl(var(--line)), 0 18px 40px -24px rgba(11, 31, 58, .22);
   }
 
+  /* Ruled hairline dividers — the ledger motif */
+  .rule {
+    @apply border-t border-border;
+  }
+  .rule-strong {
+    border-top: 2px solid hsl(var(--ink));
+  }
+
+  /* Card = ruled panel, not a floating pill */
   .feature-card {
-    @apply p-6 rounded-2xl border border-black/[0.06] bg-white shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300;
+    @apply p-7 rounded border border-border bg-white transition-colors duration-200;
+    @apply hover:border-slate-300;
+  }
+  .premium-card {
+    @apply rounded border border-border bg-white transition-colors duration-200;
+    @apply hover:border-slate-300;
   }
 
-  .cta-button {
-    @apply bg-gradient-to-r from-smebank-600 to-smebank-700 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition-all duration-300;
+  /* Flat precise surface (was glassmorphism) */
+  .glass {
+    @apply border border-border bg-white;
+  }
+  .glass-card {
+    @apply rounded glass;
   }
 
+  /* Solid disciplined buttons — crisp, no pill, no gloss */
+  .cta-button, .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded text-sm font-semibold transition-colors duration-150 hover:bg-smebank-700;
+  }
   .cta-button-secondary {
-    @apply bg-gradient-to-r from-smeteal-500 to-smeteal-600 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-5 py-2.5 rounded text-sm font-semibold transition-colors duration-150 hover:bg-smeteal-700;
   }
-
   .cta-button-accent {
-    @apply bg-gradient-to-r from-smeorange-500 to-smeorange-600 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 bg-smeorange-500 text-white px-5 py-2.5 rounded text-sm font-semibold transition-colors duration-150 hover:bg-smeorange-600;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 border border-slate-300 bg-white px-5 py-2.5 rounded text-sm font-semibold text-slate-700 transition-colors duration-150 hover:border-slate-400 hover:bg-slate-50;
   }
 
+  /* Confident tight display — big scale, heavy, precise */
+  .display {
+    font-family: var(--font-jakarta), var(--font-inter), sans-serif;
+    @apply font-extrabold text-slate-900;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+  }
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-smebank-900 mb-2;
+    @apply text-3xl md:text-[2.5rem] font-extrabold text-slate-900 mb-3;
+    letter-spacing: -0.03em;
+    line-height: 1.06;
+  }
+  .section-subtitle {
+    @apply text-lg text-muted-foreground mb-8 leading-relaxed max-w-2xl;
   }
 
-  .section-subtitle {
-    @apply text-lg text-muted-foreground mb-8;
+  /* Eyebrow = ruled index label (mono), reads like a ledger line */
+  .eyebrow {
+    font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-px w-6 bg-secondary;
+  }
+
+  /* Restrained brand gradient text — sparing */
+  .text-gradient {
+    @apply bg-gradient-to-r from-smebank-700 to-smeteal-600 bg-clip-text text-transparent;
+  }
+
+  /* Fine ruled grid — engineering-paper feel, low intensity */
+  .mesh-bg {
+    background-color: hsl(var(--background));
+    background-image:
+      linear-gradient(hsl(var(--line) / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--line) / 0.5) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .grid-texture {
+    background-image:
+      linear-gradient(hsl(var(--line) / 0.6) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--line) / 0.6) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .brand-glow {
+    box-shadow: 0 18px 48px -28px rgba(9, 103, 227, 0.28);
   }
 
   .no-scrollbar::-webkit-scrollbar {
@@ -148,4 +239,19 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+}
+
+/* Continuous logo marquee (Partners) — track holds two copies, slides -50% */
+@keyframes ledger-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: ledger-marquee 38s linear infinite;
+}
+.marquee-pause:hover .animate-marquee {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee { animation: none; }
 }

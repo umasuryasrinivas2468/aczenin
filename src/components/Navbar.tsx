@@ -16,7 +16,7 @@ const Navbar = () => {
   const isMobile = useIsMobile();
 
   return (
-    <header className="fixed top-0 w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-black/[0.06]">
+    <header className="fixed top-0 w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" aria-label="Aczen home">
           <img

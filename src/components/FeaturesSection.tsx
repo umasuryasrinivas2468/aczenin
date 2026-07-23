@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useInView, AnimatePresence, type Variants } from "framer-motion";
-import { ChevronLeft, ChevronRight, Check, ShieldCheck, Sparkles } from "lucide-react";
+import { Check, ShieldCheck, Sparkles } from "lucide-react";
 
 /* ---------- shared stagger variants (drives the "streaming result" feel) ---------- */
 
@@ -407,77 +407,41 @@ const features: Feature[] = [
 /* ---------- section ---------- */
 
 const FeaturesSection = () => {
-  const scroller = useRef<HTMLDivElement>(null);
-
-  const scrollByCard = (dir: number) => {
-    const el = scroller.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>("[data-card]");
-    const amount = card ? card.offsetWidth + 24 : el.clientWidth * 0.85;
-    el.scrollBy({ left: dir * amount, behavior: "smooth" });
-  };
-
   return (
-    <section
-      id="features"
-      className="py-24 bg-gradient-to-b from-smebank-50/50 via-background to-background overflow-hidden"
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-          <div className="max-w-2xl">
-            <h2 className="section-title">Powerful Features for Your Business</h2>
-            <p className="section-subtitle mb-0">
-              Everything you need to manage your business finances efficiently in one place.
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <button
-              type="button"
-              aria-label="Previous"
-              onClick={() => scrollByCard(-1)}
-              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-600 hover:text-smebank-600 hover:border-smebank-300 transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              type="button"
-              aria-label="Next"
-              onClick={() => scrollByCard(1)}
-              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-600 hover:text-smebank-600 hover:border-smebank-300 transition-colors"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
+    <section id="features" className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-2xl mb-12">
+          <p className="eyebrow mb-3">Features</p>
+          <h2 className="section-title">Powerful Features for Your Business</h2>
+          <p className="section-subtitle mb-0">
+            Everything you need to manage your business finances efficiently in one place.
+          </p>
         </div>
-      </div>
 
-      {/* horizontal, swipeable, snap carousel with edge peeking */}
-      <div
-        ref={scroller}
-        className="no-scrollbar flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 md:px-8 lg:px-[max(1rem,calc((100%-72rem)/2))] pb-4 [scrollbar-width:none] [-ms-overflow-style:none]"
-      >
-        {features.map((f, i) => (
-          <motion.article
-            key={f.no}
-            data-card
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.45, delay: (i % 4) * 0.06 }}
-            className="snap-start shrink-0 w-[86vw] sm:w-[400px] lg:w-[420px] min-h-[560px] flex flex-col rounded-3xl bg-white p-7 md:p-8 border border-black/[0.06] shadow-soft-lg"
-          >
-            <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase text-smebank-500 mb-5">
-              <span>{f.no}</span>
-              <span className="text-smebank-300">·</span>
-              <span>{f.eyebrow}</span>
-            </p>
-            <h3 className="text-2xl md:text-[28px] leading-tight font-bold text-gray-900 mb-3">
-              {f.title}
-            </h3>
-            <p className="text-gray-500 leading-relaxed">{f.description}</p>
-            <div className="mt-auto pt-8">{f.mock}</div>
-          </motion.article>
-        ))}
+        {/* ruled matrix — cells separated only by hairlines, reads like a spec sheet */}
+        <div className="border border-border rounded overflow-hidden grid md:grid-cols-3 divide-y divide-x divide-border">
+          {features.map((f, i) => (
+            <motion.article
+              key={f.no}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.4, delay: (i % 3) * 0.06 }}
+              className="flex flex-col bg-white p-7 md:p-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
+            >
+              <div className="flex items-center gap-3 mb-5">
+                <span className="tabular text-secondary text-sm font-semibold">{f.no}</span>
+                <span className="rule flex-1" />
+                <span className="eyebrow before:hidden">{f.eyebrow}</span>
+              </div>
+              <h3 className="text-xl md:text-2xl leading-tight font-bold text-slate-900 mb-3">
+                {f.title}
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">{f.description}</p>
+              <div className="mt-auto pt-8">{f.mock}</div>
+            </motion.article>
+          ))}
+        </div>
       </div>
     </section>
   );

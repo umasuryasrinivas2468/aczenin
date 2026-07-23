@@ -20,32 +20,43 @@ const industries = [
 
 const IndustrySection = () => {
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+    <section className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-12">
+          <span className="eyebrow mb-4">
+            <span className="h-1.5 w-1.5 bg-smeteal-500" />
+            Built for every industry
+          </span>
+          <h2 className="section-title text-slate-900 mb-4">Industries We Serve</h2>
+          <p className="text-slate-900 max-w-2xl">
             Tailored banking solutions for various business sectors across India
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <ul className="border-2 border-slate-900 shadow-soft-lg">
           {industries.map((industry, index) => (
-            <div key={index} className="relative group overflow-hidden rounded-xl">
-              <div className="aspect-square relative">
+            <li
+              key={index}
+              className={`group flex items-center gap-4 sm:gap-8 p-4 sm:p-6 border-b-2 border-slate-900 last:border-b-0 transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none ${
+                index % 2 === 1 ? "bg-smeteal-400" : "bg-white"
+              }`}
+            >
+              <span className="display text-slate-900 shrink-0 w-16 sm:w-24 tabular-nums">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3 className="flex-1 text-2xl sm:text-4xl font-bold text-slate-900">
+                {industry.name}
+              </h3>
+              <div className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 border-2 border-slate-900 bg-white overflow-hidden">
                 <img
                   src={industry.image}
                   alt={industry.name}
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-300"
+                  className="object-cover w-full h-full"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-xl font-semibold">{industry.name}</h3>
-                </div>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

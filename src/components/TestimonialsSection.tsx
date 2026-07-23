@@ -63,6 +63,10 @@ const TestimonialsSection = () => {
     ]);
   };
 
+  const goTo = (target: number) => {
+    setState(([i]) => [target, target > i ? 1 : -1]);
+  };
+
   const onDragEnd = (_: unknown, info: PanInfo) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
@@ -71,95 +75,125 @@ const TestimonialsSection = () => {
   };
 
   const t = testimonials[index];
+  const others = testimonials.filter((_, i) => i !== index);
 
   return (
-    <section
-      id="testimonials"
-      className="relative py-24 md:py-28 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden"
-    >
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
-            Real teams.{" "}
-            <span className="bg-gradient-to-r from-blue-600 via-smebank-600 to-smeteal-600 bg-clip-text text-transparent">
-              Real results.
-            </span>
+    <section id="testimonials" className="py-24 md:py-28 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-14">
+          <span className="eyebrow">
+            <span className="h-1.5 w-1.5 bg-smeteal-400" />
+            Loved by founders
+          </span>
+          <h2 className="section-title mt-4">
+            Real teams. Real results.
           </h2>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg text-slate-900 max-w-2xl">
             Hear from the founders running their businesses on Aczen.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="relative max-w-3xl mx-auto select-none">
-          <div className="relative h-[360px] md:h-[320px]">
-            <AnimatePresence mode="popLayout" custom={direction} initial={false}>
-              <motion.div
-                key={t.id}
-                custom={direction}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.2}
-                onDragEnd={onDragEnd}
-                initial={{ x: direction >= 0 ? 320 : -320, opacity: 0, scale: 0.96 }}
-                animate={{ x: 0, opacity: 1, scale: 1 }}
-                exit={{ x: direction >= 0 ? -320 : 320, opacity: 0, scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 260, damping: 30 }}
-                className="absolute inset-0 cursor-grab active:cursor-grabbing"
-              >
-                <div className="relative h-full bg-white border border-gray-100 rounded-2xl p-7 md:p-10 shadow-soft">
-                  <Quote
-                    className="absolute top-6 right-6 w-10 h-10 text-gray-100"
-                    strokeWidth={1.5}
-                  />
+        <div className="grid gap-6 md:grid-cols-5 items-start select-none">
+          {/* Featured quote */}
+          <div className="md:col-span-3">
+            <div className="relative h-full min-h-[360px] md:min-h-[420px]">
+              <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+                <motion.div
+                  key={t.id}
+                  custom={direction}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={onDragEnd}
+                  initial={{ x: direction >= 0 ? 320 : -320, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: direction >= 0 ? -320 : 320, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 30 }}
+                  className="absolute inset-0 cursor-grab active:cursor-grabbing"
+                >
+                  <div className="relative h-full flex flex-col border-2 border-slate-900 bg-smebank-500 text-white shadow-soft-lg p-8 md:p-10">
+                    <Quote
+                      className="w-16 h-16 md:w-20 md:h-20 text-smeteal-400 shrink-0"
+                      strokeWidth={1.5}
+                    />
 
-                  <div className="flex items-center gap-4 mb-6">
-                    <div
-                      className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${t.accent} flex items-center justify-center text-white text-lg font-bold shrink-0`}
-                    >
-                      {t.initials}
-                      <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-md flex items-center justify-center shadow-sm">
-                        <Building2 className="w-3 h-3 text-gray-700" />
-                      </span>
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
-                        {t.director}
-                      </h3>
-                      <p className="text-sm text-gray-500 truncate">{t.role}</p>
+                    <p className="mt-4 text-xl md:text-2xl leading-relaxed">
+                      &ldquo;{t.quote}&rdquo;
+                    </p>
+
+                    <div className="mt-auto pt-8 flex items-center gap-4">
+                      <div className="relative w-14 h-14 border-2 border-slate-900 bg-white text-slate-900 flex items-center justify-center text-lg font-bold shrink-0">
+                        {t.initials}
+                        <span className="absolute -bottom-2 -right-2 w-6 h-6 border-2 border-slate-900 bg-smeteal-400 flex items-center justify-center">
+                          <Building2 className="w-3 h-3 text-slate-900" />
+                        </span>
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="text-lg font-semibold truncate">
+                          {t.director}
+                        </h3>
+                        <p className="text-sm text-white/80 truncate">{t.role}</p>
+                        <div className="mt-1 flex items-center gap-1">
+                          {Array.from({ length: 5 }).map((_, idx) => (
+                            <Star
+                              key={idx}
+                              className={`w-4 h-4 ${
+                                idx < t.rating
+                                  ? "text-smeteal-400 fill-smeteal-400"
+                                  : "text-white/30"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, idx) => (
-                      <Star
-                        key={idx}
-                        className={`w-4 h-4 ${
-                          idx < t.rating
-                            ? "text-yellow-400 fill-yellow-400"
-                            : "text-gray-200"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
 
-          <p className="text-center text-xs text-gray-400 mt-4">
-            Swipe to see more
-          </p>
+          {/* Staggered smaller cards */}
+          <div className="md:col-span-2 flex flex-col gap-6">
+            {others.map((o, i) => (
+              <button
+                key={o.id}
+                type="button"
+                onClick={() => goTo(testimonials.indexOf(o))}
+                className={`text-left border-2 border-slate-900 bg-white text-slate-900 shadow-soft p-6 transition-transform hover:-translate-y-1 ${
+                  i === 1 ? "md:mt-8" : ""
+                }`}
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 border-2 border-slate-900 bg-smebank-50 flex items-center justify-center text-sm font-bold shrink-0">
+                    {o.initials}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-semibold truncate">{o.director}</h3>
+                    <p className="text-sm text-slate-900/70 truncate">{o.role}</p>
+                  </div>
+                </div>
+                <p className="text-base leading-relaxed">&ldquo;{o.quote}&rdquo;</p>
+                <div className="mt-4 flex items-center gap-1">
+                  {Array.from({ length: 5 }).map((_, idx) => (
+                    <Star
+                      key={idx}
+                      className={`w-4 h-4 ${
+                        idx < o.rating
+                          ? "text-smeteal-400 fill-smeteal-400"
+                          : "text-slate-900/20"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
+
+        <p className="text-xs text-slate-900/70 mt-6">
+          Swipe to see more
+        </p>
       </div>
     </section>
   );

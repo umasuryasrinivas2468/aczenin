@@ -50,33 +50,33 @@ const ComplianceAndSecurity = () => {
   return (
     <>
       {/* Regulation & Compliance Section */}
-      <section className="py-20 bg-gradient-to-b from-smebank-50 via-smeteal-50/60 to-white overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
+      <section className="py-24 bg-smebank-50 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             {/* Smart Regulation Library */}
-            <div className="rounded-3xl bg-white p-10 shadow-soft-lg flex flex-col justify-between border border-smebank-100/70">
+            <div className="border-2 border-slate-900 bg-white p-10 shadow-soft-lg flex flex-col justify-between">
               <div>
-                <h3 className="text-3xl font-extrabold text-gray-900 mb-4">
+                <h3 className="section-title mb-4">
                   Smart Regulation Library
                 </h3>
-                <p className="text-gray-700 leading-relaxed mb-8">
+                <p className="text-slate-900 leading-relaxed mb-8">
                   Access a comprehensive repository of chapter-wise regulations, master circulars, and real-time amendment updates, fully linked and queryable for effortless navigation.
                 </p>
               </div>
 
-              <div className="mt-auto bg-white rounded-2xl p-6 shadow-inner border border-gray-100">
+              <div className="mt-auto border-2 border-slate-900 bg-smeteal-50 p-6">
                 <div className="flex items-start gap-4">
-                  <div className="text-green-500 mt-1">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-slate-900 bg-smeteal-400 text-slate-900">
                     <CheckCircle className="h-6 w-6" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 leading-snug">
+                    <div className="font-semibold text-slate-900 leading-snug">
                       Securities and Exchange Board of India (Market Infrastructure Institutions) Regulations, 2023
                     </div>
-                    <div className="text-sm text-gray-500 mt-3 space-y-1">
+                    <div className="text-sm text-slate-900 mt-3 space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="font-medium">Latest Gazette:</span>{" "}
-                        <a className="text-smeteal-600 hover:underline" href="#">
+                        <a className="underline" href="#">
                           GAZ-2023-125
                         </a>
                       </div>
@@ -88,20 +88,20 @@ const ComplianceAndSecurity = () => {
             </div>
 
             {/* AI-Powered Compliance Reporting */}
-            <div className="rounded-3xl bg-gradient-to-br from-smebank-700 via-smebank-900 to-smeteal-900 p-10 shadow-soft text-white relative overflow-hidden border border-smebank-800">
+            <div className="border-2 border-slate-900 bg-smebank-500 p-10 shadow-soft text-white flex flex-col justify-between">
               <div>
-                <h3 className="text-3xl font-extrabold mb-4">
+                <h3 className="section-title text-white mb-4">
                   AI-Powered Compliance Reporting
                 </h3>
-                <p className="text-gray-300 leading-relaxed mb-10">
+                <p className="text-white leading-relaxed mb-10">
                   Generate audit-ready reports, compliance decks, and MIS presentations in seconds, saving weeks of manual effort.
                 </p>
               </div>
 
               <div className="mt-auto">
-                <div className="bg-gradient-to-r from-smebank-300 via-smeteal-200 to-smebank-100 text-neutral-900 rounded-3xl p-8 shadow-soft w-full">
-                  <div className="text-4xl font-extrabold">Compliance Actionables</div>
-                  <div className="mt-3 text-sm text-neutral-700">
+                <div className="border-2 border-slate-900 bg-white text-slate-900 p-8 w-full shadow-soft">
+                  <div className="display text-4xl">Compliance Actionables</div>
+                  <div className="mt-3 text-sm text-slate-900">
                     January 6, 2025 - January 11, 2025
                   </div>
                 </div>
@@ -112,87 +112,99 @@ const ComplianceAndSecurity = () => {
       </section>
 
       {/* Security Section */}
-      <section className="py-20 bg-gradient-to-b from-smebank-50 via-smeteal-50/60 to-white overflow-hidden">
-        <div className="container mx-auto px-6">
+      <section className="py-24 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-14"
+            className="mb-14"
           >
-            <span className="inline-flex items-center gap-2 rounded-full bg-smebank-100 text-smebank-700 px-3 py-1 text-xs font-semibold tracking-[0.16em] uppercase mb-4">
+            <span className="eyebrow inline-flex items-center gap-2 mb-4">
               <Shield className="h-3.5 w-3.5" />
               Security
             </span>
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+            <h2 className="display mb-4">
               Security You Can Trust
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+            <p className="text-slate-900 max-w-2xl text-lg">
               Your security is our top priority. We use advanced technology to protect your business.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 28 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.45, delay: index * 0.08 }}
-                  className="group bg-white p-8 rounded-3xl border border-smebank-100/70 shadow-soft-lg hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300"
-                >
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-smebank-50 to-smeteal-100 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
-                    <Icon className="h-7 w-7 text-smebank-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {feature.description}
-                  </p>
-
-                  <div className="mt-6 pt-6 border-t border-gray-100 space-y-2.5">
-                    {feature.points.map((point) => (
-                      <div
-                        key={point}
-                        className="flex items-center gap-2 text-sm text-gray-700"
-                      >
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-smebank-100 text-smebank-600">
-                          <Check className="h-3 w-3" strokeWidth={3} />
-                        </span>
-                        {point}
+          {/* Bold split: checklist rows (left) + cert badges (right) */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            {/* Left: stacked bordered checklist rows */}
+            <div className="lg:col-span-2 flex flex-col gap-6">
+              {features.map((feature, index) => {
+                const Icon = feature.icon;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.45, delay: index * 0.08 }}
+                    className="border-2 border-slate-900 bg-white shadow-soft"
+                  >
+                    <div className="flex items-stretch">
+                      {/* Square accent icon box */}
+                      <div className="flex w-16 shrink-0 items-center justify-center border-r-2 border-slate-900 bg-smeteal-400 sm:w-20">
+                        <Icon className="h-8 w-8 text-slate-900" />
                       </div>
-                    ))}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
 
-          {/* Trust badge strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-12 flex flex-wrap justify-center gap-3"
-          >
-            {trustBadges.map((badge) => (
-              <span
-                key={badge}
-                className="inline-flex items-center gap-2 rounded-full bg-white border border-smebank-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm"
-              >
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                  <Check className="h-2.5 w-2.5" strokeWidth={3} />
-                </span>
-                {badge}
-              </span>
-            ))}
-          </motion.div>
+                      <div className="flex-1 p-6">
+                        <h3 className="text-xl font-semibold mb-2 text-slate-900">
+                          {feature.title}
+                        </h3>
+                        <p className="text-slate-900 leading-relaxed">
+                          {feature.description}
+                        </p>
+
+                        <div className="mt-5 pt-5 border-t-2 border-slate-900 flex flex-wrap gap-x-6 gap-y-2.5">
+                          {feature.points.map((point) => (
+                            <div
+                              key={point}
+                              className="flex items-center gap-2 text-sm text-slate-900"
+                            >
+                              <span className="flex h-5 w-5 items-center justify-center border-2 border-slate-900 bg-smeteal-50 text-slate-900">
+                                <Check className="h-3 w-3" strokeWidth={3} />
+                              </span>
+                              {point}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Right: stacked cert / compliance badge blocks */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="flex flex-col gap-6"
+            >
+              {trustBadges.map((badge) => (
+                <div
+                  key={badge}
+                  className="flex items-center gap-4 border-2 border-slate-900 bg-smebank-50 p-6 shadow-soft"
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-slate-900 bg-smebank-500 text-white">
+                    <Check className="h-5 w-5" strokeWidth={3} />
+                  </span>
+                  <span className="text-base font-semibold text-slate-900">
+                    {badge}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
     </>

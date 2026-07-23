@@ -1,35 +1,50 @@
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const CTASection = () => {
   return (
-    <section className="py-20 bg-gradient-to-r from-smebank-700 to-smebank-900 text-white overflow-hidden relative">
-      {/* Background elements */}
-      <div className="absolute top-0 left-1/4 w-64 h-64 bg-smebank-500 rounded-full blur-3xl opacity-20" />
-      <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-smeteal-400 rounded-full blur-3xl opacity-10" />
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Transform Your Business Banking?
-          </h2>
-          <p className="text-lg md:text-xl mb-10 text-white/80 max-w-2xl mx-auto">
-            Join thousands of Indian SMEs who have simplified their finances, gained valuable insights, and accelerated their growth with SMEPower.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-white text-smebank-700 hover:bg-white/90 px-8 py-6 rounded-full">
-              <span className="text-base">Join Waitlist</span>
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" className="border-white/30 text-white px-8 py-6 rounded-full bg-transparent hover:bg-white/10">
-              <span className="text-base">Schedule a Demo</span>
-            </Button>
+    <section className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative">
+          {/* Offset brutalist accent block */}
+          <div className="hidden md:block absolute -top-4 -left-4 w-24 h-24 bg-smeteal-400 border-2 border-slate-900" />
+          <div className="hidden md:block absolute -bottom-4 -right-4 w-24 h-24 bg-smeorange-400 border-2 border-slate-900" />
+
+          {/* Full-bleed color block panel */}
+          <div className="relative border-2 border-slate-900 shadow-soft-lg bg-smebank-500 text-white overflow-hidden">
+            <div className="absolute inset-0 grid-texture opacity-20 pointer-events-none" />
+
+            <div className="relative px-6 py-16 sm:px-12 sm:py-20 lg:px-20">
+              <h2 className="display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 max-w-3xl">
+                Ready to transform your business finances?
+              </h2>
+              <p className="text-lg md:text-xl mb-10 text-white/80 max-w-2xl leading-relaxed">
+                Join thousands of Indian businesses who simplified their finances, gained
+                real-time insights, and accelerated growth with Aczen.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href="https://dashboard.aczen.in/signup"
+                  className="inline-flex items-center justify-center gap-2 border-2 border-slate-900 bg-white px-8 py-4 text-base font-semibold text-slate-900 shadow-soft transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  Start free
+                  <ArrowRight className="h-5 w-5" />
+                </a>
+                <a
+                  href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2Vf659Nu3Ni3wVnJnBvHW3wOqnF9sDiZLKmIRvip2cH_qWGZWuDoGrSibH4wEBadGDdqgUoZBJ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center border-2 border-slate-900 bg-smeorange-400 px-8 py-4 text-base font-semibold text-slate-900 shadow-soft transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  Book a demo
+                </a>
+              </div>
+
+              <p className="mt-8 text-white/70 text-sm">
+                No setup fees · 45-day free trial · Cancel anytime
+              </p>
+            </div>
           </div>
-          
-          <p className="mt-6 text-white/70 text-sm">
-           
-          </p>
         </div>
       </div>
     </section>

@@ -1,7 +1,6 @@
 "use client";
 
 import { CheckCircle, Shield, Lock, Check } from "lucide-react";
-import { motion } from "framer-motion";
 
 const ComplianceAndSecurity = () => {
   const features = [
@@ -50,37 +49,37 @@ const ComplianceAndSecurity = () => {
   return (
     <>
       {/* Regulation & Compliance Section */}
-      <section className="py-20 bg-gradient-to-b from-smebank-50 via-smeteal-50/60 to-white overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border border border-border rounded">
             {/* Smart Regulation Library */}
-            <div className="rounded-3xl bg-white p-10 shadow-soft-lg flex flex-col justify-between border border-smebank-100/70">
+            <div className="bg-white p-8 sm:p-10 flex flex-col justify-between">
               <div>
-                <h3 className="text-3xl font-extrabold text-gray-900 mb-4">
+                <h3 className="section-title text-2xl text-slate-900 mb-4">
                   Smart Regulation Library
                 </h3>
-                <p className="text-gray-700 leading-relaxed mb-8">
+                <p className="text-muted-foreground leading-relaxed mb-8">
                   Access a comprehensive repository of chapter-wise regulations, master circulars, and real-time amendment updates, fully linked and queryable for effortless navigation.
                 </p>
               </div>
 
-              <div className="mt-auto bg-white rounded-2xl p-6 shadow-inner border border-gray-100">
-                <div className="flex items-start gap-4">
-                  <div className="text-green-500 mt-1">
-                    <CheckCircle className="h-6 w-6" />
-                  </div>
+              <div className="mt-auto border border-border rounded">
+                <div className="flex items-start gap-4 p-5">
+                  <span className="text-secondary mt-0.5 shrink-0">
+                    <CheckCircle className="h-5 w-5" />
+                  </span>
                   <div>
-                    <div className="font-semibold text-gray-900 leading-snug">
+                    <div className="font-semibold text-slate-900 leading-snug">
                       Securities and Exchange Board of India (Market Infrastructure Institutions) Regulations, 2023
                     </div>
-                    <div className="text-sm text-gray-500 mt-3 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">Latest Gazette:</span>{" "}
-                        <a className="text-smeteal-600 hover:underline" href="#">
+                    <div className="text-sm text-muted-foreground mt-3 divide-y divide-border">
+                      <div className="flex items-center gap-2 pb-2">
+                        <span className="font-medium text-slate-900">Latest Gazette:</span>{" "}
+                        <a className="text-blue-600 hover:underline tabular" href="#">
                           GAZ-2023-125
                         </a>
                       </div>
-                      <div>3 Amendments · 24 applicable regulations</div>
+                      <div className="pt-2 tabular">3 Amendments · 24 applicable regulations</div>
                     </div>
                   </div>
                 </div>
@@ -88,20 +87,20 @@ const ComplianceAndSecurity = () => {
             </div>
 
             {/* AI-Powered Compliance Reporting */}
-            <div className="rounded-3xl bg-gradient-to-br from-smebank-700 via-smebank-900 to-smeteal-900 p-10 shadow-soft text-white relative overflow-hidden border border-smebank-800">
+            <div className="bg-white p-8 sm:p-10 flex flex-col justify-between">
               <div>
-                <h3 className="text-3xl font-extrabold mb-4">
+                <h3 className="section-title text-2xl text-slate-900 mb-4">
                   AI-Powered Compliance Reporting
                 </h3>
-                <p className="text-gray-300 leading-relaxed mb-10">
+                <p className="text-muted-foreground leading-relaxed mb-8">
                   Generate audit-ready reports, compliance decks, and MIS presentations in seconds, saving weeks of manual effort.
                 </p>
               </div>
 
-              <div className="mt-auto">
-                <div className="bg-gradient-to-r from-smebank-300 via-smeteal-200 to-smebank-100 text-neutral-900 rounded-3xl p-8 shadow-soft w-full">
-                  <div className="text-4xl font-extrabold">Compliance Actionables</div>
-                  <div className="mt-3 text-sm text-neutral-700">
+              <div className="mt-auto border border-border rounded">
+                <div className="p-6">
+                  <div className="text-2xl font-bold text-slate-900">Compliance Actionables</div>
+                  <div className="mt-3 text-sm text-muted-foreground tabular">
                     January 6, 2025 - January 11, 2025
                   </div>
                 </div>
@@ -111,88 +110,68 @@ const ComplianceAndSecurity = () => {
         </div>
       </section>
 
-      {/* Security Section */}
-      <section className="py-20 bg-gradient-to-b from-smebank-50 via-smeteal-50/60 to-white overflow-hidden">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-14"
-          >
-            <span className="inline-flex items-center gap-2 rounded-full bg-smebank-100 text-smebank-700 px-3 py-1 text-xs font-semibold tracking-[0.16em] uppercase mb-4">
+      {/* Security Section — compliance ledger */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="mb-12 max-w-2xl">
+            <span className="eyebrow">
               <Shield className="h-3.5 w-3.5" />
               Security
             </span>
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+            <h2 className="display text-slate-900 mt-3 mb-4">
               Security You Can Trust
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+            <p className="text-muted-foreground text-lg leading-relaxed">
               Your security is our top priority. We use advanced technology to protect your business.
             </p>
-          </motion.div>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Ruled register of security features */}
+          <div className="border border-border rounded divide-y divide-border">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 28 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.45, delay: index * 0.08 }}
-                  className="group bg-white p-8 rounded-3xl border border-smebank-100/70 shadow-soft-lg hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300"
+                  className="grid grid-cols-1 md:grid-cols-[auto_1fr_1.2fr] gap-4 md:gap-8 items-start p-6"
                 >
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-smebank-50 to-smeteal-100 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
-                    <Icon className="h-7 w-7 text-smebank-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <span className="flex items-center gap-3 text-secondary">
+                    <Icon className="h-5 w-5 shrink-0" />
+                    <span className="font-semibold text-slate-900">
+                      {feature.title}
+                    </span>
+                  </span>
+                  <p className="text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
-
-                  <div className="mt-6 pt-6 border-t border-gray-100 space-y-2.5">
+                  <div className="divide-y divide-border border-t border-border md:border-t-0 md:border-l md:pl-8 -mt-px md:mt-0">
                     {feature.points.map((point) => (
                       <div
                         key={point}
-                        className="flex items-center gap-2 text-sm text-gray-700"
+                        className="flex items-center gap-2 text-sm text-slate-900 py-2 first:pt-0 md:first:pt-2"
                       >
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-smebank-100 text-smebank-600">
-                          <Check className="h-3 w-3" strokeWidth={3} />
-                        </span>
+                        <Check className="h-3.5 w-3.5 text-secondary shrink-0" strokeWidth={3} />
                         {point}
                       </div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
 
-          {/* Trust badge strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-12 flex flex-wrap justify-center gap-3"
-          >
+          {/* Compliance / cert index */}
+          <div className="mt-8 inline-flex flex-col sm:flex-row border border-border rounded divide-y sm:divide-y-0 sm:divide-x divide-border">
             {trustBadges.map((badge) => (
               <span
                 key={badge}
-                className="inline-flex items-center gap-2 rounded-full bg-white border border-smebank-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-900 tabular"
               >
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                  <Check className="h-2.5 w-2.5" strokeWidth={3} />
-                </span>
+                <Check className="h-3.5 w-3.5 text-secondary shrink-0" strokeWidth={3} />
                 {badge}
               </span>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
     </>

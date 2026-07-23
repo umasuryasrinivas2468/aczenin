@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
-import { Quote, Star, Building2 } from "lucide-react";
+import { Star } from "lucide-react";
 
 type Testimonial = {
   id: number;
@@ -53,6 +53,20 @@ const testimonials: Testimonial[] = [
 
 const SWIPE_THRESHOLD = 80;
 
+const Rating = ({ rating }: { rating: number }) => (
+  <span className="inline-flex items-center gap-1 tabular" aria-label={`${rating} out of 5`}>
+    {Array.from({ length: 5 }).map((_, idx) => (
+      <Star
+        key={idx}
+        className={`w-3.5 h-3.5 ${
+          idx < rating ? "text-secondary fill-secondary" : "text-border"
+        }`}
+        strokeWidth={1.5}
+      />
+    ))}
+  </span>
+);
+
 const TestimonialsSection = () => {
   const [[index, direction], setState] = useState<[number, number]>([0, 0]);
 
@@ -71,94 +85,94 @@ const TestimonialsSection = () => {
   };
 
   const t = testimonials[index];
+  const secondary = testimonials.filter((_, i) => i !== index);
 
   return (
     <section
       id="testimonials"
-      className="relative py-24 md:py-28 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden"
+      className="py-24 md:py-28 bg-white border-t border-border"
     >
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
-            Real teams.{" "}
-            <span className="bg-gradient-to-r from-blue-600 via-smebank-600 to-smeteal-600 bg-clip-text text-transparent">
-              Real results.
-            </span>
-          </h2>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-12 border-b border-border pb-8">
+          <p className="eyebrow">Real teams. Real results.</p>
+          <h2 className="section-title mt-3 text-slate-900">
             Hear from the founders running their businesses on Aczen.
-          </p>
-        </motion.div>
+          </h2>
+        </div>
 
-        <div className="relative max-w-3xl mx-auto select-none">
-          <div className="relative h-[360px] md:h-[320px]">
+        <div className="grid gap-0 lg:grid-cols-3 lg:divide-x lg:divide-border select-none">
+          {/* Featured quote register */}
+          <div className="lg:col-span-2 lg:pr-12">
             <AnimatePresence mode="popLayout" custom={direction} initial={false}>
-              <motion.div
+              <motion.figure
                 key={t.id}
                 custom={direction}
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.2}
                 onDragEnd={onDragEnd}
-                initial={{ x: direction >= 0 ? 320 : -320, opacity: 0, scale: 0.96 }}
-                animate={{ x: 0, opacity: 1, scale: 1 }}
-                exit={{ x: direction >= 0 ? -320 : 320, opacity: 0, scale: 0.96 }}
+                initial={{ opacity: 0, x: direction >= 0 ? 40 : -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction >= 0 ? -40 : 40 }}
                 transition={{ type: "spring", stiffness: 260, damping: 30 }}
-                className="absolute inset-0 cursor-grab active:cursor-grabbing"
+                className="cursor-grab active:cursor-grabbing motion-reduce:transform-none"
               >
-                <div className="relative h-full bg-white border border-gray-100 rounded-2xl p-7 md:p-10 shadow-soft">
-                  <Quote
-                    className="absolute top-6 right-6 w-10 h-10 text-gray-100"
-                    strokeWidth={1.5}
-                  />
+                <blockquote className="display text-2xl md:text-3xl leading-snug text-slate-900">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
 
-                  <div className="flex items-center gap-4 mb-6">
-                    <div
-                      className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${t.accent} flex items-center justify-center text-white text-lg font-bold shrink-0`}
-                    >
-                      {t.initials}
-                      <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-md flex items-center justify-center shadow-sm">
-                        <Building2 className="w-3 h-3 text-gray-700" />
+                <figcaption className="rule mt-8 flex items-center gap-4 border-t border-border pt-5">
+                  <div
+                    className={`w-12 h-12 rounded bg-gradient-to-br ${t.accent} flex items-center justify-center text-white text-sm font-semibold tabular border border-border shrink-0`}
+                  >
+                    {t.initials}
+                  </div>
+                  <div className="flex flex-1 flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                    <div className="min-w-0">
+                      <span className="tabular text-sm font-semibold text-slate-900">
+                        {t.director}
+                      </span>
+                      <span className="tabular block text-sm text-muted-foreground">
+                        {t.role}
                       </span>
                     </div>
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
-                        {t.director}
-                      </h3>
-                      <p className="text-sm text-gray-500 truncate">{t.role}</p>
-                    </div>
+                    <Rating rating={t.rating} />
                   </div>
-
-                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, idx) => (
-                      <Star
-                        key={idx}
-                        className={`w-4 h-4 ${
-                          idx < t.rating
-                            ? "text-yellow-400 fill-yellow-400"
-                            : "text-gray-200"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
+                </figcaption>
+              </motion.figure>
             </AnimatePresence>
+
+            <p className="tabular mt-6 text-xs text-muted-foreground">
+              Swipe to see more
+            </p>
           </div>
 
-          <p className="text-center text-xs text-gray-400 mt-4">
-            Swipe to see more
-          </p>
+          {/* Secondary quote ledger */}
+          <div className="mt-10 lg:mt-0 lg:pl-12 divide-y divide-border border-t border-border lg:border-t-0">
+            {secondary.map((s) => (
+              <div key={s.id} className="py-6 first:pt-0 lg:first:pt-0">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-10 h-10 rounded bg-gradient-to-br ${s.accent} flex items-center justify-center text-white text-xs font-semibold tabular border border-border shrink-0`}
+                  >
+                    {s.initials}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="tabular block text-sm font-semibold text-slate-900 truncate">
+                      {s.director}
+                    </span>
+                    <span className="tabular block text-xs text-muted-foreground truncate">
+                      {s.role}
+                    </span>
+                  </div>
+                  <Rating rating={s.rating} />
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  &ldquo;{s.quote}&rdquo;
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

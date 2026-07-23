@@ -1,32 +1,36 @@
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 interface FAQItemProps {
+  index: number;
   question: string;
   answer: string;
   isOpen: boolean;
   onClick: () => void;
 }
 
-const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
+const FAQItem = ({ index, question, answer, isOpen, onClick }: FAQItemProps) => {
   return (
-    <div className="border-b border-gray-200 py-5">
-      <button 
-        className="w-full flex justify-between items-center text-left"
+    <div>
+      <button
+        className="w-full flex items-start gap-4 py-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
         onClick={onClick}
         aria-expanded={isOpen}
       >
-        <h3 className="text-lg font-semibold text-gray-800">{question}</h3>
+        <span className="tabular text-sm text-muted-foreground pt-1 w-6 shrink-0">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <h3 className="flex-1 text-lg font-semibold text-slate-900">{question}</h3>
         {isOpen ? (
-          <ChevronUp className="h-5 w-5 text-smebank-600 flex-shrink-0" />
+          <Minus className="h-5 w-5 text-secondary shrink-0 mt-1" />
         ) : (
-          <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
+          <Plus className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
         )}
       </button>
-      
+
       {isOpen && (
-        <div className="mt-3 text-gray-600">
+        <div className="pb-5 pl-10 pr-9 text-muted-foreground">
           <p>{answer}</p>
         </div>
       )}
@@ -71,33 +75,43 @@ const FAQSection = () => {
 
   return (
     <section id="faq" className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="section-title">Frequently Asked Questions</h2>
-          <p className="section-subtitle max-w-2xl mx-auto">
-            Find quick answers to common questions about our services
-          </p>
-        </div>
-        
-        <div className="max-w-3xl mx-auto">
-          {faqs.map((faq, index) => (
-            <FAQItem
-              key={faq.id}
-              question={faq.question}
-              answer={faq.answer}
-              isOpen={openIndex === index}
-              onClick={() => toggleFAQ(index)}
-            />
-          ))}
-        </div>
-        
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-6">
-            Can't find what you're looking for?
-          </p>
-          <button className="cta-button-accent">
-            Contact Support
-          </button>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+          {/* LEFT: sticky ledger heading */}
+          <div className="md:col-span-4">
+            <div className="md:sticky md:top-24">
+              <p className="eyebrow">FAQ</p>
+              <h2 className="section-title">Frequently Asked Questions</h2>
+              <p className="mt-4 text-muted-foreground">
+                Find quick answers to common questions about our services
+              </p>
+
+              <div className="mt-8 border border-border p-6">
+                <p className="text-muted-foreground mb-4">
+                  Can't find what you're looking for?
+                </p>
+                <button className="btn-primary">
+                  Contact Support
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: bordered register */}
+          <div className="md:col-span-8">
+            <div className="border-y border-border divide-y divide-border">
+              {faqs.map((faq, index) => (
+                <FAQItem
+                  key={faq.id}
+                  index={index}
+                  question={faq.question}
+                  answer={faq.answer}
+                  isOpen={openIndex === index}
+                  onClick={() => toggleFAQ(index)}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

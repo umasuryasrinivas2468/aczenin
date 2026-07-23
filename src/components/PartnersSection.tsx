@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 const PartnersSection = () => {
   const partners = [
     {
@@ -46,50 +44,44 @@ const PartnersSection = () => {
     },
   ];
 
-  // Duplicate the list so the marquee can loop seamlessly (0% -> -50%).
-  const marquee = [...partners, ...partners];
-
   return (
-    <section id="partners" className="py-16 bg-white overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
-            Trusted Partners
-          </h2>
-          <p className="text-gray-600">Building India's financial future together</p>
+    <section id="partners" className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-8">
+          <div>
+            <p className="eyebrow">Trusted Partners</p>
+            <h2 className="section-title text-slate-900">
+              Building India's financial future together
+            </h2>
+          </div>
+          <span className="tabular text-sm text-muted-foreground">
+            {partners.length} partners
+          </span>
         </div>
-      </div>
 
-      {/* Continuously swiping logo marquee */}
-      <div className="relative w-full overflow-hidden">
-        {/* edge fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 md:w-32 bg-gradient-to-r from-white to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 md:w-32 bg-gradient-to-l from-white to-transparent" />
-
-        <motion.div
-          className="flex w-max items-center gap-12 md:gap-20"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 28, ease: "linear", repeat: Infinity }}
-        >
-          {marquee.map((partner, index) => (
-            <div key={index} className="flex shrink-0 items-center justify-center">
-              <img
-                src={partner.logo}
-                alt={partner.alt}
-                className="h-10 md:h-14 w-auto object-contain mix-blend-multiply opacity-80 hover:opacity-100 transition-opacity duration-300"
-              />
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      <div className="container mx-auto px-4">
-        <div className="mt-12 text-center">
-          <p className="text-sm md:text-base text-gray-500 max-w-2xl mx-auto">
-            We've partnered with India's leading financial institutions to provide you
-            with the best banking services tailored for SMEs.
-          </p>
+        {/* Ruled trust strip: logos scroll continuously, framed by hairlines */}
+        <div className="marquee-pause border-y border-border overflow-hidden no-scrollbar">
+          <div className="flex w-max animate-marquee">
+            {[...partners, ...partners].map((partner, i) => (
+              <div
+                key={`${partner.name}-${i}`}
+                className="flex w-44 md:w-56 shrink-0 items-center justify-center border-r border-border p-6 md:p-8"
+                aria-hidden={i >= partners.length}
+              >
+                <img
+                  src={partner.logo}
+                  alt={i < partners.length ? partner.alt : ""}
+                  className="h-9 md:h-12 w-auto object-contain grayscale opacity-70 transition-[filter,opacity] duration-300 hover:grayscale-0 hover:opacity-100 motion-reduce:transition-none"
+                />
+              </div>
+            ))}
+          </div>
         </div>
+
+        <p className="mt-8 text-sm md:text-base text-muted-foreground max-w-2xl">
+          We've partnered with India's leading financial institutions to provide you
+          with the best banking services tailored for SMEs.
+        </p>
       </div>
     </section>
   );

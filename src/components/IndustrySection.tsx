@@ -21,29 +21,44 @@ const industries = [
 const IndustrySection = () => {
   return (
     <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-10">
+          <p className="eyebrow">Industries</p>
+          <h2 className="section-title text-slate-900">Industries We Serve</h2>
+          <p className="text-muted-foreground max-w-2xl mt-2">
             Tailored banking solutions for various business sectors across India
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border border border-border rounded overflow-hidden">
           {industries.map((industry, index) => (
-            <div key={index} className="relative group overflow-hidden rounded-xl">
-              <div className="aspect-square relative">
+            <a
+              key={index}
+              href="#"
+              className="group relative flex flex-col bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                   src={industry.image}
                   alt={industry.name}
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-300"
+                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-xl font-semibold">{industry.name}</h3>
-                </div>
+                <span className="tabular absolute top-3 left-3 bg-white/95 border border-border px-2 py-0.5 text-xs text-secondary">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
               </div>
-            </div>
+              <div className="flex items-center justify-between gap-2 px-4 py-4 border-t border-border">
+                <h3 className="text-base md:text-lg font-semibold text-slate-900">
+                  {industry.name}
+                </h3>
+                <span
+                  aria-hidden="true"
+                  className="tabular text-secondary transition-transform duration-200 group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </div>
+            </a>
           ))}
         </div>
       </div>

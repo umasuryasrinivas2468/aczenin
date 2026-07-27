@@ -54,24 +54,24 @@ const PartnersSection = () => {
               Building India's financial future together
             </h2>
           </div>
-          <span className="tabular text-sm text-muted-foreground">
+          <span className="tabular inline-flex items-center text-sm font-semibold text-secondary-foreground bg-secondary rounded px-2.5 py-1">
             {partners.length} partners
           </span>
         </div>
 
-        {/* Ruled trust strip: logos scroll continuously, framed by hairlines */}
-        <div className="marquee-pause border-y border-border overflow-hidden no-scrollbar">
+        {/* Ruled trust strip: full-colour logos scroll over a brand-tinted band */}
+        <div className="marquee-pause border-y-2 border-slate-900 overflow-hidden no-scrollbar bg-gradient-to-r from-smebank-50 via-white to-smeteal-50">
           <div className="flex w-max animate-marquee">
             {[...partners, ...partners].map((partner, i) => (
               <div
                 key={`${partner.name}-${i}`}
-                className="flex w-44 md:w-56 shrink-0 items-center justify-center border-r border-border p-6 md:p-8"
+                className="flex w-44 md:w-56 shrink-0 items-center justify-center border-r border-slate-200 p-6 md:p-8"
                 aria-hidden={i >= partners.length}
               >
                 <img
                   src={partner.logo}
                   alt={i < partners.length ? partner.alt : ""}
-                  className="h-9 md:h-12 w-auto object-contain grayscale opacity-70 transition-[filter,opacity] duration-300 hover:grayscale-0 hover:opacity-100 motion-reduce:transition-none"
+                  className="h-9 md:h-12 w-auto object-contain transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
                 />
               </div>
             ))}

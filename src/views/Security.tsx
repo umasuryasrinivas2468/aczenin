@@ -104,18 +104,18 @@ const Security = () => {
       
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-smebank-50 to-smeteal-50">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-4 bg-smebank-100 text-smebank-800 hover:bg-smebank-200">
               Security & Privacy
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               Your Security is Our 
               <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 text-transparent bg-clip-text">
                 {" "}Top Priority
               </span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
               We employ cutting-edge security technologies and follow industry best practices 
               to protect your financial data and ensure safe banking experiences.
             </p>
@@ -137,19 +137,19 @@ const Security = () => {
 
       {/* Security Features */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Advanced Security Features
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Multiple layers of protection to keep your money and data safe from cyber threats.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {securityFeatures.map((feature, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
+              <Card key={index} className="rounded-2xl hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit">
                     {feature.icon}
@@ -169,7 +169,7 @@ const Security = () => {
 
       {/* Security Alert */}
       <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <Alert className="border-orange-200 bg-orange-50">
               <AlertTriangle className="h-4 w-4 text-orange-600" />
@@ -185,19 +185,19 @@ const Security = () => {
 
       {/* Security Tips */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Security Best Practices
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-muted-foreground">
               Follow these guidelines to enhance your account security and protect yourself from fraud.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {securityTips.map((tip, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
+              <Card key={index} className="rounded-2xl hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardHeader>
                   <div className="flex items-center mb-4">
                     <div className="p-2 bg-green-50 rounded-full mr-3">
@@ -212,7 +212,7 @@ const Security = () => {
                     {tip.tips.map((tipItem, idx) => (
                       <div key={idx} className="flex items-center">
                         <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                        <span className="text-sm text-gray-600">{tipItem}</span>
+                        <span className="text-sm text-muted-foreground">{tipItem}</span>
                       </div>
                     ))}
                   </div>
@@ -227,30 +227,30 @@ const Security = () => {
 
       {/* Security Measures */}
       <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <img 
                 src="/placeholder.svg" 
-                alt="Security Infrastructure" 
-                className="rounded-lg shadow-soft w-full h-96 object-cover"
+                alt="Security Infrastructure"
+                className="rounded-2xl shadow-soft w-full h-96 object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-smebank-600/20 to-smeteal-600/20 rounded-lg"></div>
-              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-4">
+              <div className="absolute inset-0 bg-gradient-to-tr from-smebank-600/20 to-smeteal-600/20 rounded-2xl"></div>
+              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-soft">
                 <div className="flex items-center">
                   <Shield className="h-6 w-6 text-green-500 mr-2" />
                   <div>
-                    <div className="font-semibold text-gray-900">99.9% Uptime</div>
-                    <div className="text-sm text-gray-600">Secure & Reliable</div>
+                    <div className="font-semibold text-foreground">99.9% Uptime</div>
+                    <div className="text-sm text-muted-foreground">Secure & Reliable</div>
                   </div>
                 </div>
               </div>
             </div>
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
                 Comprehensive Security Measures
               </h2>
-              <p className="text-lg text-gray-600 mb-8">
+              <p className="text-lg text-muted-foreground mb-8">
                 Our multi-layered security approach ensures your data and transactions are protected 
                 at every level, from infrastructure to application security.
               </p>
@@ -258,7 +258,7 @@ const Security = () => {
                 {securityMeasures.map((measure, index) => (
                   <div key={index} className="flex items-center">
                     <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{measure}</span>
+                    <span className="text-foreground">{measure}</span>
                   </div>
                 ))}
               </div>
@@ -269,7 +269,7 @@ const Security = () => {
 
       {/* Stats Section */}
       <section className="py-16 bg-smebank-600">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-white">
             <div>
               <div className="text-4xl font-bold mb-2">99.9%</div>
@@ -293,37 +293,37 @@ const Security = () => {
 
       {/* Emergency Contact */}
       <section className="py-16 bg-red-50">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Security Emergency Contacts</h2>
-            <p className="text-lg text-gray-600">Report security incidents immediately</p>
+            <h2 className="text-3xl font-bold text-foreground mb-4">Security Emergency Contacts</h2>
+            <p className="text-lg text-muted-foreground">Report security incidents immediately</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <Card className="border-red-200 bg-white text-center">
               <CardContent className="p-6">
                 <AlertTriangle className="h-8 w-8 text-red-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Fraud Hotline</h3>
+                <h3 className="font-semibold text-foreground mb-2">Fraud Hotline</h3>
                 <p className="text-red-600 font-bold text-lg">1800-XXX-FRAUD</p>
-                <p className="text-sm text-gray-500 mt-2">24/7 Available</p>
+                <p className="text-sm text-muted-foreground mt-2">24/7 Available</p>
               </CardContent>
             </Card>
             
             <Card className="border-red-200 bg-white text-center">
               <CardContent className="p-6">
                 <Lock className="h-8 w-8 text-red-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Card Block</h3>
+                <h3 className="font-semibold text-foreground mb-2">Card Block</h3>
                 <p className="text-red-600 font-bold text-lg">1800-XXX-BLOCK</p>
-                <p className="text-sm text-gray-500 mt-2">Instant card blocking</p>
+                <p className="text-sm text-muted-foreground mt-2">Instant card blocking</p>
               </CardContent>
             </Card>
             
             <Card className="border-red-200 bg-white text-center">
               <CardContent className="p-6">
                 <Shield className="h-8 w-8 text-red-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Security Email</h3>
+                <h3 className="font-semibold text-foreground mb-2">Security Email</h3>
                 <p className="text-red-600 font-bold text-sm">security@aczen.tech</p>
-                <p className="text-sm text-gray-500 mt-2">For detailed reports</p>
+                <p className="text-sm text-muted-foreground mt-2">For detailed reports</p>
               </CardContent>
             </Card>
           </div>
@@ -332,7 +332,7 @@ const Security = () => {
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-smebank-600 to-smeteal-600">
-        <div className="container mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Banking with Complete Peace of Mind
           </h2>

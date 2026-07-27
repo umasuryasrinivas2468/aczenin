@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, Shield, Lock, Check } from "lucide-react";
+import { CheckCircle, Shield, Lock, Check, Library, Sparkles } from "lucide-react";
 
 const ComplianceAndSecurity = () => {
   const features = [
@@ -51,10 +51,13 @@ const ComplianceAndSecurity = () => {
       {/* Regulation & Compliance Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border border border-border rounded">
-            {/* Smart Regulation Library */}
-            <div className="bg-white p-8 sm:p-10 flex flex-col justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border border border-border rounded overflow-hidden">
+            {/* Smart Regulation Library — blue accent */}
+            <div className="relative bg-white p-8 sm:p-10 flex flex-col justify-between border-t-4 border-primary">
               <div>
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded bg-primary text-primary-foreground mb-5">
+                  <Library className="h-5 w-5" />
+                </span>
                 <h3 className="section-title text-2xl text-slate-900 mb-4">
                   Smart Regulation Library
                 </h3>
@@ -63,7 +66,7 @@ const ComplianceAndSecurity = () => {
                 </p>
               </div>
 
-              <div className="mt-auto border border-border rounded">
+              <div className="mt-auto border border-smebank-200 bg-smebank-50 rounded">
                 <div className="flex items-start gap-4 p-5">
                   <span className="text-secondary mt-0.5 shrink-0">
                     <CheckCircle className="h-5 w-5" />
@@ -72,10 +75,10 @@ const ComplianceAndSecurity = () => {
                     <div className="font-semibold text-slate-900 leading-snug">
                       Securities and Exchange Board of India (Market Infrastructure Institutions) Regulations, 2023
                     </div>
-                    <div className="text-sm text-muted-foreground mt-3 divide-y divide-border">
+                    <div className="text-sm text-muted-foreground mt-3 divide-y divide-smebank-200">
                       <div className="flex items-center gap-2 pb-2">
                         <span className="font-medium text-slate-900">Latest Gazette:</span>{" "}
-                        <a className="text-blue-600 hover:underline tabular" href="#">
+                        <a className="text-primary font-semibold hover:underline tabular" href="#">
                           GAZ-2023-125
                         </a>
                       </div>
@@ -86,9 +89,12 @@ const ComplianceAndSecurity = () => {
               </div>
             </div>
 
-            {/* AI-Powered Compliance Reporting */}
-            <div className="bg-white p-8 sm:p-10 flex flex-col justify-between">
+            {/* AI-Powered Compliance Reporting — teal accent */}
+            <div className="relative bg-white p-8 sm:p-10 flex flex-col justify-between border-t-4 border-secondary">
               <div>
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded bg-secondary text-secondary-foreground mb-5">
+                  <Sparkles className="h-5 w-5" />
+                </span>
                 <h3 className="section-title text-2xl text-slate-900 mb-4">
                   AI-Powered Compliance Reporting
                 </h3>
@@ -97,10 +103,10 @@ const ComplianceAndSecurity = () => {
                 </p>
               </div>
 
-              <div className="mt-auto border border-border rounded">
+              <div className="mt-auto border border-smeteal-200 bg-smeteal-50 rounded">
                 <div className="p-6">
                   <div className="text-2xl font-bold text-slate-900">Compliance Actionables</div>
-                  <div className="mt-3 text-sm text-muted-foreground tabular">
+                  <div className="mt-3 inline-flex text-sm text-secondary-foreground bg-secondary rounded px-2.5 py-1 tabular">
                     January 6, 2025 - January 11, 2025
                   </div>
                 </div>
@@ -135,8 +141,14 @@ const ComplianceAndSecurity = () => {
                   key={index}
                   className="grid grid-cols-1 md:grid-cols-[auto_1fr_1.2fr] gap-4 md:gap-8 items-start p-6"
                 >
-                  <span className="flex items-center gap-3 text-secondary">
-                    <Icon className="h-5 w-5 shrink-0" />
+                  <span className="flex items-center gap-3">
+                    <span
+                      className={`inline-flex h-9 w-9 items-center justify-center rounded shrink-0 text-white ${
+                        index % 2 === 0 ? "bg-primary" : "bg-secondary"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                    </span>
                     <span className="font-semibold text-slate-900">
                       {feature.title}
                     </span>

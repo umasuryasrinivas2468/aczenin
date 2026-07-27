@@ -88,7 +88,7 @@ const Patent = () => {
       <Navbar />
 
       <main className="pt-24 pb-16">
-        <section className="container mx-auto px-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-smebank-200 bg-white/90 p-6 md:p-10 shadow-soft backdrop-blur">
             <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
               <div>
@@ -280,10 +280,10 @@ const Patent = () => {
                           <span
                             className={`rounded-full px-3 py-1 text-xs ${
                               step.status === "Completed"
-                                ? "bg-emerald-500/20 text-emerald-300"
+                                ? "bg-emerald-100 text-emerald-700"
                                 : step.status === "In Review"
-                                  ? "bg-amber-500/20 text-amber-300"
-                                  : "bg-zinc-500/20 text-zinc-300"
+                                  ? "bg-amber-100 text-amber-700"
+                                  : "bg-zinc-100 text-zinc-600"
                             }`}
                           >
                             {step.status}

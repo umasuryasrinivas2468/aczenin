@@ -91,31 +91,31 @@ const Freelancers = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-br from-smebank-50 to-smeteal-50">
-        <div className="container mx-auto px-4">
+      <section className="pt-28 pb-24 bg-gradient-to-b from-smebank-50 via-smeteal-50/60 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-4 bg-smebank-100 text-smebank-800 hover:bg-smebank-200">
               Freelancer Solutions
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               Banking for 
               <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 text-transparent bg-clip-text">
                 {" "}Independent Professionals
               </span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
               Simplify your freelance finances with our comprehensive banking solutions. 
               From payment collection to investment planning, we've got you covered.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white px-8 py-3"
+                className="bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white px-8 py-3 rounded-xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
               >
                 Start Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button variant="outline" size="lg" className="px-8 py-3">
+              <Button variant="outline" size="lg" className="px-8 py-3 rounded-xl">
                 Compare Plans
               </Button>
             </div>
@@ -124,20 +124,20 @@ const Freelancers = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Built for Freelance Success
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Everything you need to manage your freelance business finances in one place.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
+              <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit">
                     {feature.icon}
@@ -158,20 +158,20 @@ const Freelancers = () => {
 
 
       {/* Services Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Comprehensive Freelancer Services
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-muted-foreground">
               All the financial tools you need to run your freelance business efficiently.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 h-full">
+              <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 h-full">
                 <CardHeader>
                   <CardTitle className="text-lg">{service.title}</CardTitle>
                   <CardDescription>{service.description}</CardDescription>
@@ -181,7 +181,7 @@ const Freelancers = () => {
                     {service.features.map((feature, idx) => (
                       <div key={idx} className="flex items-center">
                         <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                        <span className="text-sm text-gray-600">{feature}</span>
+                        <span className="text-sm text-muted-foreground">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -193,14 +193,14 @@ const Freelancers = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-smebank-50/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
                 Why Freelancers Love Aczen
               </h2>
-              <p className="text-lg text-gray-600 mb-8">
+              <p className="text-lg text-muted-foreground mb-8">
                 We understand the unique financial needs of freelancers and provide solutions 
                 that help you focus on what you do best - your work.
               </p>
@@ -208,7 +208,7 @@ const Freelancers = () => {
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-center">
                     <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{benefit}</span>
+                    <span className="text-foreground">{benefit}</span>
                   </div>
                 ))}
               </div>
@@ -217,15 +217,15 @@ const Freelancers = () => {
               <img 
                 src="/placeholder.svg" 
                 alt="Freelancer Working" 
-                className="rounded-lg shadow-soft w-full h-96 object-cover"
+                className="rounded-2xl shadow-soft w-full h-96 object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-smebank-600/20 to-smeteal-600/20 rounded-lg"></div>
-              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-4">
+              <div className="absolute inset-0 bg-gradient-to-tr from-smebank-600/20 to-smeteal-600/20 rounded-2xl"></div>
+              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-soft p-4">
                 <div className="flex items-center">
                   <Wallet className="h-6 w-6 text-green-500 mr-2" />
                   <div>
-                    <div className="font-semibold text-gray-900">50,000+ Freelancers</div>
-                    <div className="text-sm text-gray-600">Trust Aczen for their banking</div>
+                    <div className="font-semibold text-foreground">50,000+ Freelancers</div>
+                    <div className="text-sm text-muted-foreground">Trust Aczen for their banking</div>
                   </div>
                 </div>
               </div>
@@ -235,30 +235,30 @@ const Freelancers = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               What Freelancers Say
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-muted-foreground">
               Hear from successful freelancers who've simplified their finances with Aczen.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
+              <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardContent className="p-6">
                   <div className="flex mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-gray-600 mb-4 italic">"{testimonial.content}"</p>
+                  <p className="text-muted-foreground mb-4 italic">"{testimonial.content}"</p>
                   <div>
-                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.profession}</p>
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.profession}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -268,8 +268,8 @@ const Freelancers = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-smebank-600 to-smeteal-600">
-        <div className="container mx-auto px-4 text-center">
+      <section className="py-24 bg-gradient-to-r from-smebank-700 to-smeteal-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ready to Simplify Your Freelance Finances?
           </h2>
@@ -279,7 +279,7 @@ const Freelancers = () => {
           </p>
           <Button 
             size="lg" 
-            className="bg-white text-smebank-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
+            className="bg-white text-smebank-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold rounded-xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
           >
             Start Now
             <ArrowRight className="ml-2 h-5 w-5" />

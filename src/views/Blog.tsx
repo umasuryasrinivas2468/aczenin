@@ -55,9 +55,9 @@ const Blog = () => {
       />
       <Navbar />
       <main className="pt-24 pb-16">
-        <section className="container mx-auto px-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               Aczen{" "}
               <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 text-transparent bg-clip-text">
                 Blog
@@ -68,17 +68,37 @@ const Blog = () => {
             </p>
           </div>
 
-          {loading && <p className="text-center text-gray-500">Loading posts…</p>}
+          {loading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl overflow-hidden bg-white shadow-soft border border-gray-100"
+                >
+                  <div className="w-full h-48 bg-gray-100 animate-pulse" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-3 w-1/3 bg-gray-100 rounded animate-pulse" />
+                    <div className="h-5 w-4/5 bg-gray-100 rounded animate-pulse" />
+                    <div className="h-4 w-full bg-gray-100 rounded animate-pulse" />
+                    <div className="h-4 w-2/3 bg-gray-100 rounded animate-pulse" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {error && (
-            <div className="max-w-2xl mx-auto bg-amber-50 border border-amber-200 rounded-lg p-6 text-amber-800">
+            <div className="max-w-2xl mx-auto bg-amber-50 border border-amber-200 rounded-2xl p-6 text-amber-800 shadow-soft">
               <p className="font-medium mb-2">Blog setup pending</p>
               <p className="text-sm">{error}</p>
             </div>
           )}
 
           {!loading && !error && posts.length === 0 && (
-            <p className="text-center text-gray-500">No posts yet — check back soon.</p>
+            <div className="text-center py-16">
+              <p className="text-lg font-medium text-foreground mb-1">No posts yet</p>
+              <p className="text-muted-foreground">Check back soon for fresh insights.</p>
+            </div>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -86,7 +106,7 @@ const Blog = () => {
               <Link
                 key={post._id}
                 href={`/blog/${post.slug}`}
-                className="group rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 hover:shadow-soft transition-shadow"
+                className="group rounded-2xl overflow-hidden bg-white shadow-soft border border-gray-100 hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300"
               >
                 {post.coverImage?.asset && (
                   <img
@@ -97,7 +117,7 @@ const Blog = () => {
                   />
                 )}
                 <div className="p-6">
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
                     <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
                     {post.categories?.[0] && (
                       <>
@@ -106,7 +126,7 @@ const Blog = () => {
                       </>
                     )}
                   </div>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-smebank-600 transition-colors">
+                  <h2 className="text-xl font-semibold text-foreground mb-2 group-hover:text-smebank-600 transition-colors">
                     {post.title}
                   </h2>
                   {post.excerpt && (

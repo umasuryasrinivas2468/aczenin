@@ -178,7 +178,7 @@ const B2BPayments = () => {
           ? 'bg-white/95 backdrop-blur-xl shadow-soft border-b border-slate-200/50' 
           : 'bg-white/80 backdrop-blur-sm'
       }`}>
-        <div className="container mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center space-x-3">
@@ -192,15 +192,15 @@ const B2BPayments = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-12">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 relative group">
+              <Link href="/" className="text-foreground hover:text-blue-600 font-medium transition-colors duration-300 relative group">
                 Home
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-smebank-500 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/pricing" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 relative group">
+              <Link href="/pricing" className="text-foreground hover:text-blue-600 font-medium transition-colors duration-300 relative group">
                 Pricing
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-smebank-500 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/contacts" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 relative group">
+              <Link href="/contacts" className="text-foreground hover:text-blue-600 font-medium transition-colors duration-300 relative group">
                 Contact
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-smebank-500 transition-all group-hover:w-full"></span>
               </Link>
@@ -220,13 +220,13 @@ const B2BPayments = () => {
           {isMenuOpen && (
             <div className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-slate-200/50">
               <div className="px-6 py-6 space-y-6">
-                <Link href="/" className="block text-slate-700 hover:text-slate-900 font-medium">
+                <Link href="/" className="block text-foreground hover:text-foreground font-medium">
                   Home
                 </Link>
-                <Link href="/pricing" className="block text-slate-700 hover:text-slate-900 font-medium">
+                <Link href="/pricing" className="block text-foreground hover:text-foreground font-medium">
                   Pricing
                 </Link>
-                <Link href="/contacts" className="block text-slate-700 hover:text-slate-900 font-medium">
+                <Link href="/contacts" className="block text-foreground hover:text-foreground font-medium">
                   Contact
                 </Link>
                 {/* Sign In / Sign Up removed from mobile menu */}
@@ -241,7 +241,7 @@ const B2BPayments = () => {
         {/* Clean, bold hero background */}
         <div className="absolute left-0 bottom-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-100 via-smebank-100 to-pink-100 rounded-full blur-3xl -z-10"></div>
         <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-100 via-smebank-100 to-pink-100 rounded-full blur-3xl -z-10"></div>
-        <div className="container mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center text-center">
             {/* Status badge */}
             <div className="mb-6">
@@ -252,14 +252,14 @@ const B2BPayments = () => {
             </div>
             {/* Headline */}
             <h1 className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight">
-              <span className="block text-gray-900">Effortlessly manage</span>
+              <span className="block text-foreground">Effortlessly manage</span>
               <span className="block bg-gradient-to-r from-blue-600 via-smebank-600 to-pink-600 bg-clip-text text-transparent">B2B transactions</span>
-              <span className="block text-gray-800 mt-2">with <span className="bg-gradient-to-r from-smebank-600 via-blue-600 to-pink-600 bg-clip-text text-transparent">Bharat Connect</span></span>
+              <span className="block text-foreground mt-2">with <span className="bg-gradient-to-r from-smebank-600 via-blue-600 to-pink-600 bg-clip-text text-transparent">Bharat Connect</span></span>
             </h1>
             {/* Decorative underline */}
             <div className="mx-auto h-1 w-56 rounded-full bg-gradient-to-r from-blue-500 to-smebank-500 mb-6" />
             {/* Description */}
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
               Manage bills, invoices, and payments on a single secure platform—integrate with your business apps, accept cards, UPI, and NetBanking, and automate reconciliation and financing so you can focus on growth.
             </p>
             {/* Phone capture + submit (saves to Google Sheets webhook) */}
@@ -311,7 +311,7 @@ const B2BPayments = () => {
                 </div>
                 <div className="mt-3 text-center min-h-[24px]">
                   {phoneStatus === 'sending' && (
-                    <span className="text-gray-600 inline-flex items-center">
+                    <span className="text-muted-foreground inline-flex items-center">
                       <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-smebank-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -339,7 +339,7 @@ const B2BPayments = () => {
               </div>
             </div>
             {/* Feature highlights */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-2 text-gray-500 text-sm">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-2 text-muted-foreground text-sm">
               <div className="flex items-center">
                 <CheckCircle className="h-4 w-4 mr-2 text-green-400" />
                 <span>No setup fees</span>
@@ -359,16 +359,16 @@ const B2BPayments = () => {
 
       {/* Key Features Section */}
       <section className="py-24 bg-gradient-to-br from-smeteal-50 via-smebank-50 to-pink-50">
-        <div className="container mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <div className="inline-flex items-center bg-gradient-to-r from-smeteal-100 to-smebank-100 rounded-full px-4 py-2 mb-6">
               <Layers className="h-4 w-4 text-smeteal-600 mr-2" />
               <span className="text-sm font-medium bg-gradient-to-r from-smeteal-600 to-smebank-600 bg-clip-text text-transparent">Enterprise Features</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
               Powerful Features for Modern B2B Payments
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Everything you need to streamline your business payments and financial operations with enterprise-grade reliability
             </p>
           </div>
@@ -386,10 +386,10 @@ const B2BPayments = () => {
                       {feature.icon}
                     </div>
                   </div>
-                  <CardTitle className="text-xl font-bold text-gray-900 mb-3">{feature.title}</CardTitle>
+                  <CardTitle className="text-xl font-bold text-foreground mb-3">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center px-6 pb-8">
-                  <CardDescription className="text-gray-600 leading-relaxed text-base">
+                  <CardDescription className="text-muted-foreground leading-relaxed text-base">
                     {feature.description}
                   </CardDescription>
                 </CardContent>
@@ -405,16 +405,16 @@ const B2BPayments = () => {
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/30 to-smebank-100/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-br from-pink-100/30 to-orange-100/30 rounded-full blur-3xl"></div>
         
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-20">
             <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-green-100 rounded-full px-4 py-2 mb-6">
               <Workflow className="h-4 w-4 text-blue-600 mr-2" />
               <span className="text-sm font-medium bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">Implementation Process</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
               How Aczen Bilz Works
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Get started in 4 simple steps and transform your B2B payment experience with enterprise-grade efficiency
             </p>
           </div>
@@ -436,10 +436,10 @@ const B2BPayments = () => {
                     {step.time}
                   </Badge>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                <h3 className="text-xl font-bold text-foreground mb-4">
                   {step.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-base">
+                <p className="text-muted-foreground leading-relaxed text-base">
                   {step.description}
                 </p>
               </div>
@@ -455,7 +455,7 @@ const B2BPayments = () => {
         <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-green-400/20 to-blue-400/20 rounded-full blur-3xl"></div>
         
-        <div className="container mx-auto px-6 text-center relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="max-w-4xl mx-auto space-y-10">
             <div className="space-y-6">
               <div className="inline-flex items-center bg-white/20 rounded-full px-4 py-2">
@@ -547,16 +547,16 @@ const B2BPayments = () => {
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/30 to-smebank-100/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-br from-pink-100/30 to-orange-100/30 rounded-full blur-3xl"></div>
         
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-smebank-100 rounded-full px-4 py-2 mb-6">
               <Plane className="h-4 w-4 text-blue-600 mr-2" />
               <span className="text-sm font-medium bg-gradient-to-r from-blue-600 to-smebank-600 bg-clip-text text-transparent">Exclusive Travel Benefits</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
               Unlock <span className="bg-gradient-to-r from-blue-600 to-smebank-600 bg-clip-text text-transparent">Complimentary Flight Offers</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               With every IT filing through Aczen Bilz, get exclusive access to premium flight deals and travel rewards
             </p>
           </div>
@@ -567,10 +567,10 @@ const B2BPayments = () => {
                 <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Globe className="h-8 w-8 text-blue-600" />
                 </div>
-                <CardTitle className="text-xl font-bold text-gray-900">Domestic Flights</CardTitle>
+                <CardTitle className="text-xl font-bold text-foreground">Domestic Flights</CardTitle>
               </CardHeader>
               <CardContent className="text-center px-6 pb-8">
-                <CardDescription className="text-gray-600 leading-relaxed">
+                <CardDescription className="text-muted-foreground leading-relaxed">
                   Get up to ₹5,000 off on domestic flights with every successful IT filing through our platform
                 </CardDescription>
               </CardContent>
@@ -581,10 +581,10 @@ const B2BPayments = () => {
                 <div className="w-16 h-16 bg-smebank-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Plane className="h-8 w-8 text-smebank-600" />
                 </div>
-                <CardTitle className="text-xl font-bold text-gray-900">International Travel</CardTitle>
+                <CardTitle className="text-xl font-bold text-foreground">International Travel</CardTitle>
               </CardHeader>
               <CardContent className="text-center px-6 pb-8">
-                <CardDescription className="text-gray-600 leading-relaxed">
+                <CardDescription className="text-muted-foreground leading-relaxed">
                   Exclusive discounts up to ₹25,000 on international flight bookings for premium customers
                 </CardDescription>
               </CardContent>
@@ -595,10 +595,10 @@ const B2BPayments = () => {
                 <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Star className="h-8 w-8 text-green-600" />
                 </div>
-                <CardTitle className="text-xl font-bold text-gray-900">Premium Benefits</CardTitle>
+                <CardTitle className="text-xl font-bold text-foreground">Premium Benefits</CardTitle>
               </CardHeader>
               <CardContent className="text-center px-6 pb-8">
-                <CardDescription className="text-gray-600 leading-relaxed">
+                <CardDescription className="text-muted-foreground leading-relaxed">
                   Complimentary lounge access, priority check-in, and extra baggage allowance with partner airlines
                 </CardDescription>
               </CardContent>
@@ -607,15 +607,15 @@ const B2BPayments = () => {
 
           <div className="mt-12 text-center">
             <div className="inline-flex items-center gap-6 bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-soft">
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-muted-foreground">
                 <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
                 <span>Valid on all airlines</span>
               </div>
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-muted-foreground">
                 <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
                 <span>Instant redemption</span>
               </div>
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-muted-foreground">
                 <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
                 <span>No blackout dates</span>
               </div>

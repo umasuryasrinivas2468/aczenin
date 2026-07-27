@@ -16,30 +16,30 @@ const TermsOfService = () => {
       />
       <Navbar />
       <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <div className="mb-8">
             <div className="flex items-center space-x-2 text-sm">
-              <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
-              <span className="text-gray-400">/</span>
-              <span className="text-gray-900">Terms of Service</span>
+              <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
+              <span className="text-muted-foreground">/</span>
+              <span className="text-foreground">Terms of Service</span>
             </div>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Terms of Service</h1>
-            <p className="text-sm text-gray-500 mb-8">Last Updated: {new Date().toLocaleDateString()}</p>
-            
-            <div className="prose prose-lg">
-              <p className="text-gray-600 mb-8">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Terms of Service</h1>
+            <p className="text-sm text-muted-foreground mb-8">Last Updated: {new Date().toLocaleDateString()}</p>
+
+            <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground mb-8">
                 Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the Aczen website and services operated by Aczen Technologies Private Limited.
               </p>
-              
-              <p className="text-gray-600 mb-8">
+
+              <p className="text-muted-foreground mb-8">
                 By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part of the terms, you do not have permission to access the Service.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">1. Accounts</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">1. Accounts</h2>
               <p>
                 When you create an account with us, you guarantee that the information you provide is accurate, complete, and current at all times. Inaccurate, incomplete, or obsolete information may result in the immediate termination of your account on the Service.
               </p>
@@ -50,7 +50,7 @@ const TermsOfService = () => {
                 You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">2. Services and Fees</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">2. Services and Fees</h2>
               <p>
                 The Aczen platform provides financial services, including but not limited to SME lending, invoice discounting, and other financial products. The use of these services may be subject to fees, which will be clearly communicated prior to any transaction.
               </p>
@@ -58,7 +58,7 @@ const TermsOfService = () => {
                 All fees are non-refundable except as required by law or as explicitly stated in these Terms. We reserve the right to change our fee structure at any time. Changes to the fee structure will be posted online and will be effective immediately.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">3. Intellectual Property</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">3. Intellectual Property</h2>
               <p>
                 The Service and its original content, features, and functionality are and will remain the exclusive property of Aczen Technologies Private Limited and its licensors. The Service is protected by copyright, trademark, and other laws of both India and foreign countries.
               </p>
@@ -66,7 +66,7 @@ const TermsOfService = () => {
                 Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Aczen Technologies Private Limited.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">4. User Content</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">4. User Content</h2>
               <p>
                 Our Service allows you to post, link, store, share and otherwise make available certain information, text, graphics, videos, or other material. You are responsible for the content that you post on or through the Service, including its legality, reliability, and appropriateness.
               </p>
@@ -78,7 +78,7 @@ const TermsOfService = () => {
                 <li>The posting of your content on or through the Service does not violate the privacy rights, publicity rights, copyrights, contract rights or any other rights of any person or entity.</li>
               </ul>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">5. Prohibited Uses</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">5. Prohibited Uses</h2>
               <p>
                 You agree not to use the Service:
               </p>
@@ -90,7 +90,7 @@ const TermsOfService = () => {
                 <li>To engage in any other conduct that restricts or inhibits anyone's use or enjoyment of the Service, or which, as determined by us, may harm the Company or users of the Service or expose them to liability.</li>
               </ul>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">6. Termination</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">6. Termination</h2>
               <p>
                 We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.
               </p>
@@ -101,7 +101,7 @@ const TermsOfService = () => {
                 All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity, and limitations of liability.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">7. Limitation of Liability</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">7. Limitation of Liability</h2>
               <p>
                 In no event shall Aczen Technologies Private Limited, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:
               </p>
@@ -112,7 +112,7 @@ const TermsOfService = () => {
                 <li>Unauthorized access, use or alteration of your transmissions or content, whether based on warranty, contract, tort (including negligence) or any other legal theory, whether or not we have been informed of the possibility of such damage.</li>
               </ul>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">8. Disclaimer</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">8. Disclaimer</h2>
               <p>
                 Your use of the Service is at your sole risk. The Service is provided on an "AS IS" and "AS AVAILABLE" basis. The Service is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.
               </p>
@@ -126,7 +126,7 @@ const TermsOfService = () => {
                 <li>The results of using the Service will meet your requirements.</li>
               </ul>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">9. Governing Law</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">9. Governing Law</h2>
               <p>
                 These Terms shall be governed and construed in accordance with the laws of India, without regard to its conflict of law provisions.
               </p>
@@ -134,7 +134,7 @@ const TermsOfService = () => {
                 Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">10. Changes to Terms</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">10. Changes to Terms</h2>
               <p>
                 We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.
               </p>
@@ -142,7 +142,7 @@ const TermsOfService = () => {
                 By continuing to access or use our Service after any revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, you are no longer authorized to use the Service.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">11. Contact Us</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">11. Contact Us</h2>
               <p>
                 If you have any questions about these Terms, please contact us at: <a href="mailto:legal@aczen.org" className="text-smebank-600 hover:underline">legal@aczen.org</a>
               </p>

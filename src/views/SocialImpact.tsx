@@ -92,27 +92,27 @@ const SocialImpact = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Breadcrumb */}
-        <div className="container mx-auto px-4 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900">Social Impact</span>
+            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
+            <span className="text-muted-foreground">/</span>
+            <span className="text-foreground">Social Impact</span>
           </div>
         </div>
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Creating Positive Social Impact
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               At Aczen, we believe technology should serve humanity. Our social impact initiatives 
               focus on empowering communities, ensuring safety, and creating opportunities for all.
             </p>
           </div>
 
-          <div className="relative rounded-xl overflow-hidden shadow-soft">
+          <div className="relative rounded-2xl overflow-hidden shadow-soft">
             <img
               src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80"
               alt="Social Impact"
@@ -128,30 +128,30 @@ const SocialImpact = () => {
         </section>
 
         {/* Impact Areas */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Impact Areas</h2>
-            <p className="text-lg text-gray-600">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Our Impact Areas</h2>
+            <p className="text-lg text-muted-foreground">
               We focus on key areas where technology can make the biggest difference
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {impactAreas.map((area, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-soft border hover:shadow-soft transition-shadow">
+              <div key={index} className="feature-card">
                 <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${area.color}`}>
                   <area.icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{area.title}</h3>
-                <p className="text-gray-600">{area.description}</p>
+                <h3 className="text-xl font-bold text-foreground mb-2">{area.title}</h3>
+                <p className="text-muted-foreground">{area.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Women Safety Project Highlight */}
-        <section className="container mx-auto px-4 mb-16">
-          <div className="bg-gradient-to-r from-pink-50 to-smebank-50 rounded-xl p-8 md:p-12">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="bg-gradient-to-r from-pink-50 to-smebank-50 rounded-2xl p-8 md:p-12">
             <div className="flex flex-col lg:flex-row gap-12 items-center">
               <div className="lg:w-1/2">
                 <div className="flex items-center mb-4">
@@ -160,20 +160,20 @@ const SocialImpact = () => {
                     Featured Project
                   </span>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                <h2 className="text-3xl font-bold text-foreground mb-4">
                   Women Safety Initiative
                 </h2>
-                <p className="text-lg text-gray-600 mb-6">
+                <p className="text-lg text-muted-foreground mb-6">
                   Our comprehensive women safety project combines cutting-edge technology with 
                   community support to create a safer environment for women everywhere. Through 
                   our mobile application and awareness programs, we're making a real difference.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <button className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-md font-medium flex items-center">
+                  <button className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl font-medium flex items-center shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                     Learn More
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </button>
-                  <button className="border border-pink-600 text-pink-600 hover:bg-pink-50 px-6 py-3 rounded-md font-medium">
+                  <button className="border border-pink-600 text-pink-600 hover:bg-pink-50 px-6 py-3 rounded-xl font-medium transition-all duration-300">
                     Download App
                   </button>
                 </div>
@@ -182,7 +182,7 @@ const SocialImpact = () => {
                 <img
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2088&q=80"
                   alt="Women Safety"
-                  className="rounded-lg shadow-soft w-full"
+                  className="rounded-2xl shadow-soft w-full"
                 />
               </div>
             </div>
@@ -190,24 +190,24 @@ const SocialImpact = () => {
         </section>
 
         {/* Women Safety Features */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Safety Features</h2>
-            <p className="text-lg text-gray-600">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Safety Features</h2>
+            <p className="text-lg text-muted-foreground">
               Comprehensive safety tools designed with women's security in mind
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {womenSafetyFeatures.map((feature, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-soft border">
+              <div key={index} className="bg-white p-6 rounded-2xl shadow-soft border border-black/[0.06]">
                 <div className="flex items-start">
                   <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
                     <feature.icon className="w-6 h-6 text-pink-600" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
-                    <p className="text-gray-600">{feature.description}</p>
+                    <h3 className="text-xl font-bold text-foreground mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground">{feature.description}</p>
                   </div>
                 </div>
               </div>
@@ -216,8 +216,8 @@ const SocialImpact = () => {
         </section>
 
         {/* Impact Statistics */}
-        <section className="container mx-auto px-4 mb-16">
-          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-xl p-8 md:p-12 text-white">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-2xl p-8 md:p-12 text-white">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Our Impact in Numbers</h2>
               <p className="text-lg opacity-90">
@@ -238,21 +238,21 @@ const SocialImpact = () => {
         </section>
 
         {/* Call to Action */}
-        <section className="container mx-auto px-4">
-          <div className="bg-gray-50 rounded-xl p-8 md:p-12 text-center">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gray-50 rounded-2xl p-8 md:p-12 text-center">
             <Award className="w-16 h-16 text-blue-600 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               Join Our Mission
             </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               Be part of our social impact initiatives. Whether you're an individual, organization, 
               or community leader, there are many ways to contribute to positive change.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-medium shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 Get Involved
               </button>
-              <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-md font-medium">
+              <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-xl font-medium transition-all duration-300">
                 Partner With Us
               </button>
             </div>

@@ -126,7 +126,7 @@ const SecurityCaseReport = () => {
         <div className="absolute inset-0 opacity-20" style={{
           backgroundImage: "radial-gradient(circle at 25% 25%, rgba(99,102,241,0.25) 0, transparent 40%), radial-gradient(circle at 75% 75%, rgba(56,189,248,0.2) 0, transparent 40%)",
         }} />
-        <div className="container mx-auto px-4 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="max-w-5xl mx-auto">
             <div className="flex flex-wrap items-center gap-3 mb-6">
               <Badge className="bg-red-500/20 text-red-200 border border-red-400/30 hover:bg-red-500/25">
@@ -167,19 +167,19 @@ const SecurityCaseReport = () => {
 
       {/* Meta Card */}
       <section className="-mt-10 pb-12 relative z-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <Card className="shadow-soft border-slate-200/80">
               <CardContent className="p-6 md:p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                   {metaRows.map((row) => (
                     <div key={row.label} className="flex items-start gap-3 border-b border-slate-100 pb-3 last:border-0">
-                      <div className="mt-0.5 p-1.5 rounded-md bg-slate-100 text-slate-600">
+                      <div className="mt-0.5 p-1.5 rounded-md bg-slate-100 text-muted-foreground">
                         {row.icon}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs uppercase tracking-wider text-slate-500">{row.label}</div>
-                        <div className="text-sm font-medium text-slate-900 break-words">{row.value}</div>
+                        <div className="text-xs uppercase tracking-wider text-muted-foreground">{row.label}</div>
+                        <div className="text-sm font-medium text-foreground break-words">{row.value}</div>
                       </div>
                     </div>
                   ))}
@@ -192,10 +192,10 @@ const SecurityCaseReport = () => {
 
       {/* Executive Summary */}
       <section className="py-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<FileText className="h-5 w-5" />} eyebrow="Section 01" title="Executive Summary" />
-            <div className="bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-sm space-y-4 text-slate-700 leading-relaxed">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-soft space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 An anomaly was identified within the source code management and deployment workflow
                 involving an unexpected account attribution during a production deployment process.
@@ -203,7 +203,7 @@ const SecurityCaseReport = () => {
               <p>
                 During deployment validation, the platform reported that the deployment was associated
                 with an external account identified as{" "}
-                <code className="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-sm text-slate-900">
+                <code className="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-sm text-foreground">
                   superman32432432
                 </code>
                 . This account is not recognized by the repository owner and has no known authorization,
@@ -220,7 +220,7 @@ const SecurityCaseReport = () => {
 
       {/* Incident Description */}
       <section className="py-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<AlertTriangle className="h-5 w-5" />} eyebrow="Section 02" title="Incident Description" />
 
@@ -235,7 +235,7 @@ const SecurityCaseReport = () => {
 
             <Card className="border-slate-200">
               <CardHeader>
-                <CardTitle className="text-base text-slate-700">Reported Account</CardTitle>
+                <CardTitle className="text-base text-muted-foreground">Reported Account</CardTitle>
                 <CardDescription>
                   The deployment platform reported that the deployment request was linked to:
                 </CardDescription>
@@ -248,7 +248,7 @@ const SecurityCaseReport = () => {
                 </div>
 
                 <div className="mt-6">
-                  <h4 className="text-sm font-semibold text-slate-700 mb-3">
+                  <h4 className="text-sm font-semibold text-muted-foreground mb-3">
                     Repository owner's internal review determined:
                   </h4>
                   <ul className="space-y-2">
@@ -259,7 +259,7 @@ const SecurityCaseReport = () => {
                       "Current repository ownership remains unchanged.",
                       "No direct evidence of repository compromise has been identified.",
                     ].map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-slate-700">
+                      <li key={item} className="flex items-start gap-2 text-muted-foreground">
                         <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 flex-shrink-0" />
                         <span className="text-sm">{item}</span>
                       </li>
@@ -274,7 +274,7 @@ const SecurityCaseReport = () => {
 
       {/* Timeline */}
       <section className="py-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<Activity className="h-5 w-5" />} eyebrow="Section 03" title="Event Timeline" />
             <div className="relative">
@@ -290,9 +290,9 @@ const SecurityCaseReport = () => {
                         <span className="text-xs font-mono text-smeteal-600 bg-smeteal-50 px-2 py-0.5 rounded">
                           {event.time}
                         </span>
-                        <h4 className="font-semibold text-slate-900">{event.title}</h4>
+                        <h4 className="font-semibold text-foreground">{event.title}</h4>
                       </div>
-                      <p className="text-sm text-slate-600">{event.desc}</p>
+                      <p className="text-sm text-muted-foreground">{event.desc}</p>
                     </div>
                   </li>
                 ))}
@@ -304,7 +304,7 @@ const SecurityCaseReport = () => {
 
       {/* Observed Findings */}
       <section className="py-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<Search className="h-5 w-5" />} eyebrow="Section 04" title="Observed Findings" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -320,7 +320,7 @@ const SecurityCaseReport = () => {
                 <CardContent>
                   <ul className="space-y-3">
                     {repoFindings.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-slate-700">
+                      <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground">
                         <ArrowRight className="h-4 w-4 text-slate-400 mt-0.5 flex-shrink-0" />
                         <span>{f}</span>
                       </li>
@@ -341,7 +341,7 @@ const SecurityCaseReport = () => {
                 <CardContent>
                   <ul className="space-y-3">
                     {securityFindings.map((f) => (
-                      <li key={f.text} className="flex items-start gap-2 text-sm text-slate-700">
+                      <li key={f.text} className="flex items-start gap-2 text-sm text-muted-foreground">
                         {f.ok ? (
                           <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 flex-shrink-0" />
                         ) : (
@@ -360,18 +360,18 @@ const SecurityCaseReport = () => {
 
       {/* Risk Assessment */}
       <section className="py-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<ShieldAlert className="h-5 w-5" />} eyebrow="Section 05" title="Risk Assessment" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="border-slate-200 bg-gradient-to-br from-rose-50/40 to-white">
                 <CardHeader>
-                  <CardTitle className="text-base text-slate-900">Potential Risks</CardTitle>
+                  <CardTitle className="text-base text-foreground">Potential Risks</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2.5">
                     {potentialRisks.map((r) => (
-                      <li key={r} className="flex items-start gap-2 text-sm text-slate-700">
+                      <li key={r} className="flex items-start gap-2 text-sm text-muted-foreground">
                         <XCircle className="h-4 w-4 text-rose-500 mt-0.5 flex-shrink-0" />
                         <span>{r}</span>
                       </li>
@@ -382,12 +382,12 @@ const SecurityCaseReport = () => {
 
               <Card className="border-slate-200 bg-gradient-to-br from-amber-50/40 to-white">
                 <CardHeader>
-                  <CardTitle className="text-base text-slate-900">Business Impact</CardTitle>
+                  <CardTitle className="text-base text-foreground">Business Impact</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2.5">
                     {businessImpact.map((b) => (
-                      <li key={b} className="flex items-start gap-2 text-sm text-slate-700">
+                      <li key={b} className="flex items-start gap-2 text-sm text-muted-foreground">
                         <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
                         <span>{b}</span>
                       </li>
@@ -402,10 +402,10 @@ const SecurityCaseReport = () => {
 
       {/* Investigation Objectives */}
       <section className="py-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<HelpCircle className="h-5 w-5" />} eyebrow="Section 06" title="Investigation Objectives" />
-            <p className="text-slate-600 mb-6">The following questions require clarification:</p>
+            <p className="text-muted-foreground mb-6">The following questions require clarification:</p>
             <div className="grid grid-cols-1 gap-4">
               {investigationQuestions.map((qa, idx) => (
                 <Card key={qa.q} className="border-slate-200">
@@ -416,11 +416,11 @@ const SecurityCaseReport = () => {
                       </div>
                       <div className="flex-1">
                         <div className="text-xs text-slate-400 mb-1">Q{idx + 1}</div>
-                        <p className="text-slate-900 font-medium mb-2">{qa.q}</p>
+                        <p className="text-foreground font-medium mb-2">{qa.q}</p>
                         {qa.items && (
                           <div className="mt-3 flex flex-wrap gap-2">
                             {qa.items.map((item) => (
-                              <span key={item} className="text-xs px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                              <span key={item} className="text-xs px-2.5 py-1 rounded-md bg-slate-100 text-muted-foreground border border-slate-200">
                                 {item}
                               </span>
                             ))}
@@ -438,7 +438,7 @@ const SecurityCaseReport = () => {
 
       {/* Requested Actions */}
       <section className="py-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<ClipboardCheck className="h-5 w-5" />} eyebrow="Section 07" title="Requested Actions" />
             <Card className="border-slate-200">
@@ -457,7 +457,7 @@ const SecurityCaseReport = () => {
                       <div className="flex-shrink-0 h-6 w-6 rounded-full bg-smeteal-600 text-white text-xs font-semibold flex items-center justify-center">
                         {idx + 1}
                       </div>
-                      <span className="text-sm text-slate-700">{action}</span>
+                      <span className="text-sm text-muted-foreground">{action}</span>
                     </div>
                   ))}
                 </div>
@@ -469,18 +469,18 @@ const SecurityCaseReport = () => {
 
       {/* Current Status */}
       <section className="py-10">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <SectionHeading icon={<Server className="h-5 w-5" />} eyebrow="Section 08" title="Current Status" />
-            <div className="rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 md:p-8">
+            <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 md:p-8 shadow-soft">
               <div className="flex items-center gap-2 mb-4">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500" />
                 </span>
-                <span className="font-semibold text-slate-900">Status: Open Investigation</span>
+                <span className="font-semibold text-foreground">Status: Open Investigation</span>
               </div>
-              <p className="text-slate-700 leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed">
                 At the time of filing this report, no evidence has been found indicating confirmed
                 unauthorized access, repository compromise, or malicious activity. However, the identity
                 attribution inconsistency and resulting deployment block require formal review to ensure
@@ -493,7 +493,7 @@ const SecurityCaseReport = () => {
 
       {/* Footer Case Card */}
       <section className="py-12">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="rounded-2xl bg-slate-900 text-slate-100 p-8 md:p-10 shadow-soft">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -508,7 +508,7 @@ const SecurityCaseReport = () => {
                 </div>
                 <a
                   href="mailto:security@aczen.tech?subject=Re%3A%20Case%20ACZ-SEC-2026-0625-48192"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white text-slate-900 font-medium hover:bg-slate-100 transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white text-foreground font-medium hover:bg-slate-100 transition-colors"
                 >
                   <Mail className="h-4 w-4" />
                   security@aczen.tech
@@ -542,7 +542,7 @@ const SectionHeading = ({
       {icon}
       <span>{eyebrow}</span>
     </div>
-    <h2 className="text-2xl md:text-3xl font-bold text-slate-900">{title}</h2>
+    <h2 className="text-2xl md:text-3xl font-bold text-foreground">{title}</h2>
   </div>
 );
 

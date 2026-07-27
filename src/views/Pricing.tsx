@@ -195,16 +195,16 @@ const Pricing = () => {
 
       <main className="pt-16 pb-16">
         {/* Breadcrumb */}
-        <div className="container mx-auto px-4 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
+            <Link href="/" className="text-muted-foreground hover:text-gray-700">Home</Link>
             <span className="text-gray-400">/</span>
-            <span className="text-gray-900">Pricing</span>
+            <span className="text-foreground">Pricing</span>
           </div>
         </div>
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-16 text-center">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
           <div className="max-w-4xl mx-auto">
             <div className="inline-flex items-center bg-gradient-to-r from-smebank-50 to-smeteal-50 rounded-full px-6 py-3 mb-8">
               <Crown className="h-5 w-5 text-smebank-600 mr-2" />
@@ -212,14 +212,14 @@ const Pricing = () => {
             </div>
 
             <h1 className="text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gray-900">Simple, Transparent</span>
+              <span className="text-foreground">Simple, Transparent</span>
               <br />
               <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 bg-clip-text text-transparent">
                 Pricing
               </span>
             </h1>
 
-            <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
               Scale your business with our comprehensive financial management platform.
               Choose the plan that fits your business needs and grow without limits.
             </p>
@@ -232,7 +232,7 @@ const Pricing = () => {
                 className={`px-6 py-3 rounded-full font-semibold transition-all ${
                   billingCycle === 'monthly'
                     ? 'bg-smebank-600 text-white shadow-soft'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 Monthly
@@ -243,7 +243,7 @@ const Pricing = () => {
                 className={`px-6 py-3 rounded-full font-semibold transition-all flex items-center ${
                   billingCycle === 'annually'
                     ? 'bg-smebank-600 text-white shadow-soft'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 Annually
@@ -256,15 +256,15 @@ const Pricing = () => {
         </section>
 
         {/* Pricing Cards */}
-        <section className="container mx-auto px-4 pb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.id}
-                className={`relative overflow-hidden ${
+                className={`relative overflow-hidden rounded-2xl ${
                   plan.popular
-                    ? 'ring-2 ring-smebank-500 shadow-soft scale-105'
-                    : 'shadow-soft hover:shadow-soft'
+                    ? 'ring-2 ring-smebank-500 shadow-soft-lg lg:scale-105'
+                    : 'shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5'
                 } transition-all duration-300`}
               >
                 {plan.popular && (
@@ -276,17 +276,17 @@ const Pricing = () => {
 
                 <CardHeader className={plan.popular ? 'pt-14' : 'pt-6'}>
                   <div className="text-center">
-                    <CardTitle className="text-xl font-bold text-gray-900 mb-1">
+                    <CardTitle className="text-xl font-bold text-foreground mb-1">
                       {plan.name}
                     </CardTitle>
-                    <p className="text-xs text-gray-600 mb-4">{plan.tagline}</p>
+                    <p className="text-xs text-muted-foreground mb-4">{plan.tagline}</p>
 
                     <div className="space-y-2">
                       <div className="flex items-center justify-center">
-                        <span className="text-3xl font-bold text-gray-900">
+                        <span className="text-3xl font-bold text-foreground">
                           {formatPrice(getCurrentPrice(plan))}
                         </span>
-                        <span className="text-gray-600 ml-2">
+                        <span className="text-muted-foreground ml-2">
                           /{billingCycle === 'monthly' ? 'month' : 'year'}
                         </span>
                       </div>
@@ -331,12 +331,12 @@ const Pricing = () => {
                                 <X className="h-3.5 w-3.5 flex-shrink-0 text-gray-300" />
                               )}
                               <span className={`flex-1 text-xs ${
-                                included ? 'text-gray-800' : 'text-gray-400'
+                                included ? 'text-foreground' : 'text-gray-400'
                               }`}>
                                 {feature.name}
                               </span>
                               {detail && (
-                                <span className="text-right text-xs font-medium text-gray-500">
+                                <span className="text-right text-xs font-medium text-muted-foreground">
                                   {detail}
                                 </span>
                               )}
@@ -349,9 +349,9 @@ const Pricing = () => {
 
                   {/* CTA Button */}
                   <Button
-                    className={`w-full py-4 font-semibold text-base ${
+                    className={`w-full py-4 rounded-xl font-semibold text-base shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 ${
                       plan.popular
-                        ? 'bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white shadow-soft hover:shadow-soft'
+                        ? 'bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white'
                         : 'bg-smebank-600 hover:bg-smebank-700 text-white'
                     } transition-all duration-300`}
                     onClick={() => window.open(plan.cta.url, plan.cta.url.includes('dashboard.aczen.in') ? '_self' : '_blank')}
@@ -360,7 +360,7 @@ const Pricing = () => {
                     {plan.cta.label}
                   </Button>
 
-                  <p className="text-xs text-gray-500 text-center mt-3">
+                  <p className="text-xs text-muted-foreground text-center mt-3">
                     No setup fees • Cancel anytime • 14-day money-back guarantee
                   </p>
                 </CardContent>
@@ -370,12 +370,12 @@ const Pricing = () => {
         </section>
 
         {/* Recommended Add-ons */}
-        <section className="container mx-auto px-4 pb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               Recommended Add-ons
             </h2>
-            <p className="text-gray-600 mb-12">
+            <p className="text-muted-foreground mb-12">
               Extend any plan with modular upgrades as your business grows
             </p>
 
@@ -383,9 +383,9 @@ const Pricing = () => {
               {addOns.map((addOn) => (
                 <div
                   key={addOn.name}
-                  className="flex items-center justify-between bg-white rounded-xl border border-gray-100 shadow-sm p-4"
+                  className="flex items-center justify-between bg-white rounded-2xl border border-black/[0.06] shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 p-4"
                 >
-                  <span className="text-sm font-medium text-gray-900">{addOn.name}</span>
+                  <span className="text-sm font-medium text-foreground">{addOn.name}</span>
                   <span className="text-sm font-semibold text-smebank-600 whitespace-nowrap ml-3">
                     {addOn.price}
                   </span>
@@ -396,34 +396,34 @@ const Pricing = () => {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-gray-600 mb-12">
+            <p className="text-muted-foreground mb-12">
               Everything you need to know about our pricing and plans
             </p>
 
             <div className="grid md:grid-cols-2 gap-8 text-left">
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Can I switch plans anytime?</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-semibold text-foreground mb-2">Can I switch plans anytime?</h3>
+                  <p className="text-muted-foreground text-sm">
                     Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Is there a setup fee?</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-semibold text-foreground mb-2">Is there a setup fee?</h3>
+                  <p className="text-muted-foreground text-sm">
                     No setup fees, no hidden costs. What you see is what you pay.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Do you offer refunds?</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-semibold text-foreground mb-2">Do you offer refunds?</h3>
+                  <p className="text-muted-foreground text-sm">
                     Yes, we offer a 14-day money-back guarantee for all new subscriptions.
                   </p>
                 </div>
@@ -431,22 +431,22 @@ const Pricing = () => {
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">What payment methods do you accept?</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-semibold text-foreground mb-2">What payment methods do you accept?</h3>
+                  <p className="text-muted-foreground text-sm">
                     We accept all major credit cards, debit cards, UPI, and net banking through our secure payment gateway.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Is my data secure?</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-semibold text-foreground mb-2">Is my data secure?</h3>
+                  <p className="text-muted-foreground text-sm">
                     Absolutely. We use bank-grade security with SSL encryption and comply with all data protection regulations.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Can I get a custom plan?</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-semibold text-foreground mb-2">Can I get a custom plan?</h3>
+                  <p className="text-muted-foreground text-sm">
                     Yes! For enterprise needs, we offer custom solutions. Contact our sales team for a personalized quote.
                   </p>
                 </div>

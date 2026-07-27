@@ -3,6 +3,7 @@
 import { Play } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import AnimatedBorder from "@/components/reactbits/AnimatedBorder";
 
 const VideoSection = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,7 @@ const VideoSection = () => {
         </div>
 
         {/* document/viewer panel */}
-        <div className="border border-border rounded bg-white overflow-hidden">
+        <AnimatedBorder>
           {/* toolbar strip */}
           <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-2.5">
             <span className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
@@ -56,7 +57,7 @@ const VideoSection = () => {
               </span>
             </div>
           </div>
-        </div>
+        </AnimatedBorder>
       </div>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>

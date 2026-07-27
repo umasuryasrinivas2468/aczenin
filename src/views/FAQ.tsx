@@ -176,12 +176,12 @@ const FAQ = () => {
 
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-smebank-50 to-smeteal-50">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-4 bg-smebank-100 text-smebank-800 hover:bg-smebank-200">
               Help Center
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               Frequently Asked 
               <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 text-transparent bg-clip-text">
                 {" "}Questions
@@ -194,13 +194,13 @@ const FAQ = () => {
             
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
                 type="text"
                 placeholder="Search for answers..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-3 text-lg border-2 border-gray-200 focus:border-smebank-500 rounded-lg"
+                className="h-auto pl-11 pr-4 py-3 text-lg rounded-xl border border-gray-200 bg-white outline-none transition-colors focus:border-smebank-300 focus:ring-2 focus:ring-smebank-100"
               />
             </div>
           </div>
@@ -208,16 +208,16 @@ const FAQ = () => {
       </section>
 
       {/* FAQ Categories */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {searchTerm === "" && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
               {faqCategories.map((category, index) => (
-                <Card key={index} className="hover:shadow-soft transition-shadow duration-300 cursor-pointer text-center">
+                <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer text-center">
                   <CardContent className="p-4">
                     <div className="flex justify-center mb-2">{category.icon}</div>
                     <h3 className="font-semibold text-sm">{category.title}</h3>
-                    <p className="text-xs text-gray-500 mt-1">{category.faqs.length} questions</p>
+                    <p className="text-xs text-muted-foreground mt-1">{category.faqs.length} questions</p>
                   </CardContent>
                 </Card>
               ))}
@@ -229,15 +229,15 @@ const FAQ = () => {
             {filteredFAQs.length === 0 && searchTerm !== "" ? (
               <div className="text-center py-12">
                 <HelpCircle className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">No results found</h3>
-                <p className="text-gray-500">Try searching with different keywords or browse categories above.</p>
+                <h3 className="text-xl font-semibold text-foreground mb-2">No results found</h3>
+                <p className="text-muted-foreground">Try searching with different keywords or browse categories above.</p>
               </div>
             ) : (
               filteredFAQs.map((category, categoryIndex) => (
                 <div key={categoryIndex} className="mb-8">
                   <div className="flex items-center mb-4">
                     <div className="mr-3">{category.icon}</div>
-                    <h2 className="text-2xl font-bold text-gray-900">{category.title}</h2>
+                    <h2 className="text-2xl font-bold text-foreground">{category.title}</h2>
                   </div>
                   
                   <Accordion type="single" collapsible className="space-y-2">
@@ -245,10 +245,10 @@ const FAQ = () => {
                       <AccordionItem 
                         key={faqIndex} 
                         value={`${categoryIndex}-${faqIndex}`}
-                        className="border border-gray-200 rounded-lg px-4"
+                        className="border border-gray-200 rounded-xl px-4 bg-white shadow-soft"
                       >
                         <AccordionTrigger className="text-left hover:no-underline py-4">
-                          <span className="font-medium text-gray-900">{faq.question}</span>
+                          <span className="font-medium text-foreground">{faq.question}</span>
                         </AccordionTrigger>
                         <AccordionContent className="pb-4 text-gray-600 leading-relaxed">
                           {faq.answer}
@@ -264,10 +264,10 @@ const FAQ = () => {
       </section>
 
       {/* Support Channels */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Still Need Help?
             </h2>
             <p className="text-lg text-gray-600">
@@ -277,7 +277,7 @@ const FAQ = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {supportChannels.map((channel, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 text-center">
+              <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 text-center">
                 <CardHeader>
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit text-smebank-600">
                     {channel.icon}
@@ -287,7 +287,7 @@ const FAQ = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="font-semibold text-smebank-600 mb-2">{channel.contact}</p>
-                  <p className="text-sm text-gray-500 mb-4">{channel.availability}</p>
+                  <p className="text-sm text-muted-foreground mb-4">{channel.availability}</p>
                   <Button variant="outline" className="w-full">
                     Contact Now
                   </Button>
@@ -299,10 +299,10 @@ const FAQ = () => {
       </section>
 
       {/* Popular Resources */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Popular Resources
             </h2>
             <p className="text-lg text-gray-600">
@@ -311,7 +311,7 @@ const FAQ = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="hover:shadow-soft transition-shadow duration-300">
+            <Card className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <FileText className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Account Opening Guide</h3>
@@ -320,7 +320,7 @@ const FAQ = () => {
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-soft transition-shadow duration-300">
+            <Card className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <Smartphone className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Digital Banking Guide</h3>
@@ -329,7 +329,7 @@ const FAQ = () => {
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-soft transition-shadow duration-300">
+            <Card className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <BarChart3 className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Interest Rates</h3>
@@ -338,7 +338,7 @@ const FAQ = () => {
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-soft transition-shadow duration-300">
+            <Card className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <Shield className="h-8 w-8 text-smebank-600 mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Security Tips</h3>

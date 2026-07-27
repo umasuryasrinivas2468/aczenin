@@ -58,21 +58,21 @@ const Products = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Breadcrumb */}
-        <div className="container mx-auto px-4 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900">Products</span>
+            <Link href="/" className="text-muted-foreground hover:text-foreground">Home</Link>
+            <span className="text-muted-foreground">/</span>
+            <span className="text-foreground">Products</span>
           </div>
         </div>
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Our Product Suite
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Discover our comprehensive range of innovative technology solutions designed to 
               empower businesses and developers with cutting-edge tools and platforms.
             </p>
@@ -83,34 +83,34 @@ const Products = () => {
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <stat.icon className="w-8 h-8 text-gray-600" />
+                  <stat.icon className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
-                <div className="text-gray-600">{stat.label}</div>
+                <div className="text-3xl font-bold text-foreground mb-2">{stat.number}</div>
+                <div className="text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
         </section>
 
         {/* Products Grid */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {products.map((product, index) => (
-              <div key={product.id} className="bg-white rounded-xl shadow-soft border hover:shadow-soft transition-all duration-300 overflow-hidden">
+              <div key={product.id} className="bg-white rounded-2xl border border-black/[0.06] shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
                 <div className={`h-2 bg-gradient-to-r ${product.gradient}`}></div>
                 <div className="p-8">
-                  <div className={`w-16 h-16 rounded-lg flex items-center justify-center mb-6 ${product.color}`}>
+                  <div className={`w-16 h-16 rounded-xl flex items-center justify-center mb-6 ${product.color}`}>
                     <product.icon className="w-8 h-8" />
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{product.name}</h3>
-                  <p className="text-gray-600 mb-6">{product.description}</p>
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{product.name}</h3>
+                  <p className="text-muted-foreground mb-6">{product.description}</p>
                   
                   <div className="mb-6">
-                    <h4 className="font-semibold text-gray-900 mb-3">Key Features:</h4>
+                    <h4 className="font-semibold text-foreground mb-3">Key Features:</h4>
                     <ul className="space-y-2">
                       {product.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-center text-sm text-gray-600">
+                        <li key={featureIndex} className="flex items-center text-sm text-muted-foreground">
                           <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3"></div>
                           {feature}
                         </li>
@@ -120,7 +120,7 @@ const Products = () => {
                   
                   <Link
                     href={product.link}
-                    className={`inline-flex items-center bg-gradient-to-r ${product.gradient} text-white px-6 py-3 rounded-md font-medium hover:shadow-soft transition-all duration-300 group`}
+                    className={`inline-flex items-center bg-gradient-to-r ${product.gradient} text-white px-6 py-3 rounded-xl font-medium shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group`}
                   >
                     Learn More
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -132,13 +132,13 @@ const Products = () => {
         </section>
 
         {/* Why Choose Our Products */}
-        <section className="container mx-auto px-4 mb-16">
-          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-8 md:p-12">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-3xl p-8 md:p-12">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
                 Why Choose Aczen Products?
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-muted-foreground">
                 Built with innovation, designed for performance, and crafted for user experience
               </p>
             </div>
@@ -148,59 +148,59 @@ const Products = () => {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Zap className="w-8 h-8 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">High Performance</h3>
-                <p className="text-gray-600">Optimized for speed and efficiency to handle demanding workloads.</p>
+                <h3 className="text-xl font-bold text-foreground mb-2">High Performance</h3>
+                <p className="text-muted-foreground">Optimized for speed and efficiency to handle demanding workloads.</p>
               </div>
 
               <div className="text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">User-Centric Design</h3>
-                <p className="text-gray-600">Intuitive interfaces designed with user experience at the forefront.</p>
+                <h3 className="text-xl font-bold text-foreground mb-2">User-Centric Design</h3>
+                <p className="text-muted-foreground">Intuitive interfaces designed with user experience at the forefront.</p>
               </div>
 
               <div className="text-center">
                 <div className="w-16 h-16 bg-smebank-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Star className="w-8 h-8 text-smebank-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Enterprise Ready</h3>
-                <p className="text-gray-600">Scalable solutions that grow with your business needs.</p>
+                <h3 className="text-xl font-bold text-foreground mb-2">Enterprise Ready</h3>
+                <p className="text-muted-foreground">Scalable solutions that grow with your business needs.</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Integration Section */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
             <div className="lg:w-1/2">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl font-bold text-foreground mb-6">
                 Seamless Integration
               </h2>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="text-lg text-muted-foreground mb-6">
                 Our products are designed to work together seamlessly, creating a unified 
                 ecosystem that enhances productivity and streamlines workflows across your organization.
               </p>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center">
                   <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Cross-platform compatibility</span>
+                  <span className="text-foreground">Cross-platform compatibility</span>
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
-                  <span className="text-gray-700">API-first architecture</span>
+                  <span className="text-foreground">API-first architecture</span>
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Real-time synchronization</span>
+                  <span className="text-foreground">Real-time synchronization</span>
                 </li>
                 <li className="flex items-center">
                   <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Third-party integrations</span>
+                  <span className="text-foreground">Third-party integrations</span>
                 </li>
               </ul>
-              <button className="bg-gradient-to-r from-blue-600 to-smebank-600 text-white px-8 py-3 rounded-md font-medium hover:shadow-soft transition-all duration-300">
+              <button className="bg-gradient-to-r from-blue-600 to-smebank-600 text-white px-8 py-3 rounded-xl font-medium shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
                 View Integration Guide
               </button>
             </div>
@@ -208,15 +208,15 @@ const Products = () => {
               <img
                 src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                 alt="Integration"
-                className="rounded-lg shadow-soft w-full"
+                className="rounded-2xl shadow-soft w-full"
               />
             </div>
           </div>
         </section>
 
         {/* Call to Action */}
-        <section className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-xl p-8 md:p-12 text-center text-white">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-3xl p-8 md:p-12 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">
               Ready to Get Started?
             </h2>
@@ -228,7 +228,7 @@ const Products = () => {
                 href="https://dashboard.aczen.in" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-white text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors text-center"
+                className="bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 text-center"
               >
                 Get Started
               </a>
@@ -236,7 +236,7 @@ const Products = () => {
                 href="https://cal.com/aczen-technologies-pvt-ltd-t7jdhz/30min" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="border border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 rounded-md font-medium transition-colors text-center"
+                className="border border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 rounded-xl font-medium transition-colors text-center"
               >
                 Schedule Demo
               </a>

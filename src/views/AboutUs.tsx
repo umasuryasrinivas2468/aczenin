@@ -37,26 +37,26 @@ const AboutUs = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         {/* Simple Breadcrumb */}
-        <div className="container mx-auto px-4 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900">About Us</span>
+            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
+            <span className="text-muted-foreground">/</span>
+            <span className="text-foreground">About Us</span>
           </div>
         </div>
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="flex flex-col md:flex-row gap-12 items-center">
             <div className="md:w-1/2">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
                 The Leadership Team
               </h1>
-              <p className="text-lg text-gray-600 mb-8">
+              <p className="text-lg text-muted-foreground mb-8">
                 Leadership is an art and We at Aczen have diverse leaders from all corners to 
                 form an outstanding team helping us craft innovative products.
               </p>
-              <button className="bg-gradient-to-r from-smebank-600 to-smebank-700 text-white px-6 py-3 rounded-md font-medium">
+              <button className="cta-button">
                 SEE OUR NEWSROOM
               </button>
             </div>
@@ -64,23 +64,23 @@ const AboutUs = () => {
               <img
                 src="/images/SPEAKER.jpg" 
                 alt="Leadership Team"
-                className="rounded-lg shadow-soft w-full"
+                className="rounded-2xl shadow-soft w-full"
               />
             </div>
           </div>
         </section>
 
         {/* Our Story Section - Brief Introduction */}
-        <section className="container mx-auto px-4 py-16 bg-gray-50 rounded-xl mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-gray-50 rounded-2xl mb-16">
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Story</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold text-foreground mb-4">Our Story</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               From a small team of ambitious students to a growing fintech company with 15 members, 
               our journey has been defined by innovation, determination, and a vision to revolutionize 
               financial technology for businesses.
             </p>
             <div className="mt-8">
-              <Link href="/our-story" className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-md uppercase tracking-wide inline-block">
+              <Link href="/our-story" className="inline-block bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-xl uppercase tracking-wide shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 Read Our Story
               </Link>
             </div>
@@ -88,41 +88,41 @@ const AboutUs = () => {
           
           {/* Timeline Preview - Just show first two milestones */}
           <div className="max-w-2xl mx-auto flex flex-col md:flex-row gap-6 justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-soft md:w-1/2">
+            <div className="bg-white p-6 rounded-2xl shadow-soft md:w-1/2">
               <span className="text-red-500 font-bold">April 2, 2024</span>
-              <h3 className="text-xl font-bold text-gray-900 mt-2">Company Incorporation</h3>
-              <p className="text-gray-600 mt-2">Aczen Technologies Pvt. Ltd. was officially incorporated with Uma Surya Srinivas appointed as CEO at just 18 years old.</p>
+              <h3 className="text-xl font-bold text-foreground mt-2">Company Incorporation</h3>
+              <p className="text-muted-foreground mt-2">Aczen Technologies Pvt. Ltd. was officially incorporated with Uma Surya Srinivas appointed as CEO at just 18 years old.</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-soft md:w-1/2">
+            <div className="bg-white p-6 rounded-2xl shadow-soft md:w-1/2">
               <span className="text-red-500 font-bold">July 2024</span>
-              <h3 className="text-xl font-bold text-gray-900 mt-2">Aczen Connect Launch</h3>
-              <p className="text-gray-600 mt-2">Successfully launched Aczen Connect, our flagship platform connecting businesses with financial solutions.</p>
+              <h3 className="text-xl font-bold text-foreground mt-2">Aczen Connect Launch</h3>
+              <p className="text-muted-foreground mt-2">Successfully launched Aczen Connect, our flagship platform connecting businesses with financial solutions.</p>
             </div>
           </div>
         </section>
 
         {/* Leadership Profiles */}
-        <section className="container mx-auto px-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {leaders.map(leader => (
             <div key={leader.id} className="flex flex-col md:flex-row gap-8 py-16 border-t border-gray-200">
               <div className="md:w-1/3 max-w-xs">
                 <img 
                   src={leader.image} 
                   alt={leader.name} 
-                  className="w-full h-72 object-cover rounded-lg shadow-soft"
+                  className="w-full h-72 object-cover rounded-2xl shadow-soft"
                 />
               </div>
               <div className="md:w-2/3">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{leader.name}</h3>
-                <p className="text-xl text-blue-700 mb-4">{leader.title}</p>
-                <p className="text-gray-600">{leader.bio}</p>
+                <h3 className="text-2xl font-bold text-foreground mb-2">{leader.name}</h3>
+                <p className="text-xl text-smebank-700 mb-4">{leader.title}</p>
+                <p className="text-muted-foreground">{leader.bio}</p>
               </div>
             </div>
           ))}
         </section>
         
         {/* Team Photos Section */}
-        <section className="container mx-auto px-4 py-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex flex-col space-y-12">
             <div className="flex flex-col md:flex-row gap-8">
               <div className="md:w-1/2">
@@ -158,14 +158,14 @@ const AboutUs = () => {
                 </div>
               </div>
               <div className="md:w-1/2">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Supporters </h3>
-                <p className="text-gray-600 mb-6">
+                <h3 className="text-2xl font-bold text-foreground mb-4">Our Supporters </h3>
+                <p className="text-muted-foreground mb-6">
                   At Aczen, we believe in fostering a collaborative and innovative environment where diverse talents come together to create exceptional solutions. Our team members bring unique perspectives and expertise from various backgrounds, contributing to our dynamic workplace culture.
                 </p>
-                <p className="text-gray-600 mb-6">
+                <p className="text-muted-foreground mb-6">
                   We value creativity, integrity, and a passion for excellence. Our team is dedicated to pushing boundaries and challenging the status quo to deliver cutting-edge products that make a difference in the financial technology landscape.
                 </p>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   Join us in our mission to transform the future of financial technology with innovative solutions that empower businesses and individuals alike.
                 </p>
               </div>
@@ -178,7 +178,7 @@ const AboutUs = () => {
               href="https://tally.so/r/3yANa8" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-10 rounded-md uppercase tracking-wide"
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-10 rounded-xl uppercase tracking-wide shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300"
             >
               JOIN THE ACZEN TEAM
             </a>

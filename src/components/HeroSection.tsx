@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Check, TrendingUp, FileText, ShieldCheck } from "lucide-react";
+import CountUp from "@/components/reactbits/CountUp";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -139,15 +140,21 @@ const Hero = () => {
         <div className="rule-strong mt-16 pt-px">
           <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border border-x border-b border-border">
             <div className="px-6 py-6">
-              <p className="tabular text-3xl font-extrabold text-slate-900">₹18.4L</p>
+              <p className="tabular text-3xl font-extrabold text-slate-900">
+                ₹<CountUp to={18.4} duration={1.6} />L
+              </p>
               <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Revenue · Jul</p>
             </div>
             <div className="px-6 py-6">
-              <p className="tabular text-3xl font-extrabold text-slate-900">₹2.1L</p>
+              <p className="tabular text-3xl font-extrabold text-slate-900">
+                ₹<CountUp to={2.1} duration={1.6} />L
+              </p>
               <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Outstanding</p>
             </div>
             <div className="px-6 py-6">
-              <p className="tabular text-3xl font-extrabold text-slate-900">10,000+</p>
+              <p className="tabular text-3xl font-extrabold text-slate-900">
+                <CountUp to={10000} separator="," duration={1.8} />+
+              </p>
               <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Indian SMBs</p>
             </div>
           </div>

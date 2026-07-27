@@ -410,7 +410,7 @@ const FeaturesSection = () => {
   return (
     <section id="features" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="max-w-2xl mb-12">
+        <div className="max-w-2xl mb-6">
           <p className="eyebrow mb-3">Features</p>
           <h2 className="section-title">Powerful Features for Your Business</h2>
           <p className="section-subtitle mb-0">
@@ -418,29 +418,42 @@ const FeaturesSection = () => {
           </p>
         </div>
 
-        {/* ruled matrix — cells separated only by hairlines, reads like a spec sheet */}
-        <div className="border border-border rounded overflow-hidden grid md:grid-cols-3 divide-y divide-x divide-border">
-          {features.map((f, i) => (
-            <motion.article
-              key={f.no}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.4, delay: (i % 3) * 0.06 }}
-              className="flex flex-col bg-white p-7 md:p-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
-            >
-              <div className="flex items-center gap-3 mb-5">
-                <span className="tabular text-secondary text-sm font-semibold">{f.no}</span>
-                <span className="rule flex-1" />
-                <span className="eyebrow before:hidden">{f.eyebrow}</span>
-              </div>
-              <h3 className="text-xl md:text-2xl leading-tight font-bold text-slate-900 mb-3">
-                {f.title}
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">{f.description}</p>
-              <div className="mt-auto pt-8">{f.mock}</div>
-            </motion.article>
-          ))}
+        {/* alternating showcase rows — text one side, live mock the other */}
+        <div className="border-y-2 border-slate-900 divide-y-2 divide-slate-300">
+          {features.map((f, i) => {
+            const flip = i % 2 === 1;
+            return (
+              <motion.article
+                key={f.no}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="grid md:grid-cols-2 gap-10 lg:gap-20 items-center py-14 lg:py-20"
+              >
+                {/* copy */}
+                <div className={flip ? "md:order-2" : ""}>
+                  <div className="flex items-center gap-3 mb-5">
+                    <span className="tabular inline-flex h-9 w-9 items-center justify-center rounded bg-primary text-primary-foreground text-sm font-bold">
+                      {f.no}
+                    </span>
+                    <span className="eyebrow before:hidden">{f.eyebrow}</span>
+                  </div>
+                  <h3 className="display text-3xl md:text-4xl text-slate-900 mb-4">
+                    {f.title}
+                  </h3>
+                  <p className="text-lg text-muted-foreground leading-relaxed max-w-md">
+                    {f.description}
+                  </p>
+                </div>
+
+                {/* live mock */}
+                <div className={flip ? "md:order-1" : ""}>
+                  <div className="w-full max-w-md mx-auto">{f.mock}</div>
+                </div>
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>

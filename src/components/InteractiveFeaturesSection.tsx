@@ -25,10 +25,10 @@ const capabilities = [
 
 const InteractiveFeaturesSection = () => {
   return (
-    <section className="py-20 md:py-24 bg-[#f7f7f7]">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 md:mb-14">
-          <h2 className="font-serif text-4xl md:text-6xl leading-tight text-gray-900">
+          <h2 className="font-serif text-4xl md:text-6xl leading-tight text-foreground">
             Powering India&apos;s AI-first future
           </h2>
         </div>
@@ -50,10 +50,10 @@ const InteractiveFeaturesSection = () => {
                     <Sparkles className="h-4 w-4 text-emerald-700" />
                   </div>
                   <div>
-                    <h3 className="text-2xl md:text-[2.9rem] leading-[1.05] font-semibold text-gray-900 mb-2">
+                    <h3 className="text-2xl md:text-[2.9rem] leading-[1.05] font-semibold text-foreground mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-lg md:text-[2rem] leading-[1.35] text-gray-500">
+                    <p className="text-lg md:text-[2rem] leading-[1.35] text-muted-foreground">
                       {item.description}
                     </p>
                   </div>

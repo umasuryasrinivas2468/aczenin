@@ -60,27 +60,27 @@ const SubProcessors = () => {
       />
       <Navbar />
       <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <div className="mb-8">
             <div className="flex items-center space-x-2 text-sm">
-              <Link href="/" className="text-gray-500 hover:text-gray-700">
+              <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
                 Home
               </Link>
-              <span className="text-gray-400">/</span>
-              <span className="text-gray-900">Sub-processors</span>
+              <span className="text-muted-foreground">/</span>
+              <span className="text-foreground">Sub-processors</span>
             </div>
           </div>
 
           <div className="max-w-5xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
               Sub-processors
             </h1>
-            <p className="text-sm text-gray-500 mb-8">
+            <p className="text-sm text-muted-foreground mb-8">
               Last Updated: {new Date().toLocaleDateString()}
             </p>
 
-            <p className="text-gray-600 mb-8 leading-relaxed">
+            <p className="text-muted-foreground mb-8 leading-relaxed max-w-3xl">
               To deliver our services, Aczen engages a limited number of trusted
               third-party sub-processors and infrastructure providers. The table below
               lists the sub-processors we use, the purpose for which they are engaged,
@@ -89,17 +89,17 @@ const SubProcessors = () => {
             </p>
 
             {/* Sub-processors table */}
-            <div className="overflow-x-auto rounded-2xl border border-smebank-100 shadow-[0_18px_50px_-24px_rgba(15,40,70,0.25)]">
+            <div className="overflow-x-auto rounded-2xl border border-smebank-100 bg-white shadow-soft-lg">
               <table className="w-full min-w-[640px] border-collapse text-left">
                 <thead>
                   <tr className="bg-gradient-to-r from-smebank-50 via-smeteal-50/60 to-white">
-                    <th className="px-6 py-4 text-sm font-semibold text-gray-900">
+                    <th className="px-6 py-4 text-sm font-semibold text-foreground">
                       Sub-processor
                     </th>
-                    <th className="px-6 py-4 text-sm font-semibold text-gray-900">
+                    <th className="px-6 py-4 text-sm font-semibold text-foreground">
                       Purpose / Service
                     </th>
-                    <th className="px-6 py-4 text-sm font-semibold text-gray-900">
+                    <th className="px-6 py-4 text-sm font-semibold text-foreground">
                       Location
                     </th>
                   </tr>
@@ -112,18 +112,18 @@ const SubProcessors = () => {
                         i % 2 ? "bg-gray-50/50" : "bg-white"
                       }`}
                     >
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 text-sm font-medium text-foreground">
                         {sp.name}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{sp.purpose}</td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{sp.location}</td>
+                      <td className="px-6 py-4 text-sm text-muted-foreground">{sp.purpose}</td>
+                      <td className="px-6 py-4 text-sm text-muted-foreground">{sp.location}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            <p className="text-sm text-gray-500 mt-8 leading-relaxed">
+            <p className="text-sm text-muted-foreground mt-8 leading-relaxed max-w-3xl">
               For questions about our sub-processors or data processing practices,
               contact us at{" "}
               <a

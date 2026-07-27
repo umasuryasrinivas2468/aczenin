@@ -150,8 +150,16 @@ const BlogPost = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <main className="pt-24 pb-16 container mx-auto px-4">
-          <p className="text-center text-gray-500">Loading…</p>
+        <main className="pt-24 pb-16 mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+          <div className="animate-pulse space-y-4">
+            <div className="h-3 w-24 bg-gray-100 rounded" />
+            <div className="h-10 w-4/5 bg-gray-100 rounded" />
+            <div className="h-4 w-2/3 bg-gray-100 rounded" />
+            <div className="h-64 w-full bg-gray-100 rounded-xl mt-6" />
+            <div className="h-4 w-full bg-gray-100 rounded" />
+            <div className="h-4 w-full bg-gray-100 rounded" />
+            <div className="h-4 w-3/4 bg-gray-100 rounded" />
+          </div>
         </main>
         <Footer />
       </div>
@@ -168,10 +176,13 @@ const BlogPost = () => {
           noIndex
         />
         <Navbar />
-        <main className="pt-24 pb-16 container mx-auto px-4 text-center">
-          <h1 className="text-3xl font-bold mb-4">Post not found</h1>
-          <p className="text-gray-600 mb-6">{error || "This post doesn't exist or was removed."}</p>
-          <Link href="/blog" className="text-smebank-600 underline">
+        <main className="pt-24 pb-16 mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl text-center">
+          <h1 className="text-3xl font-bold text-foreground mb-4">Post not found</h1>
+          <p className="text-muted-foreground mb-8">{error || "This post doesn't exist or was removed."}</p>
+          <Link
+            href="/blog"
+            className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-smebank-600 to-smebank-700 text-white px-6 py-3 font-semibold shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+          >
             ← Back to blog
           </Link>
         </main>
@@ -229,7 +240,7 @@ const BlogPost = () => {
       </div>
       <Navbar />
       <main className="pt-24 pb-16">
-        <article ref={articleRef} className="container mx-auto px-4 max-w-3xl">
+        <article ref={articleRef} className="mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
           <div className="mb-6 text-sm">
             <Link href="/blog" className="text-smebank-600 hover:underline">
               ← Back to blog
@@ -237,7 +248,7 @@ const BlogPost = () => {
           </div>
 
           <header className="mb-8">
-            <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500 mb-4">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
               <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
               {post.author && (
                 <>
@@ -269,7 +280,7 @@ const BlogPost = () => {
                 {minutes} min read
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4">
               {post.title}
             </h1>
             {post.excerpt && <p className="text-lg text-gray-600">{post.excerpt}</p>}
@@ -283,19 +294,19 @@ const BlogPost = () => {
             />
           )}
 
-          <div className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-a:text-smebank-600">
+          <div className="prose prose-lg max-w-none prose-headings:text-foreground prose-a:text-smebank-600">
             {post.body ? (
               <PortableText value={post.body as never} components={ptComponents} />
             ) : (
-              <p className="text-gray-500">This post has no content yet.</p>
+              <p className="text-muted-foreground">This post has no content yet.</p>
             )}
           </div>
         </article>
 
         {morePosts.length > 0 && (
-          <section className="container mx-auto px-4 max-w-6xl mt-20 border-t border-gray-100 pt-12">
+          <section className="mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl mt-20 border-t border-gray-100 pt-12">
             <div className="flex items-end justify-between mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground">
                 More from the blog
               </h2>
               <Link href="/blog" className="text-smebank-600 hover:underline text-sm font-medium">
@@ -307,7 +318,7 @@ const BlogPost = () => {
                 <Link
                   key={p._id}
                   href={`/blog/${p.slug}`}
-                  className="group rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 hover:shadow-soft transition-shadow"
+                  className="group rounded-2xl overflow-hidden bg-white shadow-soft border border-gray-100 hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300"
                 >
                   {p.coverImage?.asset && (
                     <img
@@ -318,7 +329,7 @@ const BlogPost = () => {
                     />
                   )}
                   <div className="p-6">
-                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
                       <time dateTime={p.publishedAt}>{formatDate(p.publishedAt)}</time>
                       {p.categories?.[0] && (
                         <>
@@ -327,7 +338,7 @@ const BlogPost = () => {
                         </>
                       )}
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-smebank-600 transition-colors line-clamp-2">
+                    <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-smebank-600 transition-colors line-clamp-2">
                       {p.title}
                     </h3>
                     {p.excerpt && (

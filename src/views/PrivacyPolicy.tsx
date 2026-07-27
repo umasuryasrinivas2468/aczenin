@@ -16,26 +16,26 @@ const PrivacyPolicy = () => {
       />
       <Navbar />
       <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <div className="mb-8">
             <div className="flex items-center space-x-2 text-sm">
-              <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
-              <span className="text-gray-400">/</span>
-              <span className="text-gray-900">Privacy Policy</span>
+              <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
+              <span className="text-muted-foreground">/</span>
+              <span className="text-foreground">Privacy Policy</span>
             </div>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Privacy Policy</h1>
-            <p className="text-sm text-gray-500 mb-8">Last Updated: {new Date().toLocaleDateString()}</p>
-            
-            <div className="prose prose-lg">
-              <p className="text-gray-600 mb-8">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Privacy Policy</h1>
+            <p className="text-sm text-muted-foreground mb-8">Last Updated: {new Date().toLocaleDateString()}</p>
+
+            <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground mb-8">
                 At Aczen, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">Information We Collect</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">Information We Collect</h2>
               <p>
                 We collect information that you provide directly to us when you:
               </p>
@@ -59,7 +59,7 @@ const PrivacyPolicy = () => {
                 <li>Device information and usage data</li>
               </ul>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">How We Use Your Information</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">How We Use Your Information</h2>
               <p>
                 We may use the information we collect from you for various purposes, including to:
               </p>
@@ -75,7 +75,7 @@ const PrivacyPolicy = () => {
                 <li>Comply with legal and regulatory requirements</li>
               </ul>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">Information Sharing and Disclosure</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">Information Sharing and Disclosure</h2>
               <p>
                 We may share your information with the following parties:
               </p>
@@ -95,12 +95,12 @@ const PrivacyPolicy = () => {
                 <li>In the event of a merger, sale, or acquisition, where your information may be transferred to the new entity</li>
               </ul>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">Data Security</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">Data Security</h2>
               <p>
                 We have implemented appropriate technical and organizational security measures designed to protect the security of any personal information we process. However, despite our safeguards and efforts to secure your information, no electronic transmission over the Internet or information storage technology can be guaranteed to be 100% secure.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">Your Data Rights</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">Your Data Rights</h2>
               <p>
                 Depending on your location, you may have the following rights regarding your data:
               </p>
@@ -112,17 +112,17 @@ const PrivacyPolicy = () => {
                 <li>Right to data portability - You have the right to request that we transfer the data we have collected to another organization, or directly to you, under certain conditions.</li>
               </ul>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">Children's Privacy</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">Children's Privacy</h2>
               <p>
                 Our services are not directed to children under 18 years of age, and we do not knowingly collect personal information from children under 18. If we learn that we have collected personal information from a child under 18 without verification of parental consent, we will promptly take steps to remove that information.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">Changes to This Privacy Policy</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">Changes to This Privacy Policy</h2>
               <p>
                 We may update our privacy policy from time to time. We will notify you of any changes by posting the new privacy policy on this page and updating the "Last Updated" date at the top. You are advised to review this privacy policy periodically for any changes.
               </p>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-4">Contact Us</h2>
+              <h2 className="text-2xl font-semibold text-foreground mt-10 mb-4">Contact Us</h2>
               <p>
                 If you have any questions about this privacy policy or our data practices, please contact us at: <a href="mailto:privacy@aczen.org" className="text-smebank-600 hover:underline">privacy@aczen.org</a>
               </p>

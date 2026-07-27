@@ -255,3 +255,39 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee { animation: none; }
 }
+
+/* React Bits — animated beam border (brand blue travels around the panel) */
+.beam-wrap {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.beam-wrap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 140%;
+  aspect-ratio: 1 / 1;
+  translate: -50% -50%;
+  z-index: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 66%,
+    #49a6ff 80%,
+    #0967e3 90%,
+    transparent 97%
+  );
+  animation: beam-spin 5s linear infinite;
+}
+.beam-inner {
+  position: relative;
+  z-index: 1;
+  margin: 1.5px;
+}
+@keyframes beam-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beam-wrap::before { animation: none; }
+}

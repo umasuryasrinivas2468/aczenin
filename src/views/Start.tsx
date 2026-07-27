@@ -140,11 +140,11 @@ const Start = () => {
       
       <main className="pt-16 pb-16">
         {/* Breadcrumb */}
-        <div className="container mx-auto px-4 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900">Start Your Company</span>
+            <Link href="/" className="text-muted-foreground hover:text-foreground">Home</Link>
+            <span className="text-muted-foreground">/</span>
+            <span className="text-foreground">Start Your Company</span>
           </div>
         </div>
 
@@ -156,24 +156,24 @@ const Start = () => {
           <div className="absolute top-20 right-10 w-64 h-64 bg-smeteal-100 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse pointer-events-none" style={{animationDelay: '2s'}}></div>
           <div className="absolute -bottom-20 left-20 w-64 h-64 bg-smeorange-100 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse pointer-events-none" style={{animationDelay: '4s'}}></div>
           
-          <div className="container mx-auto px-4 py-12 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
             <div className="grid lg:grid-cols-2 gap-8 items-center min-h-[500px]">
               {/* Left Content */}
               <div className="space-y-8">
                 <div className="space-y-6">
                   <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm border border-smebank-100">
                     <Star className="h-4 w-4 text-smeorange-500 mr-2" />
-                    <span className="text-sm font-medium text-gray-700">Trusted by 1000+ Businesses</span>
+                    <span className="text-sm font-medium text-foreground">Trusted by 1000+ Businesses</span>
                   </div>
                   
                   <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                    <span className="text-gray-900">Start Your</span>
+                    <span className="text-foreground">Start Your</span>
                     <br />
                     <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 bg-clip-text text-transparent">
                       Dream Company
                     </span>
                     <br />
-                    <span className="text-gray-900">Today</span>
+                    <span className="text-foreground">Today</span>
                   </h1>
                   
                   <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
@@ -207,10 +207,10 @@ const Start = () => {
                         <div className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-smebank-600 to-smeteal-600 bg-clip-text text-transparent">
                           ₹1,499
                         </div>
-                        <p className="text-sm text-gray-500">+ Government fees</p>
+                        <p className="text-sm text-muted-foreground">+ Government fees</p>
                       </div>
                       <div className="text-right">
-                        <div className="text-sm text-gray-500 line-through">₹5,999</div>
+                        <div className="text-sm text-muted-foreground line-through">₹5,999</div>
                         <Badge className="bg-red-100 text-red-800 hover:bg-red-100">75% OFF</Badge>
                       </div>
                     </div>
@@ -220,7 +220,7 @@ const Start = () => {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button 
                       size="lg" 
-                      className="bg-gradient-to-r from-smebank-600 to-smebank-700 hover:from-smebank-700 hover:to-smebank-800 text-white px-8 py-4 text-lg font-semibold shadow-soft hover:shadow-soft transform hover:-translate-y-1 transition-all duration-300"
+                      className="rounded-xl bg-gradient-to-r from-smebank-600 to-smebank-700 hover:from-smebank-700 hover:to-smebank-800 text-white px-8 py-4 text-lg font-semibold shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                       onClick={() => window.open('https://tally.so/r/w2pOKL', 'popup', 'width=800,height=600,scrollbars=yes,resizable=yes')}
                     >
                       Start Registration Now
@@ -229,7 +229,7 @@ const Start = () => {
                     <Button 
                       variant="outline" 
                       size="lg"
-                      className="border-2 border-smebank-200 text-smebank-700 hover:bg-smebank-50 px-8 py-4 text-lg font-semibold"
+                      className="rounded-xl border-2 border-smebank-200 text-smebank-700 hover:bg-smebank-50 px-8 py-4 text-lg font-semibold transition-all duration-300"
                     >
                       <Phone className="h-5 w-5 mr-2" />
                       Talk to Expert
@@ -252,21 +252,21 @@ const Start = () => {
                     <div className="absolute -top-6 -left-12 lg:-top-8 lg:-left-16 bg-white rounded-xl p-3 shadow-soft animate-bounce z-20" style={{animationDelay: '1s'}}>
                       <div className="text-center">
                         <div className="text-sm lg:text-lg font-bold text-smebank-700">Pvt Ltd</div>
-                        <div className="text-xs text-gray-500">Most Popular</div>
+                        <div className="text-xs text-muted-foreground">Most Popular</div>
                       </div>
                     </div>
                     
                     <div className="absolute -top-4 -right-12 lg:-top-6 lg:-right-16 bg-white rounded-xl p-3 shadow-soft animate-bounce z-20" style={{animationDelay: '2s'}}>
                       <div className="text-center">
                         <div className="text-sm lg:text-lg font-bold text-smeteal-700">LLP</div>
-                        <div className="text-xs text-gray-500">Professional</div>
+                        <div className="text-xs text-muted-foreground">Professional</div>
                       </div>
                     </div>
                     
                     <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white rounded-xl p-3 shadow-soft animate-bounce z-20" style={{animationDelay: '3s'}}>
                       <div className="text-center">
                         <div className="text-sm lg:text-lg font-bold text-smeorange-700">OPC</div>
-                        <div className="text-xs text-gray-500">Solo Entrepreneur</div>
+                        <div className="text-xs text-muted-foreground">Solo Entrepreneur</div>
                       </div>
                     </div>
                   </div>
@@ -325,9 +325,9 @@ const Start = () => {
         </section>
 
         {/* Company Types Selection */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Choose Your Company Type</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">Choose Your Company Type</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Select the business structure that aligns with your goals and requirements
             </p>
@@ -337,24 +337,24 @@ const Start = () => {
             {companyTypes.map((type) => (
               <Card 
                 key={type.id} 
-                className={`relative cursor-pointer transition-all duration-300 hover:shadow-soft ${
-                  selectedCompanyType === type.id 
-                    ? 'ring-2 ring-smebank-500 shadow-soft' 
-                    : 'hover:shadow-soft'
+                className={`relative rounded-2xl shadow-soft cursor-pointer transition-all duration-300 hover:shadow-soft-lg hover:-translate-y-0.5 ${
+                  selectedCompanyType === type.id
+                    ? 'ring-2 ring-smebank-500 shadow-soft-lg'
+                    : ''
                 }`}
                 onClick={() => setSelectedCompanyType(type.id)}
               >
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start mb-2">
-                    <CardTitle className="text-xl text-gray-900">{type.shortName}</CardTitle>
+                    <CardTitle className="text-xl text-foreground">{type.shortName}</CardTitle>
                     {selectedCompanyType === type.id && (
                       <CheckCircle className="h-6 w-6 text-smebank-600" />
                     )}
                   </div>
-                  <CardDescription className="text-base font-medium text-gray-700">
+                  <CardDescription className="text-base font-medium text-foreground">
                     {type.name}
                   </CardDescription>
-                  <p className="text-sm text-gray-500 mt-2">{type.description}</p>
+                  <p className="text-sm text-muted-foreground mt-2">{type.description}</p>
                 </CardHeader>
                 
                 <CardContent className="space-y-4">
@@ -376,7 +376,7 @@ const Start = () => {
                   </div>
                   
                   <div className="border-t pt-4">
-                    <h4 className="font-medium text-gray-900 mb-2">Key Features:</h4>
+                    <h4 className="font-medium text-foreground mb-2">Key Features:</h4>
                     <ul className="space-y-1">
                       {type.features.slice(0, 3).map((feature, index) => (
                         <li key={index} className="flex items-center text-sm text-gray-600">
@@ -388,7 +388,7 @@ const Start = () => {
                   </div>
                   
                   <div className="border-t pt-4">
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       <strong>Best for:</strong> {type.bestFor}
                     </p>
                   </div>
@@ -399,11 +399,11 @@ const Start = () => {
         </section>
 
         {/* Expert Assistance & Foreign Founder Friendly */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Structuring Assistance by Experts */}
             <div className="bg-gray-50 rounded-2xl p-8 lg:p-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
                 Structuring Assistance by Experts
               </h2>
               <p className="text-lg text-gray-600 mb-6">
@@ -422,7 +422,7 @@ const Start = () => {
                       <User className="h-6 w-6 text-smebank-600" />
                     </div>
                     <div className="text-sm">
-                      <div className="font-medium text-gray-900">You</div>
+                      <div className="font-medium text-foreground">You</div>
                     </div>
                   </div>
                   <div className="flex-1 border-t border-dashed border-gray-300"></div>
@@ -431,11 +431,11 @@ const Start = () => {
                       <Users className="h-6 w-6 text-green-600" />
                     </div>
                     <div className="text-sm">
-                      <div className="font-medium text-gray-900">Expert</div>
+                      <div className="font-medium text-foreground">Expert</div>
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-center space-x-4 text-gray-400">
+                <div className="flex justify-center space-x-4 text-muted-foreground">
                   <Button variant="ghost" size="sm" className="p-2">
                     <Phone className="h-4 w-4" />
                   </Button>
@@ -451,7 +451,7 @@ const Start = () => {
 
             {/* Foreign Founder Friendly */}
             <div className="bg-gradient-to-br from-smebank-50 to-smeteal-50 rounded-2xl p-8 lg:p-12 relative overflow-hidden">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
                 Foreign Founder Friendly
               </h2>
               <p className="text-lg text-smebank-700 mb-6">
@@ -483,9 +483,9 @@ const Start = () => {
         </section>
 
         {/* Benefits Section */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Aczen?</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">Why Choose Aczen?</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               We make company registration simple, fast, and hassle-free
             </p>
@@ -499,7 +499,7 @@ const Start = () => {
                     {benefit.icon}
                   </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
+                <h3 className="text-xl font-semibold text-foreground mb-2">{benefit.title}</h3>
                 <p className="text-gray-600">{benefit.description}</p>
               </div>
             ))}
@@ -507,12 +507,12 @@ const Start = () => {
         </section>
 
         {/* Enhanced Process Section */}
-        <section className="container mx-auto px-4 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="bg-gradient-to-br from-smeorange-100 to-smeorange-200 rounded-3xl p-8 lg:p-12">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left side - Process Description */}
               <div>
-                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                   Easy 4-Step Process and Tracking
                 </h2>
                 <p className="text-lg text-gray-600 mb-6">
@@ -549,10 +549,10 @@ const Start = () => {
                           {step.icon}
                         </div>
                         <div>
-                          <div className="text-xs text-gray-500 font-medium mb-1">
+                          <div className="text-xs text-muted-foreground font-medium mb-1">
                             STEP {step.step}
                           </div>
-                          <h3 className="text-lg font-bold text-gray-900">
+                          <h3 className="text-lg font-bold text-foreground">
                             {step.title}
                           </h3>
                           <p className="text-sm text-gray-600">
@@ -561,12 +561,12 @@ const Start = () => {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-foreground">
                           {step.time}
                         </div>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500 mt-3 ml-16">
+                    <p className="text-xs text-muted-foreground mt-3 ml-16">
                       {step.detail}
                     </p>
                   </div>
@@ -577,7 +577,7 @@ const Start = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="container mx-auto px-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-smebank-600 to-smebank-700 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Ready to Start Your Business?
@@ -588,7 +588,7 @@ const Start = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button 
                 size="lg" 
-                className="bg-white text-smebank-700 hover:bg-gray-100 px-8 py-3"
+                className="rounded-xl bg-white text-smebank-700 hover:bg-gray-100 px-8 py-3 shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 disabled:opacity-60 disabled:shadow-none disabled:translate-y-0"
                 disabled={!selectedCompanyType}
               >
                 {selectedCompanyType ? `Start ${companyTypes.find(t => t.id === selectedCompanyType)?.shortName} Registration` : 'Select Company Type to Continue'}
@@ -613,14 +613,14 @@ const Start = () => {
         </section>
 
         {/* FAQ Preview */}
-        <section className="container mx-auto px-4 mt-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
           </div>
           
           <div className="max-w-3xl mx-auto">
             <div className="grid md:grid-cols-2 gap-6">
-              <Card>
+              <Card className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardHeader>
                   <CardTitle className="text-lg">What documents do I need?</CardTitle>
                 </CardHeader>
@@ -631,7 +631,7 @@ const Start = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardHeader>
                   <CardTitle className="text-lg">How long does it take?</CardTitle>
                 </CardHeader>
@@ -642,7 +642,7 @@ const Start = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardHeader>
                   <CardTitle className="text-lg">What's included in the price?</CardTitle>
                 </CardHeader>
@@ -653,7 +653,7 @@ const Start = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardHeader>
                   <CardTitle className="text-lg">Can I track my application?</CardTitle>
                 </CardHeader>

@@ -16,17 +16,17 @@ const Status = () => {
         path="/status"
       />
       <Navbar />
-      <main className="py-20">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold text-center mb-12">System Status</h1>
-          
+      <main className="py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold text-center text-foreground mb-12">System Status</h1>
+
           <div className="max-w-3xl mx-auto space-y-6">
-            <div className="bg-green-50 p-6 rounded-lg border border-green-200">
+            <div className="bg-green-50 p-6 rounded-2xl border border-green-200 shadow-soft">
               <div className="flex items-center gap-3 mb-2">
                 <CheckCircle2 className="text-green-500 w-6 h-6" />
-                <h2 className="text-xl font-semibold">All Systems Operational</h2>
+                <h2 className="text-xl font-semibold text-foreground">All Systems Operational</h2>
               </div>
-              <p className="text-gray-600 ml-9">Updated 2 minutes ago</p>
+              <p className="text-muted-foreground ml-9">Updated 2 minutes ago</p>
             </div>
 
             <div className="grid gap-4">
@@ -38,8 +38,8 @@ const Status = () => {
                 { name: "API Services", status: "operational" },
                 { name: "Customer Support", status: "operational" }
               ].map((service) => (
-                <div key={service.name} className="p-4 bg-white rounded-lg border flex justify-between items-center">
-                  <span className="font-medium">{service.name}</span>
+                <div key={service.name} className="p-4 bg-white rounded-2xl border border-gray-200 shadow-soft hover:shadow-soft-lg transition-all duration-300 flex justify-between items-center">
+                  <span className="font-medium text-foreground">{service.name}</span>
                   <span className="flex items-center gap-2 text-green-600">
                     <CheckCircle2 className="w-5 h-5" />
                     Operational

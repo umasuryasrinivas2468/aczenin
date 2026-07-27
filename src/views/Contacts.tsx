@@ -93,12 +93,12 @@ const Contacts = () => {
       
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-smebank-50 to-smeteal-50">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-4 bg-smebank-100 text-smebank-800 hover:bg-smebank-200">
               Contact Us
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               Get in Touch 
               <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 text-transparent bg-clip-text">
                 {" "}with Us
@@ -113,10 +113,10 @@ const Contacts = () => {
       </section>
 
       {/* Contact Methods */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               How Can We Help You?
             </h2>
             <p className="text-lg text-gray-600">
@@ -126,7 +126,7 @@ const Contacts = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {contactMethods.map((method, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 text-center">
+              <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 text-center">
                 <CardHeader>
                   <div className={`mx-auto mb-4 p-3 rounded-full w-fit ${method.color}`}>
                     {method.icon}
@@ -135,8 +135,8 @@ const Contacts = () => {
                   <CardDescription>{method.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="font-semibold text-gray-900 mb-2">{method.contact}</p>
-                  <p className="text-sm text-gray-500 mb-4">{method.availability}</p>
+                  <p className="font-semibold text-foreground mb-2">{method.contact}</p>
+                  <p className="text-sm text-muted-foreground mb-4">{method.availability}</p>
                   <Button variant="outline" className="w-full">
                     Contact Now
                   </Button>
@@ -148,55 +148,58 @@ const Contacts = () => {
       </section>
 
       {/* Contact Form & Map */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
-              <Card>
-                <CardContent className="p-6">
+              <h2 className="text-3xl font-bold text-foreground mb-6">Send Us a Message</h2>
+              <Card className="rounded-2xl shadow-soft">
+                <CardContent className="p-6 sm:p-8">
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="name">Full Name *</Label>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="name" className="text-sm font-medium text-foreground">Full Name *</Label>
                         <Input
                           id="name"
                           type="text"
                           value={formData.name}
                           onChange={(e) => handleInputChange("name", e.target.value)}
                           placeholder="Enter your full name"
+                          className="rounded-xl border-gray-200 focus-visible:ring-2 focus-visible:ring-smebank-100 focus-visible:border-smebank-300 focus-visible:ring-offset-0"
                           required
                         />
                       </div>
-                      <div>
-                        <Label htmlFor="email">Email Address *</Label>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="email" className="text-sm font-medium text-foreground">Email Address *</Label>
                         <Input
                           id="email"
                           type="email"
                           value={formData.email}
                           onChange={(e) => handleInputChange("email", e.target.value)}
                           placeholder="Enter your email"
+                          className="rounded-xl border-gray-200 focus-visible:ring-2 focus-visible:ring-smebank-100 focus-visible:border-smebank-300 focus-visible:ring-offset-0"
                           required
                         />
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="phone">Phone Number</Label>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="phone" className="text-sm font-medium text-foreground">Phone Number</Label>
                         <Input
                           id="phone"
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => handleInputChange("phone", e.target.value)}
                           placeholder="Enter your phone number"
+                          className="rounded-xl border-gray-200 focus-visible:ring-2 focus-visible:ring-smebank-100 focus-visible:border-smebank-300 focus-visible:ring-offset-0"
                         />
                       </div>
-                      <div>
-                        <Label htmlFor="category">Category</Label>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="category" className="text-sm font-medium text-foreground">Category</Label>
                         <Select onValueChange={(value) => handleInputChange("category", value)}>
-                          <SelectTrigger>
+                          <SelectTrigger className="rounded-xl border-gray-200 focus:ring-2 focus:ring-smebank-100 focus:border-smebank-300">
                             <SelectValue placeholder="Select category" />
                           </SelectTrigger>
                           <SelectContent>
@@ -210,34 +213,36 @@ const Contacts = () => {
                         </Select>
                       </div>
                     </div>
-                    
-                    <div>
-                      <Label htmlFor="subject">Subject *</Label>
+
+                    <div className="space-y-1.5">
+                      <Label htmlFor="subject" className="text-sm font-medium text-foreground">Subject *</Label>
                       <Input
                         id="subject"
                         type="text"
                         value={formData.subject}
                         onChange={(e) => handleInputChange("subject", e.target.value)}
                         placeholder="Brief subject of your message"
+                        className="rounded-xl border-gray-200 focus-visible:ring-2 focus-visible:ring-smebank-100 focus-visible:border-smebank-300 focus-visible:ring-offset-0"
                         required
                       />
                     </div>
-                    
-                    <div>
-                      <Label htmlFor="message">Message *</Label>
+
+                    <div className="space-y-1.5">
+                      <Label htmlFor="message" className="text-sm font-medium text-foreground">Message *</Label>
                       <Textarea
                         id="message"
                         value={formData.message}
                         onChange={(e) => handleInputChange("message", e.target.value)}
                         placeholder="Please describe your query in detail..."
                         rows={5}
+                        className="rounded-xl border-gray-200 focus-visible:ring-2 focus-visible:ring-smebank-100 focus-visible:border-smebank-300 focus-visible:ring-offset-0"
                         required
                       />
                     </div>
-                    
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700"
+
+                    <Button
+                      type="submit"
+                      className="w-full rounded-xl bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                     >
                       Send Message
                       <Send className="ml-2 h-4 w-4" />
@@ -249,22 +254,22 @@ const Contacts = () => {
 
             {/* Office Location */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Office</h2>
+              <h2 className="text-3xl font-bold text-foreground mb-6">Our Office</h2>
               <div className="space-y-4">
                 {officeLocations.map((office, index) => (
-                  <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
+                  <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-3">
-                        <h3 className="text-xl font-semibold text-gray-900">{office.city}</h3>
+                        <h3 className="text-xl font-semibold text-foreground">{office.city}</h3>
                         <Badge variant="outline">{office.type}</Badge>
                       </div>
                       <div className="space-y-2">
                         <div className="flex items-start">
-                          <MapPin className="h-4 w-4 text-gray-400 mr-2 mt-1 flex-shrink-0" />
+                          <MapPin className="h-4 w-4 text-muted-foreground mr-2 mt-1 flex-shrink-0" />
                           <p className="text-gray-600 text-sm">{office.address}</p>
                         </div>
                         <div className="flex items-center">
-                          <Phone className="h-4 w-4 text-gray-400 mr-2" />
+                          <Phone className="h-4 w-4 text-muted-foreground mr-2" />
                           <p className="text-gray-600 text-sm">{office.phone}</p>
                         </div>
                       </div>
@@ -274,7 +279,7 @@ const Contacts = () => {
               </div>
 
               {/* Business Hours */}
-              <Card className="mt-6">
+              <Card className="mt-6 rounded-2xl shadow-soft">
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Clock className="h-5 w-5 mr-2" />
@@ -296,7 +301,7 @@ const Contacts = () => {
                       <span className="font-medium text-red-600">Closed</span>
                     </div>
                     <div className="pt-2 border-t">
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         * Customer care and digital services available 24/7
                       </p>
                     </div>
@@ -309,44 +314,44 @@ const Contacts = () => {
       </section>
 
       {/* Emergency Contacts */}
-      <section className="py-16 bg-red-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-red-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Emergency Contacts</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">Emergency Contacts</h2>
             <p className="text-lg text-gray-600">For urgent banking needs and security concerns</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Card className="border-red-200 bg-white">
+            <Card className="rounded-2xl border-red-200 bg-white shadow-soft hover:shadow-soft-lg transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <div className="text-red-600 mb-4">
                   <Phone className="h-8 w-8 mx-auto" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Emergency Support</h3>
+                <h3 className="font-semibold text-foreground mb-2">Emergency Support</h3>
                 <p className="text-red-600 font-bold text-lg">+91 99087 54657</p>
-                <p className="text-sm text-gray-500 mt-2">Available 24/7</p>
+                <p className="text-sm text-muted-foreground mt-2">Available 24/7</p>
               </CardContent>
             </Card>
             
-            <Card className="border-red-200 bg-white">
+            <Card className="rounded-2xl border-red-200 bg-white shadow-soft hover:shadow-soft-lg transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <div className="text-red-600 mb-4">
                   <MessageCircle className="h-8 w-8 mx-auto" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Technical Support</h3>
+                <h3 className="font-semibold text-foreground mb-2">Technical Support</h3>
                 <p className="text-red-600 font-bold text-lg">+1 9785588514</p>
-                <p className="text-sm text-gray-500 mt-2">US Support Line</p>
+                <p className="text-sm text-muted-foreground mt-2">US Support Line</p>
               </CardContent>
             </Card>
             
-            <Card className="border-red-200 bg-white">
+            <Card className="rounded-2xl border-red-200 bg-white shadow-soft hover:shadow-soft-lg transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <div className="text-red-600 mb-4">
                   <Mail className="h-8 w-8 mx-auto" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Support Email</h3>
+                <h3 className="font-semibold text-foreground mb-2">Support Email</h3>
                 <p className="text-red-600 font-bold text-sm">aczen.support@aczen.in</p>
-                <p className="text-sm text-gray-500 mt-2">For all inquiries</p>
+                <p className="text-sm text-muted-foreground mt-2">For all inquiries</p>
               </CardContent>
             </Card>
           </div>
@@ -354,8 +359,8 @@ const Contacts = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-smebank-600 to-smeteal-600">
-        <div className="container mx-auto px-4 text-center">
+      <section className="py-24 bg-gradient-to-r from-smebank-600 to-smeteal-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Need Immediate Assistance?
           </h2>
@@ -365,7 +370,7 @@ const Contacts = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="bg-white text-smebank-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
+              className="rounded-xl bg-white text-smebank-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
               asChild
             >
               <a href="tel:+919908754657">
@@ -376,7 +381,7 @@ const Contacts = () => {
             <Button 
               variant="outline" 
               size="lg" 
-              className="border-white text-white hover:bg-white hover:text-smebank-600 px-8 py-3"
+              className="rounded-xl border-white text-white hover:bg-white hover:text-smebank-600 px-8 py-3 transition-all duration-300"
             >
               Start Live Chat
               <MessageCircle className="ml-2 h-5 w-5" />

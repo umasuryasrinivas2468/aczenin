@@ -17,21 +17,21 @@ const Compliance = () => {
       />
       <Navbar />
       <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <div className="mb-8">
             <div className="flex items-center space-x-2 text-sm">
-              <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
-              <span className="text-gray-400">/</span>
-              <span className="text-gray-900">Compliance</span>
+              <Link href="/" className="text-muted-foreground hover:text-foreground">Home</Link>
+              <span className="text-muted-foreground">/</span>
+              <span className="text-foreground">Compliance</span>
             </div>
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Compliance Framework</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Compliance Framework</h1>
             
             <div className="prose prose-lg">
-              <p className="text-gray-600 mb-8">
+              <p className="text-muted-foreground mb-8">
                 At Aczen, we are committed to maintaining the highest standards of compliance with all relevant laws, regulations, and industry best practices. Our compliance framework is designed to ensure transparency, security, and ethical conduct across all our operations.
               </p>
 

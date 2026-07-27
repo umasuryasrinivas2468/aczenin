@@ -125,12 +125,12 @@ const Partners = () => {
       
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-smebank-50 to-smeteal-50">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-4 bg-smebank-100 text-smebank-800 hover:bg-smebank-200">
               Partnership Program
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               Building India's Financial 
               <span className="bg-gradient-to-r from-smebank-600 to-smeteal-600 text-transparent bg-clip-text">
                 {" "}Future Together
@@ -141,14 +141,14 @@ const Partners = () => {
               Together, we're creating opportunities for millions of businesses and individuals.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white px-8 py-3"
+              <Button
+                size="lg"
+                className="rounded-xl bg-gradient-to-r from-smebank-600 to-smeteal-600 hover:from-smebank-700 hover:to-smeteal-700 text-white px-8 py-3 shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
               >
                 Become a Partner
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button variant="outline" size="lg" className="px-8 py-3" asChild>
+              <Button variant="outline" size="lg" className="rounded-xl px-8 py-3" asChild>
                 <Link href="/partner-portal">
                   Partner Portal
                 </Link>
@@ -159,10 +159,10 @@ const Partners = () => {
       </section>
 
       {/* Current Partners Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Trusted Partners</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Our Trusted Partners</h2>
             <p className="text-lg text-gray-600">Working with India's leading institutions to serve you better</p>
           </div>
           
@@ -184,7 +184,7 @@ const Partners = () => {
           </div>
           
           <div className="text-center">
-            <p className="text-sm md:text-base text-gray-500 max-w-2xl mx-auto">
+            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
               We've partnered with India's leading financial institutions and technology companies 
               to provide you with the best services tailored for your needs.
             </p>
@@ -193,13 +193,13 @@ const Partners = () => {
       </section>
 
       {/* Regulation & Compliance Cards (matches screenshot) */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             <div className="rounded-2xl bg-yellow-50 p-8 shadow-soft flex flex-col justify-between">
               <div>
                 <h3 className="text-2xl font-bold mb-4">Smart Regulation Library</h3>
-                <p className="text-gray-700 mb-6">Access a comprehensive repository of chapter-wise regulations, master circulars, and real-time amendment updates, fully linked and queryable for effortless navigation.</p>
+                <p className="text-foreground mb-6">Access a comprehensive repository of chapter-wise regulations, master circulars, and real-time amendment updates, fully linked and queryable for effortless navigation.</p>
               </div>
 
               <div className="mt-4 bg-white rounded-xl p-6 shadow-inner">
@@ -208,8 +208,8 @@ const Partners = () => {
                     <CheckCircle className="h-6 w-6" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">Securities and Exchange Board of India (Market Infrastructure Institutions) Regulations, 2023</div>
-                    <div className="text-sm text-gray-500 mt-3">
+                    <div className="font-semibold text-foreground">Securities and Exchange Board of India (Market Infrastructure Institutions) Regulations, 2023</div>
+                    <div className="text-sm text-muted-foreground mt-3">
                       <div className="flex items-center gap-2"><span className="font-medium">Latest Gazette:</span> <a className="text-smeteal-600" href="#">GAZ-2023-125</a></div>
                       <div className="mt-2">3 Amendments · 24 applicable regulations</div>
                     </div>
@@ -236,10 +236,10 @@ const Partners = () => {
       </section>
 
       {/* Partnership Types Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Partnership Opportunities
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -249,7 +249,7 @@ const Partners = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {partnershipTypes.map((type, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300 text-center">
+              <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 text-center">
                 <CardHeader>
                   <div className="mx-auto mb-4 p-3 bg-smebank-50 rounded-full w-fit">
                     {type.icon}
@@ -271,8 +271,8 @@ const Partners = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <img 
@@ -285,14 +285,14 @@ const Partners = () => {
                 <div className="flex items-center">
                   <TrendingUp className="h-6 w-6 text-green-500 mr-2" />
                   <div>
-                    <div className="font-semibold text-gray-900">150+ Active Partners</div>
+                    <div className="font-semibold text-foreground">150+ Active Partners</div>
                     <div className="text-sm text-gray-600">Growing network nationwide</div>
                   </div>
                 </div>
               </div>
             </div>
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
                 Why Partner with Aczen?
               </h2>
               <p className="text-lg text-gray-600 mb-8">
@@ -303,7 +303,7 @@ const Partners = () => {
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-center">
                     <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{benefit}</span>
+                    <span className="text-foreground">{benefit}</span>
                   </div>
                 ))}
               </div>
@@ -313,8 +313,8 @@ const Partners = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-smebank-600">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-smebank-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-white">
             <div>
               <div className="text-4xl font-bold mb-2">150+</div>
@@ -337,10 +337,10 @@ const Partners = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               What Our Partners Say
             </h2>
             <p className="text-lg text-gray-600">
@@ -350,7 +350,7 @@ const Partners = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-soft transition-shadow duration-300">
+              <Card key={index} className="rounded-2xl shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300">
                 <CardContent className="p-6">
                   <div className="flex mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
@@ -359,8 +359,8 @@ const Partners = () => {
                   </div>
                   <p className="text-gray-600 mb-4 italic">"{testimonial.content}"</p>
                   <div>
-                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.company}</p>
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -370,8 +370,8 @@ const Partners = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-smebank-600 to-smeteal-600">
-        <div className="container mx-auto px-4 text-center">
+      <section className="py-24 bg-gradient-to-r from-smebank-600 to-smeteal-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ready to Partner with Us?
           </h2>
@@ -380,17 +380,17 @@ const Partners = () => {
             Let's create opportunities together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              className="bg-white text-smebank-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
+            <Button
+              size="lg"
+              className="rounded-xl bg-white text-smebank-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
             >
               Apply Now
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="border-white text-white hover:bg-white hover:text-smebank-600 px-8 py-3"
+            <Button
+              variant="outline"
+              size="lg"
+              className="rounded-xl border-white text-white hover:bg-white hover:text-smebank-600 px-8 py-3 transition-all duration-300"
             >
               Download Partnership Guide
             </Button>

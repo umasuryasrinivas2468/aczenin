@@ -6,12 +6,13 @@ import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import PartnersSection from "@/components/PartnersSection";
 import VideoSection from "@/components/VideoSection";
+import PaymentsStackSection from "@/components/PaymentsStackSection";
 import SecuritySection from "@/components/SecuritySection";
-import IndustrySection from "@/components/IndustrySection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { ScrollProgressBar } from "@/components/motion";
 
 const Index = () => {
   return (
@@ -35,14 +36,15 @@ const Index = () => {
           },
         }}
       />
+      <ScrollProgressBar />
       <Navbar />
       <main>
         <HeroSection />
         <FeaturesSection />
         <PartnersSection />
         <VideoSection />
+        <PaymentsStackSection />
         <SecuritySection />
-        <IndustrySection />
         <TestimonialsSection />
         <FAQSection />
       </main>

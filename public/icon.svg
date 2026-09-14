@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Aczen">
+  <rect width="100" height="100" rx="22" fill="#0b0c0f"/>
+  <!-- Peak and foothill, stroked with a round join so the corners soften the
+       way they do in the Aczen wordmark. -->
+  <g fill="#ff914d" stroke="#ff914d" stroke-width="5.2" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M52 20.6 L85.4 77.4 L61 77.4 L40.6 42 Z"/>
+    <path d="M14.6 77.4 A14.2 14.2 0 0 1 43 77.4 Z"/>
+  </g>
+</svg>

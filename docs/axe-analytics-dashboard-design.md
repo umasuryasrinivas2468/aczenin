@@ -5,6 +5,65 @@
 
 ---
 
+## 0. Glossary and behaviour rules
+
+Read this before changing anything. Several rules here look like preferences
+and are not — they are the reason the system is lawful.
+
+### What a "salt" is
+
+A **salt** is a secret random string mixed into data before hashing it.
+
+Hashing an IP on its own achieves nothing. There are only about four billion
+IPv4 addresses, so anyone holding `sha256(ip)` can hash all four billion and
+find the match in minutes. The "anonymised" value is reversed trivially.
+
+Mixing in a secret defeats that: without the salt, nothing can be precomputed.
+Adding the **date** to the mix makes the value change at every midnight, so
+even we cannot link Monday's visitor to Tuesday's. That is the step that turns
+*pseudonymous* data (still personal data, still regulated) into *anonymous*
+data (out of scope entirely).
+
+**Two unrelated salts exist in this project** — a frequent source of confusion:
+
+| Salt | Where | Job |
+|---|---|---|
+| Visitor salt | `AXE_SALT` | Stops a hash being reversed to an IP. Privacy. |
+| Password salt | the `saltHex:` half of `AXE_GATE_HASH` | Stops precomputed-hash attacks on the gate password. Security. |
+
+Same technique, different jobs. Neither is a tuning knob.
+
+### Behaviour rules — non-negotiable
+
+1. **Never store, log or print a raw IP.** It is read from the request, hashed
+   in memory, and discarded. One `console.log(request)` breaks the legal basis
+   of the whole system.
+2. **The date component of the visitor hash is mandatory.** Removing it as a
+   "simplification" silently converts this into a system that processes
+   personal data.
+3. **Changing `AXE_SALT` resets all visitor identity.** Historical unique
+   counts stop being comparable across the change. It is not a rotation you
+   perform casually.
+4. **Never label a cross-day distinct count "total visitors."** Hashes rotate
+   at midnight, so such a count is *visitor-days* and overcounts real humans.
+   Label it exactly what it is.
+5. **`count(distinct visitor_hash)` over a multi-day range is a bug.** Compute
+   per day, then aggregate. This produces plausible-looking wrong numbers,
+   which is what makes it dangerous.
+6. **`engaged_ms` nulls are not zeros.** Null means "still open, or the beacon
+   never landed." Averages must exclude them.
+7. **Analytics reads and writes use the service-role key, server-side only.**
+   RLS is forced with zero policies; the anon key can read nothing. Never add a
+   policy to "make it work."
+8. **No lead name or email, anywhere.** Dropped from scope deliberately; the
+   columns do not exist and must not be added.
+9. **Store the path as served.** Do not lowercase or normalise it — `/Finathon`
+   is a real route distinct from its redirect source, and normalising it
+   corrupts both the per-page table and the route-manifest join.
+10. **One human arriving once produces exactly one row.** Redirect hops,
+    prefetches and React strict-mode double-invokes must not each become a
+    pageview.
+
 ## 1. Purpose
 
 A private, password-gated dashboard at `aczen.in/axe` showing who visits
@@ -132,6 +191,41 @@ create index on page_view (visitor_hash, occurred_at desc);
 
 Plus `lead_event` (form submissions, joinable to `page_view` on `session_id`)
 and `cta_click` (v2, but created now so no migration is needed later).
+
+### 5.1 Engagement time (migration `20260917144752`, applied)
+
+Adds `view_id uuid`, `engaged_ms integer` and `client_id text` to `page_view`.
+
+**Time on page is measured as *engaged* time, not elapsed time.** The obvious
+implementation — the gap between consecutive pageview timestamps — is what
+Google Analytics does and it is wrong twice: the last page of a visit has no
+following event to subtract from, so every exit page silently reports zero; and
+it keeps counting while the tab is backgrounded, so someone who opens ten tabs
+and reads one produces ten long sessions.
+
+Instead a client-side timer accumulates only while the tab is visible (Page
+Visibility API), and the total is sent on departure with `navigator.sendBeacon`
+— the only send that reliably survives page unload. `visibilitychange → hidden`
+plus `pagehide` as a backstop; never `unload`/`beforeunload`, which are
+unreliable on mobile Safari.
+
+`view_id` is a random `crypto.randomUUID()`, not the row's `bigint id`,
+specifically because `/api/collect` is public: that value is the **only** thing
+authorising the second write to the row. A sequential id would let anyone
+enumerate rows, overwrite other visitors' measurements, or replay a beacon to
+inflate the numbers. The update path accepts only `(view_id, engaged_ms)` and
+refuses when `engaged_ms` is already set.
+
+The 30-minute cap is enforced **both** in the handler and as a `CHECK`
+constraint. That is deliberate, not redundancy: the handler catches honest
+bugs, the constraint catches a crafted request hitting the public endpoint
+directly. Verified on apply — an over-cap insert is rejected with `23514`.
+
+`engaged_ms` is nullable and must stay that way. A null means "still open, or
+left without the beacon landing", which is a real and visible state. Averages
+must **exclude** nulls, never treat them as zero-second visits.
+
+`client_id` is **reserved and written by nothing**. See §7.1.
 
 `is_bot` exists because without it every other number on the dashboard is
 inflated by crawler traffic.

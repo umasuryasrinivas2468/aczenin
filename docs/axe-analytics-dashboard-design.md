@@ -157,10 +157,16 @@ despite the concern recorded in §9.
     Node.js runtime (the Vercel default), not Edge.
 - The hash is read from `AXE_GATE_HASH`, a **Vercel Sensitive Environment
   Variable** — write-only, so even team members with dashboard access cannot
-  read the value back, and it never enters git. A hardcoded hash constant in
-  the source is the fallback if the variable is absent, satisfying the original
-  "hardcoded" requirement. This is a **dependency seam**: one call site, two
-  possible sources, swappable without touching the caller.
+  read the value back, and it never enters git.
+
+  **Reversal, 2026-09-17:** an earlier version of this design kept a hardcoded
+  hash constant in the source as a fallback, to satisfy the original
+  "hardcoded" phrasing of the request. That fallback has been REMOVED. It
+  contradicted its own mitigation: the only reason a dictionary-word password
+  survives here is that the hash never enters git and so cannot be attacked
+  offline, and a constant in the file puts it straight back into git. The gate
+  now **fails closed** when `AXE_GATE_HASH` is absent. Raised by the
+  implementing session, and it was right.
 - Success sets an **httpOnly, secure, sameSite=lax** cookie carrying an
   HMAC-signed expiry. httpOnly means the token is invisible to JavaScript, so
   an employee with DevTools open sees nothing useful.
@@ -268,6 +274,39 @@ addresses at all. Nothing published is therefore contradicted by this design —
 but equally, nothing published would cover raw IP collection if it were ever
 added. Any change to store IPs requires a policy update first.
 
+### 8.0 Legal basis (assessed 2026-09-17 — not formal legal advice)
+
+The question asked was narrow and worth recording precisely: *can we use the IP
+to tell unique visitors apart from repeat visits, without storing it?*
+
+Yes, and it is the approach taken. The IP is read from the request, combined
+with the user agent and the day's salt, hashed, and discarded. **No IP is ever
+written to disk or to a log.** There is no IP in this database to leak or
+disclose.
+
+- **India, DPDP Act 2023 — the binding regime here.** The Act governs digital
+  personal data, meaning data about an *identifiable* individual. A one-way
+  salted hash with a salt that is rotated daily and discarded is not
+  identifiable, by us or by anyone who obtains the database. India has no
+  cookie-consent law. This design is compliant.
+- **GDPR** applies only if EU users are targeted, which an India-first B2B
+  fintech generally does not. Where it does apply: raw IP is settled personal
+  data (*Breyer v Germany*, CJEU 2016), and a fixed-salt hash is merely
+  pseudonymous and still in scope — which is exactly why §9.1 mandates daily
+  rotation.
+- **ePrivacy ("the cookie law")** triggers on storing or accessing information
+  on the user's *device*. Server-side hashing stores nothing on the device, so
+  no consent banner is required for this collection.
+
+**Counter-intuitive but important:** every common alternative is *more* legally
+burdensome, not less. A first-party cookie ID (what Google Analytics uses)
+writes to the device and so triggers consent, and a persistent cookie ID is
+itself personal data. localStorage is the same, with heavier ad-blocking.
+Browser fingerprinting is explicitly called out by regulators as requiring
+consent. Counting sessions alone is clean but does not answer the question.
+The hashed-IP approach is the most conservative option that actually
+distinguishes people from page loads.
+
 ### 8.1 Can a visitor's name and email be captured from a plain visit?
 
 Asked on 2026-09-17; recorded so it is not re-litigated.
@@ -294,13 +333,20 @@ address it was derived from.
 
 ## 9. Open decisions and accepted risks
 
-1. **Salt rotation vs. the "returning visitors" metric — needs a decision.**
-   A daily-rotating salt is what makes the hash non-identifying. But it also
-   means the same person is a brand-new visitor every midnight, so
-   **new-vs-returning cannot be measured across days**. The options are: keep
-   daily rotation and drop the metric; or rotate every 30 days, which enables
-   the metric at the cost of weaker anonymity. *Not yet decided — `returning
-   visitors` has been removed from the v1 list in §7 pending this.*
+1. **Salt rotation — DECIDED 2026-09-17: rotate DAILY.** The salt is never
+   retained past its day.
+
+   This was framed as a privacy-versus-features trade, but it is actually the
+   legality question, and that is what settled it. A *fixed* salt produces only
+   **pseudonymisation** — still personal data, still fully in regulatory scope.
+   Rotating the salt and discarding it is what crosses into **anonymisation**:
+   once a day's salt is gone, that day's hashes cannot be tied to anyone, by
+   anybody, including us.
+
+   Consequence, accepted: unique visitors are counted **per day**. The same
+   person on two days is two visitors, so "returning visitors" and multi-day
+   journey stitching are impossible by construction. The tile is permanently
+   out of scope, not deferred.
 
 2. **Accepted risk: the password is `chainsaw`.** A dictionary word. The
    founder was advised on 2026-09-17 that this defeats the point of a strong

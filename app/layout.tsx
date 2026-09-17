@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
+import ChatbaseEmbed from "@/components/ChatbaseEmbed";
 import Providers from "./providers";
 import "./globals.css";
 
@@ -122,9 +122,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <Providers>{children}</Providers>
 
-        <Script id="chatbase-embed" strategy="afterInteractive">
-          {`(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="YREz_QoD10_nSG2H8WN6Y";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();`}
-        </Script>
+        {/* Moved into a component so individual routes can opt out; the embed
+            code itself is unchanged. See src/components/ChatbaseEmbed.tsx. */}
+        <ChatbaseEmbed />
       </body>
     </html>
   );

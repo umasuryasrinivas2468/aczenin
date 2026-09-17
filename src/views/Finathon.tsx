@@ -11,8 +11,8 @@ import Timeline, { type ScheduleDay } from "@/components/finathon/Timeline";
   accounting, so the page is built from the vernacular of a financial statement
   — a labelled gutter, hairline rules, right-aligned tabular figures, greenbar
   bands, and a closing balance. The 36 hours are ledger entries; the hiring
-  offer is a credit column; the prize amounts you have not set yet are drawn as
-  blank ruled lines, the way an unissued cheque is blank.
+  offer is a credit column; the values you have not set yet are drawn as blank
+  ruled lines, the way an unissued cheque is blank.
 
   Every value still to be confirmed is marked TODO(finathon). Run
   `grep -rn "TODO(finathon)" app src` for the full list, or read
@@ -44,51 +44,42 @@ const EVENT = {
   // TODO(finathon): confirm the exact campus address line before launch.
   venueAddress: "Laxman Reddy Avenue, Dundigal, Hyderabad, Telangana 500043",
   venueMapUrl: "https://www.google.com/maps/search/?api=1&query=MLR+Institute+of+Technology+Dundigal+Hyderabad",
-  startsLabel: "Wed 30 Sep, 08:00",
-  endsLabel: "Thu 1 Oct, 20:00",
+  startsLabel: "Wed 30 Sep, 9.45 am",
+  endsLabel: "Thu 1 Oct, 2.30 pm",
   deadlineLabel: "Sun 27 Sep",
   // Spelled out for the panel, where the countdown gives the duration and this
   // gives the thing people actually diarise.
   deadlineFull: "Sunday 27 September, 11.59 pm IST",
   duration: "36 hours",
   teamSize: "3 to 4 members",
-  // TODO(finathon): set the registration fee, then delete the blank-line fallback below.
-  fee: "",
 };
 
 /*
   Tracks. Held as an array and rendered as full-width ledger rows rather than a
-  fixed set of cards, which is why adding the security track was one object and
-  not a layout rewrite. A fifth would cost the same.
+  fixed set of cards, which is why cutting four tracks down to three was three
+  objects and not a layout rewrite. A fourth would cost the same.
 */
 const DOMAINS = [
   {
-    name: "Fintech",
+    name: "Finance",
     lead: true,
     summary:
       "Payments, lending, invoicing, GST and compliance, credit, reconciliation. The problems Aczen works on every day, and the track we care most about.",
-    examples: ["Payments", "Lending", "GST & compliance", "Invoicing", "Credit"],
+    examples: ["Payments", "Invoicing", "GST & compliance", "Lending", "Reconciliation"],
   },
   {
-    name: "AI & Machine Learning",
+    name: "CRM",
     lead: false,
     summary:
-      "Models that do something a business can actually use — document extraction, forecasting, agents that finish a task, anomaly detection on real transaction data.",
-    examples: ["Agents", "Document AI", "Forecasting", "Anomaly detection"],
+      "The system a company sells through. Pipeline and deal flow, contact and account records, follow-ups that actually get made, and support that closes the loop after the sale.",
+    examples: ["Pipeline", "Contacts & accounts", "Follow-ups", "Support desk"],
   },
   {
-    name: "Business Systems",
+    name: "HRM",
     lead: false,
     summary:
-      "The software a company runs on internally. Customer systems, people systems, and the unglamorous internal tools that decide whether a team ships.",
-    examples: ["CRM", "HRM", "Internal tools", "Workflow automation"],
-  },
-  {
-    name: "Cybersecurity",
-    lead: false,
-    summary:
-      "Money makes a system a target. Fraud detection, KYC and identity, securing payment flows, threat modelling, and finding what breaks before somebody else does.",
-    examples: ["Fraud detection", "KYC & identity", "Payment security", "Threat modelling"],
+      "The system a company runs its people on. Hiring and onboarding, attendance and leave, payroll, appraisals — the unglamorous internal software that decides whether a team ships.",
+    examples: ["Hiring & onboarding", "Attendance & leave", "Payroll", "Appraisals"],
   },
 ];
 
@@ -100,7 +91,7 @@ const ROLES = ["Full Stack Developer", "AI / ML Engineer", "Cybersecurity Engine
    besides the schedule where ordered markers are honest. */
 const PIPELINE = [
   { step: "Build", detail: "Ship something real in 36 hours. We watch how you work, not just what you demo." },
-  { step: "Offer", detail: "Standout builders are offered an internship at Aczen with a stipend." },
+  { step: "Offer", detail: "Selected candidates receive an offer letter within five working days of the hackathon, subject to the hiring evaluation." },
   { step: "Six months", detail: "You work on production fintech with the team that ships it." },
   { step: "PPO", detail: "A pre-placement offer, decided on performance over those six months." },
 ];
@@ -132,34 +123,85 @@ const PARTICIPANT_BENEFITS = [
   },
 ];
 
+/* The reward ledger. Cash is the smallest line of the three and is printed
+   first only because it is the one people scan for. */
+const PRIZES = [
+  { label: "Cash prize pool", value: "$500" },
+  { label: "AI build credits", value: "For every winning team" },
+  { label: "Internship at Aczen", value: "Paid, with a PPO route" },
+];
+
 const SCHEDULE: ScheduleDay[] = [
   {
     label: "Day one",
     date: "Wed 30 September",
     entries: [
-      { time: "07:00", title: "Check-in opens", note: "Bring your college ID and your own laptop." },
-      { time: "08:00", title: "Opening ceremony", note: "Problem statements and judging criteria are revealed here.", major: true },
-      { time: "09:00", title: "Hacking begins", note: "Hour zero of thirty-six.", major: true },
-      { time: "12:30", title: "Mentor round one", note: "Aczen engineers on the floor." },
-      { time: "13:30", title: "Lunch" },
-      { time: "17:00", title: "Checkpoint one", note: "Show what you have. No slides." },
-      { time: "20:00", title: "Dinner" },
-      { time: "23:00", title: "Mentor round two", note: "For teams that are stuck." },
+      {
+        time: "9:45 AM",
+        until: "10:45 AM",
+        title: "Inaugural & kick-off session",
+        note: "Welcome address, introduction to the hackathon, hackathon principles, and addresses by speakers and HODs.",
+        major: true,
+      },
+      {
+        time: "10:45 AM",
+        until: "1:00 PM",
+        title: "Aczen API & UX session",
+        note: "Introduction to the Aczen API ecosystem, API walkthrough, integration guidance, and the Aczen UX / product design session.",
+      },
+      { time: "1:00 PM", until: "2:00 PM", title: "Lunch break", note: "Lunch and networking." },
+      {
+        time: "2:00 PM",
+        until: "4:00 PM",
+        title: "Hackathon — phase 1",
+        note: "Problem understanding, ideation, architecture and initial development.",
+        major: true,
+      },
+      { time: "4:00 PM", until: "4:30 PM", title: "Break", note: "Refreshments and networking." },
+      {
+        time: "4:30 PM",
+        until: "8:00 PM",
+        title: "Hackathon — phase 2",
+        note: "Core development, Aczen API integration and product implementation.",
+      },
+      { time: "8:00 PM", until: "9:30 PM", title: "Dinner break", note: "Dinner and networking." },
+      {
+        time: "9:30 PM",
+        until: "1:00 AM",
+        title: "Hackathon — phase 3",
+        note: "Continued development, testing, integration and refinement.",
+      },
     ],
   },
   {
     label: "Day two",
     date: "Thu 1 October",
     entries: [
-      { time: "01:00", title: "Midnight refuel" },
-      { time: "08:00", title: "Breakfast", note: "Hour twenty-three." },
-      { time: "11:00", title: "Checkpoint two", note: "Demo readiness review." },
-      { time: "14:00", title: "Code freeze and submission", note: "Repositories lock. Nothing after this counts.", major: true },
-      { time: "15:00", title: "Lunch" },
-      { time: "15:30", title: "Round one judging", note: "Every team demos." },
-      { time: "18:00", title: "Finalists pitch the Aczen panel" },
-      { time: "19:30", title: "Results and hiring shortlist", note: "Winners announced, shortlisted builders notified.", major: true },
-      { time: "20:00", title: "Close" },
+      { time: "1:00 AM", until: "1:30 AM", title: "Short break", note: "Refreshments." },
+      {
+        time: "1:30 AM",
+        until: "7:30 AM",
+        title: "Hackathon — phase 4",
+        note: "Final development, testing, bug fixing and preparation for submission.",
+      },
+      {
+        time: "7:30 AM",
+        until: "9:30 AM",
+        title: "Freshen up & breakfast",
+        note: "Fresh-up, breakfast and final preparation.",
+      },
+      {
+        time: "9:45 AM",
+        title: "Judging & evaluation",
+        note: "Final presentations, live demos, Q&A and evaluation by the judging panel.",
+        major: true,
+      },
+      {
+        time: "2:30 PM",
+        title: "Winner announcement",
+        note: "Grand finale in the auditorium — winner announcement, recognition and closing ceremony.",
+        major: true,
+      },
     ],
   },
 ];
@@ -174,13 +216,8 @@ const FAQ = [
     a: "Yes — register as a team of three or four. If you are short of members, join the WhatsApp community and find them there before registration closes.",
   },
   {
-    q: "What does it cost?",
-    // TODO(finathon): replace this answer once the registration fee is decided.
-    a: "The registration fee is being finalised and will be published here before registration opens.",
-  },
-  {
     q: "How will projects be judged?",
-    a: "The judging criteria are revealed at the opening ceremony on 30 September, so every team starts from the same line.",
+    a: "The judging criteria are revealed at the inaugural session on the morning of 30 September, so every team starts from the same line.",
   },
   {
     q: "Can I bring code I have already written?",
@@ -320,7 +357,7 @@ export default function Finathon() {
 
               <p className="fin-serif fin-lede mt-7">
                 A 36-hour build at MLR Institute of Technology, hosted by the team behind Aczen&rsquo;s
-                financial OS. Four tracks, one campus, no remote option. The builders who stand out
+                financial OS. Three tracks, one campus, no remote option. The builders who stand out
                 leave with an internship, not a certificate.
               </p>
 
@@ -423,11 +460,11 @@ export default function Finathon() {
 
           {/* ---------------------------------------------------------------
               Domains as ledger line items. Not cards — cards would read as a
-              pricing table, and would flatten Fintech into one of three equals
+              pricing table, and would flatten Finance into one of three equals
               when it is explicitly the lead track.
               --------------------------------------------------------------- */}
           <Row label="Tracks">
-            <h2 className="fin-serif fin-h2">Four tracks. Pick one.</h2>
+            <h2 className="fin-serif fin-h2">Three tracks. Pick one.</h2>
 
             <div className="mt-10 border-t" style={{ borderColor: "var(--rule-strong)" }}>
               {DOMAINS.map((domain) => (
@@ -469,29 +506,28 @@ export default function Finathon() {
           </Row>
 
           {/* ---------------------------------------------------------------
-              Rewards. The undecided prize amounts are the design feature here,
-              not the problem — an unissued cheque is a blank cheque.
+              Rewards. Three credit lines rather than a first/second/third
+              split: the pool is stated as one figure, and the two rewards that
+              are worth more than the cash sit on the same ledger as the cash.
               --------------------------------------------------------------- */}
           <Row label="Rewards">
             <h2 className="fin-serif fin-h2">Prize pool</h2>
 
-            <ol className="mt-8 border-t" style={{ borderColor: "var(--rule-strong)" }}>
-              {["First place", "Second place", "Third place"].map((place) => (
+            <ul className="mt-8 border-t" style={{ borderColor: "var(--rule-strong)" }}>
+              {PRIZES.map((prize) => (
                 <li
-                  key={place}
+                  key={prize.label}
                   className="flex items-baseline justify-between gap-6 border-b py-5"
                   style={{ borderColor: "var(--rule)" }}
                 >
-                  <span className="fin-serif text-xl sm:text-2xl">{place}</span>
-                  {/* TODO(finathon): replace BlankLine with the prize amount, e.g. <span>₹50,000</span>. */}
-                  <span className="flex items-baseline gap-2 text-xl sm:text-2xl">
-                    <span style={{ color: "var(--ink-faint)" }}>&#8377;</span>
-                    <BlankLine width="9rem" />
+                  <span className="fin-serif text-xl sm:text-2xl">{prize.label}</span>
+                  <span className="text-right text-xl sm:text-2xl" style={{ color: "var(--ink-soft)" }}>
+                    {prize.value}
                   </span>
                 </li>
               ))}
-            </ol>
-            <p className="fin-meta mt-3">Prize amounts announced before registration opens</p>
+            </ul>
+            <p className="fin-meta mt-3">Split across the winning teams, announced at the results</p>
 
             <h3 className="fin-serif fin-h3 mt-16">And what everyone else leaves with</h3>
             <p className="fin-body mt-3">
@@ -523,10 +559,36 @@ export default function Finathon() {
           <section id="schedule" aria-label="Schedule" className="fin-row scroll-mt-24">
             <h2 className="fin-serif fin-h2">Thirty-six hours, start to finish.</h2>
             <p className="fin-body mt-4">
-              Timings are indicative and will be confirmed at the opening ceremony.
+              Timings are indicative and will be confirmed at the inaugural session.
             </p>
             <div className="mt-10">
               <Timeline days={SCHEDULE} />
+            </div>
+
+            {/* The closing balance of the schedule, and the line that matters
+                most to anyone reading it: the run sheet does not end when the
+                winners are announced, it ends with offer letters. */}
+            <div
+              className="mt-10 border-t-2 px-2 pt-5 sm:px-3"
+              style={{ borderColor: "var(--rule-strong)" }}
+            >
+              <div className="grid grid-cols-[5rem_1fr] gap-x-4 sm:grid-cols-[7rem_1fr] sm:gap-x-8">
+                <span
+                  className="text-right text-sm font-semibold sm:text-base"
+                  style={{ color: "var(--accent-ink)" }}
+                >
+                  Within 5 working days
+                </span>
+                <div>
+                  <p className="font-semibold" style={{ color: "var(--ink)" }}>
+                    Offer letters
+                  </p>
+                  <p className="mt-0.5 text-sm" style={{ color: "var(--ink-faint)" }}>
+                    Selected candidates receive offer letters within five working days of the
+                    hackathon, subject to completion of the hiring evaluation process.
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -551,19 +613,6 @@ export default function Finathon() {
                   <dd className="font-medium">{value}</dd>
                 </div>
               ))}
-              {/* Fee is kept as its own row so the blank reads as pending rather
-                  than as free entry — an important distinction to get wrong. */}
-              <div
-                className="grid gap-1 border-b py-4 sm:grid-cols-[14rem_1fr] sm:gap-8"
-                style={{ borderColor: "var(--rule)" }}
-              >
-                <dt className="fin-meta pt-1">Registration fee</dt>
-                <dd className="flex items-baseline gap-2 font-medium">
-                  <span style={{ color: "var(--ink-faint)" }}>&#8377;</span>
-                  {/* TODO(finathon): set EVENT.fee and this renders the amount instead of a blank. */}
-                  {EVENT.fee ? <span>{EVENT.fee}</span> : <BlankLine width="6rem" />}
-                </dd>
-              </div>
             </dl>
           </Row>
 
@@ -595,37 +644,6 @@ export default function Finathon() {
                 </li>
               ))}
             </ul>
-          </Row>
-
-          {/* --------------------------------------------------------------- */}
-          <Row label="Partners">
-            <h2 className="fin-serif fin-h2">Sponsors and partners</h2>
-            <p className="fin-body mt-4">
-              Finathon puts your brand in front of several hundred third and fourth year engineering
-              students in Hyderabad for 36 continuous hours.
-            </p>
-
-            {/* TODO(finathon): drop sponsor logos into public/images/finathon/sponsors/
-                and replace these slots with <Image> elements. */}
-            <ul className="mt-10 grid grid-cols-2 gap-px sm:grid-cols-4" style={{ background: "var(--rule)" }}>
-              {Array.from({ length: 8 }).map((_, index) => (
-                <li
-                  key={index}
-                  className="flex h-24 items-center justify-center"
-                  style={{ background: "var(--paper)" }}
-                >
-                  {/* Was --rule, which measured 1.47:1 — invisible to anyone
-                      with low vision rather than merely quiet. */}
-                  <span className="fin-meta" style={{ color: "var(--ink-faint)" }}>
-                    Open
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <a className="fin-cta-ghost mt-8" href="mailto:finathon@aczen.in?subject=Finathon%202026%20sponsorship">
-              Talk to us about sponsoring
-            </a>
           </Row>
 
           {/* --------------------------------------------------------------- */}

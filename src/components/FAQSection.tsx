@@ -1,6 +1,10 @@
+"use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+
+import { EASE, Reveal, Stagger, StaggerItem } from "@/components/motion";
 
 interface FAQItemProps {
   question: string;
@@ -12,24 +16,46 @@ interface FAQItemProps {
 const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
   return (
     <div className="border-b border-gray-200 py-5">
-      <button 
-        className="w-full flex justify-between items-center text-left"
+      <button
+        className="w-full flex justify-between items-center text-left group"
         onClick={onClick}
         aria-expanded={isOpen}
       >
-        <h3 className="text-lg font-semibold text-gray-800">{question}</h3>
-        {isOpen ? (
-          <ChevronUp className="h-5 w-5 text-smebank-600 flex-shrink-0" />
-        ) : (
-          <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
-        )}
+        <h3
+          className={`text-lg font-semibold transition-colors duration-300 ${
+            isOpen ? "text-smeorange-600" : "text-gray-800 group-hover:text-smeorange-600"
+          }`}
+        >
+          {question}
+        </h3>
+        {/* One chevron that rotates, rather than two icons swapping */}
+        <motion.span
+          className="flex-shrink-0"
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.35, ease: EASE }}
+        >
+          <ChevronDown
+            className={`h-5 w-5 transition-colors duration-300 ${
+              isOpen ? "text-smeorange-600" : "text-gray-500"
+            }`}
+          />
+        </motion.span>
       </button>
-      
-      {isOpen && (
-        <div className="mt-3 text-gray-600">
-          <p>{answer}</p>
-        </div>
-      )}
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="answer"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ height: { duration: 0.4, ease: EASE }, opacity: { duration: 0.25 } }}
+            className="overflow-hidden"
+          >
+            <p className="mt-3 text-gray-600">{answer}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -72,33 +98,32 @@ const FAQSection = () => {
   return (
     <section id="faq" className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <Reveal className="text-center mb-12">
           <h2 className="section-title">Frequently Asked Questions</h2>
           <p className="section-subtitle max-w-2xl mx-auto">
             Find quick answers to common questions about our services
           </p>
-        </div>
-        
-        <div className="max-w-3xl mx-auto">
+        </Reveal>
+
+        <Stagger className="max-w-3xl mx-auto" stagger={0.07}>
           {faqs.map((faq, index) => (
-            <FAQItem
-              key={faq.id}
-              question={faq.question}
-              answer={faq.answer}
-              isOpen={openIndex === index}
-              onClick={() => toggleFAQ(index)}
-            />
+            <StaggerItem key={faq.id}>
+              <FAQItem
+                question={faq.question}
+                answer={faq.answer}
+                isOpen={openIndex === index}
+                onClick={() => toggleFAQ(index)}
+              />
+            </StaggerItem>
           ))}
-        </div>
-        
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-6">
-            Can't find what you're looking for?
-          </p>
-          <button className="cta-button-accent">
+        </Stagger>
+
+        <Reveal className="mt-12 text-center" delay={0.1}>
+          <p className="text-gray-600 mb-6">Can't find what you're looking for?</p>
+          <button className="cta-button-accent transition-transform duration-300 hover:-translate-y-0.5">
             Contact Support
           </button>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

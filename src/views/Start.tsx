@@ -95,7 +95,7 @@ const Start = () => {
       description: "2 min process", 
       detail: "Complete secure payment for registration fees and government charges",
       icon: <CreditCard className="h-6 w-6" />,
-      color: "bg-purple-100 text-purple-700",
+      color: "bg-smebank-100 text-smebank-700",
       time: "2 min process"
     },
     {
@@ -193,7 +193,7 @@ const Start = () => {
                     <Shield className="h-4 w-4 mr-2" />
                     100% Legal
                   </Badge>
-                  <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100 px-4 py-2">
+                  <Badge className="bg-smebank-100 text-smebank-800 hover:bg-smebank-100 px-4 py-2">
                     <Users className="h-4 w-4 mr-2" />
                     Expert Support
                   </Badge>
@@ -290,7 +290,7 @@ const Start = () => {
         
                   
                   <div className="absolute -right-6 lg:-right-12 bottom-12 lg:bottom-16 bg-white/90 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow-lg z-15">
-                    <CreditCard className="h-4 w-4 lg:h-6 lg:w-6 text-purple-600 mx-auto mb-1" />
+                    <CreditCard className="h-4 w-4 lg:h-6 lg:w-6 text-smebank-600 mx-auto mb-1" />
                     <div className="text-xs font-medium text-center">Payment</div>
                   </div>
                   

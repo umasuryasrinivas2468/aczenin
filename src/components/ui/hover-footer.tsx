@@ -52,11 +52,11 @@ export const TextHoverEffect = ({
         >
           {hovered && (
             <>
-              <stop offset="0%" stopColor="#a855f7" />
-              <stop offset="25%" stopColor="#8b5cf6" />
-              <stop offset="50%" stopColor="#6366f1" />
-              <stop offset="75%" stopColor="#0ea5e9" />
-              <stop offset="100%" stopColor="#14b8a6" />
+              <stop offset="0%" stopColor="#ff914d" />
+              <stop offset="25%" stopColor="#ffb080" />
+              <stop offset="50%" stopColor="#80acff" />
+              <stop offset="75%" stopColor="#5791ff" />
+              <stop offset="100%" stopColor="#2e77ff" />
             </>
           )}
         </linearGradient>
@@ -95,7 +95,7 @@ export const TextHoverEffect = ({
         textAnchor="middle"
         dominantBaseline="middle"
         strokeWidth="0.3"
-        className="fill-transparent stroke-purple-400 font-[helvetica] text-7xl font-bold"
+        className="fill-transparent stroke-smebank-400 font-[helvetica] text-7xl font-bold"
         initial={{ strokeDashoffset: 1000, strokeDasharray: 1000 }}
         animate={{
           strokeDashoffset: 0,
@@ -131,7 +131,7 @@ export const FooterBackgroundGradient = () => {
       className="absolute inset-0 z-0"
       style={{
         background:
-          "radial-gradient(125% 125% at 50% 10%, #ffffff 45%, #a855f722 78%, #6366f126 100%)",
+          "radial-gradient(125% 125% at 50% 10%, #ffffff 45%, #ff914d22 78%, #2e77ff26 100%)",
       }}
     />
   );

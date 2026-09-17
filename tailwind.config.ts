@@ -52,44 +52,46 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+                // Brand palette — blue accent (#2e77ff). smeteal is mapped to the same blue.
                 smebank: {
-                    50: '#edf7ff',
-                    100: '#d6ebff',
-                    200: '#b5dcff',
-                    300: '#83c6ff',
-                    400: '#49a6ff',
-                    500: '#2186fb',
-                    600: '#0967e3',
-                    700: '#0552c7',
-                    800: '#0a46a3',
-                    900: '#0e3d81',
-                    950: '#0c265a',
+                    50: '#edf3ff',
+                    100: '#d6e4ff',
+                    200: '#adcaff',
+                    300: '#80acff',
+                    400: '#5791ff',
+                    500: '#2e77ff',
+                    600: '#0a5cf5',
+                    700: '#094dce',
+                    800: '#0740ab',
+                    900: '#06358e',
+                    950: '#042158',
                 },
                 smeteal: {
-                    50: '#effffd',
-                    100: '#c5fffa',
-                    200: '#8bfff6',
-                    300: '#4bfff0',
-                    400: '#1aefde',
-                    500: '#00d0c0',
-                    600: '#00a69c',
-                    700: '#008580',
-                    800: '#066967',
-                    900: '#0a5755',
-                    950: '#003433',
+                    50: '#edf3ff',
+                    100: '#d6e4ff',
+                    200: '#adcaff',
+                    300: '#80acff',
+                    400: '#5791ff',
+                    500: '#2e77ff',
+                    600: '#0a5cf5',
+                    700: '#094dce',
+                    800: '#0740ab',
+                    900: '#06358e',
+                    950: '#042158',
                 },
+                // Brand palette — orange primary (#ff914d).
                 smeorange: {
-                    50: '#fff8eb',
-                    100: '#ffecc8',
-                    200: '#ffd989',
-                    300: '#ffc04a',
-                    400: '#ffa41b',
-                    500: '#ff8800',
-                    600: '#e05e00',
-                    700: '#b93c04',
-                    800: '#982f09',
-                    900: '#7d290c',
-                    950: '#461302',
+                    50: '#fff4ed',
+                    100: '#ffe6d6',
+                    200: '#ffcdad',
+                    300: '#ffb080',
+                    400: '#ff9757',
+                    500: '#ff914d',
+                    600: '#f5640a',
+                    700: '#ce5409',
+                    800: '#ab4607',
+                    900: '#8e3a06',
+                    950: '#582404',
                 },
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -123,11 +125,18 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				// Logo marquee: the track holds two copies of the list, so
+				// travelling exactly -50% loops seamlessly.
+				marquee: {
+					from: { transform: 'translateX(0)' },
+					to: { transform: 'translateX(-50%)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				marquee: 'marquee 28s linear infinite'
 			}
 		}
 	},

@@ -96,7 +96,7 @@ const Footer = () => {
 
   return (
     <>
-      <footer className="relative m-4 md:m-8 h-fit overflow-hidden rounded-3xl border border-purple-100 bg-white/70 text-gray-600 shadow-[0_18px_50px_-24px_rgba(88,60,180,0.25)]">
+      <footer className="relative m-4 md:m-8 h-fit overflow-hidden rounded-3xl border border-smebank-100 bg-white/70 text-gray-600 shadow-[0_18px_50px_-24px_rgba(46,119,255,0.25)]">
         <div className="relative z-40 mx-auto max-w-7xl p-8 md:p-14">
           {/* Newsletter band */}
           <motion.div
@@ -104,7 +104,7 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
-            className="mb-12 grid grid-cols-1 items-center gap-6 rounded-2xl border border-purple-100 bg-gradient-to-r from-purple-50 via-indigo-50/60 to-white p-6 md:grid-cols-2 md:p-8"
+            className="mb-12 grid grid-cols-1 items-center gap-6 rounded-2xl border border-smebank-100 bg-gradient-to-r from-smebank-50 via-smebank-50/60 to-white p-6 md:grid-cols-2 md:p-8"
           >
             <div>
               <h3 className="text-xl font-bold text-gray-900 md:text-2xl">
@@ -128,7 +128,7 @@ const Footer = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition-colors focus:border-purple-300 focus:ring-2 focus:ring-purple-100"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition-colors focus:border-smebank-300 focus:ring-2 focus:ring-smebank-100"
                   />
                   <button
                     type="submit"
@@ -172,29 +172,29 @@ const Footer = () => {
               {/* Contact details */}
               <ul className="space-y-3 pt-1">
                 <li className="flex items-center gap-3 text-sm">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-100 text-purple-600">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-smebank-100 text-smebank-600">
                     <Phone className="h-4 w-4" />
                   </span>
                   <a
                     href="tel:+919908754657"
-                    className="text-gray-500 transition-colors hover:text-purple-600"
+                    className="text-gray-500 transition-colors hover:text-smebank-600"
                   >
                     +91 99087 54657
                   </a>
                 </li>
                 <li className="flex items-center gap-3 text-sm">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-100 text-purple-600">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-smebank-100 text-smebank-600">
                     <Mail className="h-4 w-4" />
                   </span>
                   <a
                     href="mailto:support@aczen.in"
-                    className="text-gray-500 transition-colors hover:text-purple-600"
+                    className="text-gray-500 transition-colors hover:text-smebank-600"
                   >
                     support@aczen.in
                   </a>
                 </li>
                 <li className="flex items-start gap-3 text-sm">
-                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-100 text-purple-600">
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-smebank-100 text-smebank-600">
                     <MapPin className="h-4 w-4" />
                   </span>
                   <span className="not-italic text-gray-500 leading-relaxed">
@@ -212,7 +212,7 @@ const Footer = () => {
                     <a
                       key={social.name}
                       href={social.href}
-                      className="text-gray-400 transition-colors hover:text-purple-600"
+                      className="text-gray-400 transition-colors hover:text-smebank-600"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -235,7 +235,7 @@ const Footer = () => {
                     <li key={link.name}>
                       <a
                         href={link.href}
-                        className="text-sm text-gray-500 transition-colors hover:text-purple-600"
+                        className="text-sm text-gray-500 transition-colors hover:text-smebank-600"
                         target={link.href.startsWith("http") ? "_blank" : undefined}
                         rel={
                           link.href.startsWith("http")
@@ -252,7 +252,7 @@ const Footer = () => {
             ))}
           </motion.div>
 
-          <hr className="my-8 border-t border-purple-100" />
+          <hr className="my-8 border-t border-smebank-100" />
 
           {/* Footer bottom */}
           <div className="flex flex-col items-center justify-between gap-4 text-sm md:flex-row">
@@ -265,19 +265,19 @@ const Footer = () => {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-gray-500">
-              <Link href="/privacy" className="transition-colors hover:text-purple-600">
+              <Link href="/privacy" className="transition-colors hover:text-smebank-600">
                 Privacy
               </Link>
-              <Link href="/terms" className="transition-colors hover:text-purple-600">
+              <Link href="/terms" className="transition-colors hover:text-smebank-600">
                 Terms
               </Link>
-              <Link href="/cookies" className="transition-colors hover:text-purple-600">
+              <Link href="/cookies" className="transition-colors hover:text-smebank-600">
                 Cookies
               </Link>
               <button
                 type="button"
                 onClick={openCookiePreferences}
-                className="transition-colors hover:text-purple-600"
+                className="transition-colors hover:text-smebank-600"
               >
                 Cookie Preferences
               </button>

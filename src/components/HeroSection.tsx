@@ -6,8 +6,8 @@ const Hero = () => {
     <section className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-32 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-32 w-80 h-80 bg-gradient-to-br from-indigo-400/20 to-blue-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-32 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-smebank-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-32 w-80 h-80 bg-gradient-to-br from-smebank-400/20 to-blue-600/20 rounded-full blur-3xl"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative">
@@ -19,7 +19,7 @@ const Hero = () => {
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
             One AI Accounting Platform to{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-smebank-600 bg-clip-text text-transparent">
               Finance & Legals
             </span>
           </h1>

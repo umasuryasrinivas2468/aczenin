@@ -46,7 +46,7 @@ const Contacts = () => {
       description: "Chat with our support agents",
       contact: "Available on website & app",
       availability: "24/7 Available",
-      color: "bg-purple-50 text-purple-600"
+      color: "bg-smebank-50 text-smebank-600"
     },
     {
       icon: <Building className="h-6 w-6" />,

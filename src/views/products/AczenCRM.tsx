@@ -146,7 +146,7 @@ const AczenCRM = () => {
 
         {/* Benefits Section */}
         <section className="container mx-auto px-4 mb-16">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 md:p-12">
+          <div className="bg-gradient-to-r from-blue-50 to-smebank-50 rounded-xl p-8 md:p-12">
             <div className="flex flex-col lg:flex-row gap-12 items-center">
               <div className="lg:w-1/2">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">
@@ -199,7 +199,7 @@ const AczenCRM = () => {
 
         {/* Call to Action */}
         <section className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-xl p-8 md:p-12 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">
               Ready to Transform Your Customer Relationships?
             </h2>

@@ -1,0 +1,442 @@
+/*
+  Finathon design tokens and the ledger primitives built on them.
+
+  Scoped under .fin rather than added to globals.css so the page's art direction
+  can be strong without leaking into the rest of aczen.in. Deleting the route
+  deletes the design system with it.
+*/
+
+.fin {
+  /* Statement stock. Deliberately cool (green cast) rather than warm cream so
+     the page reads as accounting paper, not as an editorial magazine. */
+  --paper: #f7f8f5;
+  /* Alternating band on ledger rows — the "greenbar" of continuous-feed
+     accounting paper, the single strongest visual cue for the concept. */
+  --band: #edf0ea;
+  /* Navy ink, derived from the site's smebank family. Not a tinted near-black:
+     financial statements are printed in blue-black, and it keeps the page
+     tied to Aczen's existing palette. */
+  --ink: #0b1f33;
+  --ink-soft: #51606e;
+  /* Measured against the darkest surface it ever sits on, not the lightest.
+     #8794a0 scored 2.91:1 and #64727f 3.38:1 on the greenbar band — both under
+     the 4.5:1 WCAG AA floor for text below 24px, and this token carries every
+     gutter label, schedule timestamp and currency mark. #5a6874 measures 4.95:1
+     on the band and 5.34:1 on paper. It sits closer to --ink-soft than the
+     original did; the label/body hierarchy is carried by size and case anyway,
+     and legibility is worth more than that half-step of tone. */
+  --ink-faint: #5a6874;
+  /* The same role on the dark panels, where a quiet grey has to get LIGHTER to
+     stay legible rather than darker. #a8b4bf measures 7.8:1 on --ink. */
+  --ink-on-dark: #a8b4bf;
+  /* Hairline rule. The whole layout is built from these, so it has to be light
+     enough to divide without becoming a grid of boxes. */
+  --rule: #c9d1c9;
+  --rule-strong: #0b1f33;
+  /* The accent, taken straight from the site's own smebank blue rather than
+     invented for this page. An earlier version used a darkened smeteal, which
+     was a colour that appears nowhere else on aczen.in — a new brand colour
+     introduced by one landing page is a brand problem, not a design choice.
+     smebank-700, measuring 6.4:1 on paper. */
+  --accent-ink: #0552c7;
+  /* smebank-600 — the exact fill on the site navbar's "Get Started" button, so
+     the primary action here is recognisably the same button. White text on it
+     measures 5.1:1. */
+  --accent-fill: #0967e3;
+  /* Lifted for dark panels, where the ink-weight blue would disappear into the
+     navy. 6.8:1 on --ink. */
+  --accent-on-dark: #6aa8ff;
+  --accent-wash: #e6eefb;
+  /* Focus only. Matches the site's existing ring colour so keyboard users get
+     a consistent signal across aczen.in. */
+  --focus: #0967e3;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  /* Tabular figures everywhere by default: this page is mostly numbers —
+     clocks, dates, counts — and proportional digits make a live countdown
+     visibly jitter as each digit changes width. */
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Serif is opt-in, not the default, because only display and prose use it. */
+.fin-serif {
+  font-family: var(--font-newsreader), ui-serif, Georgia, serif;
+  font-weight: 400;
+  /* Newsreader's default tracking is loose at display sizes; tightening is
+     what makes large settings look typeset rather than merely enlarged. */
+  letter-spacing: -0.015em;
+}
+
+/* ---------------------------------------------------------------------------
+   Ledger primitives
+   ------------------------------------------------------------------------ */
+
+/* The page's one structural idea: a labelled gutter and a content column,
+   separated from the row above by a hairline. Every section is one of these,
+   which is what makes the layout feel like a single ruled document instead of
+   a stack of unrelated blocks. */
+.fin-row {
+  border-top: 1px solid var(--rule);
+  padding-block: clamp(2.75rem, 6vw, 5.5rem);
+}
+
+/* The gutter label that used to sit left of each section has been removed.
+   Every section's own heading already names it, so the label repeated the
+   heading in smaller type — and once the labels were made sticky they piled up
+   against each other while scrolling. The names survive as aria-label on each
+   section, so assistive tech still gets the structure without the page
+   carrying a second set of headings. */
+
+/* Fixes the optical illusion where a hairline meeting a section edge looks
+   broken — the rule runs the full measure, the content is inset. */
+.fin-shell {
+  width: 100%;
+  /* Measured against the site navbar rather than picked as a round number.
+     The navbar's container is 1400px with 16px of side padding; at 76rem this
+     page sat 92px inside it on each edge, which read as the content floating
+     away from the window. 92rem plus the padding below lands the text within a
+     few pixels of the navbar's own left edge on a wide display. */
+  max-width: 92rem;
+  margin: 0 auto;
+  /* padding-inline, never the `padding` shorthand. The shorthand also sets
+     padding-top and padding-bottom to 0, and because this class has the same
+     specificity as a Tailwind spacing utility but loads later in the cascade,
+     it silently wins — any vertical padding utility applied alongside it stops
+     working, with the class still sitting there in the markup looking correct. */
+  /* Upper bound raised after the gutter column was removed. The gutter used to
+     hold the content roughly 8.5rem off the left rule; without it the headings
+     sat almost flush against the window edge. This puts the measure back just
+     inside the site navbar's own left edge on a wide display, so the page has
+     breathing room without drifting back toward the middle. */
+  padding-inline: clamp(1.25rem, 4vw, 4rem);
+}
+
+/* ---------------------------------------------------------------------------
+   Type scale — clamped so it is fluid without a single media query
+   ------------------------------------------------------------------------ */
+
+/* The wordmark. Sized to overflow gracefully at any viewport and set with
+   negative tracking so the letterforms lock together as one mass. */
+.fin-display {
+  /* Pulled back from 15vw/12.5rem. At that size the wordmark filled the
+     viewport on its own and pushed the countdown and the statement strip below
+     the fold — the two things a visitor most needs to see. Smaller type that
+     leaves the hero readable in one screen is worth more than a bigger mark. */
+  font-size: clamp(2.75rem, 10vw, 8rem);
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+}
+
+/* The year, set against the wordmark rather than under it. Archivo at a small
+   size beside a large serif reads as a date stamp on a document, which is the
+   register the rest of the page is already in. */
+.fin-year {
+  font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.8125rem, 1.1vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+  align-self: flex-start;
+  padding-top: 0.6em;
+}
+
+.fin-h2 {
+  font-size: clamp(1.875rem, 3.6vw, 3.125rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+}
+
+.fin-h3 {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+}
+
+/* Serif prose needs more leading than sans at the same size, and a measure
+   under ~70 characters, or the long lines undo the extra leading. */
+.fin-lede {
+  font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 34em;
+}
+
+.fin-body {
+  font-size: 1rem;
+  line-height: 1.62;
+  color: var(--ink-soft);
+  max-width: 38em;
+}
+
+.fin-meta {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ---------------------------------------------------------------------------
+   Controls
+   ------------------------------------------------------------------------ */
+
+/* Square-cornered and ink-filled: a rounded pill would pull the page back
+   toward the generic SaaS look the rest of the design is avoiding. */
+.fin-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 1rem 1.9rem;
+  border: 1px solid var(--ink);
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.fin-cta:hover {
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
+}
+
+/* The disabled state is a real designed state, not a greyed-out button: it
+   tells the visitor registration exists and is coming, which is the whole
+   job of the CTA while the Devnovate link is still missing. */
+.fin-cta[aria-disabled="true"] {
+  background: transparent;
+  color: var(--ink-soft);
+  border-style: dashed;
+  border-color: var(--rule);
+  cursor: not-allowed;
+}
+
+.fin-cta[aria-disabled="true"]:hover {
+  background: transparent;
+  border-color: var(--rule);
+}
+
+.fin-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 1rem 0.25rem;
+  border-bottom: 1px solid var(--ink);
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.fin-cta-ghost:hover {
+  color: var(--accent-ink);
+  border-color: var(--accent-ink);
+}
+
+/* One visible focus treatment for every interactive element on the page.
+   Written once here so no component can forget it. */
+.fin a:focus-visible,
+.fin button:focus-visible,
+.fin [tabindex]:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+   ------------------------------------------------------------------------ */
+
+/* No entrance motion anywhere on this page.
+
+   The hero rules originally drew themselves in left-to-right on load. It read
+   as decoration rather than as information, and it delayed the four facts a
+   visitor came for. The page now has no non-user-triggered motion at all —
+   only hover and focus, which respond to something the reader did. */
+
+@media (prefers-reduced-motion: reduce) {
+  .fin *,
+  .fin *::before,
+  .fin *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Statement strip — the four facts under the hero
+   ------------------------------------------------------------------------ */
+
+/*
+   Column rules are drawn in CSS rather than computed from an array index,
+   because the cell that starts a row changes with the breakpoint: item 3 begins
+   a row at two columns and sits mid-row at four. nth-child does that correctly
+   at every width; index arithmetic can only be right at one of them.
+*/
+.fin-statgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--rule-strong);
+}
+
+.fin-statgrid > * {
+  padding: 1rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+
+/* The cell opening each row sits flush with the page's left margin, so the
+   grid aligns with every other block instead of floating an indent. */
+.fin-statgrid > :nth-child(2n + 1) {
+  border-left: none;
+  padding-left: 0;
+}
+
+@media (min-width: 768px) {
+  .fin-statgrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .fin-statgrid > * {
+    /* One row at this width, so the horizontal rule between rows is wrong. */
+    border-bottom: none;
+    padding-block: 1.25rem;
+  }
+
+  /* Restated against :nth-child rather than the universal selector. The mobile
+     rule above is `> :nth-child(2n + 1)` at specificity (0,2,0); a `> *`
+     override here is only (0,1,0), so it loses on specificity no matter that it
+     comes later in the file — and cell three keeps the flush-left treatment it
+     should only have when it starts a row. */
+  .fin-statgrid > :nth-child(n) {
+    border-left: 1px solid var(--rule);
+    padding-left: 1rem;
+  }
+
+  .fin-statgrid > :nth-child(4n + 1) {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   Hero footer: lockup and scroll cue
+   ------------------------------------------------------------------------ */
+
+/* "by Aczen" under the wordmark. Small, quiet, and typographic apart from the
+   mark itself — the hero already has one large voice and does not need two. */
+.fin-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.fin-lockup img {
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+/*
+  The scroll cue. A descending hairline with the next section's name, rather
+  than a bouncing chevron: the hero now fits exactly one screen, so nothing
+  peeks below the fold to suggest the page continues. Naming the destination
+  makes the cue carry information instead of only saying "there is more".
+*/
+.fin-scrollcue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 2.25rem 0 3rem;
+}
+
+.fin-scrollcue-rule {
+  display: block;
+  width: 1px;
+  height: 2.75rem;
+  background: var(--rule-strong);
+}
+
+.fin-scrollcue:hover .fin-meta {
+  color: var(--accent-ink);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Dark panel
+   ------------------------------------------------------------------------ */
+
+/*
+  The ink card. Used twice and deliberately: once in the hero holding the
+  deadline, once at the foot holding the closing line. They bookend the page —
+  it opens and closes on the same dark note, and everything between is paper.
+  A third would make it a pattern rather than a pair.
+*/
+.fin-card {
+  background: var(--ink);
+  color: var(--paper);
+  padding: clamp(1.5rem, 3.2vw, 2.5rem);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Countdown digits
+   ------------------------------------------------------------------------ */
+
+/*
+  Sized with clamp rather than Tailwind breakpoint steps. The clock sits in a
+  fluid column, so its container width changes continuously while a stepped
+  size changes only at 640px and 1024px — which is how the four groups came to
+  wrap onto two lines at exactly 1024px, where the card is at its narrowest
+  relative to the type. A fluid size tracks the container it has to fit.
+*/
+.fin-clock {
+  font-size: clamp(1.875rem, 5vw, 3.25rem);
+}
+
+/* The dark panel is narrower than a full column at every width, so it gets its
+   own, tighter curve. */
+.fin-clock-dark {
+  /* Floor set from the narrowest real case: at 360px the card's inner measure
+     is about 272px, and four groups plus gaps have to live inside it. A 1.5rem
+     floor overflowed that by a few pixels and wrapped the seconds onto a
+     second line. */
+  font-size: clamp(1.375rem, 2.9vw, 2.375rem);
+}
+
+
+/*
+  The clock's row. A grid, not a wrapping flex row.
+
+  Below about 400px the four groups genuinely cannot fit on one line at a size
+  that is still readable, and shrinking further to force it would win the layout
+  and lose the clock. A grid lets that case become a deliberate 2x2 block
+  instead of three groups on one line and a lonely "seconds" on the next.
+*/
+.fin-clock-row {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  justify-content: start;
+  align-items: end;
+}
+
+@media (max-width: 399px) {
+  .fin-clock-row {
+    grid-template-columns: repeat(2, auto);
+    column-gap: 1.75rem;
+    row-gap: 0.75rem;
+  }
+}

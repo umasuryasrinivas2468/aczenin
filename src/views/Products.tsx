@@ -34,8 +34,8 @@ const Products = () => {
       name: "Aczen OS",
       description: "Next-generation operating system built for performance, security, and user experience.",
       icon: Monitor,
-      color: "bg-purple-100 text-purple-600",
-      gradient: "from-purple-600 to-purple-700",
+      color: "bg-smebank-100 text-smebank-600",
+      gradient: "from-smebank-600 to-smebank-700",
       features: ["Modern Interface", "Enhanced Security", "Cloud Integration", "Developer Tools"],
       link: "/products/aczen-os"
     }
@@ -161,8 +161,8 @@ const Products = () => {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Star className="w-8 h-8 text-purple-600" />
+                <div className="w-16 h-16 bg-smebank-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Star className="w-8 h-8 text-smebank-600" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Enterprise Ready</h3>
                 <p className="text-gray-600">Scalable solutions that grow with your business needs.</p>
@@ -200,7 +200,7 @@ const Products = () => {
                   <span className="text-gray-700">Third-party integrations</span>
                 </li>
               </ul>
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-md font-medium hover:shadow-lg transition-all duration-300">
+              <button className="bg-gradient-to-r from-blue-600 to-smebank-600 text-white px-8 py-3 rounded-md font-medium hover:shadow-lg transition-all duration-300">
                 View Integration Guide
               </button>
             </div>
@@ -216,7 +216,7 @@ const Products = () => {
 
         {/* Call to Action */}
         <section className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-smebank-600 rounded-xl p-8 md:p-12 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">
               Ready to Get Started?
             </h2>

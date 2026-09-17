@@ -210,7 +210,7 @@ const Partners = () => {
                   <div>
                     <div className="font-semibold text-gray-900">Securities and Exchange Board of India (Market Infrastructure Institutions) Regulations, 2023</div>
                     <div className="text-sm text-gray-500 mt-3">
-                      <div className="flex items-center gap-2"><span className="font-medium">Latest Gazette:</span> <a className="text-indigo-600" href="#">GAZ-2023-125</a></div>
+                      <div className="flex items-center gap-2"><span className="font-medium">Latest Gazette:</span> <a className="text-smebank-600" href="#">GAZ-2023-125</a></div>
                       <div className="mt-2">3 Amendments · 24 applicable regulations</div>
                     </div>
                   </div>
@@ -225,7 +225,7 @@ const Partners = () => {
               </div>
 
               <div className="mt-auto">
-                <div className="bg-gradient-to-r from-purple-400 to-pink-300 text-neutral-900 rounded-2xl p-8 shadow-lg w-full">
+                <div className="bg-gradient-to-r from-smebank-400 to-pink-300 text-neutral-900 rounded-2xl p-8 shadow-lg w-full">
                   <div className="text-4xl font-bold">Compliance Actionables</div>
                   <div className="mt-4 text-sm text-neutral-800">January 6, 2025 - January 11, 2025</div>
                 </div>

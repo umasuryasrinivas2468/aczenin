@@ -54,13 +54,19 @@ export const metadata: Metadata = {
     images: [`${SITE_URL}/images/aczenimg.jpeg`],
   },
   icons: {
-    icon: [{ url: "/images/aczenimg.jpeg", type: "image/jpeg" }],
-    apple: "/images/aczenimg.jpeg",
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { url: "/icon.svg", type: "image/svg+xml", sizes: "any" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
+  manifest: "/site.webmanifest",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f766e",
+  themeColor: "#ff914d",
   width: "device-width",
   initialScale: 1,
 };

@@ -201,7 +201,7 @@ export default function Page() {
 
           <section className="container mx-auto px-4 mb-20">
             <div className="max-w-4xl">
-              <span className="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium mb-6">
+              <span className="inline-block bg-smebank-100 text-smebank-800 px-3 py-1 rounded-full text-sm font-medium mb-6">
                 Banking Software for India
               </span>
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
@@ -215,7 +215,7 @@ export default function Page() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/start"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-md font-medium transition-colors flex items-center justify-center"
+                  className="bg-smebank-600 hover:bg-smebank-700 text-white px-8 py-3 rounded-md font-medium transition-colors flex items-center justify-center"
                 >
                   Start Free <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
@@ -223,15 +223,15 @@ export default function Page() {
                   href="https://cal.com/aczen-technologies-pvt-ltd-t7jdhz/30min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="border border-indigo-600 text-indigo-700 hover:bg-indigo-50 px-8 py-3 rounded-md font-medium text-center"
+                  className="border border-smebank-600 text-smebank-700 hover:bg-smebank-50 px-8 py-3 rounded-md font-medium text-center"
                 >
                   Book a Demo
                 </a>
               </div>
               <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-gray-500">
-                <span className="flex items-center"><Check className="w-4 h-4 text-indigo-600 mr-2" /> 100+ Indian banks supported</span>
-                <span className="flex items-center"><Check className="w-4 h-4 text-indigo-600 mr-2" /> RBI &amp; ISO 27001 compliant</span>
-                <span className="flex items-center"><Check className="w-4 h-4 text-indigo-600 mr-2" /> Real-time reconciliation</span>
+                <span className="flex items-center"><Check className="w-4 h-4 text-smebank-600 mr-2" /> 100+ Indian banks supported</span>
+                <span className="flex items-center"><Check className="w-4 h-4 text-smebank-600 mr-2" /> RBI &amp; ISO 27001 compliant</span>
+                <span className="flex items-center"><Check className="w-4 h-4 text-smebank-600 mr-2" /> Real-time reconciliation</span>
               </div>
             </div>
           </section>
@@ -248,9 +248,9 @@ export default function Page() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((f) => (
-                <div key={f.title} className="bg-white p-6 rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-md transition">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                    <f.icon className="w-6 h-6 text-indigo-700" />
+                <div key={f.title} className="bg-white p-6 rounded-lg border border-gray-200 hover:border-smebank-300 hover:shadow-md transition">
+                  <div className="w-12 h-12 bg-smebank-100 rounded-lg flex items-center justify-center mb-4">
+                    <f.icon className="w-6 h-6 text-smebank-700" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{f.title}</h3>
                   <p className="text-gray-600">{f.description}</p>
@@ -274,7 +274,7 @@ export default function Page() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-4 text-sm font-semibold text-gray-700">Feature</th>
-                    <th className="px-6 py-4 text-sm font-semibold text-indigo-700">Aczen</th>
+                    <th className="px-6 py-4 text-sm font-semibold text-smebank-700">Aczen</th>
                     <th className="px-6 py-4 text-sm font-semibold text-gray-700">RazorpayX</th>
                     <th className="px-6 py-4 text-sm font-semibold text-gray-700">Open</th>
                     <th className="px-6 py-4 text-sm font-semibold text-gray-700">Traditional bank portal</th>
@@ -284,7 +284,7 @@ export default function Page() {
                   {comparisonRows.map((r) => (
                     <tr key={r.feature} className="hover:bg-gray-50">
                       <td className="px-6 py-4 text-gray-700">{r.feature}</td>
-                      <td className="px-6 py-4">{r.aczen ? <Check className="w-5 h-5 text-indigo-600" /> : <X className="w-5 h-5 text-gray-300" />}</td>
+                      <td className="px-6 py-4">{r.aczen ? <Check className="w-5 h-5 text-smebank-600" /> : <X className="w-5 h-5 text-gray-300" />}</td>
                       <td className="px-6 py-4">{r.razorpayX ? <Check className="w-5 h-5 text-gray-600" /> : <X className="w-5 h-5 text-gray-300" />}</td>
                       <td className="px-6 py-4">{r.open ? <Check className="w-5 h-5 text-gray-600" /> : <X className="w-5 h-5 text-gray-300" />}</td>
                       <td className="px-6 py-4">{r.traditional ? <Check className="w-5 h-5 text-gray-600" /> : <X className="w-5 h-5 text-gray-300" />}</td>
@@ -309,12 +309,12 @@ export default function Page() {
                 <Link
                   key={u.href}
                   href={u.href}
-                  className="block bg-gradient-to-br from-indigo-50 to-white p-6 rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition"
+                  className="block bg-gradient-to-br from-smebank-50 to-white p-6 rounded-lg border border-smebank-100 hover:border-smebank-300 hover:shadow-md transition"
                 >
-                  <Users className="w-8 h-8 text-indigo-700 mb-3" />
+                  <Users className="w-8 h-8 text-smebank-700 mb-3" />
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">{u.title}</h3>
                   <p className="text-sm text-gray-600 mb-4">{u.description}</p>
-                  <span className="text-sm text-indigo-700 font-medium flex items-center">
+                  <span className="text-sm text-smebank-700 font-medium flex items-center">
                     Learn more <ArrowRight className="w-3 h-3 ml-1" />
                   </span>
                 </Link>
@@ -335,7 +335,7 @@ export default function Page() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <RefreshCw className="w-8 h-8 text-indigo-700 mb-3" />
+                <RefreshCw className="w-8 h-8 text-smebank-700 mb-3" />
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Reconciliation in minutes</h3>
                 <p className="text-gray-600">
                   Bank feeds + auto-matching mean a month-end reconciliation that used to take a junior
@@ -343,7 +343,7 @@ export default function Page() {
                 </p>
               </div>
               <div>
-                <TrendingUp className="w-8 h-8 text-indigo-700 mb-3" />
+                <TrendingUp className="w-8 h-8 text-smebank-700 mb-3" />
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Forecast that's actually accurate</h3>
                 <p className="text-gray-600">
                   Because Aczen has every invoice, bill and bank transaction, the cash forecast is built
@@ -351,7 +351,7 @@ export default function Page() {
                 </p>
               </div>
               <div>
-                <ShieldCheck className="w-8 h-8 text-indigo-700 mb-3" />
+                <ShieldCheck className="w-8 h-8 text-smebank-700 mb-3" />
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Bank-grade security</h3>
                 <p className="text-gray-600">
                   AES-256 at rest, TLS 1.3 in transit, ISO 27001 certified infrastructure within India.
@@ -359,7 +359,7 @@ export default function Page() {
                 </p>
               </div>
               <div>
-                <Layers className="w-8 h-8 text-indigo-700 mb-3" />
+                <Layers className="w-8 h-8 text-smebank-700 mb-3" />
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">One source of truth</h3>
                 <p className="text-gray-600">
                   Banking, accounting, GST, payments and CRM live in the same database. No CSV exports,
@@ -380,10 +380,10 @@ export default function Page() {
             </div>
             <div className="max-w-4xl space-y-4">
               {faqs.map((f) => (
-                <details key={f.q} className="group bg-white border border-gray-200 rounded-lg p-6 hover:border-indigo-300 transition">
+                <details key={f.q} className="group bg-white border border-gray-200 rounded-lg p-6 hover:border-smebank-300 transition">
                   <summary className="flex items-center justify-between cursor-pointer text-lg font-semibold text-gray-900">
                     {f.q}
-                    <span className="ml-4 text-indigo-600 group-open:rotate-45 transition-transform text-2xl leading-none">+</span>
+                    <span className="ml-4 text-smebank-600 group-open:rotate-45 transition-transform text-2xl leading-none">+</span>
                   </summary>
                   <p className="mt-4 text-gray-600 leading-relaxed">{f.a}</p>
                 </details>
@@ -392,7 +392,7 @@ export default function Page() {
           </section>
 
           <section className="container mx-auto px-4">
-            <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-xl p-8 md:p-12 text-center text-white">
+            <div className="bg-gradient-to-r from-smebank-600 to-smebank-700 rounded-xl p-8 md:p-12 text-center text-white">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Run your business banking on Aczen
               </h2>
@@ -403,7 +403,7 @@ export default function Page() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/start"
-                  className="bg-white text-indigo-700 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors"
+                  className="bg-white text-smebank-700 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors"
                 >
                   Start Free
                 </Link>
@@ -411,7 +411,7 @@ export default function Page() {
                   href="https://cal.com/aczen-technologies-pvt-ltd-t7jdhz/30min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="border border-white text-white hover:bg-white hover:text-indigo-700 px-8 py-3 rounded-md font-medium transition-colors"
+                  className="border border-white text-white hover:bg-white hover:text-smebank-700 px-8 py-3 rounded-md font-medium transition-colors"
                 >
                   Book a Demo
                 </a>

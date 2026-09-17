@@ -36,13 +36,13 @@ const archivo = Archivo({
 
 const PAGE_TITLE = "Finathon 2026 — 36-Hour Fintech Hackathon by Aczen at MLRIT";
 const PAGE_DESCRIPTION =
-  "Finathon is Aczen's 36-hour hiring hackathon at MLR Institute of Technology, Hyderabad, 30 September to 1 October 2026. Four tracks: fintech, AI & ML, business systems, and cybersecurity. Open to third and fourth year students from any college in Telangana. Standout builders are offered a paid internship at Aczen.";
+  "Finathon is Aczen's 36-hour hiring hackathon at MLR Institute of Technology, Hyderabad, 30 September to 1 October 2026. Three tracks: finance, CRM and HRM. Open to third and fourth year students from any college in Telangana. Standout builders are offered a paid internship at Aczen.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   keywords:
-    "Finathon, Aczen hackathon, fintech hackathon India, MLRIT hackathon, Hyderabad hackathon 2026, hiring hackathon, internship hackathon, AI ML hackathon, cybersecurity hackathon, 36 hour hackathon, student hackathon India",
+    "Finathon, Aczen hackathon, fintech hackathon India, MLRIT hackathon, Hyderabad hackathon 2026, hiring hackathon, internship hackathon, CRM hackathon, HRM hackathon, finance hackathon, 36 hour hackathon, student hackathon India",
   alternates: { canonical: "/Finathon" },
   openGraph: {
     title: PAGE_TITLE,
@@ -69,8 +69,8 @@ const eventJsonLd = {
   description: PAGE_DESCRIPTION,
   // ISO instants carry the +05:30 offset so the listing is not shifted for
   // searchers outside India.
-  startDate: "2026-09-30T08:00:00+05:30",
-  endDate: "2026-10-01T20:00:00+05:30",
+  startDate: "2026-09-30T09:45:00+05:30",
+  endDate: "2026-10-01T14:30:00+05:30",
   eventStatus: "https://schema.org/EventScheduled",
   eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
   location: {

@@ -46,7 +46,19 @@ const SCRYPT_KEYLEN = 64;
   cost is that it needs the Node.js runtime, not Edge.
 */
 export function verifyPassword(submitted: string): boolean {
-  const stored = process.env.AXE_GATE_HASH;
+  return verifyPasswordAgainst(submitted, process.env.AXE_GATE_HASH);
+}
+
+/*
+  The same check against an explicitly supplied hash.
+
+  Split out so a second gate — the Finathon registrations dashboard, which has
+  its own password and its own FINATHON_GATE_HASH — can reuse this verification
+  verbatim instead of copying scrypt, the length guard and the constant-time
+  compare into a second file. Three subtle security details reimplemented twice
+  is three chances to get one of them wrong in only one of the copies.
+*/
+export function verifyPasswordAgainst(submitted: string, stored: string | undefined): boolean {
 
   // Fail CLOSED when the hash is missing.
   //

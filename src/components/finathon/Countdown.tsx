@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 
   It walks three phases on its own, so nobody has to redeploy on the 27th:
     "registration" -> counting down to the registration deadline
-    "event"        -> counting down to the 8 AM kickoff
+    "event"        -> counting down to the 9.45 am kick-off
     "live"         -> the hackathon is running
     "done"         -> it is over
 */
@@ -21,8 +21,8 @@ import { useEffect, useState } from "react";
 // local dates. Without it a visitor in another timezone sees a clock that is
 // hours wrong, and a build machine running in UTC bakes in the wrong target.
 const REGISTRATION_CLOSES = new Date("2026-09-27T23:59:59+05:30");
-const EVENT_STARTS = new Date("2026-09-30T08:00:00+05:30");
-const EVENT_ENDS = new Date("2026-10-01T20:00:00+05:30");
+const EVENT_STARTS = new Date("2026-09-30T09:45:00+05:30");
+const EVENT_ENDS = new Date("2026-10-01T14:30:00+05:30");
 
 type Phase = "registration" | "event" | "live" | "done";
 

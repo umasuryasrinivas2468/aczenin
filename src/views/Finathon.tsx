@@ -26,10 +26,12 @@ import Timeline, { type ScheduleDay } from "@/components/finathon/Timeline";
    designed "opening soon" state instead of a dead link; the moment the
    Devnovate URL lands here, the whole page goes live. Nothing else changes.
    ------------------------------------------------------------------------ */
-// Live. Filling this single constant flipped every call to action on the page
-// from the "opening shortly" state to a working link — the whole point of
-// routing them all through one name instead of repeating the URL per button.
-const REGISTRATION_URL = "https://devnovate.co/event/Finathon-by-Aczen";
+// Live, and now an internal route rather than an outbound link. Registration
+// runs through our own form at /Finathon/register, which takes the team lead's
+// details and the UPI payment reference, and hands the team on to Devnovate
+// only after that is recorded. Sending people straight to Devnovate meant the
+// payment and the roster lived somewhere we could not reconcile them.
+const REGISTRATION_URL = "/Finathon/register";
 
 const REGISTRATION_OPEN = REGISTRATION_URL.length > 0;
 
@@ -290,15 +292,12 @@ function RegisterCta({ className = "", tone = "light" }: { className?: string; t
     );
   }
   return (
-    <a
-      className={`fin-cta ${className}`}
-      style={darkStyle}
-      href={REGISTRATION_URL}
-      target="_blank"
-      rel="noreferrer noopener"
-    >
-      Register on Devnovate
-    </a>
+    // A Link, and no target="_blank": the destination is our own route now, and
+    // opening an internal step of a flow in a second tab leaves people with two
+    // copies of the site and no sense of where they are.
+    <Link className={`fin-cta ${className}`} style={darkStyle} href={REGISTRATION_URL}>
+      Register now
+    </Link>
   );
 }
 
@@ -746,15 +745,13 @@ export default function Finathon() {
 
             <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
               {REGISTRATION_OPEN ? (
-                <a
+                <Link
                   className="fin-cta"
                   style={{ background: "var(--accent-fill)", borderColor: "var(--accent-fill)", color: "#fff" }}
                   href={REGISTRATION_URL}
-                  target="_blank"
-                  rel="noreferrer noopener"
                 >
-                  Register on Devnovate
-                </a>
+                  Register now
+                </Link>
               ) : (
                 <span className="fin-cta" aria-disabled="true" style={{ color: "var(--ink-on-dark)", borderColor: "var(--ink-on-dark)" }}>
                   Registration opens shortly

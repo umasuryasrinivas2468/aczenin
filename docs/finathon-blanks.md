@@ -15,11 +15,37 @@ page is edited. The grep above is the source of truth.
 
 ## 1. Blocking — the page cannot go live without these
 
-> **Done:** the Devnovate registration URL is set to `https://devnovate.co/event/Finathon-by-Aczen`, so every call to action is live.
+> **Done:** every call to action now points at our own form at `/Finathon/register`, which records the team lead, roll number and UPI payment reference before handing the team on to Devnovate.
 
 | What | Where | Notes |
 |---|---|---|
+| **Payment QR image** | `public/images/finathon/payment-qr.png` | **The form cannot take a payment without this.** Until the file exists the QR panel renders "Payment QR not uploaded yet" — visible to students. Drop in a square PNG of the UPI QR; the path is fixed in `RegistrationForm.tsx` (`QR_IMAGE_SRC`). |
 | **Prize pool** | `src/views/Finathon.tsx` (`PRIZES`) | Set: $500 cash pool, AI build credits, paid internship. Confirm how the $500 splits across winning teams before the results. |
+
+### The registration flow
+
+`/Finathon/register` → team lead name + roll number → UPI QR (₹499 per team) →
+UTR → row written to `finathon_registration` → "Continue on Devnovate" link to
+`https://devnovate.co/event/finthon-2o`.
+
+Registrations are read at **`/Finathon/axe/26`**, behind its own password
+(`FINATHON_GATE_HASH`, separate from the `/axe` gate so an event volunteer does
+not also get the analytics dashboard). The table is searchable by name, roll
+number or UTR, which is how a payment gets reconciled against the bank
+statement.
+
+> **Note the mismatch:** the eligibility table on `/Finathon` no longer mentions
+> a registration fee, but the form charges ₹499 per team. Either put the fee
+> back on the event page or drop the amount from the form — a fee that first
+> appears at the payment step reads as a surprise charge.
+
+Two things must exist before the flow works in production:
+
+1. The migration `supabase/migrations/20260918101500_finathon_registration.sql`
+   applied to the Supabase project.
+2. `FINATHON_GATE_HASH` set in Vercel as a **Sensitive** variable. The amount
+   (`AMOUNT_LABEL`) and the Devnovate URL (`DEVNOVATE_URL`) are constants at the
+   top of `src/components/finathon/RegistrationForm.tsx`.
 
 ## 2. Contact details — students will look for these first
 

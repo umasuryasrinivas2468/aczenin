@@ -35,11 +35,20 @@ const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
 const RATE_LIMIT_MAX_SUBMISSIONS = 5;
 
 export async function POST(request: Request): Promise<NextResponse> {
-  // Hashed at the first opportunity. There is no point in this handler where a
-  // raw IP is held in a named variable that outlives this line.
-  const ipHash = rateLimitIpHash(clientIp(request.headers));
-
   try {
+    /*
+      Hashed at the first opportunity — there is no point in this handler where
+      a raw IP is held in a named variable that outlives this line.
+
+      INSIDE the try, which is load-bearing rather than stylistic. This throws
+      when AXE_SALT is unset, and outside the try that became an unhandled
+      exception: Next returns a 500 with an EMPTY body, the form's
+      response.json() fails, and the person sees the generic "could not save"
+      message with nothing in it to diagnose. A misconfigured deploy and a
+      genuinely failed write looked identical from the browser.
+    */
+    const ipHash = rateLimitIpHash(clientIp(request.headers));
+
     // --- 1. Rate limit, before any parsing or writing ----------------------
     const recent = await recentSubmissionCount(ipHash, RATE_LIMIT_WINDOW_MS);
     if (recent >= RATE_LIMIT_MAX_SUBMISSIONS) {

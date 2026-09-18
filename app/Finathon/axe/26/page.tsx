@@ -87,7 +87,29 @@ export default async function FinathonRegistrationsPage({
   }
 
   const { q = "" } = await searchParams;
-  const all = await listRegistrations();
+
+  /*
+    The read is caught rather than allowed to throw.
+
+    Without this the page 500s on any storage problem, and a blank error screen
+    says nothing about WHICH problem — which is exactly the position the form
+    leaves you in, because a public endpoint must stay vague about why a write
+    failed. This page is behind the password, so it is the one place the real
+    message can safely be shown, and it is the natural place to look when
+    registrations are not arriving.
+
+    The message is safe to render: SupabaseWriteError and the select path both
+    go through describeFailure, which keeps only the SQLSTATE and the
+    schema-generated hint and strips anything that could carry a row value.
+  */
+  let all: Registration[] = [];
+  let readError: string | null = null;
+  try {
+    all = await listRegistrations();
+  } catch (error) {
+    readError = error instanceof Error ? error.message : String(error);
+  }
+
   const rows = all.filter((row) => matches(row, q));
 
   // Counted from the unfiltered set, so the tile still reads as the event total
@@ -96,6 +118,28 @@ export default async function FinathonRegistrationsPage({
 
   return (
     <div className="space-y-6">
+      {/* --- Storage diagnostic -------------------------------------------
+          Shown only when the read failed. This is what turns "registrations
+          are not saving" from a guess into a named cause, without exposing
+          anything to the public form. */}
+      {readError ? (
+        <div
+          role="alert"
+          className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm"
+        >
+          <p className="font-semibold">Cannot read registrations.</p>
+          <p className="mt-1 font-mono text-xs break-all">{readError}</p>
+          <p className="mt-2">
+            {/* The two causes that actually happen, named. A 404 or PGRST205
+                means PostgREST cannot find the table, which is what an
+                unapplied migration looks like from here. */}
+            {readError.includes("404") || readError.includes("PGRST205")
+              ? "That is an unapplied migration: run supabase/migrations/20260918101500_finathon_registration.sql against this project. Writes from the registration form are failing for the same reason."
+              : "Check NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in the deployment environment. Writes from the registration form are failing for the same reason."}
+          </p>
+        </div>
+      ) : null}
+
       {/* --- Totals ------------------------------------------------------- */}
       <div className="grid grid-cols-2 gap-4 sm:max-w-md">
         <Card>

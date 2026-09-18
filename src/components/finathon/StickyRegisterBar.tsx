@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 /*
@@ -58,16 +59,17 @@ export default function StickyRegisterBar({
         </div>
 
         {open ? (
-          <a
+          // A Link with no target="_blank": registration is now an internal
+          // route, and a new tab for a step of our own flow just leaves two
+          // copies of the site open.
+          <Link
             href={registrationUrl}
-            target="_blank"
-            rel="noreferrer noopener"
             className="shrink-0 px-5 py-2.5 text-sm font-semibold"
             style={{ background: "var(--accent-fill)", color: "#fff" }}
             tabIndex={visible ? 0 : -1}
           >
-            Register
-          </a>
+            Register now
+          </Link>
         ) : (
           <span
             className="shrink-0 border border-dashed px-5 py-2.5 text-sm font-semibold"

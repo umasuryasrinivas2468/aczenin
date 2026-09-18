@@ -42,7 +42,37 @@ const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // The tables this module is allowed to touch, as a union rather than a bare
 // string. A typo'd table name would otherwise come back as a PostgREST 404 at
 // runtime; this turns it into a compile-time error at the call site.
-export type AxeTable = "page_view" | "lead_event" | "cta_click" | "axe_auth_attempt";
+export type AxeTable =
+  | "page_view"
+  | "lead_event"
+  | "cta_click"
+  | "axe_auth_attempt"
+  // The one table here that holds personal data rather than anonymised counts.
+  // See the header of the migration: every write error from it must go through
+  // describeFailure(), because a constraint violation on this table would
+  // otherwise put a registrant's real name into a log line.
+  | "finathon_registration";
+
+/*
+  A write failure, carrying the SQLSTATE separately from the message.
+
+  The code is exposed as a field because callers need to branch on it — a 23505
+  unique violation on a registration means "you have already registered", which
+  is a normal outcome to show the person, whereas anything else is a fault. The
+  alternative, matching on substrings of the message, breaks the moment
+  PostgREST rewords anything.
+
+  What it deliberately does NOT carry is the response body. See describeFailure.
+*/
+export class SupabaseWriteError extends Error {
+  readonly code: string | null;
+
+  constructor(message: string, code: string | null) {
+    super(message);
+    this.name = "SupabaseWriteError";
+    this.code = code;
+  }
+}
 
 /*
   Builds the PostgREST endpoint for a table.
@@ -113,7 +143,7 @@ export async function axeSelect<T>(
   });
 
   if (!response.ok) {
-    throw new Error(await describeFailure("select", table, response));
+    throw new Error((await describeFailure("select", table, response)).message);
   }
 
   return (await response.json()) as T[];
@@ -147,7 +177,9 @@ async function describeFailure(
   operation: string,
   table: AxeTable,
   response: Response,
-): Promise<string> {
+  // Returns the SQLSTATE alongside the message rather than only the prose,
+  // so a caller can branch on a unique violation without re-parsing the text.
+): Promise<{ message: string; code: string | null }> {
   // The base message, which is always safe: status codes and our own table
   // names carry nothing about any visitor.
   const base = `Supabase ${operation} on ${table} failed (${response.status})`;
@@ -164,11 +196,14 @@ async function describeFailure(
     // moment PostgREST changed its response shape.
     const code = typeof parsed.code === "string" ? parsed.code : null;
     const hint = typeof parsed.hint === "string" ? parsed.hint : null;
-    return `${base}${code ? ` [${code}]` : ""}${hint ? ` hint: ${hint}` : ""}`;
+    return {
+      message: `${base}${code ? ` [${code}]` : ""}${hint ? ` hint: ${hint}` : ""}`,
+      code,
+    };
   } catch {
     // An unparseable body tells us nothing safe, so nothing is added. The
     // status alone still distinguishes 401 from 404 from 500.
-    return base;
+    return { message: base, code: null };
   }
 }
 
@@ -194,8 +229,22 @@ export async function axeInsert(
   });
 
   if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`Supabase insert into ${table} failed (${response.status}): ${body}`);
+    /*
+      Routed through describeFailure rather than interpolating the body.
+
+      The previous form was `${response.status}: ${await response.text()}`, and
+      it was the exact leak the describeFailure comment above was written about
+      — it just had not been applied here. On a constraint violation PostgREST
+      forwards Postgres' `message` and `details` verbatim, and those contain the
+      offending row: "Failing row contains (…)", "Key (utr)=(…) already exists".
+
+      With finathon_registration in the union that is no longer a hashed
+      identifier, it is a registrant's name and their payment reference going
+      into a runtime log that outlives the request. Only the SQLSTATE and the
+      schema-generated hint survive this path, and neither can carry a value.
+    */
+    const failure = await describeFailure("insert", table, response);
+    throw new SupabaseWriteError(failure.message, failure.code);
   }
 }
 

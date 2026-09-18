@@ -35,7 +35,23 @@ export const LIMITS = {
   // apps prefix theirs. Bounded generously and not pattern-matched, because a
   // reference that fails to match is still the only thread back to the payment.
   utr: { min: 8, max: 30 },
+  email: { max: 160 },
+  // Ten digits for an Indian mobile, up to sixteen so "+91 98765 43210" still
+  // fits once the separators are stripped.
+  phone: { min: 10, max: 16 },
 } as const;
+
+/*
+  The same loose address shape the database CHECK enforces: something, an @,
+  something, a dot, something.
+
+  Deliberately not one of the long "RFC-compliant" regexes. Those are either
+  wrong or unreadable, and the cost of being strict here is asymmetric — a
+  rejected valid address loses a registration, whereas an accepted invalid one
+  bounces and gets chased by phone, which is why the phone number is also
+  required.
+*/
+const EMAIL_SHAPE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 /* Shape stored in, and read back from, the table. */
 export type Registration = {
@@ -43,6 +59,8 @@ export type Registration = {
   submitted_at: string;
   team_lead_name: string;
   roll_number: string;
+  email: string;
+  phone: string;
   utr: string;
 };
 
@@ -50,6 +68,8 @@ export type Registration = {
 export type RegistrationInput = {
   teamLeadName: unknown;
   rollNumber: unknown;
+  email: unknown;
+  phone: unknown;
   utr: unknown;
 };
 
@@ -59,9 +79,19 @@ export type RegistrationInput = {
   `field` on the failure branch is what lets the form focus and mark the
   offending input rather than showing one message above the whole thing.
 */
+export type ValidatedRegistration = {
+  teamLeadName: string;
+  rollNumber: string;
+  email: string;
+  phone: string;
+  utr: string;
+};
+
+export type RegistrationField = keyof ValidatedRegistration;
+
 export type ValidationResult =
-  | { ok: true; value: { teamLeadName: string; rollNumber: string; utr: string } }
-  | { ok: false; field: "teamLeadName" | "rollNumber" | "utr"; message: string };
+  | { ok: true; value: ValidatedRegistration }
+  | { ok: false; field: RegistrationField; message: string };
 
 /*
   Collapses runs of whitespace and trims.
@@ -89,12 +119,26 @@ export function validateRegistration(input: RegistrationInput): ValidationResult
   if (typeof input.rollNumber !== "string") {
     return { ok: false, field: "rollNumber", message: "Enter the team lead's roll number." };
   }
+  if (typeof input.email !== "string") {
+    return { ok: false, field: "email", message: "Enter an email address." };
+  }
+  if (typeof input.phone !== "string") {
+    return { ok: false, field: "phone", message: "Enter a phone number." };
+  }
   if (typeof input.utr !== "string") {
     return { ok: false, field: "utr", message: "Enter the UTR from your payment." };
   }
 
   const teamLeadName = tidy(input.teamLeadName);
   const rollNumber = tidy(input.rollNumber);
+  // Lowercased, because addresses are compared and typed case-insensitively in
+  // practice and a capitalised entry would otherwise look like a different
+  // address to anyone scanning the dashboard.
+  const email = tidy(input.email).toLowerCase();
+  // Separators stripped entirely. People type "+91 98765-43210", and keeping
+  // the punctuation would mean the same number stored three different ways,
+  // none of which can be dialled straight from the dashboard.
+  const phone = tidy(input.phone).replace(/[\s\-()]/g, "");
   // Whitespace removed entirely rather than collapsed: UPI apps often render
   // the reference in groups ("1234 5678 9012") and a copy-paste carries the
   // gaps, which would otherwise be stored as part of the value and break the
@@ -120,6 +164,31 @@ export function validateRegistration(input: RegistrationInput): ValidationResult
     };
   }
 
+  if (!EMAIL_SHAPE.test(email) || email.length > LIMITS.email.max) {
+    return {
+      ok: false,
+      field: "email",
+      message: "That does not look like an email address. Check for a typo.",
+    };
+  }
+
+  /*
+    Digits counted, not characters.
+
+    The length check has to ignore a leading "+", or "+919876543210" measures
+    thirteen against a ten-to-sixteen bound and passes for the wrong reason
+    while a genuinely short number like "+9198765" also passes. Counting digits
+    is what the bound is actually about.
+  */
+  const phoneDigits = phone.replace(/\D/g, "");
+  if (phoneDigits.length < LIMITS.phone.min || phoneDigits.length > LIMITS.phone.max) {
+    return {
+      ok: false,
+      field: "phone",
+      message: "Enter a valid phone number, including the country code if it is not Indian.",
+    };
+  }
+
   if (utr.length < LIMITS.utr.min || utr.length > LIMITS.utr.max) {
     return {
       ok: false,
@@ -128,7 +197,7 @@ export function validateRegistration(input: RegistrationInput): ValidationResult
     };
   }
 
-  return { ok: true, value: { teamLeadName, rollNumber, utr } };
+  return { ok: true, value: { teamLeadName, rollNumber, email, phone, utr } };
 }
 
 /*
@@ -157,16 +226,15 @@ const UNIQUE_VIOLATION = "23505";
   instead. Two extra reads on a rare path is a fair price for never putting a
   registrant's name in a log.
 */
-export async function saveRegistration(value: {
-  teamLeadName: string;
-  rollNumber: string;
-  utr: string;
-  ipHash: string;
-}): Promise<SaveResult> {
+export async function saveRegistration(
+  value: ValidatedRegistration & { ipHash: string },
+): Promise<SaveResult> {
   try {
     await axeInsert("finathon_registration", {
       team_lead_name: value.teamLeadName,
       roll_number: value.rollNumber,
+      email: value.email,
+      phone: value.phone,
       utr: value.utr,
       ip_hash: value.ipHash,
     });
@@ -244,7 +312,7 @@ export async function recentSubmissionCount(
 export async function listRegistrations(limit = 2_000): Promise<Registration[]> {
   return axeSelect<Registration>(
     "finathon_registration",
-    "select=id,submitted_at,team_lead_name,roll_number,utr&order=submitted_at.desc",
+    "select=id,submitted_at,team_lead_name,roll_number,email,phone,utr&order=submitted_at.desc",
     limit,
   );
 }

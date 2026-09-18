@@ -74,6 +74,8 @@ export async function POST(request: Request): Promise<NextResponse> {
     const validated = validateRegistration({
       teamLeadName: body.teamLeadName,
       rollNumber: body.rollNumber,
+      email: body.email,
+      phone: body.phone,
       utr: body.utr,
     });
     /*

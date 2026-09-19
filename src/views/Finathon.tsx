@@ -116,21 +116,6 @@ const PARTICIPANT_BENEFITS = [
     detail: "Engineers who ship the product circulate through the floor for the full 36 hours.",
   },
   {
-    title: "ElevenLabs Creator Tier Subscription — worth $22",
-    detail:
-      "Every participant: show up, ship something, and walk away with a Creator subscription — voice cloning, high-quality speech synthesis, and API access to build with.",
-  },
-  {
-    title: "ElevenLabs Pro Tier Subscription — worth $297",
-    detail:
-      "Top 10 teams: crack the top ten and unlock Pro — 100 minutes of ultra-realistic voice generation, priority rendering, and commercial usage rights.",
-  },
-  {
-    title: "ElevenLabs Scale Tier Subscription — worth $897",
-    detail:
-      "Top 3 winners: place in the top three and get Scale — enterprise-grade voice AI with 500 minutes, the highest quality models, and full commercial licensing.",
-  },
-  {
     title: "Certificate of participation",
     detail: "Issued to every participant who submits a project.",
   },
@@ -138,6 +123,15 @@ const PARTICIPANT_BENEFITS = [
     title: "Aczen goodies and swag",
     detail: "Details to be announced closer to the event.",
     // TODO(finathon): confirm the swag list, then replace the placeholder line above.
+  },
+  {
+    title: "Credits on AI build tools",
+    detail: "ElevenLabs subscriptions for every participant.",
+    perks: [
+      { tier: "Top 3 Winners", plan: "Scale Tier", value: "$897" },
+      { tier: "Top 10 Teams", plan: "Pro Tier", value: "$297" },
+      { tier: "Every Participant", plan: "Creator Tier", value: "$22" },
+    ],
   },
 ];
 
@@ -147,36 +141,6 @@ const PRIZES = [
   { label: "Cash prize pool", value: "$500" },
   { label: "AI build credits", value: "For every winning team" },
   { label: "Internship at Aczen", value: "Paid, with a PPO route" },
-];
-
-/* Sponsor perks — ElevenLabs subscriptions tiered by placement. Every single
-   participant walks away with something, which is the strongest registration
-   driver on the page. */
-const PERKS = [
-  {
-    tier: "Every Participant",
-    highlight: true,
-    perk: "ElevenLabs Creator Tier Subscription",
-    value: "$22",
-    detail:
-      "Show up, ship something, and walk away with a Creator subscription — voice cloning, high-quality speech synthesis, and API access to build with.",
-  },
-  {
-    tier: "Top 10 Teams",
-    highlight: false,
-    perk: "ElevenLabs Pro Tier Subscription",
-    value: "$297",
-    detail:
-      "Crack the top ten and unlock Pro — 100 minutes of ultra-realistic voice generation, priority rendering, and commercial usage rights.",
-  },
-  {
-    tier: "Top 3 Winners",
-    highlight: false,
-    perk: "ElevenLabs Scale Tier Subscription",
-    value: "$897",
-    detail:
-      "Place in the top three and get Scale — enterprise-grade voice AI with 500 minutes, the highest quality models, and full commercial licensing.",
-  },
 ];
 
 const SCHEDULE: ScheduleDay[] = [
@@ -583,10 +547,9 @@ export default function Finathon() {
               {PARTICIPANT_BENEFITS.map((benefit) => (
                 <li
                   key={benefit.title}
-                  // There are an odd number of these, so the final item spans the
-                  // full row instead of leaving an empty cell showing the grid's
-                  // rule colour as a dead grey box.
-                  className="p-6 sm:last:col-span-2"
+                  className={`p-6 sm:last:col-span-2${
+                    "perks" in benefit ? " sm:py-8" : ""
+                  }`}
                   style={{ background: "var(--accent-wash)" }}
                 >
                   <h4 className="font-semibold" style={{ color: "var(--ink)" }}>
@@ -595,59 +558,20 @@ export default function Finathon() {
                   <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
                     {benefit.detail}
                   </p>
+                  {"perks" in benefit && (
+                    <ul className="mt-4 grid gap-px sm:grid-cols-3" style={{ background: "var(--rule)" }}>
+                      {(benefit as typeof benefit & { perks: { tier: string; plan: string; value: string }[] }).perks.map((p) => (
+                        <li key={p.tier} className="px-4 py-3" style={{ background: "var(--paper)" }}>
+                          <span className="fin-meta" style={{ color: "var(--ink-faint)" }}>{p.tier}</span>
+                          <p className="mt-1 text-sm font-medium">{p.plan}</p>
+                          <p className="text-lg font-semibold" style={{ color: "var(--accent-ink)" }}>{p.value}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ul>
-          </Row>
-
-          {/* ---------------------------------------------------------------
-              Perks — ElevenLabs sponsor subscriptions. Every participant gets
-              something, which is the strongest registration driver: nobody
-              leaves empty-handed.
-              --------------------------------------------------------------- */}
-          <Row label="Perks" id="perks">
-            <h2 className="fin-serif fin-h2">Everyone walks away with something.</h2>
-            <p className="fin-body mt-5">
-              Win or not, every participant who submits a project gets an ElevenLabs
-              subscription on us. Place higher, unlock more. No raffle, no lottery —
-              you earn it by building.
-            </p>
-
-            <ul className="mt-10 grid gap-px sm:grid-cols-3" style={{ background: "var(--rule)" }}>
-              {PERKS.map((perk) => (
-                <li
-                  key={perk.tier}
-                  className="flex flex-col p-6"
-                  style={{
-                    background: perk.highlight ? "var(--accent-wash)" : "var(--paper)",
-                  }}
-                >
-                  <span
-                    className="fin-meta"
-                    style={{ color: perk.highlight ? "var(--accent-ink)" : "var(--ink-faint)" }}
-                  >
-                    {perk.tier}
-                  </span>
-                  <h3 className="fin-serif mt-3 text-xl sm:text-2xl">{perk.perk}</h3>
-                  <p
-                    className="mt-1 text-2xl font-semibold"
-                    style={{ color: "var(--accent-ink)" }}
-                  >
-                    Worth {perk.value}
-                  </p>
-                  <p
-                    className="mt-3 text-sm leading-relaxed"
-                    style={{ color: "var(--ink-soft)" }}
-                  >
-                    {perk.detail}
-                  </p>
-                </li>
-              ))}
-            </ul>
-
-            <p className="fin-meta mt-4">
-              Powered by ElevenLabs — the world&apos;s most advanced voice AI platform
-            </p>
           </Row>
 
           {/* --------------------------------------------------------------- */}

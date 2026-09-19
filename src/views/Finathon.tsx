@@ -87,7 +87,13 @@ const DOMAINS = [
 
 /* The roles Aczen is hiring into. Deliberately no headcount and no numbers —
    the offer is described, never quantified. */
-const ROLES = ["Full Stack Developer", "AI / ML Engineer", "Cybersecurity Engineer"];
+const ROLES = [
+  "Full Stack Developer",
+  "Full Stack AI Engineer",
+  "Forward Deployed Software Engineer",
+  "AI Engineer",
+  "Cybersecurity Engineer",
+];
 
 /* The hiring pipeline. This genuinely is a sequence, so it is the one place
    besides the schedule where ordered markers are honest. */
@@ -131,6 +137,36 @@ const PRIZES = [
   { label: "Cash prize pool", value: "$500" },
   { label: "AI build credits", value: "For every winning team" },
   { label: "Internship at Aczen", value: "Paid, with a PPO route" },
+];
+
+/* Sponsor perks — ElevenLabs subscriptions tiered by placement. Every single
+   participant walks away with something, which is the strongest registration
+   driver on the page. */
+const PERKS = [
+  {
+    tier: "Every Participant",
+    highlight: true,
+    perk: "ElevenLabs Creator Tier Subscription",
+    value: "$22",
+    detail:
+      "Show up, ship something, and walk away with a Creator subscription — voice cloning, high-quality speech synthesis, and API access to build with.",
+  },
+  {
+    tier: "Top 10 Teams",
+    highlight: false,
+    perk: "ElevenLabs Pro Tier Subscription",
+    value: "$297",
+    detail:
+      "Crack the top ten and unlock Pro — 100 minutes of ultra-realistic voice generation, priority rendering, and commercial usage rights.",
+  },
+  {
+    tier: "Top 3 Winners",
+    highlight: false,
+    perk: "ElevenLabs Scale Tier Subscription",
+    value: "$897",
+    detail:
+      "Place in the top three and get Scale — enterprise-grade voice AI with 500 minutes, the highest quality models, and full commercial licensing.",
+  },
 ];
 
 const SCHEDULE: ScheduleDay[] = [
@@ -554,6 +590,56 @@ export default function Finathon() {
             </ul>
           </Row>
 
+          {/* ---------------------------------------------------------------
+              Perks — ElevenLabs sponsor subscriptions. Every participant gets
+              something, which is the strongest registration driver: nobody
+              leaves empty-handed.
+              --------------------------------------------------------------- */}
+          <Row label="Perks" id="perks">
+            <h2 className="fin-serif fin-h2">Everyone walks away with something.</h2>
+            <p className="fin-body mt-5">
+              Win or not, every participant who submits a project gets an ElevenLabs
+              subscription on us. Place higher, unlock more. No raffle, no lottery —
+              you earn it by building.
+            </p>
+
+            <ul className="mt-10 grid gap-px sm:grid-cols-3" style={{ background: "var(--rule)" }}>
+              {PERKS.map((perk) => (
+                <li
+                  key={perk.tier}
+                  className="flex flex-col p-6"
+                  style={{
+                    background: perk.highlight ? "var(--accent-wash)" : "var(--paper)",
+                  }}
+                >
+                  <span
+                    className="fin-meta"
+                    style={{ color: perk.highlight ? "var(--accent-ink)" : "var(--ink-faint)" }}
+                  >
+                    {perk.tier}
+                  </span>
+                  <h3 className="fin-serif mt-3 text-xl sm:text-2xl">{perk.perk}</h3>
+                  <p
+                    className="mt-1 text-2xl font-semibold"
+                    style={{ color: "var(--accent-ink)" }}
+                  >
+                    Worth {perk.value}
+                  </p>
+                  <p
+                    className="mt-3 text-sm leading-relaxed"
+                    style={{ color: "var(--ink-soft)" }}
+                  >
+                    {perk.detail}
+                  </p>
+                </li>
+              ))}
+            </ul>
+
+            <p className="fin-meta mt-4">
+              Powered by ElevenLabs — the world&apos;s most advanced voice AI platform
+            </p>
+          </Row>
+
           {/* --------------------------------------------------------------- */}
           <section id="schedule" aria-label="Schedule" className="fin-row scroll-mt-24">
             <h2 className="fin-serif fin-h2">Thirty-six hours, start to finish.</h2>
@@ -703,17 +789,21 @@ export default function Finathon() {
                 </dd>
               </div>
 
-              {/* TODO(finathon): replace both coordinators with real names and phone numbers. */}
-              {["Student coordinator", "Student coordinator"].map((label, index) => (
+              {[
+                { label: "Student coordinator", name: "Sri Harsha", phone: "+91 98666 25904" },
+                { label: "Student coordinator", name: "Uma Surya Srinivas", phone: "+91 97056 47169" },
+              ].map((coordinator, index) => (
                 <div
-                  key={`${label}-${index}`}
+                  key={`${coordinator.label}-${index}`}
                   className="grid gap-1 border-b py-4 sm:grid-cols-[14rem_1fr] sm:gap-8"
                   style={{ borderColor: "var(--rule)" }}
                 >
-                  <dt className="fin-meta pt-1">{label}</dt>
-                  <dd className="flex items-baseline gap-3" style={{ color: "var(--ink-faint)" }}>
-                    <BlankLine width="9rem" />
-                    <BlankLine width="7rem" />
+                  <dt className="fin-meta pt-1">{coordinator.label}</dt>
+                  <dd className="flex items-baseline gap-3">
+                    <span className="font-medium">{coordinator.name}</span>
+                    <a className="underline underline-offset-4" href={`tel:${coordinator.phone.replace(/\s/g, "")}`}>
+                      {coordinator.phone}
+                    </a>
                   </dd>
                 </div>
               ))}

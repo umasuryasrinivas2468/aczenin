@@ -116,9 +116,19 @@ const PARTICIPANT_BENEFITS = [
     detail: "Engineers who ship the product circulate through the floor for the full 36 hours.",
   },
   {
-    title: "Credits on AI build tools",
-    detail: "Participants receive credits on AI development tools to keep building after the event.",
-    // TODO(finathon): confirm which tools and credit amounts before launch (Lovable, others).
+    title: "ElevenLabs Creator Tier Subscription — worth $22",
+    detail:
+      "Every participant: show up, ship something, and walk away with a Creator subscription — voice cloning, high-quality speech synthesis, and API access to build with.",
+  },
+  {
+    title: "ElevenLabs Pro Tier Subscription — worth $297",
+    detail:
+      "Top 10 teams: crack the top ten and unlock Pro — 100 minutes of ultra-realistic voice generation, priority rendering, and commercial usage rights.",
+  },
+  {
+    title: "ElevenLabs Scale Tier Subscription — worth $897",
+    detail:
+      "Top 3 winners: place in the top three and get Scale — enterprise-grade voice AI with 500 minutes, the highest quality models, and full commercial licensing.",
   },
   {
     title: "Certificate of participation",

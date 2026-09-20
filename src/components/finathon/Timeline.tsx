@@ -11,11 +11,17 @@
 
 export type ScheduleEntry = {
   time: string;
+  /* The closing time of a slot that runs for a stretch. Set on its own line
+     under the start rather than as "9:45 AM – 10:45 AM" on one: a range that
+     wide forces the figure column past a third of a phone screen, and the
+     ledger's whole argument is a narrow figure column. */
+  until?: string;
   title: string;
   note?: string;
-  /* Marks the four structural beats — kickoff, freeze, judging, results — which
-     are rendered in ink rather than grey so the shape of the 36 hours is
-     readable at a glance without reading every line. */
+  /* Marks the structural beats — kick-off, the phase that starts the build,
+     judging, the winner announcement — which are rendered in ink rather than
+     grey so the shape of the event is readable at a glance without reading
+     every line. */
   major?: boolean;
 };
 
@@ -40,7 +46,7 @@ export default function Timeline({ days }: { days: ScheduleDay[] }) {
             {day.entries.map((entry, index) => (
               <li
                 key={`${day.date}-${entry.time}-${entry.title}`}
-                className="grid grid-cols-[4.25rem_1fr] items-baseline gap-x-4 gap-y-1 border-b px-2 py-3 sm:grid-cols-[6rem_1fr] sm:gap-x-8 sm:px-3"
+                className="grid grid-cols-[5rem_1fr] items-baseline gap-x-4 gap-y-1 border-b px-2 py-3 sm:grid-cols-[7rem_1fr] sm:gap-x-8 sm:px-3"
                 style={{
                   borderColor: "var(--rule)",
                   // The greenbar: alternating bands are what make a long ruled
@@ -51,11 +57,18 @@ export default function Timeline({ days }: { days: ScheduleDay[] }) {
               >
                 {/* Right-aligned figures, left-aligned text — the alignment
                     convention of every printed ledger. */}
-                <time
-                  className="text-right text-sm font-semibold sm:text-base"
-                  style={{ color: entry.major ? "var(--accent-ink)" : "var(--ink-faint)" }}
-                >
-                  {entry.time}
+                <time className="block text-right">
+                  <span
+                    className="block text-sm font-semibold sm:text-base"
+                    style={{ color: entry.major ? "var(--accent-ink)" : "var(--ink-faint)" }}
+                  >
+                    {entry.time}
+                  </span>
+                  {entry.until ? (
+                    <span className="block text-xs sm:text-sm" style={{ color: "var(--ink-faint)" }}>
+                      to {entry.until}
+                    </span>
+                  ) : null}
                 </time>
 
                 <div>

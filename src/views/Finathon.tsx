@@ -87,7 +87,17 @@ const DOMAINS = [
 
 /* The roles Aczen is hiring into. Deliberately no headcount and no numbers —
    the offer is described, never quantified. */
+<<<<<<< HEAD
 const ROLES = ["Full Stack Developer", "AI / ML Engineer", "Cybersecurity Engineer"];
+=======
+const ROLES = [
+  "Full Stack Developer",
+  "Full Stack AI Engineer",
+  "Forward Deployed Software Engineer",
+  "AI Engineer",
+  "Cybersecurity Engineer",
+];
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
 
 /* The hiring pipeline. This genuinely is a sequence, so it is the one place
    besides the schedule where ordered markers are honest. */
@@ -110,11 +120,14 @@ const PARTICIPANT_BENEFITS = [
     detail: "Engineers who ship the product circulate through the floor for the full 36 hours.",
   },
   {
+<<<<<<< HEAD
     title: "Credits on AI build tools",
     detail: "Participants receive credits on AI development tools to keep building after the event.",
     // TODO(finathon): confirm which tools and credit amounts before launch (Lovable, others).
   },
   {
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
     title: "Certificate of participation",
     detail: "Issued to every participant who submits a project.",
   },
@@ -123,6 +136,18 @@ const PARTICIPANT_BENEFITS = [
     detail: "Details to be announced closer to the event.",
     // TODO(finathon): confirm the swag list, then replace the placeholder line above.
   },
+<<<<<<< HEAD
+=======
+  {
+    title: "Credits on AI build tools",
+    detail: "ElevenLabs subscriptions for every participant.",
+    perks: [
+      { tier: "Top 3 Winners", plan: "Scale Tier", value: "$897" },
+      { tier: "Top 10 Teams", plan: "Pro Tier", value: "$297" },
+      { tier: "Every Participant", plan: "Creator Tier", value: "$22" },
+    ],
+  },
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
 ];
 
 /* The reward ledger. Cash is the smallest line of the three and is printed
@@ -537,10 +562,16 @@ export default function Finathon() {
               {PARTICIPANT_BENEFITS.map((benefit) => (
                 <li
                   key={benefit.title}
+<<<<<<< HEAD
                   // There are an odd number of these, so the final item spans the
                   // full row instead of leaving an empty cell showing the grid's
                   // rule colour as a dead grey box.
                   className="p-6 sm:last:col-span-2"
+=======
+                  className={`p-6 sm:last:col-span-2${
+                    "perks" in benefit ? " sm:py-8" : ""
+                  }`}
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
                   style={{ background: "var(--accent-wash)" }}
                 >
                   <h4 className="font-semibold" style={{ color: "var(--ink)" }}>
@@ -549,6 +580,20 @@ export default function Finathon() {
                   <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
                     {benefit.detail}
                   </p>
+<<<<<<< HEAD
+=======
+                  {"perks" in benefit && (
+                    <ul className="mt-4 grid gap-px sm:grid-cols-3" style={{ background: "var(--rule)" }}>
+                      {(benefit as typeof benefit & { perks: { tier: string; plan: string; value: string }[] }).perks.map((p) => (
+                        <li key={p.tier} className="px-4 py-3" style={{ background: "var(--paper)" }}>
+                          <span className="fin-meta" style={{ color: "var(--ink-faint)" }}>{p.tier}</span>
+                          <p className="mt-1 text-sm font-medium">{p.plan}</p>
+                          <p className="text-lg font-semibold" style={{ color: "var(--accent-ink)" }}>{p.value}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
                 </li>
               ))}
             </ul>
@@ -703,6 +748,7 @@ export default function Finathon() {
                 </dd>
               </div>
 
+<<<<<<< HEAD
               {/* TODO(finathon): replace both coordinators with real names and phone numbers. */}
               {["Student coordinator", "Student coordinator"].map((label, index) => (
                 <div
@@ -714,6 +760,23 @@ export default function Finathon() {
                   <dd className="flex items-baseline gap-3" style={{ color: "var(--ink-faint)" }}>
                     <BlankLine width="9rem" />
                     <BlankLine width="7rem" />
+=======
+              {[
+                { label: "Student coordinator", name: "Sri Harsha", phone: "+91 98666 25904" },
+                { label: "Student coordinator", name: "Uma Surya Srinivas", phone: "+91 97056 47169" },
+              ].map((coordinator, index) => (
+                <div
+                  key={`${coordinator.label}-${index}`}
+                  className="grid gap-1 border-b py-4 sm:grid-cols-[14rem_1fr] sm:gap-8"
+                  style={{ borderColor: "var(--rule)" }}
+                >
+                  <dt className="fin-meta pt-1">{coordinator.label}</dt>
+                  <dd className="flex items-baseline gap-3">
+                    <span className="font-medium">{coordinator.name}</span>
+                    <a className="underline underline-offset-4" href={`tel:${coordinator.phone.replace(/\s/g, "")}`}>
+                      {coordinator.phone}
+                    </a>
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
                   </dd>
                 </div>
               ))}

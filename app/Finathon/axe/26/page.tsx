@@ -52,7 +52,11 @@ function formatTimestamp(iso: string): string {
   });
 }
 
+<<<<<<< HEAD
 /* Case-insensitive match across every field a person would search by. */
+=======
+/* Case-insensitive match across the three fields a person would search by. */
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
 function matches(row: Registration, query: string): boolean {
   const needle = query.trim().toLowerCase();
   if (!needle) {
@@ -61,11 +65,14 @@ function matches(row: Registration, query: string): boolean {
   return (
     row.team_lead_name.toLowerCase().includes(needle) ||
     row.roll_number.toLowerCase().includes(needle) ||
+<<<<<<< HEAD
     row.email.toLowerCase().includes(needle) ||
     // Separators stripped from the NEEDLE as well as compared against a stored
     // value that already has none. Someone searching "98765 43210", copied from
     // a message, otherwise matches nothing at all.
     row.phone.includes(needle.replace(/[\s\-()]/g, "")) ||
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
     row.utr.toLowerCase().includes(needle)
   );
 }
@@ -87,6 +94,7 @@ export default async function FinathonRegistrationsPage({
   }
 
   const { q = "" } = await searchParams;
+<<<<<<< HEAD
 
   /*
     The read is caught rather than allowed to throw.
@@ -110,6 +118,9 @@ export default async function FinathonRegistrationsPage({
     readError = error instanceof Error ? error.message : String(error);
   }
 
+=======
+  const all = await listRegistrations();
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   const rows = all.filter((row) => matches(row, q));
 
   // Counted from the unfiltered set, so the tile still reads as the event total
@@ -118,6 +129,7 @@ export default async function FinathonRegistrationsPage({
 
   return (
     <div className="space-y-6">
+<<<<<<< HEAD
       {/* --- Storage diagnostic -------------------------------------------
           Shown only when the read failed. This is what turns "registrations
           are not saving" from a guess into a named cause, without exposing
@@ -140,6 +152,8 @@ export default async function FinathonRegistrationsPage({
         </div>
       ) : null}
 
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
       {/* --- Totals ------------------------------------------------------- */}
       <div className="grid grid-cols-2 gap-4 sm:max-w-md">
         <Card>
@@ -164,7 +178,11 @@ export default async function FinathonRegistrationsPage({
       <form method="get" className="flex flex-wrap items-end gap-3">
         <div className="min-w-[16rem] flex-1">
           <label htmlFor="q" className="text-sm text-muted-foreground">
+<<<<<<< HEAD
             Search name, roll number, email, phone or UTR
+=======
+            Search name, roll number or UTR
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
           </label>
           <Input id="q" name="q" defaultValue={q} className="mt-1.5" />
         </div>
@@ -187,8 +205,11 @@ export default async function FinathonRegistrationsPage({
                 <TableHead>Registered</TableHead>
                 <TableHead>Team lead</TableHead>
                 <TableHead>Roll number</TableHead>
+<<<<<<< HEAD
                 <TableHead>Email</TableHead>
                 <TableHead>Phone</TableHead>
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
                 <TableHead>UTR</TableHead>
               </TableRow>
             </TableHeader>
@@ -197,7 +218,11 @@ export default async function FinathonRegistrationsPage({
                 <TableRow>
                   {/* One spanning cell rather than an empty tbody: an empty
                       table renders as a stray header with no explanation. */}
+<<<<<<< HEAD
                   <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
+=======
+                  <TableCell colSpan={4} className="py-10 text-center text-muted-foreground">
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
                     {total === 0
                       ? "No registrations yet."
                       : "No registrations match that search."}
@@ -214,6 +239,7 @@ export default async function FinathonRegistrationsPage({
                         are read character by character against a bank statement,
                         which a proportional face makes needlessly hard. */}
                     <TableCell className="font-mono uppercase">{row.roll_number}</TableCell>
+<<<<<<< HEAD
                     {/* Both contacts are links, so reaching a team from the
                         dashboard is one tap rather than a copy-paste — which is
                         what someone running the event on a phone actually
@@ -228,6 +254,8 @@ export default async function FinathonRegistrationsPage({
                         {row.phone}
                       </a>
                     </TableCell>
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
                     <TableCell className="font-mono">{row.utr}</TableCell>
                   </TableRow>
                 ))

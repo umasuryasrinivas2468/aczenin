@@ -35,6 +35,7 @@ export const LIMITS = {
   // apps prefix theirs. Bounded generously and not pattern-matched, because a
   // reference that fails to match is still the only thread back to the payment.
   utr: { min: 8, max: 30 },
+<<<<<<< HEAD
   email: { max: 160 },
   // Ten digits for an Indian mobile, up to sixteen so "+91 98765 43210" still
   // fits once the separators are stripped.
@@ -53,14 +54,21 @@ export const LIMITS = {
 */
 const EMAIL_SHAPE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
+=======
+} as const;
+
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
 /* Shape stored in, and read back from, the table. */
 export type Registration = {
   id: number;
   submitted_at: string;
   team_lead_name: string;
   roll_number: string;
+<<<<<<< HEAD
   email: string;
   phone: string;
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   utr: string;
 };
 
@@ -68,8 +76,11 @@ export type Registration = {
 export type RegistrationInput = {
   teamLeadName: unknown;
   rollNumber: unknown;
+<<<<<<< HEAD
   email: unknown;
   phone: unknown;
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   utr: unknown;
 };
 
@@ -79,6 +90,7 @@ export type RegistrationInput = {
   `field` on the failure branch is what lets the form focus and mark the
   offending input rather than showing one message above the whole thing.
 */
+<<<<<<< HEAD
 export type ValidatedRegistration = {
   teamLeadName: string;
   rollNumber: string;
@@ -92,6 +104,11 @@ export type RegistrationField = keyof ValidatedRegistration;
 export type ValidationResult =
   | { ok: true; value: ValidatedRegistration }
   | { ok: false; field: RegistrationField; message: string };
+=======
+export type ValidationResult =
+  | { ok: true; value: { teamLeadName: string; rollNumber: string; utr: string } }
+  | { ok: false; field: "teamLeadName" | "rollNumber" | "utr"; message: string };
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
 
 /*
   Collapses runs of whitespace and trims.
@@ -119,18 +136,22 @@ export function validateRegistration(input: RegistrationInput): ValidationResult
   if (typeof input.rollNumber !== "string") {
     return { ok: false, field: "rollNumber", message: "Enter the team lead's roll number." };
   }
+<<<<<<< HEAD
   if (typeof input.email !== "string") {
     return { ok: false, field: "email", message: "Enter an email address." };
   }
   if (typeof input.phone !== "string") {
     return { ok: false, field: "phone", message: "Enter a phone number." };
   }
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   if (typeof input.utr !== "string") {
     return { ok: false, field: "utr", message: "Enter the UTR from your payment." };
   }
 
   const teamLeadName = tidy(input.teamLeadName);
   const rollNumber = tidy(input.rollNumber);
+<<<<<<< HEAD
   // Lowercased, because addresses are compared and typed case-insensitively in
   // practice and a capitalised entry would otherwise look like a different
   // address to anyone scanning the dashboard.
@@ -139,6 +160,8 @@ export function validateRegistration(input: RegistrationInput): ValidationResult
   // the punctuation would mean the same number stored three different ways,
   // none of which can be dialled straight from the dashboard.
   const phone = tidy(input.phone).replace(/[\s\-()]/g, "");
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   // Whitespace removed entirely rather than collapsed: UPI apps often render
   // the reference in groups ("1234 5678 9012") and a copy-paste carries the
   // gaps, which would otherwise be stored as part of the value and break the
@@ -164,6 +187,7 @@ export function validateRegistration(input: RegistrationInput): ValidationResult
     };
   }
 
+<<<<<<< HEAD
   if (!EMAIL_SHAPE.test(email) || email.length > LIMITS.email.max) {
     return {
       ok: false,
@@ -189,6 +213,8 @@ export function validateRegistration(input: RegistrationInput): ValidationResult
     };
   }
 
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   if (utr.length < LIMITS.utr.min || utr.length > LIMITS.utr.max) {
     return {
       ok: false,
@@ -197,7 +223,11 @@ export function validateRegistration(input: RegistrationInput): ValidationResult
     };
   }
 
+<<<<<<< HEAD
   return { ok: true, value: { teamLeadName, rollNumber, email, phone, utr } };
+=======
+  return { ok: true, value: { teamLeadName, rollNumber, utr } };
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
 }
 
 /*
@@ -226,15 +256,27 @@ const UNIQUE_VIOLATION = "23505";
   instead. Two extra reads on a rare path is a fair price for never putting a
   registrant's name in a log.
 */
+<<<<<<< HEAD
 export async function saveRegistration(
   value: ValidatedRegistration & { ipHash: string },
 ): Promise<SaveResult> {
+=======
+export async function saveRegistration(value: {
+  teamLeadName: string;
+  rollNumber: string;
+  utr: string;
+  ipHash: string;
+}): Promise<SaveResult> {
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   try {
     await axeInsert("finathon_registration", {
       team_lead_name: value.teamLeadName,
       roll_number: value.rollNumber,
+<<<<<<< HEAD
       email: value.email,
       phone: value.phone,
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
       utr: value.utr,
       ip_hash: value.ipHash,
     });
@@ -312,7 +354,11 @@ export async function recentSubmissionCount(
 export async function listRegistrations(limit = 2_000): Promise<Registration[]> {
   return axeSelect<Registration>(
     "finathon_registration",
+<<<<<<< HEAD
     "select=id,submitted_at,team_lead_name,roll_number,email,phone,utr&order=submitted_at.desc",
+=======
+    "select=id,submitted_at,team_lead_name,roll_number,utr&order=submitted_at.desc",
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
     limit,
   );
 }

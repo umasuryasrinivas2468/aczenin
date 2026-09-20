@@ -32,13 +32,20 @@ const QR_IMAGE_SRC = "/images/finathon/payment-qr.png";
    thread about a wrong amount. */
 const AMOUNT_LABEL = "₹499 per team";
 
+<<<<<<< HEAD
 type FieldName = "teamLeadName" | "rollNumber" | "email" | "phone" | "utr";
+=======
+type FieldName = "teamLeadName" | "rollNumber" | "utr";
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
 
 export default function RegistrationForm() {
   const [teamLeadName, setTeamLeadName] = useState("");
   const [rollNumber, setRollNumber] = useState("");
+<<<<<<< HEAD
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   const [utr, setUtr] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
@@ -54,8 +61,11 @@ export default function RegistrationForm() {
   const refs = {
     teamLeadName: useRef<HTMLInputElement>(null),
     rollNumber: useRef<HTMLInputElement>(null),
+<<<<<<< HEAD
     email: useRef<HTMLInputElement>(null),
     phone: useRef<HTMLInputElement>(null),
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
     utr: useRef<HTMLInputElement>(null),
   };
 
@@ -74,7 +84,11 @@ export default function RegistrationForm() {
       const response = await fetch("/api/finathon/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+<<<<<<< HEAD
         body: JSON.stringify({ teamLeadName, rollNumber, email, phone, utr }),
+=======
+        body: JSON.stringify({ teamLeadName, rollNumber, utr }),
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
       });
 
       const body = (await response.json().catch(() => null)) as
@@ -82,6 +96,7 @@ export default function RegistrationForm() {
         | null;
 
       if (response.ok && body?.ok) {
+<<<<<<< HEAD
         /*
           Saved, so hand the team straight on to Devnovate.
 
@@ -100,6 +115,9 @@ export default function RegistrationForm() {
         // that the payment was recorded, rather than skipping past it to the
         // empty form.
         window.location.assign(DEVNOVATE_URL);
+=======
+        setSubmitted(true);
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
         return;
       }
 
@@ -137,6 +155,7 @@ export default function RegistrationForm() {
         <p className="fin-meta">Registration recorded</p>
         <h2 className="fin-serif fin-h2 mt-3">You&rsquo;re in, {teamLeadName.split(" ")[0]}.</h2>
         <p className="fin-body mt-4">
+<<<<<<< HEAD
           We have your details and your payment reference. Taking you to Devnovate now, where
           problem statements and submissions are handled — if nothing happens, use the button
           below.
@@ -146,6 +165,18 @@ export default function RegistrationForm() {
             button is the same journey by hand rather than a second one in a
             new tab. */}
         <a className="fin-cta mt-8" href={DEVNOVATE_URL} rel="noreferrer noopener">
+=======
+          We have your payment reference. One last step: complete your team&rsquo;s entry on
+          Devnovate, which is where problem statements and submissions are handled.
+        </p>
+
+        <a
+          className="fin-cta mt-8"
+          href={DEVNOVATE_URL}
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
           Continue on Devnovate
         </a>
 
@@ -196,6 +227,7 @@ export default function RegistrationForm() {
           required
         />
 
+<<<<<<< HEAD
         <Field
           id="email"
           label="Email"
@@ -222,6 +254,8 @@ export default function RegistrationForm() {
           required
         />
 
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
         {/* --- Step two: pay ---------------------------------------------- */}
         <div className="mt-12">
           {/* A <p>, not a second <legend>: a legend is only valid as the FIRST
@@ -306,20 +340,29 @@ export default function RegistrationForm() {
         // that cannot possibly succeed should not spend one of the five the
         // rate limiter allows this network in an hour.
         disabled={
+<<<<<<< HEAD
           submitting ||
           !teamLeadName.trim() ||
           !rollNumber.trim() ||
           !email.trim() ||
           !phone.trim() ||
           !utr.trim()
+=======
+          submitting || !teamLeadName.trim() || !rollNumber.trim() || !utr.trim()
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
         }
       >
         {submitting ? "Saving…" : "Register now"}
       </button>
 
       <p className="fin-meta mt-6">
+<<<<<<< HEAD
         We store your name, roll number, email, phone and UTR to confirm your entry, reach you
         about the event, and reconcile payment. Nothing else.
+=======
+        We store your name, roll number and UTR to confirm your entry and reconcile payment.
+        Nothing else.
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
       </p>
     </form>
   );
@@ -343,10 +386,13 @@ function Field({
   invalid,
   autoComplete,
   inputMode,
+<<<<<<< HEAD
   // "email" and "tel" are what make a phone show the right keyboard and let the
   // browser offer a saved address. Defaulted to "text" rather than made
   // required, because most fields here genuinely are text.
   type = "text",
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   className = "",
   required,
 }: {
@@ -359,7 +405,10 @@ function Field({
   invalid: boolean;
   autoComplete: string;
   inputMode?: "numeric" | "text";
+<<<<<<< HEAD
   type?: "text" | "email" | "tel";
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
   className?: string;
   required?: boolean;
 }) {
@@ -377,7 +426,10 @@ function Field({
         <input
           id={id}
           ref={inputRef}
+<<<<<<< HEAD
           type={type}
+=======
+>>>>>>> ce67e70af6824703c236c65f2105429458946b90
           value={value}
           onChange={(event) => onChange(event.target.value)}
           autoComplete={autoComplete}

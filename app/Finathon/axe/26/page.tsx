@@ -52,11 +52,7 @@ function formatTimestamp(iso: string): string {
   });
 }
 
-<<<<<<< HEAD
-/* Case-insensitive match across every field a person would search by. */
-=======
 /* Case-insensitive match across the three fields a person would search by. */
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
 function matches(row: Registration, query: string): boolean {
   const needle = query.trim().toLowerCase();
   if (!needle) {
@@ -65,14 +61,6 @@ function matches(row: Registration, query: string): boolean {
   return (
     row.team_lead_name.toLowerCase().includes(needle) ||
     row.roll_number.toLowerCase().includes(needle) ||
-<<<<<<< HEAD
-    row.email.toLowerCase().includes(needle) ||
-    // Separators stripped from the NEEDLE as well as compared against a stored
-    // value that already has none. Someone searching "98765 43210", copied from
-    // a message, otherwise matches nothing at all.
-    row.phone.includes(needle.replace(/[\s\-()]/g, "")) ||
-=======
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
     row.utr.toLowerCase().includes(needle)
   );
 }
@@ -94,33 +82,7 @@ export default async function FinathonRegistrationsPage({
   }
 
   const { q = "" } = await searchParams;
-<<<<<<< HEAD
-
-  /*
-    The read is caught rather than allowed to throw.
-
-    Without this the page 500s on any storage problem, and a blank error screen
-    says nothing about WHICH problem — which is exactly the position the form
-    leaves you in, because a public endpoint must stay vague about why a write
-    failed. This page is behind the password, so it is the one place the real
-    message can safely be shown, and it is the natural place to look when
-    registrations are not arriving.
-
-    The message is safe to render: SupabaseWriteError and the select path both
-    go through describeFailure, which keeps only the SQLSTATE and the
-    schema-generated hint and strips anything that could carry a row value.
-  */
-  let all: Registration[] = [];
-  let readError: string | null = null;
-  try {
-    all = await listRegistrations();
-  } catch (error) {
-    readError = error instanceof Error ? error.message : String(error);
-  }
-
-=======
   const all = await listRegistrations();
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
   const rows = all.filter((row) => matches(row, q));
 
   // Counted from the unfiltered set, so the tile still reads as the event total
@@ -129,31 +91,6 @@ export default async function FinathonRegistrationsPage({
 
   return (
     <div className="space-y-6">
-<<<<<<< HEAD
-      {/* --- Storage diagnostic -------------------------------------------
-          Shown only when the read failed. This is what turns "registrations
-          are not saving" from a guess into a named cause, without exposing
-          anything to the public form. */}
-      {readError ? (
-        <div
-          role="alert"
-          className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm"
-        >
-          <p className="font-semibold">Cannot read registrations.</p>
-          <p className="mt-1 font-mono text-xs break-all">{readError}</p>
-          <p className="mt-2">
-            {/* The two causes that actually happen, named. A 404 or PGRST205
-                means PostgREST cannot find the table, which is what an
-                unapplied migration looks like from here. */}
-            {readError.includes("404") || readError.includes("PGRST205")
-              ? "That is an unapplied migration: run supabase/migrations/20260918101500_finathon_registration.sql against this project. Writes from the registration form are failing for the same reason."
-              : "Check NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in the deployment environment. Writes from the registration form are failing for the same reason."}
-          </p>
-        </div>
-      ) : null}
-
-=======
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
       {/* --- Totals ------------------------------------------------------- */}
       <div className="grid grid-cols-2 gap-4 sm:max-w-md">
         <Card>
@@ -178,11 +115,7 @@ export default async function FinathonRegistrationsPage({
       <form method="get" className="flex flex-wrap items-end gap-3">
         <div className="min-w-[16rem] flex-1">
           <label htmlFor="q" className="text-sm text-muted-foreground">
-<<<<<<< HEAD
-            Search name, roll number, email, phone or UTR
-=======
             Search name, roll number or UTR
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
           </label>
           <Input id="q" name="q" defaultValue={q} className="mt-1.5" />
         </div>
@@ -205,11 +138,6 @@ export default async function FinathonRegistrationsPage({
                 <TableHead>Registered</TableHead>
                 <TableHead>Team lead</TableHead>
                 <TableHead>Roll number</TableHead>
-<<<<<<< HEAD
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-=======
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
                 <TableHead>UTR</TableHead>
               </TableRow>
             </TableHeader>
@@ -218,11 +146,7 @@ export default async function FinathonRegistrationsPage({
                 <TableRow>
                   {/* One spanning cell rather than an empty tbody: an empty
                       table renders as a stray header with no explanation. */}
-<<<<<<< HEAD
-                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-=======
                   <TableCell colSpan={4} className="py-10 text-center text-muted-foreground">
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
                     {total === 0
                       ? "No registrations yet."
                       : "No registrations match that search."}
@@ -239,23 +163,6 @@ export default async function FinathonRegistrationsPage({
                         are read character by character against a bank statement,
                         which a proportional face makes needlessly hard. */}
                     <TableCell className="font-mono uppercase">{row.roll_number}</TableCell>
-<<<<<<< HEAD
-                    {/* Both contacts are links, so reaching a team from the
-                        dashboard is one tap rather than a copy-paste — which is
-                        what someone running the event on a phone actually
-                        needs from this table. */}
-                    <TableCell>
-                      <a className="underline underline-offset-2" href={`mailto:${row.email}`}>
-                        {row.email}
-                      </a>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap font-mono">
-                      <a className="underline underline-offset-2" href={`tel:${row.phone}`}>
-                        {row.phone}
-                      </a>
-                    </TableCell>
-=======
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
                     <TableCell className="font-mono">{row.utr}</TableCell>
                   </TableRow>
                 ))

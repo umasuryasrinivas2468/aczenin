@@ -49,32 +49,6 @@ create table public.finathon_registration (
   roll_number text not null
     check (char_length(btrim(roll_number)) between 4 and 24),
 
-<<<<<<< HEAD
-  -- How the organisers reach this team. Both are required: the shortlist and
-  -- the offer letters go out by email, and the day-of logistics ("your team is
-  -- called for judging in ten minutes") only work by phone.
-  --
-  -- Deliberately NOT unique, unlike roll_number and utr. A shared team inbox or
-  -- one member's phone standing in for the team is normal and harmless, and the
-  -- roll number already stops the same person registering twice. A unique
-  -- constraint here would reject legitimate entries to catch a duplicate that
-  -- is already caught.
-  email text not null
-    -- The loosest check that still rejects a typo'd address: something, an @,
-    -- something, a dot, something. Anything stricter starts rejecting valid
-    -- addresses — the full grammar permits far more than people expect — and a
-    -- registration bounced for a "wrong" address that was right is worse than
-    -- one that has to be chased.
-    check (btrim(email) ~ '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$'),
-
-  -- Stored as the digits the person typed, normalised in the API to strip
-  -- spaces, dashes and brackets. Bounded rather than pinned to ten digits so a
-  -- +91 prefix or a landline still passes.
-  phone text not null
-    check (char_length(btrim(phone)) between 10 and 16),
-
-=======
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
   -- The UPI transaction reference the team pastes after paying. This is what
   -- makes the row reconcilable against the bank statement; without it a
   -- registration is an unverifiable claim to have paid.

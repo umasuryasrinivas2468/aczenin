@@ -56,18 +56,9 @@ async function recentAttemptCount(ipHash: string): Promise<number> {
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
-<<<<<<< HEAD
-  try {
-    // Inside the try for the same reason as the register route: this throws
-    // when AXE_SALT is unset, and outside it that is an unhandled exception and
-    // a bodyless 500 rather than the JSON error the gate form expects.
-    const ipHash = rateLimitIpHash(clientIp(request.headers));
-
-=======
   const ipHash = rateLimitIpHash(clientIp(request.headers));
 
   try {
->>>>>>> ce67e70af6824703c236c65f2105429458946b90
     // --- 1. Rate limit, before any password work ---------------------------
     const attempts = await recentAttemptCount(ipHash);
     if (attempts >= RATE_LIMIT_MAX_ATTEMPTS) {

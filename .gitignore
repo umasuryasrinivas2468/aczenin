@@ -39,8 +39,5 @@ next-env.d.ts
 studio/
 # Playwright MCP screenshot/debug artifacts
 .playwright-mcp/
-<<<<<<< HEAD
-=======
 migrate-data-payload.sql
 vercel-env-upload.env
->>>>>>> ce67e70af6824703c236c65f2105429458946b90

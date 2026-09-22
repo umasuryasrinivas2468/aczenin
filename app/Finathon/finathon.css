@@ -912,3 +912,26 @@
   height: 1.125rem;
   margin-top: 0.1rem;
 }
+
+/* ---------------------------------------------------------------------------
+   Line-item float containment
+
+   .fin-lineitem-legend floats (see its own comment for why a <legend> has to).
+   Every field row inside a line item is `display: grid`, and a grid container
+   establishes an INDEPENDENT FORMATTING CONTEXT — which means it does not flow
+   underneath a float the way a plain block would. The browser shifts it
+   sideways to avoid the float instead.
+
+   The visible symptom was the first field of every member: its label was pushed
+   into the middle of the page and its input squeezed into a sliver at the right
+   edge, while every field below it sat correctly. Only the first was wrong
+   because only it overlapped the floated legend's height.
+
+   `clear: both` puts each child below the float rather than beside it. Applied
+   to every non-legend child rather than only the first, so the rule keeps
+   holding if the markup inside a line item is ever reordered — and it costs
+   nothing on the rows that have no float above them.
+   ------------------------------------------------------------------------ */
+.fin-lineitem > *:not(legend) {
+  clear: both;
+}

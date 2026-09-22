@@ -41,3 +41,6 @@ studio/
 .playwright-mcp/
 migrate-data-payload.sql
 vercel-env-upload.env
+
+# TypeScript incremental build cache — machine-local, never shared
+tsconfig.tsbuildinfo

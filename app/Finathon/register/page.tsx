@@ -4,7 +4,11 @@ import { Newsreader, Archivo } from "next/font/google";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import RegistrationForm from "@/components/finathon/RegistrationForm";
+// The two-step team form. RegistrationForm, the single-person version this
+// replaces, stays on disk unused until the JSON route it posts to is retired —
+// deleting it in the same pass would take the only reference implementation of
+// the old contract with it while that route is still live.
+import TeamRegistrationForm from "@/components/finathon/TeamRegistrationForm";
 import "../finathon.css";
 
 /*
@@ -70,12 +74,16 @@ export default function RegisterPage() {
 
           <h1 className="fin-serif fin-h2 mt-6">Register your team</h1>
           <p className="fin-body mt-4 max-w-2xl">
-            One registration per team, submitted by the team lead. You will need your roll
-            number and a UPI app. It takes about two minutes.
+            {/* Says up front what the form will ask for, because the expensive
+                surprise is reaching step two and discovering you need four
+                teammates&rsquo; roll numbers that you do not have to hand. */}
+            One registration per team, submitted by the team lead. You will need every
+            member&rsquo;s name, college, roll number, phone and email, plus a UPI app to
+            pay with.
           </p>
 
           <div className="mt-12 max-w-3xl">
-            <RegistrationForm />
+            <TeamRegistrationForm />
           </div>
         </div>
       </main>

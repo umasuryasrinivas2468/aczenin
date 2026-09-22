@@ -311,3 +311,27 @@ export function firstIssue(error: z.ZodError): { field: string; message: string 
   // "members.2.email" — a dotted path the form maps straight onto its field ids.
   return { field: issue.path.join("."), message: issue.message };
 }
+
+/*
+  When registration closes, as ONE definition.
+
+  Lives in the shared module rather than in the countdown component because the
+  deadline is now enforced in two places that must agree to the second: the
+  countdown that tells a student they still have time, and the API route that
+  decides whether to accept their money. Two copies of this instant is the same
+  bug class as the 27-vs-28 September correction — a value duplicated across
+  files drifts, and here the drift takes payments for a closed event.
+
+  The +05:30 offset is written explicitly. A bare local date means different
+  instants to a visitor abroad and to a build machine running in UTC.
+
+  NOTE: 28 September 2026 is a MONDAY. Any edit to the digit must move the
+  weekday word in src/views/Finathon.tsx with it.
+*/
+export const REGISTRATION_CLOSES_AT = new Date("2026-09-28T23:59:59+05:30");
+
+/* True when the deadline has passed. Takes `now` as a parameter so the check is
+   testable without mocking the clock. */
+export function registrationIsClosed(now: number = Date.now()): boolean {
+  return now > REGISTRATION_CLOSES_AT.getTime();
+}

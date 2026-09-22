@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 
+// The single definition of when registration closes, shared with the API route
+// that enforces it. See the note in that module about the weekday.
+import { REGISTRATION_CLOSES_AT } from "@/lib/finathon/teamRegistrationSchema";
+
 /*
   Finathon countdown.
 
@@ -20,7 +24,10 @@ import { useEffect, useState } from "react";
 // All event instants are written with the +05:30 offset rather than as bare
 // local dates. Without it a visitor in another timezone sees a clock that is
 // hours wrong, and a build machine running in UTC bakes in the wrong target.
-const REGISTRATION_CLOSES = new Date("2026-09-28T23:59:59+05:30");
+// Imported rather than redeclared. This instant is now also enforced
+// server-side by the registration API, and two copies of a deadline drift —
+// which here would mean taking payments for a closed event.
+const REGISTRATION_CLOSES = REGISTRATION_CLOSES_AT;
 const EVENT_STARTS = new Date("2026-09-30T09:45:00+05:30");
 const EVENT_ENDS = new Date("2026-10-01T14:30:00+05:30");
 

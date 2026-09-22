@@ -27,6 +27,31 @@ if (typeof window !== "undefined") {
 // private dashboard to anyone glancing at their own cookie jar.
 export const AXE_COOKIE_NAME = "axe_session";
 
+/*
+  WHICH GATE a session belongs to.
+
+  === THE VULNERABILITY THIS CLOSES ========================================
+  Before this existed, the cookie value was `<expiry>.<nonce>.<hmac>` — and
+  nothing in it said which gate had issued it. Both gates sign with the same
+  AXE_COOKIE_SECRET and minted an identical payload, so the two cookies were
+  byte-for-byte interchangeable. The ONLY thing keeping them apart was the
+  cookie's NAME, which is not signed and which the holder can edit freely.
+
+  `httpOnly` stops JavaScript from reading the cookie. It does not stop a person
+  opening DevTools -> Application -> Cookies and renaming one. So any Finathon
+  volunteer with a valid `fin_session` could rename it to `axe_session` and walk
+  into the founder analytics dashboard. The reverse held too.
+
+  Binding the gate into the SIGNED payload fixes it properly: the name is now
+  covered by the HMAC, so changing it invalidates the signature.
+
+  The gate is the FIRST parameter of both mint and verify, deliberately — that
+  way a call site that has not been updated fails to compile rather than
+  silently defaulting to one of the two gates.
+  ==========================================================================
+*/
+export type SessionGate = "axe" | "finathon";
+
 // Eight hours. Long enough to cover a working day without re-entering the
 // password, short enough that a session left open on an unattended laptop
 // expires by itself overnight.
@@ -114,13 +139,15 @@ export function verifyPasswordAgainst(submitted: string, stored: string | undefi
   A signed expiry is checked by the server and cannot be extended without the
   secret.
 */
-export function mintSessionCookie(now: number = Date.now()): string {
+export function mintSessionCookie(gate: SessionGate, now: number = Date.now()): string {
   const expiresAt = now + SESSION_TTL_MS;
   // A random nonce makes every issued cookie unique even when two logins land
   // in the same millisecond, so one captured value can be told apart from
   // another in the auth log if that is ever needed.
   const nonce = randomBytes(9).toString("base64url");
-  const payload = `${expiresAt}.${nonce}`;
+  // The gate name is part of the SIGNED payload, so it cannot be edited without
+  // the secret. See the SessionGate comment above for why this is not optional.
+  const payload = `${gate}.${expiresAt}.${nonce}`;
   return `${payload}.${sign(payload)}`;
 }
 
@@ -131,7 +158,13 @@ export function mintSessionCookie(now: number = Date.now()): string {
   see the dashboard or not", and returning a richer object would invite call
   sites to trust fields that are not actually authenticated.
 */
-export function verifySessionCookie(value: string | undefined, now: number = Date.now()): boolean {
+export function verifySessionCookie(
+  // The gate this caller is protecting. A cookie minted for the other gate is
+  // rejected even though it is perfectly validly signed — that is the point.
+  gate: SessionGate,
+  value: string | undefined,
+  now: number = Date.now(),
+): boolean {
   // No cookie at all is the overwhelmingly common case — every first visit and
   // every crawler — so it is handled first and cheaply.
   if (!value) {
@@ -139,19 +172,36 @@ export function verifySessionCookie(value: string | undefined, now: number = Dat
   }
 
   const parts = value.split(".");
-  // Exactly three segments, or the value did not come from mintSessionCookie.
-  if (parts.length !== 3) {
+  // Exactly FOUR segments now: gate, expiry, nonce, signature. A three-segment
+  // value is a cookie minted before the gate was bound in; it fails here and
+  // the holder is asked to sign in again. That is the intended migration path —
+  // there is no way to upgrade an old cookie without trusting its unsigned gate.
+  if (parts.length !== 4) {
     return false;
   }
 
-  const [expiresAtRaw, nonce, signature] = parts;
-  const payload = `${expiresAtRaw}.${nonce}`;
+  const [gateRaw, expiresAtRaw, nonce, signature] = parts;
+  const payload = `${gateRaw}.${expiresAtRaw}.${nonce}`;
 
   // Signature is checked BEFORE the expiry is trusted. The expiry is
   // attacker-supplied text until the HMAC proves otherwise, so reading it first
   // would mean acting on unverified input — the standard ordering mistake in
   // signed-token verification.
   if (!signatureMatches(payload, signature)) {
+    return false;
+  }
+
+  /*
+    The gate is checked AFTER the signature, not before.
+
+    Ordering matters: until the HMAC verifies, `gateRaw` is attacker-supplied
+    text. Comparing it first would be acting on unverified input — and would
+    also leak, through response timing, whether a forged cookie had guessed the
+    right gate name. Once the signature holds, this value is known to have been
+    minted by us, and a mismatch means a cookie from the OTHER dashboard has
+    been renamed into this one's slot.
+  */
+  if (gateRaw !== gate) {
     return false;
   }
 

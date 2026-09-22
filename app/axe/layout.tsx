@@ -44,7 +44,7 @@ export default async function AxeLayout({ children }: { children: React.ReactNod
   // Awaited because cookies() is async in Next 15 — the synchronous form is the
   // Next 14 API and silently yields a Promise object here rather than a store.
   const cookieStore = await cookies();
-  const authenticated = verifySessionCookie(cookieStore.get(AXE_COOKIE_NAME)?.value);
+  const authenticated = verifySessionCookie("axe", cookieStore.get(AXE_COOKIE_NAME)?.value);
 
   // {children} is deliberately NOT rendered on this branch. The page element is
   // created by the framework and passed in, but React only invokes a component

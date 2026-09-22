@@ -440,3 +440,475 @@
     row-gap: 0.75rem;
   }
 }
+
+
+/* ===========================================================================
+   Team registration form — appended for the two-step flow
+   ===========================================================================
+
+   Everything below is additive. Nothing above this line is edited, because the
+   event page renders from the same stylesheet and a change to a shared
+   primitive would land on a page nobody is testing in this pass.
+   ------------------------------------------------------------------------ */
+
+/*
+   A SECOND `.fin` block, rather than a new declaration inside the first one.
+
+   The token belongs with the other tokens, but editing that block means
+   touching a rule the event page depends on. Two blocks at equal specificity
+   resolve by document order, so this one simply extends the set — and a reader
+   diffing the file sees an addition, never a modification.
+*/
+.fin {
+  /*
+     The error voice. Oxblood rather than the #b3261e hardcoded twice in the
+     legacy form, because that red is a signal red borrowed from Material and
+     sits loud beside navy ink; this one is the red a printer would use on a
+     statement. Measured, not asserted: 7.52:1 on --paper (#f7f8f5) and 6.97:1
+     on --band (#edf0ea). Passes the 4.5:1 floor for error TEXT and the 3:1
+     floor for an error input RULE, which are different requirements that the
+     same token has to satisfy because it is used for both.
+  */
+  --error-ink: #9c1f16;
+}
+
+/* ---------------------------------------------------------------------------
+   Step header — a ruled two-cell account header, not a progress bar
+   ------------------------------------------------------------------------ */
+
+/*
+   Two cells, always both visible. A progress bar shows how far along you are;
+   a statement header shows what the document IS — which of the two parts you
+   are looking at, and that there are exactly two. The second is more useful
+   here: the question a student actually has at step one is "how much more of
+   this is there", and two named cells answer it outright.
+*/
+.fin-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* The heavy rule above and the hairline below are the same pairing the
+     statement strip uses, so this header reads as part of the same document
+     rather than as a widget dropped on top of it. */
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
+  /* An <ol> carries the sequence to assistive tech; the markers would be a
+     second, worse set of numbers next to the ones the cells already print. */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* One cell. Quiet by default — the inactive step is information, not an
+   invitation, so it gets the faint ink and no fill. */
+.fin-step {
+  display: grid;
+  /* The number sits in its own narrow column so the names line up with each
+     other even though "01" and "02" are the same width but the names are not. */
+  grid-template-columns: auto 1fr;
+  column-gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.875rem 1rem;
+  color: var(--ink-faint);
+}
+
+/* The dividing hairline goes on the second cell only. Putting a left border on
+   every cell would draw a line down the outside edge of the first one, which
+   on a full-bleed ruled layout reads as a stray mark. */
+.fin-step + .fin-step {
+  border-left: 1px solid var(--rule);
+}
+
+/* The live row, banded like a greenbar ledger line. This is the whole reason
+   the header can drop the progress bar: a ledger already has a way of saying
+   "this line" and it is a tint, not a filling meter. */
+.fin-step[aria-current="step"] {
+  background: var(--band);
+  color: var(--ink);
+}
+
+/* The sequence number. Tabular by inheritance from .fin, so 01 and 02 occupy
+   identical width and the two cells' names start at the same x position. */
+.fin-step-no {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  /* Sits with the number column's own centre rather than the name's baseline,
+     so a wrapped name never drags the digits out of the rule. */
+  align-self: center;
+}
+
+/* The step's name and its state stack in the content column. */
+.fin-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/*
+   The state word — "Now", "Next", "Done".
+
+   A word, not a tick and not a colour change, because colour is never allowed
+   to be the only signal here and a bare glyph still leaves a screen reader
+   announcing punctuation. The word costs four characters and removes both
+   problems.
+*/
+.fin-step-state {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ---------------------------------------------------------------------------
+   Fields
+   ------------------------------------------------------------------------ */
+
+/*
+   The underlined input, lifted out of the legacy form's inline `style` prop.
+
+   Same look, but the error and focus states now live in CSS where an attribute
+   selector can reach them. Inline styles cannot express :focus-visible at all,
+   which is why the legacy inputs set `outline: none` and then had no visible
+   focus ring of their own — the sitewide .fin focus rule only covers a, button
+   and [tabindex], so form controls fell through it entirely.
+*/
+.fin-field-rule {
+  width: 100%;
+  display: block;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rule-strong);
+  border-radius: 0;
+  padding: 0.5rem 0;
+  font-size: 1.125rem;
+  font-family: inherit;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 160ms ease;
+}
+
+/* The ruled line under the field is the field, so the focus signal belongs on
+   it: it thickens and takes the site's focus blue. The outline is kept as well
+   rather than replaced by it — a colour change alone is invisible to anyone who
+   cannot see the colour, and Windows High Contrast Mode drops backgrounds and
+   borders but keeps outlines. */
+.fin-field-rule:focus-visible {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--focus);
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/*
+   The error state: the rule thickens AND reddens.
+
+   Two changes, not one, so weight carries the signal for anyone the colour
+   does not reach. The message below the field carries a third — words — and
+   the mark beside the message a fourth. Driven off aria-invalid rather than a
+   class, so the visual state literally cannot be applied without the
+   accessibility attribute that announces it.
+*/
+.fin-field-rule[aria-invalid="true"] {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--error-ink);
+}
+
+/* Placeholder left deliberately faint and unused for labelling — every field
+   here has a real <label>. This only exists so a browser's autofill preview
+   text does not render at full ink weight. */
+.fin-field-rule::placeholder {
+  color: var(--ink-faint);
+}
+
+/* The hint under a field. Same role as --ink-faint's other uses: present,
+   readable, subordinate. */
+.fin-field-hint {
+  margin-top: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--ink-faint);
+}
+
+/*
+   A field-level error message.
+
+   Flex so the mark and the words sit on one baseline and wrap as a unit. The
+   mark is an inline SVG in the markup rather than a ::before glyph, because a
+   pseudo-element's content is read aloud by some screen readers and "black
+   circle exclamation" is not a sentence anyone needs.
+*/
+.fin-field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin-top: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--error-ink);
+}
+
+/* The mark holds its size while the text wraps beside it. */
+.fin-field-error svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  /* Optical alignment: a 16px mark centred on a 20px line sits a hair high. */
+  margin-top: 0.1rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Line items — one person per ruled row
+   ------------------------------------------------------------------------ */
+
+/*
+   A participant block, drawn as a statement line item.
+
+   The hairline above and the number in the gutter are the same two devices the
+   rest of the page uses to say "this is one entry in a list". Nested <fieldset>
+   elements, which is valid HTML: the restriction is that a <legend> may only be
+   the FIRST child of its own fieldset, not that fieldsets cannot nest.
+*/
+.fin-lineitem {
+  border-top: 1px solid var(--rule);
+  padding-top: 1.5rem;
+  margin-top: 2.5rem;
+  /* Fieldsets carry a browser default border and padding that would box every
+     person on a page whose entire idea is rules instead of boxes. */
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  min-width: 0;
+}
+
+/*
+   The legend, placed as a full-width row rather than notched into the rule.
+
+   `float: left` plus `width: 100%` is the one reliable way to make a <legend>
+   behave as a block in every engine; a plain `display: block` still lets some
+   browsers apply the legend's own notching rules to the fieldset border above.
+*/
+.fin-lineitem-legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 0.25rem;
+}
+
+/* The legend's contents: the person's position on the left, any control for
+   that line on the right, on one baseline. */
+.fin-lineitem-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------------
+   Row actions — add and remove a member
+   ------------------------------------------------------------------------ */
+
+/*
+   A small ghost control, sized to sit on a line item's heading line.
+
+   Not a .fin-cta: the page has exactly one primary action per step, and adding
+   a fourth teammate is not it. Underlined rather than filled, which is the
+   .fin-cta-ghost idea at a smaller size.
+*/
+.fin-rowaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  padding: 0.25rem 0;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.fin-rowaction:hover {
+  color: var(--accent-ink);
+  border-color: var(--accent-ink);
+}
+
+/*
+   Unavailable, but still reachable.
+
+   aria-disabled rather than the `disabled` attribute for the same reason the
+   CTA uses it: a natively disabled button is skipped by the tab order and by
+   most screen-reader element lists, so somebody who cannot add a fifth member
+   has no way to land on the control and find out why. Dashed, matching the
+   designed .fin-cta disabled state, so the two read as one vocabulary.
+*/
+.fin-rowaction[aria-disabled="true"] {
+  color: var(--ink-faint);
+  border-color: var(--rule);
+  border-bottom-style: dashed;
+  cursor: not-allowed;
+}
+
+.fin-rowaction[aria-disabled="true"]:hover {
+  color: var(--ink-faint);
+  border-color: var(--rule);
+}
+
+/* ---------------------------------------------------------------------------
+   Payment step
+   ------------------------------------------------------------------------ */
+
+/* The QR sits in a ruled frame on paper stock, the way a printed remittance
+   slip prints its code inside a box. Fixed square so the layout does not jump
+   between the image loading and the fallback rendering. */
+.fin-qr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 13rem;
+  height: 13rem;
+  padding: 0.75rem;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+}
+
+/* The QR itself. `height: auto` keeps the 1:1 source square when next/image's
+   intrinsic width is scaled by the frame. */
+.fin-qr img {
+  width: 100%;
+  height: auto;
+}
+
+/*
+   The native file input, styled rather than hidden behind a fake button.
+
+   The usual trick — a visually-hidden input plus a <label> dressed as a button
+   — needs its own focus-within plumbing and breaks differently in every
+   browser. Styling the real control keeps the browser's own keyboard handling,
+   its file picker and its focus ring, and costs one pseudo-element.
+*/
+.fin-file {
+  display: block;
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+.fin-file::file-selector-button {
+  /* The same ghost vocabulary as .fin-rowaction, so "choose a file" reads as a
+     secondary action rather than competing with Submit. */
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 0.6rem 1.1rem;
+  margin-right: 0.9rem;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.fin-file::file-selector-button:hover {
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
+  color: var(--paper);
+}
+
+/* Safari below 16.4 only knows the -webkit- spelling; unprefixed and prefixed
+   selectors cannot share a rule block, because one unknown selector invalidates
+   the whole list. */
+.fin-file::-webkit-file-upload-button {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 0.6rem 1.1rem;
+  margin-right: 0.9rem;
+  cursor: pointer;
+}
+
+/* The file control is an input, so the sitewide .fin focus rule misses it the
+   same way it misses the text fields. */
+.fin-file:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/*
+   The chosen screenshot, shown back to the person.
+
+   A thumbnail is the only check that catches the commonest upload mistake,
+   which is not a wrong file type but the wrong screenshot — the gallery's most
+   recent image rather than the payment one. Boxed in the same hairline as the
+   QR so the two read as a matched pair: what you scanned, what you are sending.
+*/
+.fin-filepreview {
+  display: block;
+  max-width: 11rem;
+  max-height: 11rem;
+  width: auto;
+  height: auto;
+  margin-top: 0.875rem;
+  border: 1px solid var(--rule);
+  background: var(--band);
+}
+
+/* ---------------------------------------------------------------------------
+   Form-level message
+   ------------------------------------------------------------------------ */
+
+/*
+   The banner above the buttons, for anything that is not about one field — a
+   rejected submission, a network failure, a bound that was reached.
+
+   Banded rather than tinted red: a red panel would put a third loud element on
+   a page that already has an ink button and a red rule, and the words plus the
+   mark carry the meaning without it. The left rule is what makes it read as a
+   note in a margin rather than an alert box.
+*/
+.fin-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 2rem;
+  padding: 0.875rem 1rem;
+  background: var(--band);
+  border-left: 3px solid var(--ink);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* The failure variant. The rule on the left changes colour AND the mark in the
+   markup changes shape, so the difference between "note" and "problem" survives
+   greyscale. */
+.fin-notice-error {
+  border-left-color: var(--error-ink);
+  color: var(--error-ink);
+}
+
+.fin-notice svg {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.1rem;
+}

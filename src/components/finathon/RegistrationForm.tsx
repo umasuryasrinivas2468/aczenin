@@ -25,7 +25,7 @@ const DEVNOVATE_URL = "https://devnovate.co/event/finthon-2o";
 
 /* The payment QR, as a file in public/. Rendered through next/image for the
    automatic sizing and lazy behaviour; it is a static asset, not user content. */
-const QR_IMAGE_SRC = "/images/finathon/payment-qr.png";
+const QR_IMAGE_SRC = "/images/finathon/payment-qr.jpg";
 
 /* Shown beside the QR. A figure the person can check against what their app
    offers to send is the difference between a correct payment and a support

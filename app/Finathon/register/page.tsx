@@ -46,8 +46,17 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
+  // `fin` is load-bearing here, not cosmetic. Every design token (--paper,
+  // --ink, --rule-strong, --accent-fill) is declared only inside `.fin {}` in
+  // finathon.css, so without this class all of them are undefined on this page.
+  // The worst casualty is .fin-cta: `border: 1px solid var(--ink)` is a CSS
+  // shorthand, and a shorthand containing an invalid var is discarded whole —
+  // taking the button fill with it, so the submit button on a payment page was
+  // rendering as unstyled bold text. The event page escapes this only because
+  // src/views/Finathon.tsx:320 puts `fin` on its own root; this page renders
+  // RegistrationForm directly and so has no such ancestor to inherit from.
   return (
-    <div className={`${newsreader.variable} ${archivo.variable}`}>
+    <div className={`fin ${newsreader.variable} ${archivo.variable}`}>
       <Navbar />
 
       <main style={{ background: "var(--paper)", color: "var(--ink)" }}>

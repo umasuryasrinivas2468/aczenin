@@ -48,12 +48,12 @@ const EVENT = {
   venueMapUrl: "https://www.google.com/maps/search/?api=1&query=MLR+Institute+of+Technology+Dundigal+Hyderabad",
   startsLabel: "Wed 30 Sep, 9.45 am",
   endsLabel: "Thu 1 Oct, 2.30 pm",
-  deadlineLabel: "Sun 27 Sep",
+  deadlineLabel: "Mon 28 Sep",
   // Spelled out for the panel, where the countdown gives the duration and this
   // gives the thing people actually diarise.
-  deadlineFull: "Sunday 27 September, 11.59 pm IST",
+  deadlineFull: "Monday 28 September, 11.59 pm IST",
   duration: "36 hours",
-  teamSize: "3 to 4 members",
+  teamSize: "3 to 5 members",
 };
 
 /*
@@ -221,11 +221,11 @@ const SCHEDULE: ScheduleDay[] = [
 const FAQ = [
   {
     q: "Who can participate?",
-    a: "Third and fourth year students from any college in Telangana. Bring a team of three or four.",
+    a: "Third and fourth year students from any college in Telangana. Bring a team of three to five.",
   },
   {
     q: "Do I need a team before I register?",
-    a: "Yes — register as a team of three or four. If you are short of members, join the WhatsApp community and find them there before registration closes.",
+    a: "Yes — register as a team of three to five. If you are short of members, join the WhatsApp community and find them there before registration closes.",
   },
   {
     q: "How will projects be judged?",
@@ -385,7 +385,7 @@ export default function Finathon() {
                   thing was the panel reading its label out twice. */}
               <Countdown tone="dark" />
 
-              {/* A duration is not a date. People plan against "Sunday the 27th",
+              {/* A duration is not a date. People plan against "Monday the 28th",
                   and this is also the line that survives a screenshot. */}
               <p className="mt-4 text-sm font-medium" style={{ color: "var(--paper)" }}>
                 {EVENT.deadlineFull}

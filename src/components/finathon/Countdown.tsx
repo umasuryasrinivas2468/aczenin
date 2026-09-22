@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
   in the page never re-run on a tick. (Separating stateful from presentational
   components — the same reason the sticky bar is its own file.)
 
-  It walks three phases on its own, so nobody has to redeploy on the 27th:
+  It walks three phases on its own, so nobody has to redeploy on the 28th:
     "registration" -> counting down to the registration deadline
     "event"        -> counting down to the 9.45 am kick-off
     "live"         -> the hackathon is running
@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 // All event instants are written with the +05:30 offset rather than as bare
 // local dates. Without it a visitor in another timezone sees a clock that is
 // hours wrong, and a build machine running in UTC bakes in the wrong target.
-const REGISTRATION_CLOSES = new Date("2026-09-27T23:59:59+05:30");
+const REGISTRATION_CLOSES = new Date("2026-09-28T23:59:59+05:30");
 const EVENT_STARTS = new Date("2026-09-30T09:45:00+05:30");
 const EVENT_ENDS = new Date("2026-10-01T14:30:00+05:30");
 

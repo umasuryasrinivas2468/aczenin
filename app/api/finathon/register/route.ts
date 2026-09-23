@@ -14,6 +14,7 @@
     8. Upload to the private bucket
     9. One transactional RPC
    10. On RPC failure, delete the orphaned object
+   11. On success, email the team (after the response, never blocking it)
 
   Steps 1-4 all run before a single byte of the body is consumed, so a flood of
   5 MB uploads is rejected without ever being buffered. Moving any of them below
@@ -33,9 +34,10 @@
   explicit Origin / Sec-Fetch-Site check below replaces it.
 */
 
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 
 import { clientIp, rateLimitIpHash } from "@/lib/axe/identity";
+import { sendRegistrationConfirmation } from "@/lib/finathon/confirmationMail";
 import {
   MAX_SCREENSHOT_BYTES,
   RATE_LIMIT_MAX_ATTEMPTS,
@@ -65,7 +67,7 @@ export const dynamic = "force-dynamic";
 
   The JSON payload for a five-person team is a few kilobytes; 256 KB is far more
   than it can be and still small enough that the check is meaningful. Without
-  headroom a legitimate 5 MB screenshot would be rejected for the overhead of
+  headroom a legitimate 4 MB screenshot would be rejected for the overhead of
   its own MIME boundaries.
 */
 const MAX_REQUEST_BYTES = MAX_SCREENSHOT_BYTES + 256 * 1024;
@@ -139,7 +141,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     const declaredLength = Number(request.headers.get("content-length"));
     if (Number.isFinite(declaredLength) && declaredLength > MAX_REQUEST_BYTES) {
       await logRegisterAttempt(ipHash, "rejected");
-      return fail(413, "That screenshot is too large. Please upload an image under 5 MB.", "screenshot");
+      return fail(413, "That screenshot is too large. Please upload an image under 4 MB.", "screenshot");
     }
 
     // --- 2. Origin, before the body is touched ------------------------------
@@ -242,7 +244,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     // a lying Content-Length in step 1 does not get past.
     if (screenshot.size > MAX_SCREENSHOT_BYTES) {
       await logRegisterAttempt(ipHash, "rejected");
-      return fail(413, "That screenshot is too large. Please upload an image under 5 MB.", "screenshot");
+      return fail(413, "That screenshot is too large. Please upload an image under 4 MB.", "screenshot");
     }
     // A zero-byte file is a failed pick in the file dialog, not a payment.
     if (screenshot.size === 0) {
@@ -319,6 +321,15 @@ export async function POST(request: Request): Promise<NextResponse> {
     }
 
     await logRegisterAttempt(ipHash, "accepted");
+
+    // --- 11. Confirmation email ---------------------------------------------
+    // after(), not await: the registration is committed, so the student gets
+    // their response now and an SMTP delay cannot turn it into a timeout. The
+    // platform keeps the function alive until this settles. It never throws.
+    const submission = parsed.data;
+    const publicId = saved.publicId;
+    after(() => sendRegistrationConfirmation(submission, publicId));
+
     // The unguessable id only. No row is read back and nothing about any other
     // registration is disclosed.
     return NextResponse.json({ ok: true, publicId: saved.publicId }, { status: 201 });

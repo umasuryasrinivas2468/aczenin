@@ -85,9 +85,9 @@ const AMOUNT_LABEL =
 */
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-/* The bucket's file_size_limit, restated. 5 MB in bytes, written as the
+/* The bucket's file_size_limit, restated. 4 MB in bytes, written as the
    multiplication so the number is checkable at a glance. */
-const MAX_SCREENSHOT_BYTES = 5 * 1024 * 1024;
+const MAX_SCREENSHOT_BYTES = 4 * 1024 * 1024;
 
 /* The `accept` attribute for the file picker. Built from the list above so a
    type added to one is added to both; a picker that offers a file the code then
@@ -774,7 +774,7 @@ export default function TeamRegistrationForm() {
       // The actual size is quoted, so the person can tell how far over they are
       // rather than guessing at what "too large" means.
       setScreenshotError(
-        `That image is ${(file.size / 1024 / 1024).toFixed(1)} MB. The limit is 5 MB — a screenshot is usually well under it.`,
+        `That image is ${(file.size / 1024 / 1024).toFixed(1)} MB. The limit is 4 MB — a screenshot is usually well under it.`,
       );
       setScreenshot(null);
       setPreviewUrl(null);
@@ -1319,7 +1319,7 @@ export default function TeamRegistrationForm() {
               />
 
               <p id="fin-screenshot-hint" className="fin-field-hint">
-                JPG, PNG or WEBP, up to 5 MB. The confirmation screen from your UPI app.
+                JPG, PNG or WEBP, up to 4 MB. The confirmation screen from your UPI app.
               </p>
 
               {/* The chosen file, named and sized, so the person can tell at a

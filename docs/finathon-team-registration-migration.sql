@@ -406,7 +406,7 @@ revoke all on function public.finathon_touch_updated_at() from authenticated;
 -- ============================================================================
 -- SECTION 5c — the private storage bucket
 --
--- public = false, a hard 5 MB ceiling, and a MIME allowlist enforced by storage
+-- public = false, a hard 4 MB ceiling, and a MIME allowlist enforced by storage
 -- itself rather than only by our code. Two independent checks: the API sniffs
 -- magic bytes before uploading, and the bucket refuses anything outside the
 -- list even if our code is wrong.
@@ -417,10 +417,20 @@ revoke all on function public.finathon_touch_updated_at() from authenticated;
 -- ============================================================================
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('finathon-payments', 'finathon-payments', false, 5242880,
+values ('finathon-payments', 'finathon-payments', false, 4194304,
         array['image/jpeg','image/png','image/webp'])
 -- Idempotent: re-running this file must not error on an existing bucket.
 on conflict (id) do nothing;
+
+-- 4 MB, not 5: Vercel refuses any function request body over 4.5 MB before our
+-- code runs, so a 4.5-5 MB screenshot could never have arrived anyway. The
+-- update applies the limit to a bucket that already existed, which the
+-- `do nothing` above would otherwise leave on its old settings.
+update storage.buckets
+set public = false,
+    file_size_limit = 4194304,
+    allowed_mime_types = array['image/jpeg','image/png','image/webp']
+where id = 'finathon-payments';
 
 
 -- ============================================================================

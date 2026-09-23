@@ -13,8 +13,10 @@
 
 import nodemailer from "nodemailer";
 
+import { axeSelect } from "@/lib/axe/supabase";
 import {
   isMailTemplateName,
+  mailSubject,
   renderMailHtml,
   renderMailText,
   type MailData,
@@ -52,37 +54,25 @@ const TEMPLATE = isMailTemplateName(requestedTemplate) ? requestedTemplate : "cl
 // sender is derived from the SMTP user rather than configured separately.
 const FROM = `"Finathon 2026 · Aczen" <${SMTP_USER}>`;
 
-function toMailData(submission: TeamRegistration, publicId: string): MailData {
-  const person = (p: TeamRegistration["lead"]) => ({
-    fullName: p.fullName,
-    rollNumber: p.rollNumber,
-    college: p.college,
-  });
-  return {
-    teamName: submission.teamName,
-    publicId,
-    amount: `₹${(AMOUNT_PAISE / 100).toFixed(0)}`,
-    utr: submission.utr,
-    lead: person(submission.lead),
-    members: submission.members.map(person),
-  };
-}
+const rupees = (paise: number) => `₹${(paise / 100).toFixed(0)}`;
 
 /*
-  Sends the confirmation to the lead, with every member on CC so the whole team
+  Sends one team email to the lead, with every member on CC so the whole team
   has the registration ID.
 
   Never throws. Missing configuration and SMTP failures are logged and swallowed,
-  because the registration is already committed by the time this runs. Only the
-  error's code and SMTP response code are logged — nodemailer's messages and
-  error objects can carry the recipient list, which is students' addresses.
+  because the registration (or the review) is already committed by the time this
+  runs. Only the error's code and SMTP response code are logged — nodemailer's
+  messages and error objects can carry the recipient list, which is students'
+  addresses.
 */
-export async function sendRegistrationConfirmation(
-  submission: TeamRegistration,
-  publicId: string,
+async function sendTeamMail(
+  data: MailData,
+  leadEmail: string,
+  memberEmails: string[],
 ): Promise<void> {
   if (!SMTP_PASSWORD) {
-    console.error("[finathon/mail] ZOHO_SMTP_PASSWORD is not set; confirmation email skipped.");
+    console.error(`[finathon/mail] ZOHO_SMTP_PASSWORD is not set; ${data.kind} email skipped.`);
     return;
   }
 
@@ -99,21 +89,18 @@ export async function sendRegistrationConfirmation(
       socketTimeout: 15_000,
     });
 
-    const leadEmail = submission.lead.email;
     // De-duplicated case-insensitively: two members sharing an address, or a
     // member reusing the lead's, would otherwise get the mail twice.
-    const cc = [...new Set(submission.members.map((m) => m.email.toLowerCase()))].filter(
+    const cc = [...new Set(memberEmails.map((email) => email.toLowerCase()))].filter(
       (email) => email !== leadEmail.toLowerCase(),
     );
-
-    const data = toMailData(submission, publicId);
 
     await transport.sendMail({
       from: FROM,
       to: leadEmail,
       cc,
       replyTo: SMTP_USER,
-      subject: `Finathon 2026: registration received — ${submission.teamName}`,
+      subject: mailSubject(data),
       text: renderMailText(data),
       html: renderMailHtml(TEMPLATE, data),
     });
@@ -121,9 +108,101 @@ export async function sendRegistrationConfirmation(
     // e.g. EAUTH (bad app password), ETIMEDOUT, EENVELOPE, with 535/550 etc.
     const { code, responseCode } = (error ?? {}) as { code?: unknown; responseCode?: unknown };
     console.error(
-      "[finathon/mail] confirmation email failed:",
+      `[finathon/mail] ${data.kind} email failed:`,
       typeof code === "string" ? code : "unknown",
       typeof responseCode === "number" ? responseCode : "",
     );
+  }
+}
+
+/* "Registration received", sent by the register route straight after a save. */
+export async function sendRegistrationConfirmation(
+  submission: TeamRegistration,
+  publicId: string,
+): Promise<void> {
+  const person = (p: TeamRegistration["lead"]) => ({
+    fullName: p.fullName,
+    rollNumber: p.rollNumber,
+    college: p.college,
+  });
+  await sendTeamMail(
+    {
+      kind: "received",
+      teamName: submission.teamName,
+      publicId,
+      amount: rupees(AMOUNT_PAISE),
+      utr: submission.utr,
+      lead: person(submission.lead),
+      members: submission.members.map(person),
+    },
+    submission.lead.email,
+    submission.members.map((member) => member.email),
+  );
+}
+
+type StoredTeam = {
+  team_name: string;
+  public_id: string;
+  amount_paise: number;
+  utr: string;
+  finathon_participant: {
+    is_lead: boolean;
+    position: number;
+    full_name: string;
+    college: string;
+    roll_number: string;
+    email: string;
+  }[];
+};
+
+/*
+  "You're confirmed", sent when a reviewer approves a team on /Finathon/axe/26.
+
+  Takes only the team id and reads the rest back, because the review form
+  carries nothing but the id — and the stored row, not anything a form posted,
+  is what the team registered with. Never throws, like sendTeamMail.
+*/
+export async function sendApprovalEmail(teamId: number): Promise<void> {
+  try {
+    const [team] = await axeSelect<StoredTeam>(
+      "finathon_team",
+      `id=eq.${encodeURIComponent(String(teamId))}` +
+        "&select=team_name,public_id,amount_paise,utr," +
+        "finathon_participant(is_lead,position,full_name,college,roll_number,email)",
+      1,
+    );
+    const people = Array.isArray(team?.finathon_participant)
+      ? team.finathon_participant.slice().sort((a, b) => a.position - b.position)
+      : [];
+    const lead = people.find((p) => p.is_lead === true);
+    // No row, or a team with no lead (a legacy copy, say): nobody to write to.
+    if (!team || !lead) {
+      console.error(`[finathon/mail] approval email skipped: team ${teamId} has no lead on record.`);
+      return;
+    }
+    const members = people.filter((p) => p !== lead);
+    const person = (p: StoredTeam["finathon_participant"][number]) => ({
+      fullName: p.full_name,
+      rollNumber: p.roll_number,
+      college: p.college,
+    });
+
+    await sendTeamMail(
+      {
+        kind: "approved",
+        teamName: team.team_name,
+        publicId: team.public_id,
+        amount: rupees(team.amount_paise),
+        utr: team.utr,
+        lead: person(lead),
+        members: members.map(person),
+      },
+      lead.email,
+      members.map((member) => member.email),
+    );
+  } catch (error) {
+    // The id is an integer, not a person, so it is safe to log. The error comes
+    // from the shared client and is already scrubbed of row data.
+    console.error(`[finathon/mail] approval email failed for team ${teamId}:`, error);
   }
 }

@@ -4,7 +4,8 @@
 
     node scripts/preview-finathon-mail.mjs [outDir]
 
-  Writes one <name>.html per design into outDir (default: .mail-preview/).
+  Writes <name>-received.html and <name>-approved.html per design into outDir
+  (default: .mail-preview/).
   Needs Node 22.18+ for built-in TypeScript type stripping.
 */
 
@@ -15,6 +16,7 @@ import { MAIL_TEMPLATE_NAMES, renderMailHtml } from "../src/lib/finathon/mailTem
 
 // Sample team, plainly fictional.
 const SAMPLE = {
+  kind: "received",
   teamName: "Ledger Lions",
   publicId: "3f6c2a91-8b4e-4d17-a0c5-9e21b7d4f803",
   amount: "₹499",
@@ -31,7 +33,9 @@ const outDir = process.argv[2] ?? ".mail-preview";
 mkdirSync(outDir, { recursive: true });
 
 for (const name of MAIL_TEMPLATE_NAMES) {
-  const file = join(outDir, `${name}.html`);
-  writeFileSync(file, renderMailHtml(name, SAMPLE));
-  console.log(`wrote ${file}`);
+  for (const kind of ["received", "approved"]) {
+    const file = join(outDir, `${name}-${kind}.html`);
+    writeFileSync(file, renderMailHtml(name, { ...SAMPLE, kind }));
+    console.log(`wrote ${file}`);
+  }
 }

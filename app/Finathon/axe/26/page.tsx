@@ -58,6 +58,7 @@ import { hasFinathonSession } from "@/lib/finathon/gate";
 
 import { applySearch, clearSearch, reviewTeam } from "./actions";
 import {
+  assignTeamCodes,
   listTeams,
   signScreenshotUrls,
   sortRoster,
@@ -407,6 +408,8 @@ export default async function FinathonReviewQueuePage({
       : undefined;
 
   const all = await listTeams();
+  // From the unfiltered set, so a team's code does not change with the tab.
+  const teamCodes = assignTeamCodes(all);
 
   /*
     Counts computed from the UNFILTERED set, so the tiles keep reading as event
@@ -480,6 +483,7 @@ export default async function FinathonReviewQueuePage({
           URL, so a link is the whole feature — and it keeps working with the
           back button, middle-click and a bookmark, none of which a click
           handler gives for free. */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
       <nav aria-label="Filter by status" className="flex flex-wrap gap-2">
         {STATUS_FILTERS.map((option) => (
           <a
@@ -502,6 +506,14 @@ export default async function FinathonReviewQueuePage({
           </a>
         ))}
       </nav>
+        {/* A plain download link: the route checks the session itself and
+            exports the tab currently selected. */}
+        <Button asChild variant="outline" size="sm">
+          <a href={`/Finathon/axe/26/export?status=${status}`} download>
+            Export CSV
+          </a>
+        </Button>
+      </div>
 
       {/* --- Search ------------------------------------------------------- */}
       {/*
@@ -617,6 +629,9 @@ export default async function FinathonReviewQueuePage({
 
                         <TableCell className="font-medium">
                           {team.team_name || "—"}
+                          <span className="block font-mono text-xs font-normal text-muted-foreground">
+                            {teamCodes.get(team.id)}
+                          </span>
                           {/* The roster size, stated. §4.2 allows 3 to 5, and a
                               team that somehow has 2 is a data problem the
                               reviewer should see rather than count by hand. */}

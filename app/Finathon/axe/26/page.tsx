@@ -563,6 +563,51 @@ export default async function FinathonReviewQueuePage({
         </form>
       ) : null}
 
+      {/* --- Team contacts ------------------------------------------------ */}
+      {/* One block per team with every member's name, email and phone, for
+          the current tab and search — the same set the table below shows. */}
+      {rows.length > 0 ? (
+        <section aria-labelledby="team-contacts" className="space-y-3">
+          <h2 id="team-contacts" className="text-lg font-semibold">
+            Team contacts
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {rows.map((team) => (
+              <Card key={team.id}>
+                <CardContent className="space-y-3 p-4">
+                  <div>
+                    <p className="font-mono text-xs text-muted-foreground">
+                      {teamCodes.get(team.id)}
+                    </p>
+                    <p className="font-semibold">{team.team_name || "—"}</p>
+                  </div>
+                  <ol className="space-y-2 text-sm">
+                    {sortRoster(team.finathon_participant).map((person) => (
+                      <li key={person.id} className="leading-snug">
+                        <span className="font-medium">{person.full_name || "—"}</span>
+                        {person.is_lead === true ? (
+                          <span className="ml-1.5 rounded bg-foreground/10 px-1 text-[10px] font-semibold uppercase tracking-wide">
+                            Lead
+                          </span>
+                        ) : null}
+                        {/* break-all: a long email would otherwise overflow
+                            the card on a phone. */}
+                        <span className="block break-all text-xs text-muted-foreground">
+                          {person.email || "—"}
+                        </span>
+                        <span className="block font-mono text-xs text-muted-foreground">
+                          {person.phone || "—"}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       {/* --- The queue ---------------------------------------------------- */}
       <Card>
         <CardContent className="p-0">

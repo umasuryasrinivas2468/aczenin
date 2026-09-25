@@ -1,7 +1,8 @@
 /*
   GET /Finathon/axe/26/export?status=<filter> — the team roster as CSV.
 
-  One row per participant: team code, team name, status, role, name, email.
+  One row per participant: team code, team name, status, role, name, email,
+  phone. Rows are grouped team by team, with a blank line between teams.
   Route handlers do not pass through the gating layout, so the session is
   checked here before anything is fetched.
 */
@@ -13,7 +14,7 @@ import { assignTeamCodes, listTeams, sortRoster, toStatusFilter } from "../data"
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const HEADER = ["Team Code", "Team Name", "Status", "Role", "Name", "Email"];
+const HEADER = ["Team Code", "Team Name", "Status", "Role", "Name", "Email", "Phone"];
 
 /*
   Quotes one CSV cell. A leading = + - @ is prefixed with an apostrophe so a
@@ -46,6 +47,10 @@ export async function GET(request: Request) {
 
   const lines = [HEADER.map(cell).join(",")];
   for (const team of teams) {
+    // A blank line between teams, so the sheet reads as one block per team.
+    if (lines.length > 1) {
+      lines.push("");
+    }
     for (const person of sortRoster(team.finathon_participant)) {
       lines.push(
         [
@@ -55,6 +60,7 @@ export async function GET(request: Request) {
           person.is_lead === true ? "Lead" : "Member",
           person.full_name,
           person.email,
+          person.phone,
         ]
           .map(cell)
           .join(","),

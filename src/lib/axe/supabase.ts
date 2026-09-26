@@ -51,7 +51,16 @@ export type AxeTable =
   // See the header of the migration: every write error from it must go through
   // describeFailure(), because a constraint violation on this table would
   // otherwise put a registrant's real name into a log line.
-  | "finathon_registration";
+  | "finathon_registration"
+  // The team-registration tables. finathon_team and finathon_participant hold
+  // MORE personal data than finathon_registration did — colleges, phone numbers
+  // and email addresses for up to five people per team — so the describeFailure
+  // discipline above is not optional on these, it is the whole defence.
+  | "finathon_team"
+  | "finathon_participant"
+  // The rate-limit ledger. Holds only a hashed IP and an outcome word, so it is
+  // the one table in this group that carries nothing identifying.
+  | "finathon_register_attempt";
 
 /*
   A write failure, carrying the SQLSTATE separately from the message.
@@ -66,11 +75,15 @@ export type AxeTable =
 */
 export class SupabaseWriteError extends Error {
   readonly code: string | null;
+  // The violated constraint/index name on a 23505, when it could be read out
+  // safely. See describeFailure for why this is the only part of `message` kept.
+  readonly constraint: string | null;
 
-  constructor(message: string, code: string | null) {
+  constructor(message: string, code: string | null, constraint: string | null = null) {
     super(message);
     this.name = "SupabaseWriteError";
     this.code = code;
+    this.constraint = constraint;
   }
 }
 
@@ -175,11 +188,15 @@ export async function axeSelect<T>(
 */
 async function describeFailure(
   operation: string,
-  table: AxeTable,
+  // Widened from AxeTable to string so the RPC and storage helpers below can
+  // reuse this exact scrubbing. They are not tables, but they return the same
+  // PostgREST-shaped error body, and a second copy of this logic is how one of
+  // the two copies ends up leaking a row value after a future edit.
+  table: string,
   response: Response,
   // Returns the SQLSTATE alongside the message rather than only the prose,
   // so a caller can branch on a unique violation without re-parsing the text.
-): Promise<{ message: string; code: string | null }> {
+): Promise<{ message: string; code: string | null; constraint: string | null }> {
   // The base message, which is always safe: status codes and our own table
   // names carry nothing about any visitor.
   const base = `Supabase ${operation} on ${table} failed (${response.status})`;
@@ -190,20 +207,31 @@ async function describeFailure(
     const parsed = JSON.parse(await response.text()) as {
       code?: unknown;
       hint?: unknown;
+      message?: unknown;
     };
     // Whitelisted by name, never spread. A spread would pick up `message` and
     // `details` — the two fields this whole function exists to exclude — the
     // moment PostgREST changed its response shape.
     const code = typeof parsed.code === "string" ? parsed.code : null;
     const hint = typeof parsed.hint === "string" ? parsed.hint : null;
+    // The one exception to "never read message": on a 23505 Postgres puts only
+    // the constraint NAME in `message` (the row values go in `details`). The
+    // match is anchored and the capture limited to identifier characters, so
+    // anything other than that exact fixed sentence yields null, not text.
+    const constraintMatch =
+      code === "23505" && typeof parsed.message === "string"
+        ? /^duplicate key value violates unique constraint "([a-z0-9_]{1,63})"$/.exec(parsed.message)
+        : null;
+    const constraint = constraintMatch ? constraintMatch[1] : null;
     return {
-      message: `${base}${code ? ` [${code}]` : ""}${hint ? ` hint: ${hint}` : ""}`,
+      message: `${base}${code ? ` [${code}]` : ""}${constraint ? ` on ${constraint}` : ""}${hint ? ` hint: ${hint}` : ""}`,
       code,
+      constraint,
     };
   } catch {
     // An unparseable body tells us nothing safe, so nothing is added. The
     // status alone still distinguishes 401 from 404 from 500.
-    return { message: base, code: null };
+    return { message: base, code: null, constraint: null };
   }
 }
 
@@ -281,4 +309,189 @@ export async function axeCount(table: AxeTable, params: string): Promise<number>
   // it is at least a number the caller can reason about; the thrown errors
   // above already cover the cases that actually matter.
   return Number.isFinite(total) ? total : 0;
+}
+
+/*
+  ============================================================================
+  RPC and Storage — added for Finathon team registration.
+
+  Both speak to the same Supabase project with the same service-role key, so
+  they live here rather than in a second client that would need its own copy of
+  the URL normalisation, the auth headers and the error scrubbing.
+  ============================================================================
+*/
+
+/*
+  Calls a Postgres function through PostgREST.
+
+  WHY AN RPC AT ALL: PostgREST cannot span a transaction across two tables.
+  Registering a team means one insert into finathon_team and three-to-five into
+  finathon_participant, and doing that as separate HTTP calls leaves an orphaned
+  team with no members whenever call two fails. "The network blipped
+  mid-registration" is exactly the case that must not corrupt an entry somebody
+  paid ₹499 for. One function call, one transaction, all or nothing.
+
+  Returns the function's return value. The SQLSTATE is preserved on failure so
+  the caller can tell a 23505 unique violation — a normal outcome worth showing
+  the student — from an actual fault.
+*/
+export async function axeRpc<T>(
+  functionName: string,
+  payload: Record<string, unknown>,
+): Promise<T> {
+  if (!SUPABASE_URL) {
+    throw new Error("NEXT_PUBLIC_SUPABASE_URL is not set; cannot call Supabase RPC.");
+  }
+  const base = SUPABASE_URL.replace(/\/+$/, "");
+
+  const response = await fetch(`${base}/rest/v1/rpc/${functionName}`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify(payload),
+    // A registration write must never be served from, or written to, a cache.
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    // Same scrubbing as every other write path. A CHECK violation raised inside
+    // the function would otherwise put the offending row — names, phone numbers,
+    // email addresses — into a log line that outlives the request.
+    const failure = await describeFailure("rpc", functionName, response);
+    throw new SupabaseWriteError(failure.message, failure.code, failure.constraint);
+  }
+
+  return (await response.json()) as T;
+}
+
+/*
+  Uploads bytes to a PRIVATE storage bucket, server-side only.
+
+  WHY THE SERVER AND NOT THE BROWSER: a direct browser upload would require
+  granting `anon` INSERT on storage.objects, which would make it the ONLY
+  anonymously writable surface in a database where every single table is
+  deny-by-default with zero policies. Routing the bytes through here also means
+  size, MIME and magic-byte checks all happen BEFORE anything is persisted.
+
+  `upsert` is left off deliberately: each team's object path contains its own
+  uuid, so a collision means something is wrong and should fail loudly rather
+  than silently overwrite another team's payment evidence.
+*/
+export async function storageUpload(
+  bucket: string,
+  objectPath: string,
+  bytes: Uint8Array,
+  contentType: string,
+): Promise<void> {
+  if (!SUPABASE_URL) {
+    throw new Error("NEXT_PUBLIC_SUPABASE_URL is not set; cannot upload to Supabase Storage.");
+  }
+  if (!SERVICE_ROLE_KEY) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set; cannot upload to Supabase Storage.");
+  }
+  const base = SUPABASE_URL.replace(/\/+$/, "");
+
+  const response = await fetch(`${base}/storage/v1/object/${bucket}/${objectPath}`, {
+    method: "POST",
+    headers: {
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+      // The REAL content type, determined by sniffing magic bytes upstream —
+      // never the one the client claimed in its multipart part header.
+      "Content-Type": contentType,
+      // Refuse rather than replace if the path somehow already exists.
+      "x-upsert": "false",
+    },
+    // Uint8Array is an accepted BodyInit; no base64 round trip, so a 5 MB file
+    // does not become a 6.7 MB string in memory on the way through.
+    body: bytes as unknown as BodyInit,
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const failure = await describeFailure("storage upload", bucket, response);
+    throw new SupabaseWriteError(failure.message, failure.code);
+  }
+}
+
+/*
+  Deletes one object from a bucket.
+
+  Exists for exactly one caller: the API route's compensating action. The bucket
+  write happens BEFORE the database insert, because a row pointing at a missing
+  file is worse than a file with no row. When the insert then fails, this undoes
+  the upload in the same request so the bucket does not accumulate orphans.
+
+  Swallows its own failure at the call site rather than here — a failed cleanup
+  must not turn a handled error into an unhandled one.
+*/
+export async function storageDelete(bucket: string, objectPath: string): Promise<void> {
+  if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
+    throw new Error("Supabase env not configured; cannot delete from Storage.");
+  }
+  const base = SUPABASE_URL.replace(/\/+$/, "");
+
+  const response = await fetch(`${base}/storage/v1/object/${bucket}/${objectPath}`, {
+    method: "DELETE",
+    headers: {
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const failure = await describeFailure("storage delete", bucket, response);
+    throw new SupabaseWriteError(failure.message, failure.code);
+  }
+}
+
+/*
+  Mints a short-lived signed URL for one private object.
+
+  Used by the admin dashboard to show a payment screenshot without ever making
+  the bucket public and without the browser holding a Supabase key.
+
+  SIXTY SECONDS, not an hour: the URL is generated fresh on every page render,
+  so a short life costs nothing, and a URL that leaks through a screenshot, a
+  shared screen or a browser history is useless a minute later.
+
+  The URL serves from supabase.co rather than aczen.in, which is deliberate and
+  worth keeping: a crafted polyglot file — valid JPEG header, HTML payload —
+  cannot execute script in the site's own origin even if it somehow slipped past
+  the magic-byte check.
+*/
+export async function storageSignedUrl(
+  bucket: string,
+  objectPath: string,
+  expiresInSeconds = 60,
+): Promise<string> {
+  if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
+    throw new Error("Supabase env not configured; cannot sign a Storage URL.");
+  }
+  const base = SUPABASE_URL.replace(/\/+$/, "");
+
+  const response = await fetch(`${base}/storage/v1/object/sign/${bucket}/${objectPath}`, {
+    method: "POST",
+    headers: {
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ expiresIn: expiresInSeconds }),
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const failure = await describeFailure("storage sign", bucket, response);
+    throw new SupabaseWriteError(failure.message, failure.code);
+  }
+
+  // Storage returns { signedURL: "/object/sign/<bucket>/<path>?token=..." } —
+  // a RELATIVE path, which is the detail that makes a naive implementation
+  // render a broken image. It has to be joined onto the storage origin.
+  const parsed = (await response.json()) as { signedURL?: unknown };
+  if (typeof parsed.signedURL !== "string") {
+    throw new Error("Supabase Storage returned no signedURL.");
+  }
+  return `${base}/storage/v1${parsed.signedURL.replace(/^\/+/, "/")}`;
 }

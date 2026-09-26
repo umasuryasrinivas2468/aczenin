@@ -56,12 +56,9 @@ async function recentAttemptCount(ipHash: string): Promise<number> {
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
-  try {
-    // Inside the try for the same reason as the register route: this throws
-    // when AXE_SALT is unset, and outside it that is an unhandled exception and
-    // a bodyless 500 rather than the JSON error the gate form expects.
-    const ipHash = rateLimitIpHash(clientIp(request.headers));
+  const ipHash = rateLimitIpHash(clientIp(request.headers));
 
+  try {
     // --- 1. Rate limit, before any password work ---------------------------
     const attempts = await recentAttemptCount(ipHash);
     if (attempts >= RATE_LIMIT_MAX_ATTEMPTS) {
@@ -104,7 +101,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     // sameSite lax, path '/'. Every flag applies here for the same reason, and
     // duplicating the object would let the two gates drift apart on a detail
     // like the Secure flag, which fails silently.
-    response.cookies.set(FINATHON_COOKIE_NAME, mintSessionCookie(), AXE_COOKIE_OPTIONS);
+    response.cookies.set(FINATHON_COOKIE_NAME, mintSessionCookie("finathon"), AXE_COOKIE_OPTIONS);
     return response;
   } catch (error) {
     console.error("[finathon/session] login failed:", error);

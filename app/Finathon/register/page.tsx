@@ -4,7 +4,13 @@ import { Newsreader, Archivo } from "next/font/google";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import RegistrationForm from "@/components/finathon/RegistrationForm";
+// The two-step team form. RegistrationForm, the single-person version this
+// replaces, stays on disk unused until the JSON route it posts to is retired —
+// deleting it in the same pass would take the only reference implementation of
+// the old contract with it while that route is still live.
+import TeamRegistrationForm from "@/components/finathon/TeamRegistrationForm";
+// Client-only popup that states the 3rd-year / MLRIT-only rule on arrival.
+import EligibilityPopup from "@/components/finathon/EligibilityPopup";
 import "../finathon.css";
 
 /*
@@ -46,8 +52,17 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
+  // `fin` is load-bearing here, not cosmetic. Every design token (--paper,
+  // --ink, --rule-strong, --accent-fill) is declared only inside `.fin {}` in
+  // finathon.css, so without this class all of them are undefined on this page.
+  // The worst casualty is .fin-cta: `border: 1px solid var(--ink)` is a CSS
+  // shorthand, and a shorthand containing an invalid var is discarded whole —
+  // taking the button fill with it, so the submit button on a payment page was
+  // rendering as unstyled bold text. The event page escapes this only because
+  // src/views/Finathon.tsx:320 puts `fin` on its own root; this page renders
+  // RegistrationForm directly and so has no such ancestor to inherit from.
   return (
-    <div className={`${newsreader.variable} ${archivo.variable}`}>
+    <div className={`fin ${newsreader.variable} ${archivo.variable}`}>
       <Navbar />
 
       <main style={{ background: "var(--paper)", color: "var(--ink)" }}>
@@ -61,12 +76,27 @@ export default function RegisterPage() {
 
           <h1 className="fin-serif fin-h2 mt-6">Register your team</h1>
           <p className="fin-body mt-4 max-w-2xl">
-            One registration per team, submitted by the team lead. You will need your roll
-            number and a UPI app. It takes about two minutes.
+            {/* Says up front what the form will ask for, because the expensive
+                surprise is reaching step two and discovering you need four
+                teammates&rsquo; roll numbers that you do not have to hand. */}
+            One registration per team, submitted by the team lead. You will need every
+            member&rsquo;s name, college, roll number, phone and email, plus a UPI app to
+            pay with.
           </p>
 
+          {/* Stated again on the page itself, not only in the popup, so it is
+              still visible after the popup is dismissed and before paying. */}
+          <p className="fin-notice mt-6 max-w-2xl" role="note">
+            <strong>Eligibility:</strong> open only to{" "}
+            <strong>3rd year students of MLR Institute of Technology (MLRIT)</strong>. Every
+            team member must meet both conditions.
+          </p>
+
+          {/* Once-per-visit popup so no one reaches the payment step unaware. */}
+          <EligibilityPopup />
+
           <div className="mt-12 max-w-3xl">
-            <RegistrationForm />
+            <TeamRegistrationForm />
           </div>
         </div>
       </main>

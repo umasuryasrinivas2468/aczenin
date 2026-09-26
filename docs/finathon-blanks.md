@@ -71,12 +71,12 @@ Two things must exist before the flow works in production:
 
 These are already correct in the code — listed so nobody "fixes" them by mistake.
 
-- **Dates.** 30 Sep 09:45 → 1 Oct 14:30 IST. Registration closes 27 Sep.
+- **Dates.** 30 Sep 09:45 → 1 Oct 14:30 IST. Registration closes 28 Sep.
 - **The countdown advances by itself.** It counts to the registration deadline,
   then flips to the kickoff, then to a live state, then to a closing message —
-  with no redeploy on the 27th. Targets live in
+  with no redeploy on the 28th. Targets live in
   `src/components/finathon/Countdown.tsx:23-25`.
-- **Eligibility.** Third and fourth year students, any college in Telangana, teams of 3–4.
+- **Eligibility.** Third and fourth year students, any college in Telangana, teams of 3–5.
 - **Tracks.** Finance (lead), CRM, HRM.
   Held in the `DOMAINS` array and rendered as ledger rows, so adding a fourth is one
   object, not a redesign. Three pieces of copy count the tracks and must be updated

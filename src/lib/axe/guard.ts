@@ -26,5 +26,5 @@ export async function hasAxeSession(): Promise<boolean> {
   // returns a Promise here, which is truthy, so `.get()` on it would throw
   // rather than silently pass — but the await is what makes it correct.
   const cookieStore = await cookies();
-  return verifySessionCookie(cookieStore.get(AXE_COOKIE_NAME)?.value);
+  return verifySessionCookie("axe", cookieStore.get(AXE_COOKIE_NAME)?.value);
 }

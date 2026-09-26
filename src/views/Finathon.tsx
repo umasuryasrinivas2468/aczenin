@@ -48,12 +48,12 @@ const EVENT = {
   venueMapUrl: "https://www.google.com/maps/search/?api=1&query=MLR+Institute+of+Technology+Dundigal+Hyderabad",
   startsLabel: "Wed 30 Sep, 9.45 am",
   endsLabel: "Thu 1 Oct, 2.30 pm",
-  deadlineLabel: "Sun 27 Sep",
+  deadlineLabel: "Mon 28 Sep",
   // Spelled out for the panel, where the countdown gives the duration and this
   // gives the thing people actually diarise.
-  deadlineFull: "Sunday 27 September, 11.59 pm IST",
+  deadlineFull: "Monday 28 September, 11.59 pm IST",
   duration: "36 hours",
-  teamSize: "3 to 4 members",
+  teamSize: "3 to 5 members",
 };
 
 /*
@@ -87,7 +87,13 @@ const DOMAINS = [
 
 /* The roles Aczen is hiring into. Deliberately no headcount and no numbers —
    the offer is described, never quantified. */
-const ROLES = ["Full Stack Developer", "AI / ML Engineer", "Cybersecurity Engineer"];
+const ROLES = [
+  "Full Stack Developer",
+  "Full Stack AI Engineer",
+  "Forward Deployed Software Engineer",
+  "AI Engineer",
+  "Cybersecurity Engineer",
+];
 
 /* The hiring pipeline. This genuinely is a sequence, so it is the one place
    besides the schedule where ordered markers are honest. */
@@ -110,11 +116,6 @@ const PARTICIPANT_BENEFITS = [
     detail: "Engineers who ship the product circulate through the floor for the full 36 hours.",
   },
   {
-    title: "Credits on AI build tools",
-    detail: "Participants receive credits on AI development tools to keep building after the event.",
-    // TODO(finathon): confirm which tools and credit amounts before launch (Lovable, others).
-  },
-  {
     title: "Certificate of participation",
     detail: "Issued to every participant who submits a project.",
   },
@@ -122,6 +123,15 @@ const PARTICIPANT_BENEFITS = [
     title: "Aczen goodies and swag",
     detail: "Details to be announced closer to the event.",
     // TODO(finathon): confirm the swag list, then replace the placeholder line above.
+  },
+  {
+    title: "Credits on AI build tools",
+    detail: "ElevenLabs subscriptions for every participant.",
+    perks: [
+      { tier: "Top 3 Winners", plan: "Scale Tier", value: "$897" },
+      { tier: "Top 10 Teams", plan: "Pro Tier", value: "$297" },
+      { tier: "Every Participant", plan: "Creator Tier", value: "$22" },
+    ],
   },
 ];
 
@@ -211,11 +221,11 @@ const SCHEDULE: ScheduleDay[] = [
 const FAQ = [
   {
     q: "Who can participate?",
-    a: "Third and fourth year students from any college in Telangana. Bring a team of three or four.",
+    a: "Only 3rd year students of MLR Institute of Technology (MLRIT). Bring a team of three to five.",
   },
   {
     q: "Do I need a team before I register?",
-    a: "Yes — register as a team of three or four. If you are short of members, join the WhatsApp community and find them there before registration closes.",
+    a: "Yes — register as a team of three to five. If you are short of members, join the WhatsApp community and find them there before registration closes.",
   },
   {
     q: "How will projects be judged?",
@@ -360,6 +370,13 @@ export default function Finathon() {
                 leave with an internship, not a certificate.
               </p>
 
+              {/* Eligibility, right under the lede: it is the first thing that
+                  disqualifies a visitor, so it must be read before any CTA. */}
+              <p className="fin-notice mt-6" role="note">
+                <strong>Eligibility update:</strong> Finathon 2026 is open only to{" "}
+                <strong>3rd year students of MLR Institute of Technology (MLRIT)</strong>.
+              </p>
+
               <div className="mt-6 flex flex-wrap items-center gap-x-8">
                 <a className="fin-cta-ghost" href="#schedule">
                   Read the 36-hour schedule
@@ -375,7 +392,7 @@ export default function Finathon() {
                   thing was the panel reading its label out twice. */}
               <Countdown tone="dark" />
 
-              {/* A duration is not a date. People plan against "Sunday the 27th",
+              {/* A duration is not a date. People plan against "Monday the 28th",
                   and this is also the line that survives a screenshot. */}
               <p className="mt-4 text-sm font-medium" style={{ color: "var(--paper)" }}>
                 {EVENT.deadlineFull}
@@ -386,8 +403,7 @@ export default function Finathon() {
               </div>
 
               <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--ink-on-dark)" }}>
-                Teams of {EVENT.teamSize.replace(" members", "")}. Third and fourth year students,
-                any college in Telangana.
+                Teams of {EVENT.teamSize.replace(" members", "")}. 3rd year MLRIT students only.
               </p>
             </div>
           </div>
@@ -537,10 +553,9 @@ export default function Finathon() {
               {PARTICIPANT_BENEFITS.map((benefit) => (
                 <li
                   key={benefit.title}
-                  // There are an odd number of these, so the final item spans the
-                  // full row instead of leaving an empty cell showing the grid's
-                  // rule colour as a dead grey box.
-                  className="p-6 sm:last:col-span-2"
+                  className={`p-6 sm:last:col-span-2${
+                    "perks" in benefit ? " sm:py-8" : ""
+                  }`}
                   style={{ background: "var(--accent-wash)" }}
                 >
                   <h4 className="font-semibold" style={{ color: "var(--ink)" }}>
@@ -549,6 +564,17 @@ export default function Finathon() {
                   <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
                     {benefit.detail}
                   </p>
+                  {"perks" in benefit && (
+                    <ul className="mt-4 grid gap-px sm:grid-cols-3" style={{ background: "var(--rule)" }}>
+                      {(benefit as typeof benefit & { perks: { tier: string; plan: string; value: string }[] }).perks.map((p) => (
+                        <li key={p.tier} className="px-4 py-3" style={{ background: "var(--paper)" }}>
+                          <span className="fin-meta" style={{ color: "var(--ink-faint)" }}>{p.tier}</span>
+                          <p className="mt-1 text-sm font-medium">{p.plan}</p>
+                          <p className="text-lg font-semibold" style={{ color: "var(--accent-ink)" }}>{p.value}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ul>
@@ -597,8 +623,8 @@ export default function Finathon() {
 
             <dl className="mt-8 border-t" style={{ borderColor: "var(--rule-strong)" }}>
               {[
-                ["Year of study", "Third and fourth year students only"],
-                ["Colleges", "Open to every college in Telangana"],
+                ["Year of study", "3rd year students only"],
+                ["Colleges", "MLR Institute of Technology (MLRIT) students only"],
                 ["Team size", EVENT.teamSize],
                 ["Format", "Fully offline, on campus, for the whole 36 hours"],
                 ["Registration closes", EVENT.deadlineLabel],
@@ -703,17 +729,21 @@ export default function Finathon() {
                 </dd>
               </div>
 
-              {/* TODO(finathon): replace both coordinators with real names and phone numbers. */}
-              {["Student coordinator", "Student coordinator"].map((label, index) => (
+              {[
+                { label: "Student coordinator", name: "Sri Harsha", phone: "+91 98666 25904" },
+                { label: "Student coordinator", name: "Uma Surya Srinivas", phone: "+91 97056 47169" },
+              ].map((coordinator, index) => (
                 <div
-                  key={`${label}-${index}`}
+                  key={`${coordinator.label}-${index}`}
                   className="grid gap-1 border-b py-4 sm:grid-cols-[14rem_1fr] sm:gap-8"
                   style={{ borderColor: "var(--rule)" }}
                 >
-                  <dt className="fin-meta pt-1">{label}</dt>
-                  <dd className="flex items-baseline gap-3" style={{ color: "var(--ink-faint)" }}>
-                    <BlankLine width="9rem" />
-                    <BlankLine width="7rem" />
+                  <dt className="fin-meta pt-1">{coordinator.label}</dt>
+                  <dd className="flex items-baseline gap-3">
+                    <span className="font-medium">{coordinator.name}</span>
+                    <a className="underline underline-offset-4" href={`tel:${coordinator.phone.replace(/\s/g, "")}`}>
+                      {coordinator.phone}
+                    </a>
                   </dd>
                 </div>
               ))}

@@ -221,7 +221,7 @@ const SCHEDULE: ScheduleDay[] = [
 const FAQ = [
   {
     q: "Who can participate?",
-    a: "Third and fourth year students from any college in Telangana. Bring a team of three to five.",
+    a: "Only 3rd year students of MLR Institute of Technology (MLRIT). Bring a team of three to five.",
   },
   {
     q: "Do I need a team before I register?",
@@ -370,6 +370,13 @@ export default function Finathon() {
                 leave with an internship, not a certificate.
               </p>
 
+              {/* Eligibility, right under the lede: it is the first thing that
+                  disqualifies a visitor, so it must be read before any CTA. */}
+              <p className="fin-notice mt-6" role="note">
+                <strong>Eligibility update:</strong> Finathon 2026 is open only to{" "}
+                <strong>3rd year students of MLR Institute of Technology (MLRIT)</strong>.
+              </p>
+
               <div className="mt-6 flex flex-wrap items-center gap-x-8">
                 <a className="fin-cta-ghost" href="#schedule">
                   Read the 36-hour schedule
@@ -396,8 +403,7 @@ export default function Finathon() {
               </div>
 
               <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--ink-on-dark)" }}>
-                Teams of {EVENT.teamSize.replace(" members", "")}. Third and fourth year students,
-                any college in Telangana.
+                Teams of {EVENT.teamSize.replace(" members", "")}. 3rd year MLRIT students only.
               </p>
             </div>
           </div>
@@ -617,8 +623,8 @@ export default function Finathon() {
 
             <dl className="mt-8 border-t" style={{ borderColor: "var(--rule-strong)" }}>
               {[
-                ["Year of study", "Third and fourth year students only"],
-                ["Colleges", "Open to every college in Telangana"],
+                ["Year of study", "3rd year students only"],
+                ["Colleges", "MLR Institute of Technology (MLRIT) students only"],
                 ["Team size", EVENT.teamSize],
                 ["Format", "Fully offline, on campus, for the whole 36 hours"],
                 ["Registration closes", EVENT.deadlineLabel],

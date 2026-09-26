@@ -935,3 +935,34 @@
 .fin-lineitem > *:not(legend) {
   clear: both;
 }
+
+/* Eligibility popup on /Finathon/register. Square-cornered and ruled like the
+   rest of the ledger look; a rounded card would read as a generic ad. */
+.fin-dialog {
+  /* Tokens resolve because the dialog renders inside the .fin wrapper. */
+  background: var(--paper);
+  color: var(--ink);
+  /* Strong rule instead of a shadow — matches the statement-paper borders. */
+  border: 1px solid var(--rule-strong);
+  /* Caps width on desktop while leaving a 16px gutter on phones. */
+  width: min(28rem, calc(100vw - 2rem));
+  padding: 1.75rem;
+  /* <dialog> has no default centering in every engine; margin:auto provides it. */
+  margin: auto;
+}
+
+/* Dims the page behind so the notice can't be mistaken for page content. */
+.fin-dialog::backdrop {
+  background: rgb(11 31 51 / 0.55);
+}
+
+/* Eligibility banner on both Finathon pages. Accent-coloured left rule so it
+   stands apart from ordinary copy without shouting. */
+.fin-notice {
+  border-left: 3px solid var(--accent-fill);
+  /* Faint tint of the accent so the block is visible on the paper stock. */
+  background: rgb(9 103 227 / 0.07);
+  padding: 0.85rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}

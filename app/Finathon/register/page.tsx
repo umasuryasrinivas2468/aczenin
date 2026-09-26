@@ -9,6 +9,8 @@ import Footer from "@/components/Footer";
 // deleting it in the same pass would take the only reference implementation of
 // the old contract with it while that route is still live.
 import TeamRegistrationForm from "@/components/finathon/TeamRegistrationForm";
+// Client-only popup that states the 3rd-year / MLRIT-only rule on arrival.
+import EligibilityPopup from "@/components/finathon/EligibilityPopup";
 import "../finathon.css";
 
 /*
@@ -81,6 +83,17 @@ export default function RegisterPage() {
             member&rsquo;s name, college, roll number, phone and email, plus a UPI app to
             pay with.
           </p>
+
+          {/* Stated again on the page itself, not only in the popup, so it is
+              still visible after the popup is dismissed and before paying. */}
+          <p className="fin-notice mt-6 max-w-2xl" role="note">
+            <strong>Eligibility:</strong> open only to{" "}
+            <strong>3rd year students of MLR Institute of Technology (MLRIT)</strong>. Every
+            team member must meet both conditions.
+          </p>
+
+          {/* Once-per-visit popup so no one reaches the payment step unaware. */}
+          <EligibilityPopup />
 
           <div className="mt-12 max-w-3xl">
             <TeamRegistrationForm />

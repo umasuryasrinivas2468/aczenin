@@ -28,7 +28,9 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 
+import { sendApprovalEmail } from "@/lib/finathon/confirmationMail";
 import { hasFinathonSession } from "@/lib/finathon/gate";
 import {
   REVIEW_NOTE_MAX_LENGTH,
@@ -178,6 +180,12 @@ export async function reviewTeam(formData: FormData): Promise<void> {
   }
 
   // Reached only on success, because every branch above ends in a redirect.
+  // An approval emails the team. Scheduled with after() so the reviewer is not
+  // kept waiting on SMTP, and registered BEFORE finishReview because redirect()
+  // throws and nothing after it runs. Rejections send nothing.
+  if (decision === "approved") {
+    after(() => sendApprovalEmail(teamId));
+  }
   finishReview(statusFilter, decision === "approved" ? "approved" : "rejected");
 }
 

@@ -58,6 +58,7 @@ import { hasFinathonSession } from "@/lib/finathon/gate";
 
 import { applySearch, clearSearch, reviewTeam } from "./actions";
 import {
+  assignTeamCodes,
   listTeams,
   signScreenshotUrls,
   sortRoster,
@@ -407,6 +408,8 @@ export default async function FinathonReviewQueuePage({
       : undefined;
 
   const all = await listTeams();
+  // From the unfiltered set, so a team's code does not change with the tab.
+  const teamCodes = assignTeamCodes(all);
 
   /*
     Counts computed from the UNFILTERED set, so the tiles keep reading as event
@@ -480,6 +483,7 @@ export default async function FinathonReviewQueuePage({
           URL, so a link is the whole feature — and it keeps working with the
           back button, middle-click and a bookmark, none of which a click
           handler gives for free. */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
       <nav aria-label="Filter by status" className="flex flex-wrap gap-2">
         {STATUS_FILTERS.map((option) => (
           <a
@@ -502,6 +506,14 @@ export default async function FinathonReviewQueuePage({
           </a>
         ))}
       </nav>
+        {/* A plain download link: the route checks the session itself and
+            exports the tab currently selected. */}
+        <Button asChild variant="outline" size="sm">
+          <a href={`/Finathon/axe/26/export?status=${status}`} download>
+            Export CSV
+          </a>
+        </Button>
+      </div>
 
       {/* --- Search ------------------------------------------------------- */}
       {/*
@@ -549,6 +561,51 @@ export default async function FinathonReviewQueuePage({
             Clear search
           </Button>
         </form>
+      ) : null}
+
+      {/* --- Team contacts ------------------------------------------------ */}
+      {/* One block per team with every member's name, email and phone, for
+          the current tab and search — the same set the table below shows. */}
+      {rows.length > 0 ? (
+        <section aria-labelledby="team-contacts" className="space-y-3">
+          <h2 id="team-contacts" className="text-lg font-semibold">
+            Team contacts
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {rows.map((team) => (
+              <Card key={team.id}>
+                <CardContent className="space-y-3 p-4">
+                  <div>
+                    <p className="font-mono text-xs text-muted-foreground">
+                      {teamCodes.get(team.id)}
+                    </p>
+                    <p className="font-semibold">{team.team_name || "—"}</p>
+                  </div>
+                  <ol className="space-y-2 text-sm">
+                    {sortRoster(team.finathon_participant).map((person) => (
+                      <li key={person.id} className="leading-snug">
+                        <span className="font-medium">{person.full_name || "—"}</span>
+                        {person.is_lead === true ? (
+                          <span className="ml-1.5 rounded bg-foreground/10 px-1 text-[10px] font-semibold uppercase tracking-wide">
+                            Lead
+                          </span>
+                        ) : null}
+                        {/* break-all: a long email would otherwise overflow
+                            the card on a phone. */}
+                        <span className="block break-all text-xs text-muted-foreground">
+                          {person.email || "—"}
+                        </span>
+                        <span className="block font-mono text-xs text-muted-foreground">
+                          {person.phone || "—"}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
       ) : null}
 
       {/* --- The queue ---------------------------------------------------- */}
@@ -617,6 +674,9 @@ export default async function FinathonReviewQueuePage({
 
                         <TableCell className="font-medium">
                           {team.team_name || "—"}
+                          <span className="block font-mono text-xs font-normal text-muted-foreground">
+                            {teamCodes.get(team.id)}
+                          </span>
                           {/* The roster size, stated. §4.2 allows 3 to 5, and a
                               team that somehow has 2 is a data problem the
                               reviewer should see rather than count by hand. */}

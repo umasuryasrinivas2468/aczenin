@@ -75,11 +75,15 @@ export type AxeTable =
 */
 export class SupabaseWriteError extends Error {
   readonly code: string | null;
+  // The violated constraint/index name on a 23505, when it could be read out
+  // safely. See describeFailure for why this is the only part of `message` kept.
+  readonly constraint: string | null;
 
-  constructor(message: string, code: string | null) {
+  constructor(message: string, code: string | null, constraint: string | null = null) {
     super(message);
     this.name = "SupabaseWriteError";
     this.code = code;
+    this.constraint = constraint;
   }
 }
 
@@ -192,7 +196,7 @@ async function describeFailure(
   response: Response,
   // Returns the SQLSTATE alongside the message rather than only the prose,
   // so a caller can branch on a unique violation without re-parsing the text.
-): Promise<{ message: string; code: string | null }> {
+): Promise<{ message: string; code: string | null; constraint: string | null }> {
   // The base message, which is always safe: status codes and our own table
   // names carry nothing about any visitor.
   const base = `Supabase ${operation} on ${table} failed (${response.status})`;
@@ -203,20 +207,31 @@ async function describeFailure(
     const parsed = JSON.parse(await response.text()) as {
       code?: unknown;
       hint?: unknown;
+      message?: unknown;
     };
     // Whitelisted by name, never spread. A spread would pick up `message` and
     // `details` — the two fields this whole function exists to exclude — the
     // moment PostgREST changed its response shape.
     const code = typeof parsed.code === "string" ? parsed.code : null;
     const hint = typeof parsed.hint === "string" ? parsed.hint : null;
+    // The one exception to "never read message": on a 23505 Postgres puts only
+    // the constraint NAME in `message` (the row values go in `details`). The
+    // match is anchored and the capture limited to identifier characters, so
+    // anything other than that exact fixed sentence yields null, not text.
+    const constraintMatch =
+      code === "23505" && typeof parsed.message === "string"
+        ? /^duplicate key value violates unique constraint "([a-z0-9_]{1,63})"$/.exec(parsed.message)
+        : null;
+    const constraint = constraintMatch ? constraintMatch[1] : null;
     return {
-      message: `${base}${code ? ` [${code}]` : ""}${hint ? ` hint: ${hint}` : ""}`,
+      message: `${base}${code ? ` [${code}]` : ""}${constraint ? ` on ${constraint}` : ""}${hint ? ` hint: ${hint}` : ""}`,
       code,
+      constraint,
     };
   } catch {
     // An unparseable body tells us nothing safe, so nothing is added. The
     // status alone still distinguishes 401 from 404 from 500.
-    return { message: base, code: null };
+    return { message: base, code: null, constraint: null };
   }
 }
 
@@ -342,7 +357,7 @@ export async function axeRpc<T>(
     // the function would otherwise put the offending row — names, phone numbers,
     // email addresses — into a log line that outlives the request.
     const failure = await describeFailure("rpc", functionName, response);
-    throw new SupabaseWriteError(failure.message, failure.code);
+    throw new SupabaseWriteError(failure.message, failure.code, failure.constraint);
   }
 
   return (await response.json()) as T;

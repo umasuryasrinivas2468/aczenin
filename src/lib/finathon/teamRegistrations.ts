@@ -43,7 +43,7 @@ export const PAYMENTS_BUCKET = "finathon-payments";
   file_size_limit exactly — two independent checks, because our code being wrong
   and storage being wrong are different failures.
 */
-export const MAX_SCREENSHOT_BYTES = 5 * 1024 * 1024;
+export const MAX_SCREENSHOT_BYTES = 4 * 1024 * 1024;
 
 /*
   The rate-limit window and ceiling.
@@ -264,6 +264,14 @@ export async function registerTeam(
       if (error.code === "P0101") return { ok: false, reason: "duplicate-team-name" };
       if (error.code === "P0102") return { ok: false, reason: "duplicate-utr" };
       if (error.code === "P0103") return { ok: false, reason: "duplicate-roll" };
+      // Fallback for a raw 23505, which reaches here when the deployed function
+      // predates the exception block that translates it (the design-doc draft
+      // had none). Same mapping, read from the constraint name instead.
+      if (error.code === "23505") {
+        if (error.constraint === "finathon_team_name_key") return { ok: false, reason: "duplicate-team-name" };
+        if (error.constraint === "finathon_team_utr_key") return { ok: false, reason: "duplicate-utr" };
+        if (error.constraint === "finathon_participant_roll_key") return { ok: false, reason: "duplicate-roll" };
+      }
       // The team-size guard raises check_violation, which Postgres reports as
       // 23514. Reachable only by a caller that bypassed the zod schema.
       if (error.code === "23514") return { ok: false, reason: "team-size" };

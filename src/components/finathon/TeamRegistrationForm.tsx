@@ -1290,6 +1290,11 @@ export default function TeamRegistrationForm() {
                 confirmation and copy the UTR — your app may label it &ldquo;UTR&rdquo;,
                 &ldquo;transaction ID&rdquo; or &ldquo;reference number&rdquo;.
               </p>
+              {/* The UPI ID as text: someone registering on their phone cannot
+                  scan a QR shown on that same screen, so they pay to the ID. */}
+              <p className="fin-body mt-3">
+                UPI ID: <span className="select-all font-mono">mrsurya@fam</span>
+              </p>
               <p className="fin-meta mt-4">One payment per team, not per member</p>
             </div>
           </div>

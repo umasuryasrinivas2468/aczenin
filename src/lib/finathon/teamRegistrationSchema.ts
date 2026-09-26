@@ -59,10 +59,11 @@ export const TEAM_SIZE = {
   },
 } as const;
 
-/* The price, in integer paise, matching finathon_team.amount_paise's default.
-   Never a float: 499.00 in binary floating point is not 499.00, and a human
-   reconciles this figure against a bank statement. */
-export const AMOUNT_PAISE = 49900;
+/* The price, in integer paise. Written explicitly on every insert, so the
+   column's old 49900 default never applies; teams that paid ₹499 before the
+   2026-09-26 rise keep their own stored figure. Never a float: a human
+   reconciles this against a bank statement. */
+export const AMOUNT_PAISE = 69900;
 
 /*
   Collapse internal runs of whitespace and strip the ends.

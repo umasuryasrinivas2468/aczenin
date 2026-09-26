@@ -30,7 +30,7 @@ const QR_IMAGE_SRC = "/images/finathon/payment-qr.jpg";
 /* Shown beside the QR. A figure the person can check against what their app
    offers to send is the difference between a correct payment and a support
    thread about a wrong amount. */
-const AMOUNT_LABEL = "₹499 per team";
+const AMOUNT_LABEL = "₹699 per team";
 
 type FieldName = "teamLeadName" | "rollNumber" | "utr";
 

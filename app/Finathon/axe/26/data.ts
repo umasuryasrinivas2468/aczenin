@@ -137,6 +137,9 @@ export type Team = {
   // The unguessable public handle for a team (§4.2). A bigint id would let
   // anyone who saw one admin URL enumerate the rest by decrementing it.
   public_id: string;
+  // The printed code, e.g. ACZCGP-AIM-26004. Stored, not derived, so deleting
+  // a team leaves a gap instead of renumbering everyone registered after it.
+  team_code: string;
   submitted_at: string;
   updated_at: string;
   team_name: string;
@@ -166,6 +169,7 @@ export type Team = {
 const TEAM_COLUMNS = [
   "id",
   "public_id",
+  "team_code",
   "submitted_at",
   "updated_at",
   "team_name",
@@ -208,29 +212,17 @@ export async function listTeams(limit = 2_000): Promise<Team[]> {
 }
 
 /*
-  The prefix every team code carries: ACZCGP-AIM-26 followed by a
-  three-digit serial, e.g. ACZCGP-AIM-26001.
-*/
-export const TEAM_CODE_PREFIX = "ACZCGP-AIM-26";
-
-/*
   Assigns each team its code, keyed by team id.
 
-  Derived rather than stored: the serial is the team's position in submission
-  order (oldest = 001), so it needs no migration and is the same on the page
-  and in the export. Ties on submitted_at fall back to id so two teams that
-  registered in the same millisecond still get a stable order.
+  Read from the stored team_code column. It used to be derived from submission
+  order, which renumbered every later team whenever one was deleted; codes
+  already handed to teams must never change, so the database now assigns each
+  one exactly once (docs/finathon-team-code-column.sql). Kept as a map so the
+  page and the export did not have to change.
 */
 export function assignTeamCodes(teams: Team[]): Map<number, string> {
-  const ordered = teams.slice().sort((a, b) => {
-    const gap = Date.parse(a.submitted_at) - Date.parse(b.submitted_at);
-    return Number.isNaN(gap) || gap === 0 ? a.id - b.id : gap;
-  });
-  const codes = new Map<number, string>();
-  ordered.forEach((team, index) => {
-    codes.set(team.id, `${TEAM_CODE_PREFIX}${String(index + 1).padStart(3, "0")}`);
-  });
-  return codes;
+  // One entry per team, keyed by id, exactly as the callers already expect.
+  return new Map(teams.map((team) => [team.id, team.team_code]));
 }
 
 /*

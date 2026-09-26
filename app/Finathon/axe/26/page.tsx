@@ -418,7 +418,15 @@ export default async function FinathonReviewQueuePage({
     calls over the same array.
   */
   const counts = { pending: 0, approved: 0, rejected: 0, legacy: 0 };
+  // Every person across every team, lead included. Summed from the roster
+  // already embedded in listTeams(), so it costs no extra query.
+  let participantTotal = 0;
   for (const team of all) {
+    // Guarded like sortRoster(): the embedded array is absent, not empty, if
+    // PostgREST fails to resolve the relationship, and .length would throw.
+    participantTotal += Array.isArray(team.finathon_participant)
+      ? team.finathon_participant.length
+      : 0;
     // The `in` guard means a status this page does not know about — added to
     // the CHECK constraint later — increments nothing instead of creating a
     // stray `undefined` key that renders as NaN on a tile.
@@ -460,9 +468,9 @@ export default async function FinathonReviewQueuePage({
       ) : null}
 
       {/* --- Totals ------------------------------------------------------- */}
-      {/* Four across on desktop, two on a phone. One column at phone width
-          would push the queue below two screens of scrolling. */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {/* Five across on desktop, three on a tablet, two on a phone. One column
+          at phone width would push the queue below two screens of scrolling. */}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {/* Pending first, because it is the number this page exists to drive
             to zero — the reading order is the priority order. */}
         <CountTile label="Awaiting review" value={counts.pending} />
@@ -476,6 +484,20 @@ export default async function FinathonReviewQueuePage({
           // to check, so a total that hides them overstates how much money has
           // actually been reconciled against the bank statement.
           hint={`${counts.legacy.toLocaleString("en-IN")} imported from the old form`}
+        />
+        {/* Headcount for venue, food and certificates, which are planned per
+            person, not per team. Last because it is a planning number, not a
+            review number. */}
+        <CountTile
+          label="Participants"
+          value={participantTotal}
+          // The average tells an organiser whether teams are filling up or
+          // registering at the minimum size, without opening the table.
+          hint={
+            all.length > 0
+              ? `${(participantTotal / all.length).toFixed(1)} per team on average`
+              : undefined
+          }
         />
       </div>
       {/* --- Status tabs -------------------------------------------------- */}

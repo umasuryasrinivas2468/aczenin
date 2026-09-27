@@ -28,6 +28,9 @@ const HIDDEN_ON: string[] = [
   // The Finathon campaign page is a single-call-to-action page; a second
   // floating button competing for the same corner works against it.
   "/finathon",
+  // A third-party widget has no business on pages that display API keys, and
+  // the studio's CSP would block it anyway.
+  "/ai-studio",
 ];
 
 // Compared case-insensitively: the canonical route is "/Finathon", and a

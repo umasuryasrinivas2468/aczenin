@@ -5,6 +5,10 @@
     {
       "path": "/api/cron/publish-blogs",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/ai-studio",
+      "schedule": "30 21 * * *"
     }
   ]
 }

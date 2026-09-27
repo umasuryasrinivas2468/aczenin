@@ -1,16 +1,24 @@
 "use client";
 
-import { Play } from "lucide-react";
+import { Play, Volume2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Reveal } from "@/components/motion";
 
+// Muted (browsers only autoplay muted video), looping (loop needs playlist=<same id>), chrome-free
+// (controls/kb/fullscreen/annotations/captions/related off), inline on iOS; nocookie avoids tracking cookies.
+const AUTOPLAY_SRC =
+  "https://www.youtube-nocookie.com/embed/Wp9gK5SMe_c?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&rel=0&playsinline=1&loop=1&playlist=Wp9gK5SMe_c";
+
 const VideoSection = () => {
   const [isOpen, setIsOpen] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+  // Strict false check: useReducedMotion is null until it reads the media query on the client,
+  // so reduce-motion users never load the autoplay iframe, and SSR shows the thumbnail as a poster.
+  const autoplay = reduced === false;
 
   // The frame scales up as it travels into view, then settles.
   const { scrollYProgress } = useScroll({
@@ -25,10 +33,35 @@ const VideoSection = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto" ref={sectionRef}>
           <motion.div
-            className="relative rounded-2xl overflow-hidden bg-gray-900 aspect-video cursor-pointer group"
+            // Pointer + hover styles only make sense when the frame itself is the click target (thumbnail mode).
+            className={`relative rounded-2xl overflow-hidden bg-gray-900 aspect-video ${autoplay ? "" : "cursor-pointer group"}`}
             style={reduced ? undefined : { scale }}
-            onClick={() => setIsOpen(true)}
+            // In autoplay mode the frame is decorative; the "Watch with sound" link opens the popup instead.
+            onClick={autoplay ? undefined : () => setIsOpen(true)}
           >
+            {autoplay ? (
+              <iframe
+                src={AUTOPLAY_SRC}
+                // Screen readers skip it: it is a muted, uninteractive background loop.
+                aria-hidden="true"
+                // Keeps keyboard focus out of an iframe nobody can operate.
+                tabIndex={-1}
+                // Required title for iframes; harmless since aria-hidden removes it from the a11y tree.
+                title="Aczen demo preview"
+                // autoplay must be allowed explicitly or browsers block it inside the iframe.
+                allow="autoplay; encrypted-media"
+                // Absolute so it can overflow the rounded frame and have its edges cropped by overflow-hidden.
+                className="absolute left-0 w-full border-0 pointer-events-none"
+                style={{
+                  // 30% taller than the frame so YouTube's title bar and captions sit outside the visible area;
+                  // max() guarantees at least 72px cropped per edge on small phones where 15% is too little.
+                  height: "max(130%, calc(100% + 144px))",
+                  // Shift up by the same half so the video stays centred in the frame.
+                  top: "min(-15%, -72px)",
+                }}
+              />
+            ) : (
+            <>
             <img
               src="https://i3.ytimg.com/vi/Wp9gK5SMe_c/maxresdefault.jpg"
               alt="Video thumbnail"
@@ -54,7 +87,26 @@ const VideoSection = () => {
                 </motion.div>
               </div>
             </div>
+            </>
+            )}
           </motion.div>
+
+          {/* Autoplay is muted by browser policy, so offer an explicit way to hear it. */}
+          {autoplay && (
+            <div className="mt-4 text-center">
+              <button
+                // type="button" so it never submits a surrounding form.
+                type="button"
+                // Reuses the existing popup, which plays the video with sound.
+                onClick={() => setIsOpen(true)}
+                className="inline-flex items-center gap-2 text-sm font-medium text-smeorange-500 hover:text-smeorange-600 underline-offset-4 hover:underline"
+              >
+                {/* Speaker icon signals "sound" at a glance; decorative, so hidden from screen readers. */}
+                <Volume2 className="w-4 h-4" aria-hidden="true" />
+                Watch with sound
+              </button>
+            </div>
+          )}
 
           <Reveal className="mt-8 text-center" delay={0.1}>
             <h3 className="text-2xl font-semibold text-gray-900 mb-4">

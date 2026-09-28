@@ -53,19 +53,22 @@ import {
    itself; this form only captures the roster and the money. */
 const DEVNOVATE_URL = "https://devnovate.co/event/finthon-2o";
 
-/* The payment QR as a static file. The .jpg, not the .png sitting beside it:
-   the jpg is the 640x640 square that renders undistorted in the frame below. */
+/* The payment QR as a static file: the full Google Pay card (921x1280), which
+   keeps the payee name, UPI ID and ₹699 amount visible under the code for
+   anyone paying by typing the UPI ID instead of scanning. */
 const QR_IMAGE_SRC = "/images/finathon/payment-qr.jpg";
 
-/* Rendered inside a 13rem frame with 0.75rem of padding on each side, so the
-   image's own box is 184px. Stated rather than left to CSS because next/image
-   needs intrinsic dimensions to reserve the space and avoid a layout shift. */
-const QR_RENDER_PX = 184;
+/* Rendered inside a 13rem-wide frame with 0.75rem of padding on each side, so
+   the image is 184px wide; the height keeps the card's 921:1280 ratio. Stated
+   rather than left to CSS because next/image needs intrinsic dimensions to
+   reserve the space and avoid a layout shift. */
+const QR_RENDER_W = 184;
+const QR_RENDER_H = 256;
 
 /*
   The price, printed from the same integer the database stores.
 
-  Derived rather than typed as "₹499" so the two can never disagree, and
+  Derived rather than typed as "₹699" so the two can never disagree, and
   computed without toLocaleString because this component is server-rendered
   first: a locale-dependent string is the classic source of a hydration
   mismatch when the server's ICU data differs from the browser's.
@@ -1075,7 +1078,7 @@ export default function TeamRegistrationForm() {
     23:59:58 and watched the clock tick over should still be told they are in,
     not told they are late. Above the form, because a page that shows a QR and
     a submit button to somebody whose submission the server will refuse with a
-    403 has invited them to pay ₹499 for nothing.
+    403 has invited them to pay ₹699 for nothing.
   */
   if (closed) {
     return (
@@ -1271,8 +1274,8 @@ export default function TeamRegistrationForm() {
                   // The amount is in the alt text: somebody reading this aloud
                   // needs the figure, not just the fact that a code exists.
                   alt={`UPI payment QR code for Finathon registration, ${AMOUNT_LABEL} per team`}
-                  width={QR_RENDER_PX}
-                  height={QR_RENDER_PX}
+                  width={QR_RENDER_W}
+                  height={QR_RENDER_H}
                   // Not lazy. It is the whole point of the step, and a QR that
                   // fades in late is one people scroll past.
                   priority
@@ -1293,7 +1296,7 @@ export default function TeamRegistrationForm() {
               {/* The UPI ID as text: someone registering on their phone cannot
                   scan a QR shown on that same screen, so they pay to the ID. */}
               <p className="fin-body mt-3">
-                UPI ID: <span className="select-all font-mono">mrsurya@fam</span>
+                UPI ID: <span className="select-all font-mono">bumasuryasrinivas2-2@oksbi</span>
               </p>
               <p className="fin-meta mt-4">One payment per team, not per member</p>
             </div>

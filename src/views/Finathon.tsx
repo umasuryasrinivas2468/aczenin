@@ -48,10 +48,10 @@ const EVENT = {
   venueMapUrl: "https://www.google.com/maps/search/?api=1&query=MLR+Institute+of+Technology+Dundigal+Hyderabad",
   startsLabel: "Wed 30 Sep, 9.45 am",
   endsLabel: "Thu 1 Oct, 2.30 pm",
-  deadlineLabel: "Mon 28 Sep",
+  deadlineLabel: "Tue 29 Sep",
   // Spelled out for the panel, where the countdown gives the duration and this
   // gives the thing people actually diarise.
-  deadlineFull: "Monday 28 September, 11.59 pm IST",
+  deadlineFull: "Tuesday 29 September, 11.59 pm IST",
   duration: "36 hours",
   teamSize: "3 to 5 members",
 };
@@ -392,7 +392,7 @@ export default function Finathon() {
                   thing was the panel reading its label out twice. */}
               <Countdown tone="dark" />
 
-              {/* A duration is not a date. People plan against "Monday the 28th",
+              {/* A duration is not a date. People plan against "Tuesday the 29th",
                   and this is also the line that survives a screenshot. */}
               <p className="mt-4 text-sm font-medium" style={{ color: "var(--paper)" }}>
                 {EVENT.deadlineFull}

@@ -19,7 +19,7 @@ const SAMPLE = {
   kind: "received",
   teamName: "Ledger Lions",
   publicId: "3f6c2a91-8b4e-4d17-a0c5-9e21b7d4f803",
-  amount: "₹499",
+  amount: "₹699",
   utr: "426791358024",
   lead: { fullName: "Aarav Sharma", rollNumber: "23R21A6601", college: "MLR Institute of Technology" },
   members: [

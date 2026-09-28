@@ -14,7 +14,7 @@ import { REGISTRATION_CLOSES_AT } from "@/lib/finathon/teamRegistrationSchema";
   in the page never re-run on a tick. (Separating stateful from presentational
   components — the same reason the sticky bar is its own file.)
 
-  It walks three phases on its own, so nobody has to redeploy on the 28th:
+  It walks three phases on its own, so nobody has to redeploy on the 29th:
     "registration" -> counting down to the registration deadline
     "event"        -> counting down to the 9.45 am kick-off
     "live"         -> the hackathon is running

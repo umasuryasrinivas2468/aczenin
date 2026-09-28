@@ -3,7 +3,7 @@
 
   Imported by BOTH the client form and the API route, on purpose. The moment
   there are two copies they drift, and the way that drift surfaces is a student
-  who has already paid ₹499 getting a generic 500 because the form accepted
+  who has already paid ₹699 getting a generic 500 because the form accepted
   something the database's CHECK constraint rejects. One module, one set of
   bounds, both sides.
 
@@ -326,10 +326,10 @@ export function firstIssue(error: z.ZodError): { field: string; message: string 
   The +05:30 offset is written explicitly. A bare local date means different
   instants to a visitor abroad and to a build machine running in UTC.
 
-  NOTE: 28 September 2026 is a MONDAY. Any edit to the digit must move the
+  NOTE: 29 September 2026 is a TUESDAY (extended from Monday 28 on 2026-09-28). Any edit to the digit must move the
   weekday word in src/views/Finathon.tsx with it.
 */
-export const REGISTRATION_CLOSES_AT = new Date("2026-09-28T23:59:59+05:30");
+export const REGISTRATION_CLOSES_AT = new Date("2026-09-29T23:59:59+05:30");
 
 /* True when the deadline has passed. Takes `now` as a parameter so the check is
    testable without mocking the clock. */

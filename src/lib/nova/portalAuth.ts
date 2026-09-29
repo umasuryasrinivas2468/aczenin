@@ -48,15 +48,13 @@ const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const THROTTLE_WINDOW_MS = 15 * 60 * 1000;
 // Any outcome counts toward the IP budget: stops one machine spraying guesses.
 const LOGIN_MAX_PER_IP = 10;
-// FAILED attempts per account: stops a botnet grinding one password from many IPs.
-const LOGIN_MAX_FAILED_PER_EMAIL = 5;
 // Beyond this, a "password" is junk input; cap it before normalising.
 const PASSWORD_MAX_LENGTH = 1024;
 
 // One message for unknown email, wrong password and malformed input alike.
 const BAD_CREDENTIALS = "Incorrect email or password.";
-// Throttle text. Safe to differ: it is decided before the allowlist lookup and
-// the per-email budget counts failures for listed and unlisted emails alike.
+// Throttle text. Safe to differ: it is decided per IP, before the allowlist
+// lookup, so it says nothing about whether an email is listed.
 const THROTTLED_MESSAGE = "Too many attempts. Wait 15 minutes and try again.";
 
 // What callers get back for every expected outcome.
@@ -110,11 +108,19 @@ async function recentAttempts(filter: string): Promise<number> {
   return total;
 }
 
-// Records one attempt. Awaited by callers: a frozen serverless instance would
-// drop an un-awaited insert, and the throttle would silently stop counting.
-async function logAttempt(ipHash: string, email: string | null, succeeded: boolean): Promise<void> {
-  // Email is stored so the per-account failure budget can be counted.
-  await novaWrite("POST", "nova_auth_attempt", "", { kind: "portal_login", ip_hash: ipHash, email, succeeded });
+// Records one attempt as a failure and returns its id. Awaited and NOT
+// swallowed: an unrecorded attempt is an unthrottled one, so a DB error
+// propagates and the caller's generic error path refuses the sign-in.
+async function logAttempt(ipHash: string, email: string | null): Promise<number> {
+  // Email kept for the audit trail (who was tried), not for throttling.
+  const [row] = await novaWrite<{ id: number }>("POST", "nova_auth_attempt", "", {
+    kind: "portal_login",
+    ip_hash: ipHash,
+    email,
+    succeeded: false,
+  });
+  // return=representation always hands back the inserted row.
+  return row.id;
 }
 
 /*
@@ -132,16 +138,19 @@ export async function signIn(rawEmail: unknown, rawPassword: unknown): Promise<P
   // Hashed IP, never the raw address (identity.ts). headers() is async in Next 15.
   const ipHash = rateLimitIpHash(clientIp(await headers()));
 
-  // Both budgets in parallel — independent reads, one round trip of latency.
-  // A malformed email has no per-account budget; the IP budget still applies.
-  const [perIp, failedForEmail] = await Promise.all([
-    recentAttempts(`ip_hash=eq.${ipHash}`),
-    email ? recentAttempts(`email=eq.${encodeURIComponent(email)}&succeeded=is.false`) : Promise.resolve(0),
-  ]);
-  // Over either budget: refuse before any password work.
-  if (perIp >= LOGIN_MAX_PER_IP || failedForEmail >= LOGIN_MAX_FAILED_PER_EMAIL) {
-    // Logged as a failure so continued hammering keeps the window full.
-    await logAttempt(ipHash, email, false);
+  /*
+    LOG FIRST, THEN COUNT — the same TOCTOU fix as the admin gate (security
+    review, 2026-09-29): a parallel burst can no longer all read "under
+    budget" before any of them is recorded. The row starts as a failure and
+    is flipped on success.
+
+    Per-IP only. The per-email failure lockout was removed on purpose: with
+    the password equal to the email it protects no secret, and it let anyone
+    who knew a listed address keep that user locked out indefinitely.
+  */
+  const attemptId = await logAttempt(ipHash, email);
+  // Includes this attempt, hence > rather than >=.
+  if ((await recentAttempts(`ip_hash=eq.${ipHash}`)) > LOGIN_MAX_PER_IP) {
     return { ok: false, message: THROTTLED_MESSAGE };
   }
 
@@ -168,10 +177,13 @@ export async function signIn(rawEmail: unknown, rawPassword: unknown): Promise<P
   // Listed AND the typed password is that same address.
   const ok = rows.length > 0 && typed !== null && typed === email;
 
-  // Recorded either way; failures feed both throttles.
-  await logAttempt(ipHash, email, ok);
-  // One message for every failure shape.
+  // One message for every failure shape; the row already says succeeded=false.
   if (!ok) return { ok: false, message: BAD_CREDENTIALS };
+  // Audit trail only — the attempt is already counted, so a failed PATCH must
+  // not block a legitimate sign-in.
+  await novaWrite("PATCH", "nova_auth_attempt", `id=eq.${attemptId}`, { succeeded: true }).catch((error) =>
+    console.error("[nova-api] could not mark portal attempt successful:", error),
+  );
 
   // 32 random bytes → 43 base64url chars: unguessable and cookie-safe.
   const token = randomBytes(32).toString("base64url");

@@ -87,24 +87,6 @@ function field(formData: FormData, name: string): string {
 }
 
 /*
-  Records one admin sign-in attempt in nova_auth_attempt (kind 'admin').
-
-  In the NOVA project, not the site's axe_auth_attempt: the admin gate guards
-  Nova data, and the whole point of the second project is that its code never
-  needs the site credentials. Failures are swallowed so a broken audit insert
-  cannot lock the admin out, but they are logged so the gap is visible.
-*/
-async function logAttempt(ipHash: string, succeeded: boolean): Promise<void> {
-  try {
-    // Awaited: a serverless instance may freeze as soon as the action returns.
-    await novaWrite("POST", "nova_auth_attempt", "", { ip_hash: ipHash, kind: "admin", succeeded });
-  } catch (error) {
-    // Server log only; nothing about the audit table reaches the browser.
-    console.error("[nova-api/axe] could not record admin auth attempt:", error);
-  }
-}
-
-/*
   Signs the admin in.
 
   ORDER IS THE SECURITY: rate limit BEFORE scrypt. A blocked caller then learns
@@ -122,16 +104,32 @@ export async function signInNovaAdmin(formData: FormData): Promise<ActionResult>
     const since = new Date(Date.now() - LOGIN_WINDOW_MS).toISOString();
 
     // --- 1. Rate limit, before any password work ---------------------------
+    /*
+      LOG FIRST, THEN COUNT. The earlier count-then-log order was a TOCTOU
+      race (security review, 2026-09-29): 200 parallel POSTs all read "7 < 8"
+      before any of them logged, so all 200 got a password guess. Inserting
+      this attempt BEFORE counting means every concurrent request counts
+      itself and everyone ahead of it, so at most 8 ever reach scrypt.
+      The insert is not wrapped in a try: an unrecorded attempt would be an
+      unthrottled one, so an insert failure throws to the outer catch and the
+      login is refused (fail closed).
+    */
+    const [attempt] = await novaWrite<{ id: number }>("POST", "nova_auth_attempt", "", {
+      // Recorded as a failure up front; flipped to true only after a good verify.
+      ip_hash: ipHash,
+      kind: "admin",
+      succeeded: false,
+    });
     // select=id&limit=1: we only want the exact count from Content-Range, not
     // the rows. The ip_hash is hex, so it is safe in the query string as is.
     const { total } = await novaRead(
       "nova_auth_attempt",
       `select=id&kind=eq.admin&ip_hash=eq.${ipHash}&occurred_at=gte.${since}&limit=1`,
     );
-    // At or over budget: record the knock (so hammering extends the lockout) and
-    // refuse with the same message as a wrong password.
-    if (total >= LOGIN_MAX_ATTEMPTS) {
-      await logAttempt(ipHash, false);
+    // `total` now includes this attempt, hence > rather than >=. Over budget:
+    // refuse with the same message as a wrong password; the row already logged
+    // keeps hammering extending the lockout.
+    if (total > LOGIN_MAX_ATTEMPTS) {
       return LOGIN_FAILED;
     }
 
@@ -141,10 +139,17 @@ export async function signInNovaAdmin(formData: FormData): Promise<ActionResult>
     // A non-string (File) or absent field is just a wrong password, and still
     // spends an attempt so junk submissions are not a free probe.
     const ok = verifyNovaAdminPassword(typeof raw === "string" ? raw : "");
-    // Every attempt counts toward the budget, success included (design §5).
-    await logAttempt(ipHash, ok);
-    // Wrong password: same message as the rate-limit branch.
+    // Wrong password: the row already says succeeded=false. Same message as
+    // the rate-limit branch.
     if (!ok) return LOGIN_FAILED;
+    // Correct: mark the row a success for the audit trail. Best effort — the
+    // attempt is already counted either way, so a failed PATCH changes nothing
+    // about throttling and must not block a legitimate sign-in.
+    if (attempt !== undefined) {
+      await novaWrite("PATCH", "nova_auth_attempt", `id=eq.${attempt.id}`, { succeeded: true }).catch((error) =>
+        console.error("[nova-api/axe] could not mark admin attempt successful:", error),
+      );
+    }
 
     // --- 3. Mint the session ----------------------------------------------------
     // Setting a cookie inside a Server Action also tells Next to re-render the

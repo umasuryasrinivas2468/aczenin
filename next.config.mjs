@@ -92,6 +92,29 @@ const FINATHON_SECURITY_HEADERS = [
   },
 ];
 
+/*
+  Aczen AI Studio: the portal, the admin panel and both APIs. Stricter than the
+  Finathon set because these responses carry API keys, usage and admin
+  controls. The page CSP itself is set per request in middleware.ts (it needs
+  a nonce); everything static lives here.
+*/
+const STUDIO_SECURITY_HEADERS = [
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  // No referrer at all: studio URLs are not something any third party needs.
+  { key: "Referrer-Policy", value: "no-referrer" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()" },
+  // Two years. No includeSubDomains/preload: this header is host-wide once a
+  // browser sees it, and that decision belongs to whoever owns every subdomain.
+  { key: "Strict-Transport-Security", value: "max-age=63072000" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+  // Never index the console or the API, and never cache a response that may
+  // contain a freshly minted key.
+  { key: "X-Robots-Tag", value: "noindex, nofollow" },
+  { key: "Cache-Control", value: "no-store, max-age=0" },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
@@ -163,6 +186,10 @@ const nextConfig = {
         source: "/api/finathon/:path*",
         headers: FINATHON_SECURITY_HEADERS,
       },
+      { source: "/ai-studio", headers: STUDIO_SECURITY_HEADERS },
+      { source: "/ai-studio/:path*", headers: STUDIO_SECURITY_HEADERS },
+      { source: "/api/ai-studio/:path*", headers: STUDIO_SECURITY_HEADERS },
+      { source: "/api/ai/:path*", headers: STUDIO_SECURITY_HEADERS },
     ];
   },
 

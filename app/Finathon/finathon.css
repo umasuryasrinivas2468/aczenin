@@ -968,3 +968,99 @@
   font-size: 0.9375rem;
   line-height: 1.5;
 }
+
+/* ---------------------------------------------------------------------------
+   /Finathon/challenges
+   ------------------------------------------------------------------------ */
+
+/* One track per ruled section. Its own class rather than .fin-row, whose large
+   padding-block is sized for the event page's full-height sections. */
+.fin-track {
+  border-top: 1px solid var(--rule-strong);
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-top: 2rem;
+}
+
+/* Seats taken, as a hairline meter. Square ends, like every other rule here. */
+.fin-seatbar {
+  height: 3px;
+  background: var(--rule);
+}
+
+.fin-seatbar > span {
+  display: block;
+  height: 100%;
+  background: var(--accent-fill);
+  transition: width 400ms ease;
+}
+
+/* A full track reads in the error ink, and says so in words beside it. */
+.fin-seat-full {
+  color: var(--error-ink);
+}
+
+.fin-challenges {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .fin-challenges {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.fin-challenge {
+  border: 1px solid var(--rule);
+  padding: clamp(1.25rem, 2.6vw, 1.75rem);
+  background: var(--paper);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+/* Selected: the border takes the accent and thickens via an inset shadow, so
+   the layout does not shift by a pixel when the choice changes. */
+.fin-challenge.is-selected {
+  border-color: var(--accent-fill);
+  box-shadow: inset 0 0 0 1px var(--accent-fill);
+}
+
+/* Finance's nine category headings, ruled like a statement sub-section. */
+.fin-category {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+}
+
+.fin-jump:hover {
+  color: var(--accent-ink);
+}
+
+/* The folded full statement under each card. */
+.fin-statement > summary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+.fin-statement[open] > summary {
+  margin-bottom: 0.25rem;
+}
+
+/* Sheet text keeps its own line breaks and "•" bullets, so it is rendered as
+   written rather than re-parsed into lists. */
+.fin-pre {
+  white-space: pre-line;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.fin button:disabled {
+  cursor: not-allowed;
+}
+
+.fin-cta-ghost:disabled {
+  color: var(--ink-faint);
+  border-color: var(--rule);
+}

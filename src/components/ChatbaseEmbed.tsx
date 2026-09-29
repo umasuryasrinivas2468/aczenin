@@ -33,6 +33,9 @@ const HIDDEN_ON: string[] = [
   // row and the key table. Listed here so the third-party script is not even
   // loaded, rather than loaded and hidden with CSS.
   "/nova-api",
+  // A third-party widget has no business on pages that display API keys, and
+  // the studio's CSP would block it anyway.
+  "/ai-studio",
 ];
 
 // Compared case-insensitively: the canonical route is "/Finathon", and a

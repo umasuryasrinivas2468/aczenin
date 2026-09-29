@@ -45,6 +45,8 @@ const CANONICAL_CHILDREN: Record<string, string> = {
   // The organisers' dashboard parent, /Finathon/axe/26. The "26" below it needs
   // no entry: digits have no case, so they survive the pass-through unchanged.
   axe: "axe",
+  // The first-come-first-served challenge picker, /Finathon/challenges.
+  challenges: "challenges",
 };
 
 /*
@@ -109,6 +111,57 @@ function canonicalise(pathname: string): string | null {
 }
 
 /*
+  Aczen AI Studio gets a strict, nonce-based Content-Security-Policy.
+
+  It is the one part of the site that renders secrets (a new API key is shown
+  once, in the page), so it is the part where an injected script would do the
+  most damage. With a per-request nonce and 'strict-dynamic', only scripts
+  Next.js itself emits — which it tags with the nonce it reads from the
+  request's CSP header — can run. That deliberately includes blocking the
+  site-wide Clarity snippet from the root layout: a session-replay tool must
+  never record a page that displays an API key.
+
+  style-src keeps 'unsafe-inline' because next/font and framer-motion write
+  inline styles; CSS injection is a far smaller risk than script injection and
+  cannot read the DOM on its own. 'unsafe-eval' is development-only, for React
+  Refresh.
+*/
+function studioResponse(request: NextRequest): NextResponse {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  const nonce = btoa(String.fromCharCode(...bytes));
+  const dev = process.env.NODE_ENV !== "production";
+
+  const csp = [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ""}`,
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self' data:",
+    `connect-src 'self'${dev ? " ws: wss:" : ""}`,
+    "frame-src 'none'",
+    "frame-ancestors 'none'",
+    "object-src 'none'",
+    "base-uri 'none'",
+    "form-action 'self'",
+    "manifest-src 'self'",
+    "worker-src 'self' blob:",
+    ...(dev ? [] : ["upgrade-insecure-requests"]),
+  ].join("; ");
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-nonce", nonce);
+  requestHeaders.set("content-security-policy", csp);
+
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
+  response.headers.set("content-security-policy", csp);
+  return response;
+}
+
+function isStudioPath(pathname: string): boolean {
+  return pathname === "/ai-studio" || pathname.startsWith("/ai-studio/");
+}
+
+/*
   The same idea for /nova-api (docs/nova-api-architecture.md §3): the portal is
   announced as "aczen.in/Nova-api", but the canonical route is lowercase so the
   API base URL integrators paste is one exact string.
@@ -138,6 +191,10 @@ function canonicaliseNova(pathname: string): string | null {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (isStudioPath(pathname)) {
+    return studioResponse(request);
+  }
 
   // Nova first: its paths can never also be Finathon paths, so order is free,
   // and checking it first keeps the Finathon logic below untouched.
@@ -211,6 +268,10 @@ export const config = {
   matcher: [
     "/:finathonSegment([Ff][Ii][Nn][Aa][Tt][Hh][Oo][Nn])",
     "/:finathonSegment([Ff][Ii][Nn][Aa][Tt][Hh][Oo][Nn])/:path*",
+    // Aczen AI Studio pages, for the nonce CSP above. Exact casing: this is a
+    // console people bookmark, not a poster URL people retype.
+    "/ai-studio",
+    "/ai-studio/:path*",
     // Every capitalisation of /nova-api and its subtree, same character-class
     // technique as above. The hyphen is literal; digits and ids below pass through.
     "/:novaSegment([Nn][Oo][Vv][Aa]-[Aa][Pp][Ii])",

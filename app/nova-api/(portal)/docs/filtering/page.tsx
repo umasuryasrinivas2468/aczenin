@@ -72,7 +72,7 @@ export default function NovaDocsFilteringPage() {
         />
         {/* Value rules, which is where most 400s come from. */}
         <ul className="max-w-prose list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground">
-          <li>Dates are <C>YYYY-MM-DD</C> and must be real calendar dates.</li>
+          <li>Dates are <C>YYYY-MM-DD</C> and must be valid calendar dates.</li>
           <li>Numbers are plain decimals: <C>1500</C> or <C>1500.50</C>, not <C>1.5e3</C>.</li>
           <li>Booleans are the literals <C>true</C> and <C>false</C>.</li>
           <li>Enum fields accept only their listed values; an error lists the valid ones.</li>

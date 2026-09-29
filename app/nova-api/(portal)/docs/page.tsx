@@ -15,7 +15,9 @@ import { ArrowRight } from "lucide-react";
 import { CodeBlock } from "@/components/nova/docs/CodeBlock";
 import { C, Callout, DocsArticle, DocsHeader, DocsPager, DocsSection, P, ParamTable } from "@/components/nova/docs/primitives";
 // Constants and prose that are not in the registry.
-import { BASE_URL, DOCS_ROOT, GUIDE_PAGES, KEYS_PAGE, RESOURCE_DOCS, SAMPLE_KEY, TEAM_SLICE_COUNT, TEAM_SLICE_ROWS, curl, pagerFor } from "@/components/nova/docs/content";
+import { BASE_URL, DOCS_ROOT, GUIDE_PAGES, KEYS_PAGE, SAMPLE_KEY, curl, pagerFor, resourceDoc } from "@/components/nova/docs/content";
+// Live per-team reads (slice, as-of date, counts), all fail-soft.
+import { getTeamContext, sliceCounts } from "@/components/nova/docs/teamData";
 // The registry: the resource list shown below is its keys, not a hand copy.
 import { RESOURCES } from "@/lib/nova/resources";
 
@@ -38,9 +40,13 @@ const QUICK_START = [
   curl("invoices?status=overdue&limit=5"),
 ].join("\n");
 
-export default function NovaDocsIntroductionPage() {
+export default async function NovaDocsIntroductionPage() {
   // Neighbours for the bottom pager, from the shared reading order.
   const pager = pagerFor(DOCS_ROOT);
+  // The viewer's slice and the dataset's as-of date; null → generic copy.
+  const team = await getTeamContext();
+  // Live row counts for this team; empty when there is no team or every read failed.
+  const counts = team ? await sliceCounts(team.slice) : [];
   return (
     <DocsArticle>
       {/* Hero: what Nova is in one breath. */}
@@ -49,9 +55,9 @@ export default function NovaDocsIntroductionPage() {
         title="Aczen books, one request away."
         lead={
           <>
-            Nova is a read-only sandbox of Aczen accounting data: invoices, clients, bills, expenses and stock. Each team
-            reads <strong className="text-foreground">its own slice of dummy books</strong>, so you can build and test
-            an integration without touching real ones.
+            Nova is Aczen&apos;s read-only accounting data API: invoices, clients, bills, expenses and stock. Each team
+            reads <strong className="text-foreground">its own set of books</strong>, delivered as JSON over a single
+            authenticated endpoint.
           </>
         }
       />
@@ -74,23 +80,30 @@ export default function NovaDocsIntroductionPage() {
         <CodeBlock title="quick start · cURL" code={QUICK_START} />
       </DocsSection>
 
-      {/* What the sandbox promises, so nobody builds against a wrong assumption. */}
-      <DocsSection id="sandbox" title="How the sandbox behaves">
+      {/* What the API promises, so nobody builds against a wrong assumption. */}
+      <DocsSection id="behaviour" title="How the API behaves">
         <ul className="max-w-prose list-disc space-y-2 pl-5 leading-relaxed text-muted-foreground">
           {/* Read-only is the headline guarantee. */}
           <li>
             <strong className="text-foreground">Read-only.</strong> Only <C>GET</C>, <C>HEAD</C> and <C>OPTIONS</C> are
             answered; any write returns <C>405 method_not_allowed</C>.
           </li>
-          {/* Determinism is what makes assertions against the data safe. */}
+          {/* Stability is what makes assertions against the data safe. */}
           <li>
-            <strong className="text-foreground">Deterministic.</strong> A reseed reproduces the same rows in the same
-            slices, so you can write assertions against your team&apos;s data.
+            <strong className="text-foreground">Stable.</strong> Your team&apos;s data does not change between requests,
+            so you can write assertions against it.
           </li>
-          {/* Relative dates explain why "overdue" changes over time. */}
+          {/* A frozen clock explains why "overdue" never drifts between runs. */}
           <li>
-            <strong className="text-foreground">Always current.</strong> Dates are relative to the day the data was
-            loaded, so unpaid invoices age into <C>overdue</C> naturally.
+            <strong className="text-foreground">Fixed as-of date.</strong> Overdue status and ageing are computed
+            against the dataset&apos;s as-of date
+            {/* The date itself only when migration 005 has added the column. */}
+            {team?.asOfDate ? (
+              <>
+                , <C>{team.asOfDate}</C>
+              </>
+            ) : null}
+            , not today&apos;s date, so the same query gives the same answer every day.
           </li>
           {/* Indian GST context, so the tax fields make sense on first read. */}
           <li>
@@ -104,18 +117,28 @@ export default function NovaDocsIntroductionPage() {
       <DocsSection id="team-data" title="Your team's data">
         <P>
           Every allowlisted email belongs to a team, and each team reads its own coherent set of books: a handful of
-          clients and vendors with the invoices, payments, bills and stock that belong to them. The first{" "}
-          {TEAM_SLICE_COUNT} teams get distinct data; team {TEAM_SLICE_COUNT + 1} onwards reuse an earlier slice.
+          clients and vendors with the invoices, payments, bills and stock that belong to them.
+          {/* The slice count is live, so this sentence stays true after a reseed. */}
+          {team && (
+            <>
+              {" "}The first {team.sliceCount} teams get distinct data; team {team.sliceCount + 1} onwards reuse an
+              earlier slice. Your team reads slice <C>{String(team.slice)}</C>.
+            </>
+          )}
         </P>
-        <ParamTable
-          head={["Resource", "Rows per team (about)"]}
-          minWidth="18rem"
-          rows={TEAM_SLICE_ROWS.map((row) => [
-            // Resource path, so the table doubles as a sanity check for a first call.
-            <code key="r" className="font-mono text-xs">{row.path}</code>,
-            <span key="n" className="text-muted-foreground">{row.rows}</span>,
-          ])}
-        />
+        {/* Live counts for the viewer's slice; hidden entirely when none could be read. */}
+        {counts.length > 0 && (
+          <ParamTable
+            head={["Resource", "Rows for your team"]}
+            minWidth="18rem"
+            rows={counts.map((row) => [
+              // Resource path, so the table doubles as a sanity check for a first call.
+              <code key="r" className="font-mono text-xs">{row.path}</code>,
+              // Exact count(*) for this slice, the same total a list call reports.
+              <span key="n" className="tabular-nums text-muted-foreground">{row.total.toLocaleString("en-IN")}</span>,
+            ])}
+          />
+        )}
         <Callout tone="info" title="The slice is fixed server-side">
           The team filter is applied before your own filters and cannot be changed or widened by any query parameter.
           Requesting another team&apos;s row by id returns <C>404 resource_not_found</C>, exactly like an id that does
@@ -134,11 +157,11 @@ export default function NovaDocsIntroductionPage() {
       </DocsSection>
 
       {/* Resources: iterated from the REGISTRY so a new resource shows up here
-          automatically (and fails loudly if it has no prose yet). */}
+          automatically, titled by the prose map or its generated fallback. */}
       <DocsSection id="resources" title="Resources">
         <div className="grid gap-3 sm:grid-cols-2">
           {Object.keys(RESOURCES).map((slug) => (
-            <DocsCard key={slug} href={`${DOCS_ROOT}/${slug}`} label={RESOURCE_DOCS[slug]?.title ?? slug} hint={`/${slug}`} />
+            <DocsCard key={slug} href={`${DOCS_ROOT}/${slug}`} label={resourceDoc(slug).title} hint={`/${slug}`} />
           ))}
         </div>
       </DocsSection>

@@ -99,7 +99,7 @@ export default async function NovaDashboardPage() {
         <p className={EYEBROW}>Workspace</p>
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">API keys</h1>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          One active key per account. Send it as a Bearer token on every request to the read-only sandbox.
+          One active key per account. Send it as a Bearer token on every request to the Nova API.
         </p>
         {/* Only when known; typeof because slice 0 is a real value, not "missing". */}
         {typeof slice === "number" ? (

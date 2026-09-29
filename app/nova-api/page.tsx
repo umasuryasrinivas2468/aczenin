@@ -28,7 +28,7 @@ export const dynamic = "force-dynamic";
 // pinned to the lowercase URL middleware.ts normalises every casing to.
 export const metadata: Metadata = {
   title: "Sign in",
-  description: "Sign in to Nova, Aczen's read-only sandbox accounting API. Access is invite-only.",
+  description: "Sign in to Nova, Aczen's read-only accounting data API. Access is invite-only.",
   alternates: { canonical: "/nova-api" },
 };
 

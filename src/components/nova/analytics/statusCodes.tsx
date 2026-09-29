@@ -65,7 +65,7 @@ export const STATUS_CODES: CodeInfo[] = [
     status: 405,
     code: "method_not_allowed",
     meaning: "The API is read-only; only GET, HEAD and OPTIONS are accepted.",
-    fix: "Use GET. Writes are not available in the sandbox.",
+    fix: "Use GET. The Nova API is read-only.",
   },
   {
     status: 429,

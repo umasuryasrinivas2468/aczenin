@@ -9,7 +9,6 @@ import assert from "node:assert/strict";
 // The explicit .ts extension is what plain node needs to resolve the file;
 // tsc (bundler resolution, no allowImportingTsExtensions) rejects it, so the
 // error is suppressed on this one line only.
-// @ts-ignore TS5097 — .ts import extension, required by node --experimental-strip-types
 import { RESOURCES, findResource, buildListQuery, buildGetQuery, isValidId, tagRow, findSubResource } from "./resources.ts";
 
 // Invoices exercise every field kind except boolean; bills cover boolean.

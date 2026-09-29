@@ -49,6 +49,13 @@ import {
 export const runtime = "nodejs";
 // Every response is per-key and per-request; a cached one would leak across keys.
 export const dynamic = "force-dynamic";
+// Run next to the Nova DB (Supabase ap-northeast-1, Tokyo): every request makes
+// two SEQUENTIAL PostgREST calls (auth RPC, then the slice-pinned read), so the
+// function-to-DB hop is paid twice. From the iad1 default that is ~150 ms x2;
+// from hnd1 it is a few ms x2. The client's India-to-Tokyo hop (~100-130 ms) is
+// paid once. bom1 (Mumbai) would shorten the client hop but pay India-to-Tokyo
+// on each DB call, so it loses whenever there is more than one call.
+export const preferredRegion = "hnd1";
 
 // The verbs this API answers; sent as Allow on 405 and in CORS preflight.
 const ALLOWED_METHODS = "GET, HEAD, OPTIONS";

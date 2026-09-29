@@ -38,7 +38,7 @@ const ROUTE_ERRORS: ErrorRow[] = [
   { status: 404, type: "invalid_request", code: "resource_not_found", message: "No such resource.", when: "Unknown path, malformed id, or no row with that id.", retry: false },
   { status: 405, type: "invalid_request", code: "method_not_allowed", message: "The Nova API is read-only. Allowed methods: GET, HEAD, OPTIONS.", when: "Any write verb (POST, PUT, PATCH, DELETE).", retry: false },
   { status: 429, type: "rate_limit_error", code: "rate_limit_exceeded", message: "Rate limit of 120 requests per minute exceeded.", when: "Over your key's per-minute limit.", retry: true },
-  { status: 502, type: "api_error", code: "upstream_error", message: "The API is temporarily unavailable.", when: "The sandbox database did not answer.", retry: true },
+  { status: 502, type: "api_error", code: "upstream_error", message: "The API is temporarily unavailable.", when: "The Nova database did not answer.", retry: true },
 ];
 
 // Status order, the way readers look codes up.

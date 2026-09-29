@@ -25,13 +25,17 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 // Client island: holds the sheet state below lg.
 import NovaMobileNav from "./NovaMobileNav";
+// Client island: a <details> group that opens itself around the active page.
+import NovaNavGroup from "./NovaNavGroup";
 // Client island: reads usePathname to highlight the current page.
 import NovaNavLink from "./NovaNavLink";
 
 // One link in the sidebar. icon is optional so text-only doc links stay terse.
 export type NovaNavItem = { href: string; label: string; icon?: LucideIcon };
-// A titled group of links ("Workspace", "Documentation", …).
-export type NovaNavSection = { title: string; items: NovaNavItem[] };
+// A titled group of links ("Workspace", "Documentation", …). collapsible is an
+// optional addition to the agreed contract (existing callers are unaffected):
+// long registry-driven groups fold away so the sidebar fits a 768px laptop.
+export type NovaNavSection = { title: string; items: NovaNavItem[]; collapsible?: boolean };
 
 // Props exactly as agreed with the docs and admin agents.
 type NovaShellProps = {
@@ -84,16 +88,25 @@ function SidebarBody({ product, sections, userLabel, signOutAction }: Omit<NovaS
 
       {/* --- Sections ----------------------------------------------------
           The only scrolling part of the sidebar, so brand and sign-out stay
-          pinned even with 14+ links on a 768px-tall laptop. */}
-      <nav aria-label={`${product} navigation`} className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
-        {sections.map((section) => (
-          // Section key is its title: titles are unique by construction.
-          <div key={section.title} className="mb-4 last:mb-0">
-            {/* Small mono uppercase label, matching the eyebrow labels on
-                dashboard.aczen.in ("BASE URL", "WHAT YOU CAN REACH"). */}
-            <p className="mb-1.5 px-2 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-              {section.title}
-            </p>
+          pinned however long the registry grows. */}
+      <nav aria-label={`${product} navigation`} className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        {[false, true].map((collapsibleRegion) => (
+          // Two regions: fixed sections (Workspace, Documentation) never
+          // scroll, so they stay visible however many resource groups are
+          // open; the collapsible groups scroll on their own below them.
+          // min-h-32 keeps that region usable on a short screen — past that,
+          // the whole <nav> scrolls instead of squeezing it to nothing.
+          <div
+            key={String(collapsibleRegion)}
+            className={
+              collapsibleRegion
+                ? "min-h-32 flex-1 overflow-y-auto border-t border-sidebar-border px-3 py-3 empty:hidden"
+                : "shrink-0 px-3 pb-2 pt-3"
+            }
+          >
+        {sections.filter((section) => Boolean(section.collapsible) === collapsibleRegion).map((section) => {
+          // The link list, identical for fixed and collapsible sections.
+          const list = (
             <ul className="space-y-0.5">
               {section.items.map((item) => {
                 // Prefix matching only for leaf links: "Introduction" at
@@ -115,6 +128,29 @@ function SidebarBody({ product, sections, userLabel, signOutAction }: Omit<NovaS
                 );
               })}
             </ul>
+          );
+          // An empty section (e.g. a registry domain not built yet) renders nothing,
+          // rather than a heading with no links under it.
+          if (section.items.length === 0) return null;
+          // Collapsible groups sit tighter (mb-1): folded, they are one row each.
+          return section.collapsible ? (
+            <div key={section.title} className="mb-1 last:mb-0">
+              <NovaNavGroup title={section.title} hrefs={section.items.map((item) => item.href)}>
+                {list}
+              </NovaNavGroup>
+            </div>
+          ) : (
+            // Section key is its title: titles are unique by construction.
+            <div key={section.title} className="mb-4 last:mb-0">
+              {/* Small mono uppercase label, matching the eyebrow labels on
+                  dashboard.aczen.in ("BASE URL", "WHAT YOU CAN REACH"). */}
+              <p className="mb-1.5 px-2 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                {section.title}
+              </p>
+              {list}
+            </div>
+          );
+        })}
           </div>
         ))}
       </nav>

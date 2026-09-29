@@ -74,7 +74,7 @@ export default function SignInCard() {
           {/* The product name is the page's h1; the card is the whole screen. */}
           {/* A real <h1>, not CardTitle (an h3 with no asChild), with its styles. */}
           <h1 className="text-2xl font-semibold leading-none tracking-tight">Nova API</h1>
-          <CardDescription>Sign in to manage your sandbox API key and read the docs.</CardDescription>
+          <CardDescription>Sign in to manage your API key and read the docs.</CardDescription>
         </div>
       </CardHeader>
       <CardContent>

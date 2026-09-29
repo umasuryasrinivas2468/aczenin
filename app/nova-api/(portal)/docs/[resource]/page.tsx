@@ -1,11 +1,15 @@
 /*
-  /nova-api/docs/{resource} — one page for all eight resources.
+  /nova-api/docs/{resource} — one page for EVERY registry resource.
 
-  Endpoints, filter fields, operators, enum values and sort columns are all
-  read from the registry (src/lib/nova/resources.ts), the same object the /v1
-  route validates against, so the reference cannot describe a field the API
-  rejects or miss one it accepts. Only the prose and example rows come from
-  content.ts.
+  Endpoints, filter fields, operators, enum values, sort columns and child
+  routes are read from the registry (src/lib/nova/resources.ts), the same
+  object /v1 validates against, so the reference cannot describe a field the
+  API rejects or miss one it accepts. A resource added by any domain file
+  gets a page with no edit here.
+
+  Example responses are LIVE: the signed-in team's first row, read through
+  the API's own query builder and tagRow (teamData.ts). When that read fails
+  or finds nothing, the page shows the field names instead of inventing data.
 */
 
 // Metadata type for per-resource titles.
@@ -18,41 +22,67 @@ import { notFound } from "next/navigation";
 // Shared docs blocks.
 import { CodeBlock } from "@/components/nova/docs/CodeBlock";
 import { C, Callout, DocsArticle, DocsHeader, DocsPager, DocsSection, EndpointBadge, P, ParamTable } from "@/components/nova/docs/primitives";
-// Prose, examples and snippet helpers.
-import { CHILD_EXAMPLES, DOCS_ROOT, RESOURCE_DOCS, curl, json, pagerFor } from "@/components/nova/docs/content";
-// The registry: the single source of truth for everything in the tables.
-import { DEFAULT_LIMIT, RESOURCES, findResource, findSubResource, type Operator, type Resource } from "@/lib/nova/resources";
+// Prose and snippet helpers.
+import { DOCS_ROOT, curl, json, pagerFor, resourceDoc } from "@/components/nova/docs/content";
+// Live per-team reads, all fail-soft.
+import { firstRow, getTeamContext } from "@/components/nova/docs/teamData";
+// The registry: the single source of truth for everything structural.
+import { DEFAULT_LIMIT, RESOURCES, childRoutesOf, findResource, type Operator, type Resource } from "@/lib/nova/resources";
 
 // Next 15: dynamic params arrive as a Promise.
 type PageProps = { params: Promise<{ resource: string }> };
 
-// Only the eight registry keys exist; anything else is a build-time 404.
+// Only registry keys exist; anything else 404s without rendering.
 export const dynamicParams = false;
 
-// Prerender one page per registry key, so a new resource gets a page for free.
+// One entry per registry key, so a new resource gets a page for free.
 export function generateStaticParams(): { resource: string }[] {
   // Keys, not a hand list: the registry decides what exists.
   return Object.keys(RESOURCES).map((resource) => ({ resource }));
 }
 
-// "Invoices | Nova API", falling back to the slug if prose is missing.
+// "Invoices | Nova API", from the prose map or the generated fallback.
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   // Await per Next 15's async params.
   const { resource } = await params;
-  // Unknown slugs get no special title; the page itself 404s.
-  return { title: RESOURCE_DOCS[resource]?.title ?? "Not found" };
+  // Unknown slugs get a neutral title; the page itself 404s.
+  return { title: findResource(resource) ? resourceDoc(resource).title : "Not found" };
 }
 
 // How each operator is spelled in a query string.
 const OP_SYNTAX: Record<Operator, string> = { eq: "=", in: ".in=", gte: ".gte=", lte: ".lte=", gt: ".gt=", lt: ".lt=", ilike: ".ilike=" };
 
+// "vendor_bank_account" → "vendor bank account", for sentence text.
+function humanObject(resource: Resource): string {
+  // The object tag is the singular noun the API already uses.
+  return resource.object.replace(/_/g, " ");
+}
+
+// "inv_8f2c91a4" → "inv_", so the page can state the prefix it actually saw.
+function idPrefixOf(row: Record<string, unknown> | null): string | null {
+  // Only a string id with an underscore has a prefix worth naming.
+  const id = row?.id;
+  return typeof id === "string" && id.includes("_") ? id.slice(0, id.indexOf("_") + 1) : null;
+}
+
+// Field-names-only stand-in for when no live row is available: honest about
+// what is known (the filterable columns and their types), invents no values.
+function fieldShape(resource: Resource): Record<string, string> {
+  // object and id are on every row; the rest are the registry's filter columns.
+  return {
+    object: resource.object,
+    id: "string",
+    ...Object.fromEntries(Object.entries(resource.filters).map(([name, field]) => [name, field.type.kind])),
+  };
+}
+
 // Filter-table rows, generated from a resource's allowlist.
 function filterRows(resource: Resource): React.ReactNode[][] {
-  // Registry order is the declaration order, which is roughly importance order.
+  // Declaration order from the registry.
   return Object.entries(resource.filters).map(([name, field]) => [
     // Field name as the reader types it.
     <code key="f" className="whitespace-nowrap font-mono text-xs font-semibold">{name}</code>,
-    // Type chip.
+    // Type, straight from the registry's FieldType union.
     <span key="t" className="whitespace-nowrap font-mono text-xs text-muted-foreground">{field.type.kind}</span>,
     // Each allowed operator as its literal query-string spelling.
     <span key="o" className="flex flex-wrap gap-1">
@@ -74,11 +104,17 @@ function filterRows(resource: Resource): React.ReactNode[][] {
 }
 
 // Filter + sort block, shared by the main list and the child lists.
-function QueryReference({ resource, idPrefix }: { resource: Resource; idPrefix: string }) {
+function QueryReference({ resource, idPrefix }: { resource: Resource; idPrefix: string | null }) {
+  // A resource with no filters is valid registry config; say so instead of an empty table.
+  const hasFilters = Object.keys(resource.filters).length > 0;
   return (
     <>
-      {/* The allowlist table. */}
-      <ParamTable head={["Field", "Type", "Operators", "Values"]} minWidth="40rem" rows={filterRows(resource)} />
+      {/* The allowlist table, or a plain sentence when there is nothing to filter on. */}
+      {hasFilters ? (
+        <ParamTable head={["Field", "Type", "Operators", "Values"]} minWidth="40rem" rows={filterRows(resource)} />
+      ) : (
+        <P className="text-sm">This list has no filterable fields; page and sort it instead.</P>
+      )}
       {/* Sort columns, with the registry's default marked. */}
       <p className="text-sm leading-relaxed text-muted-foreground">
         <span className="font-medium text-foreground">Sortable:</span>{" "}
@@ -90,9 +126,28 @@ function QueryReference({ resource, idPrefix }: { resource: Resource; idPrefix: 
             {column === resource.defaultSort && " (default)"}
           </span>
         ))}
-        . Default order <C>desc</C>, page size {DEFAULT_LIMIT}. Rows have <C>object: &quot;{resource.object}&quot;</C> and
-        ids start with <C>{idPrefix}</C>.
+        . Default order <C>desc</C>, page size {DEFAULT_LIMIT}. Rows have <C>object: &quot;{resource.object}&quot;</C>
+        {/* The prefix is only stated when a live row showed it, never guessed. */}
+        {idPrefix && (
+          <>
+            {" "}and ids start with <C>{idPrefix}</C>
+          </>
+        )}
+        .
       </p>
+    </>
+  );
+}
+
+// Response block: the live JSON when there is a row, the field names otherwise.
+function ExampleResponse({ body, resource, live }: { body: unknown; resource: Resource; live: boolean }) {
+  // Live: the exact JSON the API returns for this team.
+  if (live) return <CodeBlock title="Response 200 · your team's data" code={json(body)} copyable={false} />;
+  // Fallback: state plainly that values are not shown, then the shape.
+  return (
+    <>
+      <P className="text-sm">Field names and types only; sign in with an allowlisted email to see your team&apos;s first row here.</P>
+      <CodeBlock title="Fields" code={json(fieldShape(resource))} copyable={false} />
     </>
   );
 }
@@ -102,30 +157,49 @@ export default async function NovaDocsResourcePage({ params }: PageProps) {
   const { resource: slug } = await params;
   // Registry lookup with the same own-key guard the API uses.
   const resource = findResource(slug);
-  // Prose for this slug; both must exist or the page is not documented.
-  const doc = RESOURCE_DOCS[slug];
-  // Unknown slug (or registry entry without prose) → 404.
-  if (resource === null || doc === undefined) notFound();
+  // Unknown slug → 404 (dynamicParams already blocks it; this covers direct renders).
+  if (resource === null) notFound();
+  // Prose, always present thanks to the generated fallback.
+  const doc = resourceDoc(slug);
 
-  // Child routes that the registry actually serves; a prose entry for a child
-  // the API does not have is dropped rather than documented.
-  const children = (doc.children ?? []).flatMap((child) => {
-    // Same lookup the route uses for /{parent}/{id}/{child}.
-    const sub = findSubResource(slug, child.segment);
-    // Registered child: keep it with its resolved resource.
-    return sub === null ? [] : [{ ...child, sub }];
-  });
+  // Child routes the registry actually serves for this parent.
+  // Read from the registry's own child table (childRoutesOf), not probed.
+  const children = childRoutesOf(slug).map(({ child, sub }) => ({ segment: child, sub }));
 
-  // A list-shaped example, consistent with the envelope documented elsewhere.
-  const listExample = json({ data: [doc.example], pagination: { limit: 5, offset: 0, total: 1, has_more: false } });
-  // The id used in the get example is the example row's own id.
-  const exampleId = String(doc.example.id);
+  // The viewer's slice; null means no live data (signed out or DB unavailable).
+  const team = await getTeamContext();
+  // Parent read and each child's discovery read, in parallel.
+  const [first, childFirsts] = await Promise.all([
+    // The team's first row in the API's default order, plus the list total.
+    team ? firstRow(resource, team.slice) : Promise.resolve(null),
+    // Each child's first row anywhere in the slice: its parentField names a
+    // parent that certainly HAS children, which the first parent may not.
+    Promise.all(children.map(({ sub }) => (team ? firstRow(sub.resource, team.slice) : Promise.resolve(null)))),
+  ]);
+  // Re-read each child pinned to that parent, so the example is exactly what
+  // the child route returns (row AND total), not a slice-wide count.
+  const childExamples = await Promise.all(
+    children.map(async ({ sub }, index) => {
+      // The parent id the discovery row points at, if it is a usable string.
+      const parentId = childFirsts[index]?.row[sub.parentField];
+      // No live row or no parent id: nothing to pin, show field names.
+      if (!team || typeof parentId !== "string") return null;
+      // Same pinned read /v1 performs for /{parent}/{id}/{child}?limit=1.
+      const pinned = await firstRow(sub.resource, team.slice, { field: sub.parentField, value: parentId });
+      return pinned ? { ...pinned, parentId } : null;
+    }),
+  );
+
+  // The live row, if any.
+  const row = first?.row ?? null;
+  // The id the get example uses: the live one, else the path placeholder.
+  const exampleId = typeof row?.id === "string" ? row.id : "{id}";
   // Pager neighbours.
   const pager = pagerFor(`${DOCS_ROOT}/${slug}`);
 
   return (
     <DocsArticle>
-      {/* Header: title from prose, endpoints badge-listed right under it. */}
+      {/* Header: title and summary from prose (or the generated fallback). */}
       <DocsHeader eyebrow="Resources" title={doc.title} lead={doc.summary} />
 
       {/* Endpoint index for this resource. */}
@@ -141,7 +215,7 @@ export default async function NovaDocsResourcePage({ params }: PageProps) {
         </ul>
         {/* Team scoping applies to every resource, so it is stated on every page. */}
         <Callout tone="tip" title="Results are scoped to your team">
-          Every endpoint here returns only your team&apos;s slice of the sandbox. The slice filter is applied server-side
+          Every endpoint here returns only your team&apos;s slice of the data. The slice filter is applied server-side
           and cannot be changed; an id from another team&apos;s slice returns a 404. See{" "}
           <Link href={`${DOCS_ROOT}#team-data`} className="font-medium text-foreground underline underline-offset-4">
             Your team&apos;s data
@@ -170,39 +244,50 @@ export default async function NovaDocsResourcePage({ params }: PageProps) {
           </Link>{" "}
           for the grammar.
         </P>
-        <QueryReference resource={resource} idPrefix={doc.idPrefix} />
-        <CodeBlock title="cURL" code={curl(doc.exampleQuery)} />
-        <CodeBlock title="Response 200" code={listExample} copyable={false} />
+        <QueryReference resource={resource} idPrefix={idPrefixOf(row)} />
+        {/* limit=1 so the live response below is exactly what this command returns. */}
+        <CodeBlock title="cURL" code={curl(`${slug}?limit=1`)} />
+        <ExampleResponse
+          resource={resource}
+          live={first !== null}
+          body={first && { data: [first.row], pagination: { limit: 1, offset: 0, total: first.total, has_more: first.total > 1 } }}
+        />
       </DocsSection>
 
       {/* Get endpoint. */}
-      <DocsSection id="get" title={`Get one ${resource.object.replace(/_/g, " ")}`}>
+      <DocsSection id="get" title={`Get one ${humanObject(resource)}`}>
         <EndpointBadge path={`/${slug}/{id}`} />
         <P>
-          Returns one row in <C>data</C>. An id that does not exist, or is not shaped like one, returns a 404{" "}
-          <C>resource_not_found</C>.
+          Returns one row in <C>data</C>. An id that does not exist, is not shaped like one, or belongs to another
+          team returns a 404 <C>resource_not_found</C>.
         </P>
         <CodeBlock title="cURL" code={curl(`${slug}/${exampleId}`)} />
-        <CodeBlock title="Response 200" code={json({ data: doc.example })} copyable={false} />
+        <ExampleResponse resource={resource} live={row !== null} body={{ data: row }} />
       </DocsSection>
 
       {/* Child list endpoints. */}
-      {children.map((child) => (
-        <DocsSection key={child.segment} id={child.segment} title={`List ${child.segment} for one ${resource.object.replace(/_/g, " ")}`}>
-          <EndpointBadge path={`/${slug}/{id}/${child.segment}`} />
-          <P>
-            {child.summary} Scoped to the parent id in the path; your filters are applied on top and cannot widen it. An
-            unknown parent id returns an empty list.
-          </P>
-          <QueryReference resource={child.sub.resource} idPrefix={child.idPrefix} />
-          <CodeBlock title="cURL" code={curl(`${slug}/${exampleId}/${child.segment}?limit=10`)} />
-          <CodeBlock
-            title="Response 200"
-            copyable={false}
-            code={json({ data: [CHILD_EXAMPLES[`${slug}/${child.segment}`]], pagination: { limit: 10, offset: 0, total: 1, has_more: false } })}
-          />
-        </DocsSection>
-      ))}
+      {children.map((child, index) => {
+        // This child's pinned live example, or null.
+        const example = childExamples[index];
+        return (
+          <DocsSection key={child.segment} id={child.segment} title={`List ${child.segment.replace(/-/g, " ")} for one ${humanObject(resource)}`}>
+            <EndpointBadge path={`/${slug}/{id}/${child.segment}`} />
+            <P>
+              The {child.segment.replace(/-/g, " ")} whose <C>{child.sub.parentField}</C> is the id in the path, with the
+              same filters and sorting as the full list. Your filters apply on top of that pin and cannot widen it. An
+              unknown parent id returns an empty list.
+            </P>
+            <QueryReference resource={child.sub.resource} idPrefix={idPrefixOf(example?.row ?? null)} />
+            {/* The live parent id, so the command returns the response shown. */}
+            <CodeBlock title="cURL" code={curl(`${slug}/${example?.parentId ?? "{id}"}/${child.segment}?limit=1`)} />
+            <ExampleResponse
+              resource={child.sub.resource}
+              live={example !== null}
+              body={example && { data: [example.row], pagination: { limit: 1, offset: 0, total: example.total, has_more: example.total > 1 } }}
+            />
+          </DocsSection>
+        );
+      })}
 
       {/* Pager. */}
       <DocsPager {...pager} />

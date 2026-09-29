@@ -86,7 +86,7 @@ export default function NovaDocsAuthenticationPage() {
         <P>
           To check which key a service is using, call <C>/me</C>. It returns the key&apos;s id, name, prefix, owner
           email, rate limit and creation time, plus your <C>team_slot</C> and <C>dataset_slice</C> (which slice of the
-          sandbox your team reads). It never returns the secret.
+          dataset your team reads). It never returns the secret.
         </P>
       </DocsSection>
 

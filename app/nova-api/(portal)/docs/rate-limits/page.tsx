@@ -100,7 +100,7 @@ export default function NovaDocsRateLimitsPage() {
           ])}
         />
         <Callout tone="info" title="Readable from a browser">
-          CORS exposes these headers (and <C>X-Request-Id</C>), so front-end test harnesses can read them too.
+          CORS exposes these headers (and <C>X-Request-Id</C>), so front-end code can read them too.
         </Callout>
       </DocsSection>
 

@@ -20,6 +20,13 @@ import { Activity, KeyRound } from "lucide-react";
 import { NovaShell, type NovaNavSection } from "@/components/nova/shell/NovaShell";
 // Session lookup (hashes the cookie, looks up the row; never throws).
 import { getPortalUser } from "@/lib/nova/portalAuth";
+// The resource registry. Pure data modules (no DB, no secrets), so reading
+// them in this server layout ships nothing to the browser but the links.
+import { RESOURCES } from "@/lib/nova/resources";
+import { BANKING_RESOURCES } from "@/lib/nova/resources.banking";
+import { ORG_RESOURCES } from "@/lib/nova/resources.org";
+import { PAYABLES_RESOURCES } from "@/lib/nova/resources.payables";
+import { PROCUREMENT_RESOURCES } from "@/lib/nova/resources.procurement";
 // Sign-out, posted from the sidebar footer.
 import { signOutAction } from "../actions";
 
@@ -29,17 +36,33 @@ export const runtime = "nodejs";
 // Session-derived output must never be prerendered or cached across users.
 export const dynamic = "force-dynamic";
 
-// Resource pages share one URL scheme; listed once so label and slug stay paired.
-const RESOURCES: [label: string, slug: string][] = [
-  ["Invoices", "invoices"],
-  ["Clients", "clients"],
-  ["Quotations", "quotations"],
-  ["Payments", "payments"],
-  ["Vendors", "vendors"],
-  ["Purchase bills", "purchase-bills"],
-  ["Expenses", "expenses"],
-  ["Inventory", "inventory"],
-];
+// "purchase-orders" → "Purchase orders": the URL key is the single source of
+// truth, so a new registry entry needs no label written anywhere else.
+function labelFor(key: string): string {
+  // Hyphens become spaces; only the first letter is capitalised (sentence case,
+  // the house style for nav labels).
+  const words = key.replace(/-/g, " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+// One nav section per registry domain, links in registry (insertion) order.
+function resourceSection(title: string, keys: string[]): NovaNavSection {
+  return {
+    title,
+    // Folded by default; NovaNavGroup opens whichever group holds the page.
+    collapsible: true,
+    items: keys.map((key) => ({ href: `/nova-api/docs/${key}`, label: labelFor(key) })),
+  };
+}
+
+// Keys owned by a domain file. "Books" is everything else in RESOURCES — the
+// core nine are not exported on their own, and deriving them this way means a
+// core resource added later still lands in Books automatically.
+const DOMAIN_KEYS = new Set(
+  [ORG_RESOURCES, PROCUREMENT_RESOURCES, PAYABLES_RESOURCES, BANKING_RESOURCES].flatMap((map) => Object.keys(map)),
+);
+// RESOURCES is merged core-first, so filtering it keeps the core's own order.
+const BOOKS_KEYS = Object.keys(RESOURCES).filter((key) => !DOMAIN_KEYS.has(key));
 
 // The whole portal nav. Routes must match what the docs and usage agents build.
 const PORTAL_NAV: NovaNavSection[] = [
@@ -62,11 +85,13 @@ const PORTAL_NAV: NovaNavSection[] = [
       { href: "/nova-api/docs/rate-limits", label: "Rate limits" },
     ],
   },
-  {
-    // One page per endpoint family.
-    title: "Resources",
-    items: RESOURCES.map(([label, slug]) => ({ href: `/nova-api/docs/${slug}`, label })),
-  },
+  // Endpoint families, grouped as in the build contract. Empty domains are
+  // dropped by NovaShell, so a stub domain file shows no heading.
+  resourceSection("Books", BOOKS_KEYS),
+  resourceSection("Organisation", Object.keys(ORG_RESOURCES)),
+  resourceSection("Procurement", Object.keys(PROCUREMENT_RESOURCES)),
+  resourceSection("Payables & controls", Object.keys(PAYABLES_RESOURCES)),
+  resourceSection("Banking & treasury", Object.keys(BANKING_RESOURCES)),
 ];
 
 export default async function NovaPortalLayout({ children }: { children: React.ReactNode }) {

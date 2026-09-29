@@ -54,17 +54,21 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { TRACKS } from "@/lib/finathon/challenges";
 import { hasFinathonSession } from "@/lib/finathon/gate";
 
 import { applySearch, clearSearch, reviewTeam } from "./actions";
 import {
   assignTeamCodes,
+  describeClaim,
+  listChallengeClaims,
   listTeams,
   signScreenshotUrls,
   sortRoster,
   toStatusFilter,
   REVIEW_NOTE_MAX_LENGTH,
   STATUS_FILTERS,
+  type ChallengeClaim,
   type Participant,
   type ReviewNotice,
   type StatusFilter,
@@ -100,6 +104,7 @@ const COLUMNS: { label: string; numeric?: boolean }[] = [
   { label: "Submitted" },
   { label: "Team" },
   { label: "Roster" },
+  { label: "Challenge" },
   { label: "UTR" },
   { label: "Amount", numeric: true },
   { label: "Payment" },
@@ -367,6 +372,45 @@ function RosterLine({ person }: { person: Participant }) {
   );
 }
 
+/*
+  A team's challenge pick, or why there is none. `claims` is null when the
+  claims table could not be read, which must not read as "not picked yet".
+*/
+function ChallengeLine({
+  claim,
+  claims,
+  roster,
+}: {
+  claim: ChallengeClaim | undefined;
+  claims: Map<number, ChallengeClaim> | null;
+  roster: Participant[];
+}) {
+  if (claims === null) {
+    return <span className="text-xs text-muted-foreground">Unavailable</span>;
+  }
+  if (!claim) {
+    return <span className="text-xs text-muted-foreground">Not picked yet</span>;
+  }
+  const { trackName, code, title } = describeClaim(claim);
+  // The member who pressed the button, looked up in the roster already loaded.
+  const picker = Array.isArray(roster)
+    ? roster.find((person) => person.id === claim.claimed_by)
+    : undefined;
+  return (
+    <span className="block text-sm leading-snug">
+      <span className="mr-1 rounded bg-foreground/10 px-1 text-[10px] font-semibold uppercase tracking-wide">
+        {trackName}
+      </span>
+      <span className="font-mono text-xs">{code}</span>
+      {title ? <span className="block font-medium">{title}</span> : null}
+      <span className="block text-[11px] text-muted-foreground">
+        {formatTimestamp(claim.claimed_at)}
+        {picker ? ` · by ${picker.full_name}` : null}
+      </span>
+    </span>
+  );
+}
+
 export default async function FinathonReviewQueuePage({
   // searchParams is a Promise in Next 15. Destructuring it directly yields a
   // Promise object, and every filter would silently read as undefined.
@@ -407,7 +451,15 @@ export default async function FinathonReviewQueuePage({
       ? NOTICE_MESSAGES[params.notice as ReviewNotice]
       : undefined;
 
-  const all = await listTeams();
+  // Two independent reads, fetched together. A failed claims read comes back
+  // as null rather than taking the review queue down with it.
+  const [all, claims] = await Promise.all([listTeams(), listChallengeClaims()]);
+
+  // Seats taken per track, counted from the same read.
+  const seatsTaken: Record<string, number> = {};
+  for (const claim of claims ? Array.from(claims.values()) : []) {
+    seatsTaken[claim.track] = (seatsTaken[claim.track] ?? 0) + 1;
+  }
   // From the unfiltered set, so a team's code does not change with the tab.
   const teamCodes = assignTeamCodes(all);
 
@@ -500,6 +552,35 @@ export default async function FinathonReviewQueuePage({
           }
         />
       </div>
+      {/* --- Challenge seats --------------------------------------------- */}
+      <section aria-labelledby="challenge-seats" className="space-y-3">
+        <h2 id="challenge-seats" className="text-lg font-semibold">
+          Challenge picks
+        </h2>
+        {claims === null ? (
+          <p className="text-sm text-muted-foreground">
+            Challenge picks could not be loaded. Check that the challenge-claim
+            migration has been run.
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {TRACKS.map((track) => (
+              <CountTile
+                key={track.id}
+                label={track.name}
+                value={seatsTaken[track.id] ?? 0}
+                hint={`of ${track.seats.toLocaleString("en-IN")} seats taken`}
+              />
+            ))}
+            <CountTile
+              label="Not picked yet"
+              value={all.filter((team) => team.status !== "rejected" && !claims.has(team.id)).length}
+              hint="teams, excluding rejected"
+            />
+          </div>
+        )}
+      </section>
+
       {/* --- Status tabs -------------------------------------------------- */}
       {/* Plain links, not a JavaScript tab widget. The status is already in the
           URL, so a link is the whole feature — and it keeps working with the
@@ -602,6 +683,13 @@ export default async function FinathonReviewQueuePage({
                       {teamCodes.get(team.id)}
                     </p>
                     <p className="font-semibold">{team.team_name || "—"}</p>
+                    <div className="mt-1">
+                      <ChallengeLine
+                        claim={claims?.get(team.id)}
+                        claims={claims}
+                        roster={team.finathon_participant}
+                      />
+                    </div>
                   </div>
                   <ol className="space-y-2 text-sm">
                     {sortRoster(team.finathon_participant).map((person) => (
@@ -717,6 +805,14 @@ export default async function FinathonReviewQueuePage({
                               <RosterLine key={person.id} person={person} />
                             ))}
                           </ol>
+                        </TableCell>
+
+                        <TableCell className="min-w-[14rem]">
+                          <ChallengeLine
+                            claim={claims?.get(team.id)}
+                            claims={claims}
+                            roster={team.finathon_participant}
+                          />
                         </TableCell>
 
                         {/* Monospace: a UTR is read character by character

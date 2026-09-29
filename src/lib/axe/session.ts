@@ -50,7 +50,10 @@ export const AXE_COOKIE_NAME = "axe_session";
   silently defaulting to one of the two gates.
   ==========================================================================
 */
-export type SessionGate = "axe" | "finathon";
+// "nova-admin" gates /nova-api/axe (docs/nova-api-architecture.md §5). Adding it
+// here, rather than minting a separate cookie format, keeps it under the same
+// HMAC so a renamed axe_session or fin_session cookie still fails verification.
+export type SessionGate = "axe" | "finathon" | "nova-admin";
 
 // Eight hours. Long enough to cover a working day without re-entering the
 // password, short enough that a session left open on an unattended laptop

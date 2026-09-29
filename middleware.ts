@@ -161,11 +161,55 @@ function isStudioPath(pathname: string): boolean {
   return pathname === "/ai-studio" || pathname.startsWith("/ai-studio/");
 }
 
+/*
+  The same idea for /nova-api (docs/nova-api-architecture.md §3): the portal is
+  announced as "aczen.in/Nova-api", but the canonical route is lowercase so the
+  API base URL integrators paste is one exact string.
+
+  Only the first segment is recased. Everything beneath it is passed through
+  verbatim because /nova-api/v1/invoices/inv_8f2c91a4 carries case-sensitive
+  ids, and lowercasing them would turn a valid id into a 404.
+
+  Idempotent for the same reason canonicalise() is: the output's first segment
+  is exactly NOVA_SEGMENT, so feeding it back returns it unchanged and the
+  equality check in middleware() stops the redirect.
+*/
+const NOVA_SEGMENT = "nova-api";
+
+function canonicaliseNova(pathname: string): string | null {
+  // Split exactly like canonicalise(): drop the empty element a leading slash produces.
+  const segments = pathname.replace(/\/+$/, "").split("/").filter((segment) => segment.length > 0);
+  // Not a Nova path (or bare "/"), so this rule has nothing to say.
+  if (segments.length === 0 || segments[0].toLowerCase() !== NOVA_SEGMENT) {
+    return null;
+  }
+  // Replace only the first segment; keep ids and the rest byte-identical.
+  segments[0] = NOVA_SEGMENT;
+  // Leading slash, no trailing one, matching trailingSlash: false.
+  return `/${segments.join("/")}`;
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isStudioPath(pathname)) {
     return studioResponse(request);
+  }
+
+  // Nova first: its paths can never also be Finathon paths, so order is free,
+  // and checking it first keeps the Finathon logic below untouched.
+  const novaCanonical = canonicaliseNova(pathname);
+  // Redirect only when the spelling actually differs — the loop guard.
+  if (novaCanonical !== null && novaCanonical !== pathname) {
+    // Clone so the query string (e.g. ?limit=10 on an API call) survives.
+    const url = request.nextUrl.clone();
+    url.pathname = novaCanonical;
+    // 308 keeps the method, so a mis-cased API GET is still a GET.
+    return NextResponse.redirect(url, 308);
+  }
+  // Already-canonical Nova path: nothing else in this file applies to it.
+  if (novaCanonical !== null) {
+    return NextResponse.next();
   }
 
   const canonical = canonicalise(pathname);
@@ -228,5 +272,9 @@ export const config = {
     // console people bookmark, not a poster URL people retype.
     "/ai-studio",
     "/ai-studio/:path*",
+    // Every capitalisation of /nova-api and its subtree, same character-class
+    // technique as above. The hyphen is literal; digits and ids below pass through.
+    "/:novaSegment([Nn][Oo][Vv][Aa]-[Aa][Pp][Ii])",
+    "/:novaSegment([Nn][Oo][Vv][Aa]-[Aa][Pp][Ii])/:path*",
   ],
 };

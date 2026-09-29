@@ -14,15 +14,19 @@
 
 // Metadata type for the robots / title export.
 import type { Metadata } from "next";
+// Nav icons, so the sidebar scans by shape as well as by word. Passed straight
+// through: NovaShell is a server component, so no client boundary is crossed.
+import { BarChart3, BookOpen, KeyRound, ListChecks } from "lucide-react";
 
 // The password form, rendered INSTEAD of the portal when there is no session.
 import NovaAdminGateForm from "@/components/nova/admin/NovaAdminGateForm";
-// Button styling for the sign-out form.
-import { Button } from "@/components/ui/button";
+// The shared portal shell, built once for both Nova portals so they cannot drift.
+import { NovaShell, type NovaNavSection } from "@/components/nova/shell/NovaShell";
 // The session check.
 import { hasNovaAdminSession } from "@/lib/nova/adminGate";
 
-// Sign-out is a plain form post to a Server Action; no client JS needed.
+// Handed to the shell's sign-out button; a Server Action, so it is a POST that a
+// prefetch or a crawler can never trigger.
 import { signOutNovaAdmin } from "./actions";
 
 // node:crypto (HMAC verify, scrypt) is unavailable on Edge.
@@ -40,6 +44,24 @@ export const metadata: Metadata = {
   title: "axe",
 };
 
+// Module-level constant: the nav never changes per request, so it is not rebuilt.
+const SECTIONS: NovaNavSection[] = [
+  {
+    // The three admin routes, in the order an admin checks them: health first.
+    title: "Admin",
+    items: [
+      { href: "/nova-api/axe", label: "Overview", icon: BarChart3 },
+      { href: "/nova-api/axe/allowlist", label: "Allowlist", icon: ListChecks },
+      { href: "/nova-api/axe/keys", label: "API keys", icon: KeyRound },
+    ],
+  },
+  {
+    // Its own section so it reads as "leave the admin area", not a fourth admin page.
+    title: "Nova",
+    items: [{ href: "/nova-api/dashboard", label: "Developer portal", icon: BookOpen }],
+  },
+];
+
 export default async function NovaAdminLayout({ children }: { children: React.ReactNode }) {
   // One check per render; cheap (an HMAC), no database.
   const authenticated = await hasNovaAdminSession();
@@ -50,24 +72,12 @@ export default async function NovaAdminLayout({ children }: { children: React.Re
     return <NovaAdminGateForm />;
   }
 
+  // Every admin route (Overview, Allowlist, API keys) renders inside the shell,
+  // so the sidebar is written once here rather than per page.
+  // userLabel is a role, not an identity: the admin gate has one shared password.
   return (
-    <div className="mx-auto min-h-screen w-full max-w-7xl px-4 py-8 sm:px-6">
-      {/* Title and sign-out share a row from sm up and stack on phones. */}
-      <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Nova API admin</h1>
-          <p className="text-sm text-muted-foreground">Allowlist, API keys and usage</p>
-        </div>
-        {/* A form, not a link: sign-out changes state, so it must be a POST
-            that a prefetch or a crawler can never trigger. */}
-        <form action={signOutNovaAdmin}>
-          <Button type="submit" variant="outline" size="sm">
-            Sign out
-          </Button>
-        </form>
-      </header>
-
-      <main className="space-y-6">{children}</main>
-    </div>
+    <NovaShell product="Nova admin" sections={SECTIONS} userLabel="Admin" signOutAction={signOutNovaAdmin}>
+      {children}
+    </NovaShell>
   );
 }

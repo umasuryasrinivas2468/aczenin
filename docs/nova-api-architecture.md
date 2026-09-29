@@ -1,7 +1,8 @@
 # Nova API — architecture and build plan
 
-*Written 2026-09-29. Status: **design, not yet built.** Nothing below exists in
-the repo or the database until the build log at the bottom says so.*
+*Written 2026-09-29. Status: **built and live** for `001`–`004`; the Tier 0 +
+Tier 1 data build (`005`–`008` and the `002` rewrite) is verified locally and
+**not yet applied live**. The build log (§11) is the record of what exists.*
 
 ## 1. What we are building
 
@@ -132,17 +133,22 @@ table would add a join and nothing else.
 
 **`overdue` is computed in a view, not stored.** `nova_invoices_v` and
 `nova_purchase_bills_v` return `status = 'overdue'` when a document is
-`pending`/`partial` and `due_date < current_date`. Filtering on
+`pending`/`partial` and its due date has passed. Filtering on
 `status=overdue` works with no background job, which is how the reference API
-describes its own behaviour, and the dummy data ages realistically as the
-calendar moves.
+describes its own behaviour. Live today the views compare against
+`current_date`, so the data ages as the calendar moves. Once `005` is applied
+they compare against the frozen `nova_dataset_meta.as_of_date` instead, so
+answers stay stable for the whole event.
 
-**The seed is deterministic** (`setseed()` plus `generate_series`), so
-re-running it reproduces the same rows and every user sees identical data.
-Seed sizes: 40 clients, 20 vendors, 300 invoices, 80 quotations, ~220
-payments, 150 bills, 200 expenses, 50 items, 400 movements. Dates span the
-last 12 months relative to the seed date. Totals obey GST arithmetic: CGST+SGST
-for an intra-state document, IGST for an inter-state one.
+**The seed is deterministic**, so re-running it reproduces the same rows and
+every team with the same slice sees identical data. Totals obey GST
+arithmetic: CGST+SGST for an intra-state document, IGST for an inter-state one.
+Per-slice volumes: the live seed (`004`) is in §11 (2026-09-29, per-team
+slices); the Tier 0 + Tier 1 volumes, pending live apply, are in §11
+(2026-09-29, Tier 0 + Tier 1 build) and in
+[nova-tier1-build-contract.md](nova-tier1-build-contract.md). The nine
+tables above are the Tier 0 set; Tier 1 adds 16 more, listed in that
+contract's §5.
 
 ### 4.4 Platform tables
 
@@ -213,6 +219,10 @@ Base URL: `https://www.aczen.in/nova-api/v1`. It must be `www`: the apex `aczen.
 | `GET /expenses`, `/expenses/{id}` | Filters: category, expense_date, payment_method, total_amount |
 | `GET /inventory`, `/inventory/{id}`, `/inventory/{id}/movements` | Filters: sku, name, hsn_code, quantity_on_hand |
 
+The table above is the Tier 0 set. The 16 Tier 1 resources and their child
+routes (names in [nova-tier1-build-contract.md](nova-tier1-build-contract.md)
+§5) are served once `005`–`008` are applied live.
+
 Every list route supports `limit`, `offset`, `sort` (from a per-resource
 allowlist) and `order`. Every row carries `"object": "<type>"`. Responses carry
 `X-Request-Id`, `RateLimit-Limit`, `RateLimit-Remaining` and `RateLimit-Reset`.
@@ -236,11 +246,18 @@ ever reaches the database as a validated value, never as syntax.
 | File | Owns |
 |---|---|
 | `supabase/nova/001_schema.sql` | Tables, views, RLS, grants, `nova_authenticate_key` |
-| `supabase/nova/002_seed.sql` | Deterministic dummy data (re-runnable: truncates business tables first) |
+| `supabase/nova/002_seed.sql` | Tier 0 data for the nine original tables, 80 slices (re-runnable: truncates business tables first). Runs **after** `005`. |
+| `supabase/nova/003_one_key_and_request_log.sql` | One-active-key index, `nova_api_request` log |
+| `supabase/nova/004_team_slices.sql` | `slice_no`, `slice_count`, allowlist `slot` |
+| `supabase/nova/005_org_and_ground_truth.sql` | Org tables, `nova_ground_truth`, `as_of_date`, Tier 0 columns, rebuilt views |
+| `supabase/nova/006_procurement.sql` | Contracts, purchase orders, goods receipts |
+| `supabase/nova/007_payables_controls.sql` | Vendor bank accounts, vendor payments, approvals, master-data changes, credit notes |
+| `supabase/nova/008_banking.sql` | Bank transactions, payroll runs, statutory dues, budgets |
 | `src/lib/nova/db.ts` | PostgREST fetch client for the Nova project: `novaRead`, `novaRpc`, `novaWrite` |
-| `src/lib/nova/resources.ts` | The resource registry and the filter → PostgREST translator |
+| `src/lib/nova/resources.ts` | The resource registry and the filter → PostgREST translator; merges the per-tier maps below |
+| `src/lib/nova/resources.{org,procurement,payables,banking}.ts` | Tier 1 registry entries, one file per owner; field shorthands from `fields.ts` |
 | `src/lib/nova/apiKeys.ts` | Key generation, hashing, authenticate-and-meter |
-| `src/lib/nova/portalAuth.ts` | Allowlist check, code send/verify, portal sessions |
+| `src/lib/nova/portalAuth.ts` | Allowlist check, password verify, portal sessions |
 | `src/lib/nova/adminGate.ts` | `nova_admin` cookie and password check (wraps `@/lib/axe/session`) |
 | `app/nova-api/v1/[...path]/route.ts` | The API |
 | `app/nova-api/page.tsx` + `components/nova/*` | Docs and sign-in |
@@ -269,7 +286,7 @@ Reused from the existing deploy: `AXE_COOKIE_SECRET`, `AXE_SALT`.
 2. **Whoever owns the Vercel project can read `NOVA_SUPABASE_SERVICE_ROLE_KEY`.**
    That is acceptable only because the Nova project holds dummy data. It is
    another reason not to put Nova in the live PII project.
-4. `nova_api_usage` grows by one row per active key-minute. At 100 keys all
+3. `nova_api_usage` grows by one row per active key-minute. At 100 keys all
    busy around the clock, that is ~52 M rows a year. Prune rows older than 90
    days (`pg_cron`) once it exceeds ~1 M rows.
 
@@ -295,5 +312,75 @@ Reused from the existing deploy: `AXE_COOKIE_SECRET`, `AXE_SALT`.
 - 2026-09-29 — sign-in changed from an emailed code to email + admin-set
   password (Teja). Applied live: `nova_allowlist.password_hash` was added and
   `nova_auth_attempt.kind` became `admin`/`portal_login`. The empty table
-  `nova_login_code` **still exists live** (a drop was blocked pending Teja's
-  OK). The schema file no longer creates it.
+  `nova_login_code` was dropped on 2026-09-29, after Teja approved it and it was
+  confirmed empty. The schema file no longer creates it.
+- 2026-09-29 — `ee83490`: login throttles are now log-then-count (a parallel
+  burst can't bypass them), and the per-email lockout was dropped.
+- 2026-09-29 — **One active key per email** (Teja). Enforced by the partial
+  unique index `nova_api_key_one_active_per_email`, which can't be raced like
+  an app-side count.
+- 2026-09-29 — **Per-request log** `nova_api_request` (`003_one_key_and_request_log.sql`,
+  applied live). `/v1` appends one row per authenticated call via
+  `nova_log_request()` inside Next's `after()`, so it adds no response
+  latency. It records status, error code and message, duration and request
+  id. It is the only write `/v1` makes, and it touches the audit log, never
+  business data. Unauthenticated 401s are not logged: there is no key to
+  attribute them to. It feeds the user's `/nova-api/usage` analytics page.
+- 2026-09-29 — Portal redesign in progress: no landing page, `/nova-api` is
+  sign-in only, then a left-sidebar app shell (`src/components/nova/shell/`)
+  with API keys, Usage & logs, and Documentation sections. The admin uses the
+  same shell.
+- 2026-09-29 — **Per-team slices** (Teja: fixed slice per team, coherent books,
+  70+ teams). `004_team_slices.sql` is applied live. It adds `slice_no` on
+  every business table, `nova_dataset_meta.slice_count`, and
+  `nova_allowlist.slot`, taken from a sequence in the order teams are added.
+  Auth now returns `team_slot` and `slice_no = slot % slice_count`, and the
+  API pins `slice_no` on every list, get and child read. It can't be
+  overridden: `?slice_no=` returns 400, and another team's id returns 404.
+  The reseed produced **80 slices**: 4 clients, 30 invoices, ~22 payments,
+  8 quotations, 2 vendors, 15 bills, 20 expenses, 5 items and 40 movements
+  per team. Totals are 320 / 2400 / 1786 / 640 / 160 / 1200 / 1600 / 400 /
+  3200. Teams 81+ wrap around. Live isolation test passed: two teams saw
+  different books, and a cross-team get returned 404. Invoice md5
+  `ceced81e91969d052ea929d77fcff79c`.
+- 2026-09-29 — Finathon has 54 problem statements
+  (`Finathon_Problem_Statements.xlsx`). The coverage analysis is in
+  `docs/nova-finathon-data-coverage.md`, still in progress. Today's data
+  covers only a small subset.
+- 2026-09-29 — Product decisions (Teja): the Supabase project is on the **free
+  plan** (500 MB), so Tiers 0 and 1 use about half the volumes in the coverage
+  plan (about 260 MB). Output is **JSON only**: no CSV or statement downloads,
+  and no receipt images; receipts are metadata only.
+- 2026-09-29 — **Tier 0 + Tier 1 data build: verified locally, not yet applied
+  live.** `005`–`008` written and the `002` rewrite done; each file carries
+  `-- STATUS: VERIFIED 2026-09-29` and passes its own verify loop. A
+  full-chain integration verify (`001 → 003 → 004 → 005 → 002 → 006 → 007 →
+  008`) is running; the live apply will follow it. Until then the live
+  database still holds the `004` seed above. Deviations from the contract are
+  recorded in [nova-tier1-build-contract.md](nova-tier1-build-contract.md) §9.
+
+  | Part | Per slice (range across 80 slices) | Size (local) |
+  |---|---|---|
+  | Tier 0 + org (`005` + `002`) | 4 business units, 8 departments, 60 employees, 5 bank accounts, 30 clients, 20 vendors, 300 invoices, 75 quotations, 274–307 payments, 190–209 bills, 300 expenses, 30 items, 689–764 movements; 39–42 ground-truth rows | ≈ 93 MB |
+  | Procurement (`006`) | 15 contracts, 175 POs, 157–204 GRNs; 49–64 bills carry `po_id` | ≈ 13 MB |
+  | Payables (`007`) | vendor bank accounts, vendor payments, approvals, master-data changes, credit notes | passes own checks |
+  | Banking (`008`) | ~450 statement lines in HDFC / ICICI / SBI / Axis formats, payroll per department per month, statutory dues, budgets | ≈ 18 MB |
+
+  | Book shape (Tier 0) | Value |
+  |---|---|
+  | Revenue | ₹4.46–8.00 Cr per slice, median ₹6.64 Cr |
+  | Payroll | ≈ ₹3.9 Cr per year per slice |
+  | Accrual net margin | median +13%; 9 slices loss-making |
+  | Cash net | median −4% |
+
+  | Planted anomalies | Where |
+  |---|---|
+  | A1, A5, A6, A14, A24, A28, each with decoys | all 80 slices (`002`) |
+  | A7 (2 clusters + 1 decoy), A8 (6 + 2), A9 (10 + 2, ≈ 18% of PO-backed bills), A10 (2 vendors + 1 decoy) | per slice (`006`) |
+  | A2, A3, A4, A7, A12, A20, A21, A22 | `007` |
+  | A13 duplicate imports and unlabelled internal transfers, A14 unbooked credits, A18 two budget overruns, A23 one minimum-balance breach week | `008` |
+
+  **Operational notes for the live apply:** `005` sets `as_of_date =
+  current_date` when it runs, so the frozen date will be the apply date, not
+  necessarily 2026-09-29. Rerunning `005` truncates with CASCADE, so any rerun
+  of it must be followed by `002 → 006 → 007 → 008`.

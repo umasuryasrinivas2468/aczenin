@@ -6,52 +6,37 @@
   one table of config beats eight near-copy route files. Adding a resource is a
   registry entry plus a view.
 
-  WHY THIS FILE IS PURE (no imports at all): it is the security boundary between
-  an untrusted query string and the database, so it must be testable in
-  isolation — resources.check.ts runs it under plain `node` with no Next.js,
-  no path aliases and no env vars.
+  WHY THIS FILE IS PURE (its only import is ./fields.ts, which imports
+  nothing): it is the security boundary between an untrusted query string and
+  the database, so it must be testable in isolation — resources.check.ts runs
+  it under plain `node` with no Next.js, no path aliases and no env vars. The
+  explicit ".ts" extensions are what plain node needs; tsconfig's
+  allowImportingTsExtensions lets tsc and Next accept them.
 
   THE RULE IT ENFORCES: untrusted input reaches PostgREST only as a validated,
   URL-encoded VALUE, never as syntax. Keys (field names, operators, sort
   columns) come from the allowlist below, never from the request.
 */
 
-// The PostgREST operators the public grammar exposes; anything else is refused.
-export type Operator = "eq" | "in" | "gte" | "lte" | "gt" | "lt" | "ilike";
-
-// Every operator the grammar recognises. Checked before the per-field list so
-// an unknown op ("status.neq", "status.or") can never be looked up anywhere.
-const ALL_OPERATORS: readonly Operator[] = ["eq", "in", "gte", "lte", "gt", "lt", "ilike"];
-
-// A field's value type decides how its value is validated before it is sent.
-export type FieldType =
-  // Free text: any non-empty value up to MAX_VALUE_LENGTH.
-  | { kind: "string" }
-  // A closed set, e.g. invoice status; the DB CHECK constraints are the source.
-  | { kind: "enum"; values: readonly string[] }
-  // YYYY-MM-DD that is also a real calendar date (no 2026-02-30).
-  | { kind: "date" }
-  // A plain decimal; no exponent, hex or Infinity.
-  | { kind: "number" }
-  // Literal "true" / "false" only.
-  | { kind: "boolean" };
-
-// One filterable column: its type plus which operators make sense for it.
-export type FilterField = { type: FieldType; ops: readonly Operator[] };
-
-// One API resource, mapped onto one read view.
-export type Resource = {
-  // The `"object"` tag prepended to every row, as in the reference API.
-  object: string;
-  // The nova_*_v view it reads (design §4.2 layer 3: views, never tables).
-  view: string;
-  // Allowlisted filters, keyed by the view's exact column name.
-  filters: Record<string, FilterField>;
-  // Allowlisted sort columns.
-  sort: readonly string[];
-  // Default sort column: the resource's date field, else created_at.
-  defaultSort: string;
-};
+// Types and field shorthands live in fields.ts (no imports), so domain files can
+// share them without a circular import through this module.
+import {
+  ALL_OPERATORS,
+  bool,
+  code,
+  date,
+  DOCUMENT_STATUS,
+  number,
+  oneOf,
+  PAYMENT_METHODS,
+  text,
+  type FieldType,
+  type FilterField,
+  type Operator,
+  type Resource,
+} from "./fields.ts";
+// Re-exported so existing importers (route.ts, docs pages) keep working unchanged.
+export type { FieldType, FilterField, Operator, Resource } from "./fields.ts";
 
 // Error codes this module can produce; the route maps them to HTTP 400.
 export type QueryErrorCode = "validation_failed" | "unknown_filter" | "unsupported_operator";
@@ -85,37 +70,11 @@ const MAX_IN_VALUES = 100;
 // Query keys that are paging controls, not filters.
 const RESERVED_KEYS = new Set(["limit", "offset", "sort", "order"]);
 
-// --- Field shorthands --------------------------------------------------------
-// Named once so every resource gets the same operator set for the same kind of
-// column; a per-resource ops list would drift.
-
-// Searchable text (names): exact, one-of, or substring.
-const text: FilterField = { type: { kind: "string" }, ops: ["eq", "in", "ilike"] };
-// Identifiers and codes: exact or one-of; substring search on an id is meaningless.
-const code: FilterField = { type: { kind: "string" }, ops: ["eq", "in"] };
-// Dates: exact or a range.
-const date: FilterField = { type: { kind: "date" }, ops: ["eq", "gte", "lte", "gt", "lt"] };
-// Amounts and quantities: exact or a range.
-const number: FilterField = { type: { kind: "number" }, ops: ["eq", "gte", "lte", "gt", "lt"] };
-// Flags: only equality means anything.
-const bool: FilterField = { type: { kind: "boolean" }, ops: ["eq"] };
-// Closed sets: exact or one-of, validated against the allowed values.
-function oneOf(values: readonly string[]): FilterField {
-  // Returned fresh per call so each resource owns its own value list.
-  return { type: { kind: "enum", values }, ops: ["eq", "in"] };
-}
-
-// Payment rails, shared by payments.method and expenses.payment_method
-// (both CHECKs in 001_schema.sql list the same seven).
-const PAYMENT_METHODS = ["upi", "neft", "rtgs", "imps", "cheque", "cash", "card"] as const;
-// Invoice/bill status as the VIEW returns it: the stored three plus derived overdue.
-const DOCUMENT_STATUS = ["pending", "partial", "paid", "overdue"] as const;
-
 /*
   Top-level resources, keyed by URL segment. Column names are exactly the
   nova_*_v view columns in supabase/nova/001_schema.sql; filters per §6.
 */
-export const RESOURCES: Record<string, Resource> = {
+const CORE_RESOURCES: Record<string, Resource> = {
   // GET /invoices
   invoices: {
     object: "invoice",
@@ -128,6 +87,10 @@ export const RESOURCES: Record<string, Resource> = {
       client_name: text,
       total_amount: number,
       invoice_number: text,
+      // Tier 0 (005): which unit and rep sold it, and the trade discount.
+      business_unit_id: code,
+      sales_rep_id: code,
+      discount_amount: number,
     },
     sort: ["invoice_date", "due_date", "total_amount", "invoice_number", "created_at"],
     defaultSort: "invoice_date",
@@ -136,8 +99,24 @@ export const RESOURCES: Record<string, Resource> = {
   clients: {
     object: "client",
     view: "nova_clients_v",
-    filters: { name: text, gst_number: code, state: text },
-    sort: ["name", "state", "created_at"],
+    filters: {
+      name: text,
+      gst_number: code,
+      state: text,
+      // Tier 0 (005): segmentation and ownership, the CRM/credit questions.
+      segment: oneOf(["enterprise", "mid_market", "smb"]),
+      industry: text,
+      // The four regions 002 derives from the state.
+      region: oneOf(["South", "West", "North", "East"]),
+      credit_limit: number,
+      payment_terms_days: number,
+      account_owner_id: code,
+      business_unit_id: code,
+      // Identifier, so exact match only.
+      pan: code,
+      state_code: code,
+    },
+    sort: ["name", "state", "credit_limit", "created_at"],
     // Clients have no business date, so newest-created first.
     defaultSort: "created_at",
   },
@@ -152,6 +131,8 @@ export const RESOURCES: Record<string, Resource> = {
       client_id: code,
       client_name: text,
       total_amount: number,
+      // Tier 0 (005): the rep who raised the quote.
+      sales_rep_id: code,
     },
     sort: ["quotation_date", "valid_until", "total_amount", "quotation_number", "created_at"],
     defaultSort: "quotation_date",
@@ -166,6 +147,9 @@ export const RESOURCES: Record<string, Resource> = {
       invoice_id: code,
       client_id: code,
       amount: number,
+      // Tier 0 (005): TDS withheld, and the bank line 008 links it to.
+      tds_deducted: number,
+      bank_transaction_id: code,
     },
     sort: ["payment_date", "amount", "payment_number", "created_at"],
     defaultSort: "payment_date",
@@ -174,8 +158,20 @@ export const RESOURCES: Record<string, Resource> = {
   vendors: {
     object: "vendor",
     view: "nova_vendors_v",
-    filters: { name: text, gst_number: code, state: text },
-    sort: ["name", "state", "created_at"],
+    filters: {
+      name: text,
+      gst_number: code,
+      state: text,
+      // Tier 0 (005): supplier risk, terms and master-data fields.
+      category: text,
+      criticality: oneOf(["high", "medium", "low"]),
+      payment_terms_days: number,
+      state_code: code,
+      pan: code,
+      created_by: code,
+      status: oneOf(["active", "blocked", "pending_verification"]),
+    },
+    sort: ["name", "state", "payment_terms_days", "created_at"],
     defaultSort: "created_at",
   },
   // GET /purchase-bills — hyphenated URL, underscored view, as in the reference.
@@ -191,8 +187,18 @@ export const RESOURCES: Record<string, Resource> = {
       total_amount: number,
       reverse_charge: bool,
       itc_eligible: bool,
+      // The vendor's own invoice number (no longer unique: duplicates are
+      // what A1 detection looks for), matched exactly or by substring.
+      bill_number: text,
+      // Tier 0 (005): procurement links (filled by 006), who keyed it,
+      // approval state and the goods-received date.
+      po_id: code,
+      grn_id: code,
+      submitted_by: code,
+      approval_status: oneOf(["pending", "approved", "rejected"]),
+      received_date: date,
     },
-    sort: ["bill_date", "due_date", "total_amount", "bill_number", "created_at"],
+    sort: ["bill_date", "due_date", "received_date", "total_amount", "bill_number", "created_at"],
     defaultSort: "bill_date",
   },
   // GET /expenses
@@ -208,6 +214,14 @@ export const RESOURCES: Record<string, Resource> = {
       expense_date: date,
       payment_method: oneOf(PAYMENT_METHODS),
       total_amount: number,
+      // Payee search.
+      vendor_name: text,
+      // Tier 0 (005): who spent it, for which cost centre and customer.
+      employee_id: code,
+      department_id: code,
+      business_unit_id: code,
+      client_id: code,
+      recurring: bool,
     },
     sort: ["expense_date", "total_amount", "expense_number", "created_at"],
     defaultSort: "expense_date",
@@ -216,7 +230,18 @@ export const RESOURCES: Record<string, Resource> = {
   inventory: {
     object: "inventory_item",
     view: "nova_inventory_v",
-    filters: { sku: text, name: text, hsn_code: code, quantity_on_hand: number },
+    filters: {
+      sku: text,
+      name: text,
+      hsn_code: code,
+      quantity_on_hand: number,
+      // The view's low-stock flag, the first thing a reorder report asks.
+      below_reorder_level: bool,
+      // Tier 0 (005): sourcing facts for supplier-risk questions.
+      primary_vendor_id: code,
+      lead_time_days: number,
+      single_source: bool,
+    },
     sort: ["name", "sku", "quantity_on_hand", "created_at"],
     defaultSort: "created_at",
   },
@@ -228,7 +253,15 @@ const STOCK_MOVEMENTS: Resource = {
   object: "stock_movement",
   view: "nova_stock_movements_v",
   // Not listed in §6; these two are the obvious ones for an audit trail.
-  filters: { movement_type: oneOf(["purchase", "sale", "adjustment"]), movement_date: date },
+  filters: {
+    movement_type: oneOf(["purchase", "sale", "adjustment"]),
+    movement_date: date,
+    // The invoice or bill number that caused the movement.
+    reference: text,
+    // Tier 0 (005): location and cost.
+    warehouse: text,
+    unit_cost: number,
+  },
   sort: ["movement_date", "quantity", "created_at"],
   defaultSort: "movement_date",
 };
@@ -242,12 +275,59 @@ export type SubResource = {
 };
 
 // Child routes, keyed "<parent segment>/<child segment>".
-const SUB_RESOURCES: Record<string, SubResource> = {
+const CORE_SUB_RESOURCES: Record<string, SubResource> = {
   // Payments carry invoice_id (FK to nova_invoices).
-  "invoices/payments": { resource: RESOURCES.payments, parentField: "invoice_id" },
+  "invoices/payments": { resource: CORE_RESOURCES.payments, parentField: "invoice_id" },
   // Movements carry item_id (FK to nova_inventory).
   "inventory/movements": { resource: STOCK_MOVEMENTS, parentField: "item_id" },
 };
+
+/*
+  Domain registries (Tier 1, 2026-09-29). Each domain owns one file and exports
+  a resource map plus a child-route map; this module merges them. Separate
+  files so parallel workers never edit the same file (write-ownership
+  partitioning) and so a domain's resources can be reviewed as one unit.
+*/
+import { ORG_RESOURCES, ORG_SUB_RESOURCES } from "./resources.org.ts";
+import { PROCUREMENT_RESOURCES, PROCUREMENT_SUB_RESOURCES } from "./resources.procurement.ts";
+import { BANKING_RESOURCES, BANKING_SUB_RESOURCES } from "./resources.banking.ts";
+import { PAYABLES_RESOURCES, PAYABLES_SUB_RESOURCES } from "./resources.payables.ts";
+
+// Merges maps and THROWS on a duplicate key at module load. Without the guard,
+// a later spread would silently replace an earlier resource — e.g. a domain
+// file redefining "invoices" — and the first sign would be wrong API output.
+function mergeUnique<T>(label: string, maps: Record<string, T>[]): Record<string, T> {
+  // Accumulator; a null prototype so keys like "constructor" cannot collide
+  // with Object.prototype during the duplicate check.
+  const out: Record<string, T> = Object.create(null);
+  for (const map of maps) {
+    for (const [key, value] of Object.entries(map)) {
+      // Fail loudly at startup, which fails the build and every test run.
+      if (Object.hasOwn(out, key)) throw new Error(`Duplicate ${label} key in Nova registry: ${key}`);
+      out[key] = value;
+    }
+  }
+  // Frozen: the registry is config, and nothing may mutate it per request.
+  return Object.freeze(out);
+}
+
+// Every top-level resource: the original nine plus each domain's.
+export const RESOURCES: Record<string, Resource> = mergeUnique("resource", [
+  CORE_RESOURCES,
+  ORG_RESOURCES,
+  PROCUREMENT_RESOURCES,
+  BANKING_RESOURCES,
+  PAYABLES_RESOURCES,
+]);
+
+// Every child route, keyed "<parent segment>/<child segment>".
+const SUB_RESOURCES: Record<string, SubResource> = mergeUnique("child route", [
+  CORE_SUB_RESOURCES,
+  ORG_SUB_RESOURCES,
+  PROCUREMENT_SUB_RESOURCES,
+  BANKING_SUB_RESOURCES,
+  PAYABLES_SUB_RESOURCES,
+]);
 
 /*
   Registry lookups. Object.hasOwn, not `RESOURCES[segment]`: a plain index
@@ -264,6 +344,19 @@ export function findSubResource(parent: string, child: string): SubResource | nu
   // Joined key is safe to build: both parts are only used as a lookup string.
   const key = `${parent}/${child}`;
   return Object.hasOwn(SUB_RESOURCES, key) ? SUB_RESOURCES[key] : null;
+}
+
+// Every child route under one parent segment, e.g. "purchase-orders" →
+// [{ child: "goods-receipts", … }]. Exported so the docs list children from the
+// real table instead of probing candidate names, which would silently miss a
+// child segment that is not also a top-level resource key.
+export function childRoutesOf(parent: string): { child: string; sub: SubResource }[] {
+  // Keys are "<parent>/<child>"; the prefix match includes the slash so
+  // "vendors" never matches "vendors-archive/…".
+  const prefix = `${parent}/`;
+  return Object.keys(SUB_RESOURCES)
+    .filter((key) => key.startsWith(prefix))
+    .map((key) => ({ child: key.slice(prefix.length), sub: SUB_RESOURCES[key] }));
 }
 
 // Path ids: our ids are "inv_8f2c91a4"-shaped. Rejecting anything outside this
@@ -371,26 +464,48 @@ function parseOffset(raw: string | null): number | string {
   return Number(raw);
 }
 
+// The per-team slice column (supabase/nova/004_team_slices.sql). Server-set
+// only: it is never in any resource's filters or sort, and never returned.
+export const SLICE_FIELD = "slice_no";
+
+/*
+  The mandatory slice pin, as a PostgREST clause. Throws rather than returns a
+  400 on a bad value: sliceNo comes from the auth RPC, never the caller, so a
+  non-integer here is a server bug and must fail closed (the route → 502)
+  instead of silently reading an unpinned query.
+*/
+function slicePin(sliceNo: number): string {
+  // Integer >= 0 is what the DB CHECK allows; anything else is a bug upstream.
+  if (!Number.isSafeInteger(sliceNo) || sliceNo < 0) throw new Error(`Invalid slice number: ${String(sliceNo)}`);
+  // Number → decimal string: no user bytes, nothing to encode.
+  return `${SLICE_FIELD}=eq.${sliceNo}`;
+}
+
 /*
   Turns the caller's query string into a PostgREST query string, or a 400.
 
-  `fixed` pins a parent filter for child routes (/invoices/{id}/payments). It
-  is applied in addition to — not instead of — any user filters, so a user
-  cannot widen it: PostgREST ANDs every filter.
+  `sliceNo` is REQUIRED, not optional, so no call site can forget the team
+  pin: it is the tenant boundary between teams (004_team_slices.sql).
+  `parent` pins a parent filter for child routes (/invoices/{id}/payments).
+  Both are applied in addition to — not instead of — any user filters, and
+  the caller cannot name slice_no at all, so neither pin can be widened:
+  PostgREST ANDs every filter.
 */
 export function buildListQuery(
   // The resource whose allowlist governs this request.
   resource: Resource,
   // The raw request query; URLSearchParams has already percent-decoded it.
   params: URLSearchParams,
+  // The authenticated key's slice, from nova_authenticate_key.
+  sliceNo: number,
   // Optional parent pin for child routes.
-  fixed?: { field: string; value: string },
+  parent?: { field: string; value: string },
 ): ListQueryResult {
-  // Filter clauses, in request order.
-  const clauses: string[] = [];
+  // Filter clauses; the slice pin first so it is present on every query built.
+  const clauses: string[] = [slicePin(sliceNo)];
 
-  // The pin goes first so it is present even if the loop below returns early.
-  if (fixed !== undefined) clauses.push(`${fixed.field}=eq.${encodeValue(fixed.value)}`);
+  // The parent pin next, likewise independent of anything the caller sends.
+  if (parent !== undefined) clauses.push(`${parent.field}=eq.${encodeValue(parent.value)}`);
 
   // Every non-reserved key must be a known field with an allowed operator.
   for (const [key, rawValue] of params) {
@@ -405,8 +520,10 @@ export function buildListQuery(
     const op = parts.length === 1 ? "eq" : parts[1];
 
     // Unknown field (including select/or/and — PostgREST's own syntax keys —
-    // and prototype names, thanks to hasOwn) → unknown_filter.
-    if (!Object.hasOwn(resource.filters, field)) {
+    // and prototype names, thanks to hasOwn) → unknown_filter. slice_no is
+    // refused by name too, so even a future registry entry that lists it by
+    // mistake cannot let a caller add a second, conflicting slice filter.
+    if (field === SLICE_FIELD || !Object.hasOwn(resource.filters, field)) {
       // List the real filters so the error is self-serve.
       return {
         ok: false,
@@ -492,13 +609,18 @@ export function buildListQuery(
 }
 
 // Single-row query for GET /{resource}/{id}; callers check isValidId first.
-export function buildGetQuery(id: string): string {
+// Slice-pinned like lists, so another team's id reads as zero rows → the same
+// 404 as a missing row, and ids cannot be probed across slices.
+export function buildGetQuery(id: string, sliceNo: number): string {
   // limit=1: ids are primary keys, so one row is the most there can be.
-  return `id=eq.${encodeValue(id)}&limit=1`;
+  return `${slicePin(sliceNo)}&id=eq.${encodeValue(id)}&limit=1`;
 }
 
-// Prepends the `"object"` tag as the first key, as the reference API does.
+// Shapes a view row for the client: `"object"` tag first (as the reference
+// API does) and slice_no removed, so the partitioning never leaks into JSON.
 export function tagRow(resource: Resource, row: Record<string, unknown>): Record<string, unknown> {
+  // Destructure slice_no out; the rest is the public shape.
+  const { [SLICE_FIELD]: _slice, ...rest } = row;
   // Spread after, so object is first in key order; views have no "object" column.
-  return { object: resource.object, ...row };
+  return { object: resource.object, ...rest };
 }

@@ -12,8 +12,8 @@
   TWO SURFACES, ON PURPOSE (design §4.2 layer 2):
   - novaRead / novaRpc  — what the public /v1 API imports. GET + RPC only.
   - novaWrite           — insert/update/delete for the portals. /v1 must never
-                          import it; a grep for "novaWrite" under app/nova-api/v1
-                          must stay empty.
+                          import it; `grep -rn "^import.*novaWrite"` under
+                          app/nova-api/v1 must stay empty.
 */
 
 // Runtime guard, same as the axe modules: turns a leak of the service key into
@@ -115,7 +115,12 @@ export async function novaRpc<T>(fn: string, args: Record<string, unknown>): Pro
     headers: headers(),
     body: JSON.stringify(args),
   });
-  return (await response.json()) as T;
+  // Read as text first: a `returns void` function (nova_log_request) answers
+  // with an EMPTY body, and response.json() throws on that after the call has
+  // already succeeded — logging a false "could not log request" every time.
+  const text = await response.text();
+  // Empty body means the function returns nothing; null is the honest value.
+  return (text ? JSON.parse(text) : null) as T;
 }
 
 /*

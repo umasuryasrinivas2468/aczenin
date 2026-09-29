@@ -17,8 +17,10 @@
   Client component only because recharts measures the DOM.
 */
 
+// Measures the chart's box, since ResponsiveContainer cannot (see useWidth).
+import { useEffect, useRef, useState } from "react";
 // recharts is already a dependency (package.json), used by /axe's TrafficChart.
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 
 // shadcn card for the panel frame.
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -63,45 +65,85 @@ function longDay(iso: string): string {
   });
 }
 
+// Chart height in px; one constant so the reserved box and the SVG agree.
+const CHART_HEIGHT = 256;
+
+/*
+  The element's content width, live. WHY NOT ResponsiveContainer: Next 15 renders
+  with its bundled React 19, whose elements recharts 2.13's react-is 18 check does
+  not recognise, so ResponsiveContainer never passes a width and draws nothing,
+  with no error. Same fix as src/components/nova/analytics/UsageCharts.tsx.
+  ponytail: back to ResponsiveContainer once recharts is on react-is 19.
+*/
+function useWidth<T extends HTMLElement>() {
+  // The box being measured.
+  const ref = useRef<T>(null);
+  // 0 on the server and first paint, so no chart is drawn and nothing mismatches on hydration.
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    // Set by the time effects run; the guard satisfies TS and StrictMode double-mounts.
+    const node = ref.current;
+    if (!node) return;
+    // Re-measures on window resize and on the shell's sheet opening, not just on mount.
+    const observer = new ResizeObserver(([entry]) => setWidth(Math.floor(entry.contentRect.width)));
+    observer.observe(node);
+    // Stops observing a node that has left the page.
+    return () => observer.disconnect();
+  }, []);
+  return [ref, width] as const;
+}
+
 // One stat tile. Tiny and used four times, so it lives here rather than in its own file.
 function Tile({ label, value }: { label: string; value: number }) {
   return (
     // <div> with the label first in DOM order, so a screen reader says
     // "Requests today, 1,204" rather than a bare number.
-    <div className="rounded-lg border p-3">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="text-2xl font-semibold tabular-nums">{formatCount(value)}</p>
+    // bg-card + shadow-sm: the same surface as the chart card, so the page reads as one set.
+    <div className="rounded-lg border bg-card p-4 shadow-sm">
+      <p className="text-xs font-medium text-muted-foreground">{label}</p>
+      <p className="mt-1 text-2xl font-semibold tabular-nums">{formatCount(value)}</p>
     </div>
   );
 }
 
 export default function UsagePanel({ daily, totals }: Pick<AdminData, "daily" | "totals">) {
+  // The chart box's width, handed to BarChart as a number.
+  const [chartRef, chartWidth] = useWidth<HTMLDivElement>();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Usage</CardTitle>
-        <CardDescription>All keys combined. Days are India Standard Time.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Two per row on phones, four from sm up; never wider than 320px allows. */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Tile label="Requests today" value={totals.today} />
-          <Tile label="Requests, 7 days" value={totals.last7d} />
-          <Tile label="Active keys" value={totals.activeKeys} />
-          <Tile label="Allowlisted users" value={totals.allowlisted} />
-        </div>
+    // One wrapper so the tiles and the chart card share a single vertical rhythm.
+    <div className="space-y-6">
+      {/* Two per row until lg, four from lg: at 1366px beside the 256px
+          sidebar each tile still has room for a six-digit count. */}
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Tile label="Requests today" value={totals.today} />
+        <Tile label="Requests, 7 days" value={totals.last7d} />
+        <Tile label="Active keys" value={totals.activeKeys} />
+        <Tile label="Allowlisted users" value={totals.allowlisted} />
+      </div>
 
-        <figure className="space-y-2">
-          {/* The chart's title, which is also its only series name. */}
-          <figcaption className="text-sm font-medium">Requests per day, last 7 days</figcaption>
+      <Card>
+        {/* The page header already says "Overview"; the card names only its chart. */}
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Requests per day</CardTitle>
+          <CardDescription>Last 7 days, all keys.</CardDescription>
+        </CardHeader>
+        <CardContent>
+        <figure>
           {/* The series colour as a scoped CSS variable with a selected dark
               step; the chart reads var(--nova-series) below. aria-hidden
               because the sr-only table underneath carries the same numbers
               in a form a screen reader can navigate. */}
-          <div className="h-56 w-full [--nova-series:#2a78d6] dark:[--nova-series:#3987e5]" aria-hidden="true">
-            <ResponsiveContainer width="100%" height="100%">
-              {/* left margin trimmed: the y-axis label already reserves room. */}
-              <BarChart data={daily} margin={{ top: 8, right: 8, left: 4, bottom: 16 }}>
+          <div
+            ref={chartRef}
+            // Fixed height reserves the space up front, so nothing jumps when the chart appears.
+            style={{ height: CHART_HEIGHT }}
+            className="w-full [--nova-series:#2a78d6] dark:[--nova-series:#3987e5]"
+            aria-hidden="true"
+          >
+            {/* Drawn only once measured; a 0-width chart would render empty SVG. */}
+            {chartWidth > 0 ? (
+              // left margin trimmed: the y-axis label already reserves room.
+              <BarChart width={chartWidth} height={CHART_HEIGHT} data={daily} margin={{ top: 8, right: 8, left: 4, bottom: 16 }}>
                 {/* Horizontal rules only; days are already marked by ticks. */}
                 <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
                 <XAxis
@@ -138,7 +180,7 @@ export default function UsagePanel({ daily, totals }: Pick<AdminData, "daily" | 
                     bars thin on a wide screen rather than turning into slabs. */}
                 <Bar dataKey="requests" fill="var(--nova-series)" radius={[4, 4, 0, 0]} maxBarSize={48} />
               </BarChart>
-            </ResponsiveContainer>
+            ) : null}
           </div>
           {/* The accessible table view of the same seven values. */}
           <table className="sr-only">
@@ -160,7 +202,8 @@ export default function UsagePanel({ daily, totals }: Pick<AdminData, "daily" | 
             </tbody>
           </table>
         </figure>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

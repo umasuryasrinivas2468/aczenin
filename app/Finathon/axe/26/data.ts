@@ -19,6 +19,7 @@
 */
 
 import { axeSelect, storageSignedUrl } from "@/lib/axe/supabase";
+import { findChallenge, findTrack, type TrackId } from "@/lib/finathon/challenges";
 import { PAYMENTS_BUCKET } from "@/lib/finathon/teamRegistrations";
 
 // Same runtime-only guard every module in this chain carries. Strictly weaker
@@ -209,6 +210,55 @@ export async function listTeams(limit = 2_000): Promise<Team[]> {
     `select=${TEAM_COLUMNS}&order=submitted_at.desc`,
     limit,
   );
+}
+
+/* One team's challenge pick, from finathon_challenge_claim. */
+export type ChallengeClaim = {
+  team_id: number;
+  track: TrackId;
+  challenge_id: string;
+  // The participant id of the member who pressed the button.
+  claimed_by: number;
+  claimed_at: string;
+};
+
+/*
+  Every challenge pick, keyed by team id (the table allows one per team).
+
+  Returns null rather than throwing when the read fails — most likely because
+  the challenge-claim migration has not been run yet — so the review queue
+  still loads and the page says the picks are unavailable instead.
+*/
+export async function listChallengeClaims(): Promise<Map<number, ChallengeClaim> | null> {
+  try {
+    const rows = await axeSelect<ChallengeClaim>(
+      "finathon_challenge_claim",
+      "select=team_id,track,challenge_id,claimed_by,claimed_at&order=claimed_at.asc",
+      2_000,
+    );
+    return new Map(rows.map((row) => [row.team_id, row]));
+  } catch (error) {
+    console.error("[finathon/admin] reading challenge claims failed:", error);
+    return null;
+  }
+}
+
+/*
+  The display labels for a claim. Falls back to the stored ids when a challenge
+  is no longer in src/lib/finathon/challenges.ts, so a renamed id still shows
+  something rather than a blank.
+*/
+export function describeClaim(claim: ChallengeClaim): {
+  trackName: string;
+  code: string;
+  title: string;
+} {
+  const challenge = findChallenge(claim.track, claim.challenge_id);
+  return {
+    trackName: findTrack(claim.track)?.name ?? claim.track,
+    code: challenge?.code ?? claim.challenge_id,
+    title: challenge?.title ?? "",
+  };
 }
 
 /*

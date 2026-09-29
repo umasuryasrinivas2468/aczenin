@@ -9,12 +9,30 @@
 
 import { hasFinathonSession } from "@/lib/finathon/gate";
 
-import { assignTeamCodes, listTeams, sortRoster, toStatusFilter } from "../data";
+import {
+  assignTeamCodes,
+  describeClaim,
+  listChallengeClaims,
+  listTeams,
+  sortRoster,
+  toStatusFilter,
+} from "../data";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const HEADER = ["Team Code", "Team Name", "Status", "Role", "Name", "Email", "Phone"];
+const HEADER = [
+  "Team Code",
+  "Team Name",
+  "Status",
+  "Track",
+  "Challenge Code",
+  "Challenge",
+  "Role",
+  "Name",
+  "Email",
+  "Phone",
+];
 
 /*
   Quotes one CSV cell. A leading = + - @ is prefixed with an apostrophe so a
@@ -38,7 +56,7 @@ export async function GET(request: Request) {
   const raw = new URL(request.url).searchParams.get("status");
   const status = raw === null ? "all" : toStatusFilter(raw);
 
-  const all = await listTeams();
+  const [all, claims] = await Promise.all([listTeams(), listChallengeClaims()]);
   // Codes come from the full set so a team keeps its code in every filtered view.
   const codes = assignTeamCodes(all);
   const teams = all
@@ -51,12 +69,21 @@ export async function GET(request: Request) {
     if (lines.length > 1) {
       lines.push("");
     }
+    // "Unavailable" when the claims table could not be read, so a failed read
+    // is not mistaken for a team that has not picked.
+    const claim = claims?.get(team.id);
+    const pick = claim
+      ? describeClaim(claim)
+      : { trackName: claims === null ? "Unavailable" : "Not picked", code: "", title: "" };
     for (const person of sortRoster(team.finathon_participant)) {
       lines.push(
         [
           codes.get(team.id),
           team.team_name,
           team.status,
+          pick.trackName,
+          pick.code,
+          pick.title,
           person.is_lead === true ? "Lead" : "Member",
           person.full_name,
           person.email,

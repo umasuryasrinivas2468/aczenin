@@ -400,6 +400,55 @@ function isRealDate(value: string): boolean {
   return parsed.getUTCFullYear() === y && parsed.getUTCMonth() === m - 1 && parsed.getUTCDate() === d;
 }
 
+// Full ISO timestamp: date, T, hh:mm[:ss[.ffffff]], then Z or ±hh:mm. The zone
+// is mandatory so the instant never depends on the DB session's TimeZone.
+const ISO_TIMESTAMP = /^(\d{4}-\d{2}-\d{2})T([01]\d|2[0-3]):[0-5]\d(:[0-5]\d(\.\d{1,6})?)?(Z|[+-](0\d|1[0-4]):[0-5]\d)$/;
+
+// A timestamp value is either a real calendar date or a strict ISO timestamp
+// whose date part is also real (the regex alone accepts 2026-02-30T…).
+function isTimestampValue(value: string): boolean {
+  // Date-only form, widened to the day later by timestampClauses.
+  if (isRealDate(value)) return true;
+  // Otherwise the full form; group 1 is its date part.
+  const match = ISO_TIMESTAMP.exec(value);
+  // Both the shape and the calendar must hold.
+  return match !== null && isRealDate(match[1]);
+}
+
+// The UTC day after a YYYY-MM-DD date, as YYYY-MM-DD. Date.UTC rolls month and
+// year ends over, so 2026-12-31 → 2027-01-01 without calendar code of our own.
+function nextDay(date: string): string {
+  // Parts of an already-validated date.
+  const [y, m, d] = date.split("-").map(Number);
+  // d + 1 overflows into the next month/year exactly as the calendar does.
+  return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+}
+
+/*
+  PostgREST clauses for one timestamp filter. A bare date on a timestamptz
+  column means midnight, so "eq.2026-01-05" would match only 00:00:00 and
+  "lte.2026-01-05" would drop the whole 5th. A date-only value therefore means
+  the whole UTC day [D, D+1) and each operator is rewritten to that range:
+    eq D  → gte D & lt D+1      lte D → lt D+1      gt D → gte D+1
+    gte D → gte D (unchanged)   lt D  → lt D (unchanged)
+  A full ISO timestamp is an exact instant and passes through as-is.
+  ponytail: "day" is the UTC day; per-team timezones would need an offset input.
+*/
+function timestampClauses(field: string, op: Operator, value: string): string[] {
+  // An exact instant needs no widening.
+  if (!isRealDate(value)) return [`${field}=${op}.${encodeValue(value)}`];
+  // Exclusive upper bound of the day; dates are digits and dashes, nothing to encode.
+  const next = nextDay(value);
+  // Two clauses on one key are fine: PostgREST ANDs repeated filters.
+  if (op === "eq") return [`${field}=gte.${value}`, `${field}=lt.${next}`];
+  // "On or before D" includes all of D.
+  if (op === "lte") return [`${field}=lt.${next}`];
+  // "After D" starts once D is over.
+  if (op === "gt") return [`${field}=gte.${next}`];
+  // gte and lt already mean "from D's start" / "before D's start".
+  return [`${field}=${op}.${value}`];
+}
+
 // Validates one value against its field type; returns an issue message or null.
 function checkValue(type: FieldType, value: string): string | null {
   // Empty values would become "eq." — a filter on the empty string nobody meant.
@@ -417,6 +466,9 @@ function checkValue(type: FieldType, value: string): string | null {
     // Calendar dates only.
     case "date":
       return isRealDate(value) ? null : "must be a real date in YYYY-MM-DD format";
+    // A day or an exact instant; anything else is refused before PostgREST sees it.
+    case "timestamp":
+      return isTimestampValue(value) ? null : "must be YYYY-MM-DD or an ISO timestamp with Z or an offset (e.g. 2026-01-05T09:30:00Z)";
     // Plain decimals: the regex rules out 1e5, 0x10, Infinity and NaN, which
     // Number() would accept or Postgres would reject with an upstream error.
     case "number":
@@ -576,6 +628,13 @@ export function buildListQuery(
     // Type check the (possibly stripped) value.
     const issue = checkValue(spec.type, value);
     if (issue !== null) return invalid(key, issue);
+    // Timestamps may expand to a day range, so they build their own clauses.
+    if (spec.type.kind === "timestamp") {
+      // Validated above; op is one of the five range/eq ops the shorthand allows.
+      clauses.push(...timestampClauses(field, op as Operator, value));
+      // Next key.
+      continue;
+    }
     // ilike gets *…* (PostgREST's wildcard); everything else is a bare value.
     const operand = op === "ilike" ? `*${encodeValue(value)}*` : encodeValue(value);
     // Key and op come from the allowlist; only the operand is user-derived.

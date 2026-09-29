@@ -21,6 +21,10 @@ export type FieldType =
   | { kind: "enum"; values: readonly string[] }
   // YYYY-MM-DD that is also a real calendar date (no 2026-02-30).
   | { kind: "date" }
+  // A timestamptz column: YYYY-MM-DD (meaning that whole UTC day) or a full
+  // ISO timestamp with an explicit Z/offset. Separate from "date" because a
+  // bare date on a timestamptz means midnight, so eq/lte would miss the day.
+  | { kind: "timestamp" }
   // A plain decimal; no exponent, hex or Infinity.
   | { kind: "number" }
   // Literal "true" / "false" only.
@@ -53,6 +57,8 @@ export const text: FilterField = { type: { kind: "string" }, ops: ["eq", "in", "
 export const code: FilterField = { type: { kind: "string" }, ops: ["eq", "in"] };
 // Dates: exact or a range.
 export const date: FilterField = { type: { kind: "date" }, ops: ["eq", "gte", "lte", "gt", "lt"] };
+// Timestamps: same ops as dates; buildListQuery widens a date-only value to the day.
+export const timestamp: FilterField = { type: { kind: "timestamp" }, ops: ["eq", "gte", "lte", "gt", "lt"] };
 // Amounts and quantities: exact or a range.
 export const number: FilterField = { type: { kind: "number" }, ops: ["eq", "gte", "lte", "gt", "lt"] };
 // Flags: only equality means anything.

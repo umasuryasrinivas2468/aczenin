@@ -157,5 +157,37 @@ assert.equal(findResource("invoices"), invoices);
 assert.equal(isValidId("inv_8f2c91a4"), true);
 assert.equal(isValidId("inv_1,or(x)"), false);
 
+// Timestamp fields: a date-only value means the whole UTC day, not midnight.
+const vendorPayments = RESOURCES["vendor-payments"];
+// Every clause before the order= suffix, i.e. just the filters this case added.
+const tsFilters = (qs: string) => ok(vendorPayments, qs).split("&order=")[0];
+// eq D → the half-open day [D, D+1), two clauses on the same column.
+assert.equal(tsFilters("initiated_at=2026-01-05"), "initiated_at=gte.2026-01-05&initiated_at=lt.2026-01-06");
+assert.equal(tsFilters("initiated_at.eq=2026-01-05"), "initiated_at=gte.2026-01-05&initiated_at=lt.2026-01-06");
+// lte D includes all of D, so it becomes lt D+1; month/year rollover handled.
+assert.equal(tsFilters("initiated_at.lte=2026-12-31"), "initiated_at=lt.2027-01-01");
+// gt D starts after D ends.
+assert.equal(tsFilters("initiated_at.gt=2026-02-28"), "initiated_at=gte.2026-03-01");
+// gte and lt already sit on the day boundary.
+assert.equal(tsFilters("initiated_at.gte=2026-01-05"), "initiated_at=gte.2026-01-05");
+assert.equal(tsFilters("initiated_at.lt=2026-01-05"), "initiated_at=lt.2026-01-05");
+// A full ISO instant passes through unchanged (only URL-encoded).
+assert.equal(tsFilters("initiated_at.lte=2026-01-05T09:30:00Z"), "initiated_at=lte.2026-01-05T09%3A30%3A00Z");
+assert.equal(tsFilters("initiated_at.eq=2026-01-05T09:30:00.5%2B05:30"), "initiated_at=eq.2026-01-05T09%3A30%3A00.5%2B05%3A30");
+// The other two timestamptz filters use the same type.
+assert.equal(RESOURCES.approvals.filters.acted_at.type.kind, "timestamp");
+assert.equal(RESOURCES["master-data-changes"].filters.changed_at.type.kind, "timestamp");
+// Bad values get the registry's usual validation_failed: impossible date, no
+// zone, a raw "+" (decoded to a space), junk, and PostgREST syntax smuggling.
+for (const bad of ["2026-02-30", "2026-01-05T09:30:00", "2026-01-05T09:30:00+05:30", "2026-01-05T24:00Z", "2026-02-30T01:00Z", "yesterday", "2026-01-05,or(x)"]) {
+  // Same call shape as the route.
+  const result = buildListQuery(vendorPayments, new URLSearchParams(`initiated_at.eq=${bad}`), SLICE);
+  // Refused, with the same error code every other bad value gets.
+  assert.equal(result.ok, false, `expected refusal for ${bad}`);
+  assert.equal((result as { error: { code: string } }).error.code, "validation_failed");
+}
+// `in` was never allowed on timestamps and still is not.
+assert.equal((buildListQuery(vendorPayments, new URLSearchParams("initiated_at.in=2026-01-05"), SLICE) as { error: { code: string } }).error.code, "unsupported_operator");
+
 // Reached only if every assert held.
 console.log("resources.check: all assertions passed");

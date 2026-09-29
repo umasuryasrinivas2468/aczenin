@@ -66,7 +66,7 @@ export default async function NovaApiPage() {
               </p>
               {/* The one line a developer wants first. */}
               <code className="inline-block max-w-full break-all rounded-md border bg-card px-3 py-2 font-mono text-sm">
-                GET https://aczen.in/nova-api/v1/invoices
+                GET https://www.aczen.in/nova-api/v1/invoices
               </code>
             </div>
 

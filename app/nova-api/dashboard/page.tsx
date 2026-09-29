@@ -44,7 +44,9 @@ export const metadata: Metadata = {
 };
 
 // Shown next to the base URL.
-const BASE_URL = "https://aczen.in/nova-api/v1";
+// www, not the apex: aczen.in 308-redirects to www.aczen.in, and HTTP clients drop the
+// Authorization header on a cross-host redirect, so an apex base URL 401s every call.
+const BASE_URL = "https://www.aczen.in/nova-api/v1";
 
 // Fixed locale and zone so the server renders the same text every time, in
 // the timezone the team and its users work in.

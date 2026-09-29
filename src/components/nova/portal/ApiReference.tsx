@@ -9,7 +9,9 @@
 */
 
 // Base URL shown everywhere; one constant so a domain move is one edit.
-const BASE_URL = "https://aczen.in/nova-api/v1";
+// www, not the apex: aczen.in 308-redirects to www.aczen.in, and HTTP clients drop the
+// Authorization header on a cross-host redirect, so an apex base URL 401s every call.
+const BASE_URL = "https://www.aczen.in/nova-api/v1";
 
 // Section anchors, used by both the on-page nav and the headings.
 export const REFERENCE_SECTIONS = [

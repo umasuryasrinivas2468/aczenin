@@ -198,7 +198,7 @@ browser-based testing works.
 
 ## 6. API reference (what `/v1` serves)
 
-Base URL: `https://aczen.in/nova-api/v1`
+Base URL: `https://www.aczen.in/nova-api/v1`. It must be `www`: the apex `aczen.in` 308-redirects to `www`, and clients drop `Authorization` on a cross-host redirect, so the apex returns 401 (found in the production check, 2026-09-29).
 
 | Route | Notes |
 |---|---|
@@ -291,6 +291,7 @@ Reused from the existing deploy: `AXE_COOKIE_SECRET`, `AXE_SALT`.
   project is not visible to the local CLI login. `001_schema.sql` **applied**
   and verified: 15 tables with RLS on, 9 views, and anon denied (`42501`) on
   views, key tables and `nova_authenticate_key`.
+- 2026-09-29 — pushed `0bab0e9`. On production, pages and `/health` return 200. Keyed calls return 502 until the `NOVA_*` env vars are added in Vercel. Base URL corrected to `www`.
 - 2026-09-29 — sign-in changed from an emailed code to email + admin-set
   password (Teja). Applied live: `nova_allowlist.password_hash` was added and
   `nova_auth_attempt.kind` became `admin`/`portal_login`. The empty table

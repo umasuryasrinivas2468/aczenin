@@ -21,7 +21,9 @@ import { createKeyAction } from "../../../../app/nova-api/actions";
 import CopyButton from "./CopyButton";
 
 // Where the sample request points; matches design §6.
-const BASE_URL = "https://aczen.in/nova-api/v1";
+// www, not the apex: aczen.in 308-redirects to www.aczen.in, and HTTP clients drop the
+// Authorization header on a cross-host redirect, so an apex base URL 401s every call.
+const BASE_URL = "https://www.aczen.in/nova-api/v1";
 
 export default function CreateKeyForm({ disabled }: { disabled: boolean }) {
   // The label the user types.

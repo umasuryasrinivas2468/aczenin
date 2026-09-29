@@ -45,6 +45,8 @@ const CANONICAL_CHILDREN: Record<string, string> = {
   // The organisers' dashboard parent, /Finathon/axe/26. The "26" below it needs
   // no entry: digits have no case, so they survive the pass-through unchanged.
   axe: "axe",
+  // The first-come-first-served challenge picker, /Finathon/challenges.
+  challenges: "challenges",
 };
 
 /*

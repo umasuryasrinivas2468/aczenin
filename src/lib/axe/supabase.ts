@@ -60,7 +60,9 @@ export type AxeTable =
   | "finathon_participant"
   // The rate-limit ledger. Holds only a hashed IP and an outcome word, so it is
   // the one table in this group that carries nothing identifying.
-  | "finathon_register_attempt";
+  | "finathon_register_attempt"
+  // Which team picked which challenge. Read for per-track seat counts only.
+  | "finathon_challenge_claim";
 
 /*
   A write failure, carrying the SQLSTATE separately from the message.

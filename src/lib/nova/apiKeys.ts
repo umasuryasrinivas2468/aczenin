@@ -54,6 +54,11 @@ export type AuthenticatedKey = {
   windowStart: string;
   // When the key was minted, shown by /me.
   createdAt: string;
+  // The team's permanent position in allowlist order, shown by /me.
+  teamSlot: number;
+  // The dataset slice this team reads (team_slot % slice_count); every /v1
+  // read is pinned to it, so it is the boundary between teams' data.
+  sliceNo: number;
 };
 
 // Row shape nova_authenticate_key returns (001_schema.sql `returns table`);
@@ -75,6 +80,10 @@ type AuthenticateRow = {
   window_start: string;
   // timestamptz → ISO string.
   key_created_at: string;
+  // Added by 004_team_slices.sql; integer → JSON number.
+  team_slot: number;
+  // Added by 004_team_slices.sql; computed in the RPC, never by us.
+  slice_no: number;
 };
 
 /*
@@ -111,5 +120,9 @@ export async function authenticateApiKey(authorizationHeader: string | null): Pr
     requestCount: row.request_count,
     windowStart: row.window_start,
     createdAt: row.key_created_at,
+    teamSlot: row.team_slot,
+    // Passed through untouched; resources.ts refuses a non-integer, so a
+    // missing column after a bad migration fails closed instead of unpinned.
+    sliceNo: row.slice_no,
   };
 }

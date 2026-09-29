@@ -297,3 +297,36 @@ Reused from the existing deploy: `AXE_COOKIE_SECRET`, `AXE_SALT`.
   `nova_auth_attempt.kind` became `admin`/`portal_login`. The empty table
   `nova_login_code` **still exists live** (a drop was blocked pending Teja's
   OK). The schema file no longer creates it.
+- 2026-09-29 — `ee83490`: login throttles are now log-then-count (a parallel
+  burst can't bypass them), and the per-email lockout was dropped.
+- 2026-09-29 — **One active key per email** (Teja). Enforced by the partial
+  unique index `nova_api_key_one_active_per_email`, which can't be raced like
+  an app-side count.
+- 2026-09-29 — **Per-request log** `nova_api_request` (`003_one_key_and_request_log.sql`,
+  applied live). `/v1` appends one row per authenticated call via
+  `nova_log_request()` inside Next's `after()`, so it adds no response
+  latency. It records status, error code and message, duration and request
+  id. It is the only write `/v1` makes, and it touches the audit log, never
+  business data. Unauthenticated 401s are not logged: there is no key to
+  attribute them to. It feeds the user's `/nova-api/usage` analytics page.
+- 2026-09-29 — Portal redesign in progress: no landing page, `/nova-api` is
+  sign-in only, then a left-sidebar app shell (`src/components/nova/shell/`)
+  with API keys, Usage & logs, and Documentation sections. The admin uses the
+  same shell.
+- 2026-09-29 — **Per-team slices** (Teja: fixed slice per team, coherent books,
+  70+ teams). `004_team_slices.sql` is applied live. It adds `slice_no` on
+  every business table, `nova_dataset_meta.slice_count`, and
+  `nova_allowlist.slot`, taken from a sequence in the order teams are added.
+  Auth now returns `team_slot` and `slice_no = slot % slice_count`, and the
+  API pins `slice_no` on every list, get and child read. It can't be
+  overridden: `?slice_no=` returns 400, and another team's id returns 404.
+  The reseed produced **80 slices**: 4 clients, 30 invoices, ~22 payments,
+  8 quotations, 2 vendors, 15 bills, 20 expenses, 5 items and 40 movements
+  per team. Totals are 320 / 2400 / 1786 / 640 / 160 / 1200 / 1600 / 400 /
+  3200. Teams 81+ wrap around. Live isolation test passed: two teams saw
+  different books, and a cross-team get returned 404. Invoice md5
+  `ceced81e91969d052ea929d77fcff79c`.
+- 2026-09-29 — Finathon has 54 problem statements
+  (`Finathon_Problem_Statements.xlsx`). The coverage analysis is in
+  `docs/nova-finathon-data-coverage.md`, still in progress. Today's data
+  covers only a small subset.

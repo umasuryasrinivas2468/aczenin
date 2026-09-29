@@ -15,13 +15,14 @@
 
 // Re-renders the dashboard's server component after a key changes.
 import { revalidatePath } from "next/cache";
-// Sends the browser back to the docs after sign-out.
+// Sends the browser back to the sign-in screen after sign-out.
 import { redirect } from "next/navigation";
 
 // Sign-in primitives; they do the validation, throttling and scrypt.
 import { getPortalUser, signIn, signOut, type PortalResult } from "@/lib/nova/portalAuth";
 // Key queries that must only ever run for the session's own email.
-import { createKey, revokeKey, type CreateKeyResult } from "./dashboard/keys";
+// "(portal)" is a route group: it shapes the folder tree, never the URL.
+import { createKey, revokeKey, type CreateKeyResult } from "./(portal)/dashboard/keys";
 
 // One message for every unexpected failure, so no internal detail leaks.
 const GENERIC_ERROR = "Something went wrong. Please try again in a minute.";
@@ -46,7 +47,7 @@ export async function signOutAction(): Promise<void> {
   await signOut();
   // Drop any cached render of the signed-in pages.
   revalidatePath("/nova-api", "layout");
-  // Explicit, so sign-out lands on the docs from wherever it was clicked.
+  // Explicit, so sign-out lands on the sign-in screen from wherever it was clicked.
   redirect("/nova-api");
 }
 

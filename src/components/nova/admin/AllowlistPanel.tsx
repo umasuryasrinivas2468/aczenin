@@ -53,14 +53,16 @@ export default function AllowlistPanel({ rows }: { rows: AllowlistRow[] }) {
   const message = removed ?? add.result;
 
   return (
+    // Two cards, add then list: the write sits apart from the rows it changes.
+    <div className="space-y-6">
     <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Allowlist</CardTitle>
-        <CardDescription>
-          Only these addresses can request a sign-in code for the developer portal.
-        </CardDescription>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base">Add an address</CardTitle>
+        {/* Users sign in with their own email as the password, so there is
+            deliberately no password field to fill here. */}
+        <CardDescription>They sign in to the developer portal with this email.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {/* --- Add form ------------------------------------------------------
             Stacks on phones, one row from sm up. */}
         <form ref={formRef} onSubmit={handleAdd} className="flex flex-col gap-3 sm:flex-row sm:items-end">
@@ -100,7 +102,15 @@ export default function AllowlistPanel({ rows }: { rows: AllowlistRow[] }) {
             </p>
           ) : null}
         </div>
+      </CardContent>
+    </Card>
 
+    <Card>
+      <CardHeader className="pb-2">
+        {/* The count in the title answers "how many" without scanning the rows. */}
+        <CardTitle className="text-base">Allowlisted ({rows.length})</CardTitle>
+      </CardHeader>
+      <CardContent>
         {/* --- Rows ----------------------------------------------------------
             Table scrolls horizontally inside its own wrapper on narrow
             screens, so the page itself never scrolls sideways at 320px. */}
@@ -113,6 +123,10 @@ export default function AllowlistPanel({ rows }: { rows: AllowlistRow[] }) {
                 <TableHead>Email</TableHead>
                 <TableHead>Note</TableHead>
                 <TableHead>Added</TableHead>
+                {/* Slot is assigned by the database; the slice is what the
+                    team's API calls actually read. */}
+                <TableHead className="text-right">Slot</TableHead>
+                <TableHead>Data slice</TableHead>
                 {/* Right-aligned: it is a number column. */}
                 <TableHead className="text-right">Active keys</TableHead>
                 {/* Visually empty header still needs a name for screen readers. */}
@@ -126,10 +140,22 @@ export default function AllowlistPanel({ rows }: { rows: AllowlistRow[] }) {
                 // email is the primary key, so it is a stable React key.
                 <TableRow key={row.email}>
                   {/* break-all: a long address wraps instead of widening the table. */}
-                  <TableCell className="break-all font-medium">{row.email}</TableCell>
+                  {/* min-w-44 stops the auto layout squeezing the address into fragments. */}
+                  <TableCell className="min-w-44 break-all font-medium">{row.email}</TableCell>
                   <TableCell className="text-muted-foreground">{row.note ?? "—"}</TableCell>
                   {/* nowrap keeps "29 Sept 2026" on one line. */}
                   <TableCell className="whitespace-nowrap">{formatDate(row.created_at)}</TableCell>
+                  {/* Read-only: there is no control to change a slot. */}
+                  <TableCell className="text-right tabular-nums">{row.slot}</TableCell>
+                  <TableCell className="whitespace-nowrap tabular-nums">
+                    {row.dataSlice}
+                    {/* slot differs from its slice exactly when slot >= slice_count:
+                        the data ran out and this team repeats the slice first
+                        given to slot {dataSlice}. Said in words so overlaps show. */}
+                    {row.slot !== row.dataSlice ? (
+                      <span className="ml-1 text-xs text-muted-foreground">(shared with slot {row.dataSlice})</span>
+                    ) : null}
+                  </TableCell>
                   {/* tabular-nums so digits line up down the column. */}
                   <TableCell className="text-right tabular-nums">{row.activeKeys}</TableCell>
                   <TableCell className="text-right">
@@ -158,5 +184,6 @@ export default function AllowlistPanel({ rows }: { rows: AllowlistRow[] }) {
         )}
       </CardContent>
     </Card>
+    </div>
   );
 }

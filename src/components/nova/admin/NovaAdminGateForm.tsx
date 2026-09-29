@@ -3,9 +3,10 @@
 /*
   The password form shown at /nova-api/axe when there is no valid admin session.
 
-  Same shape and same omissions as FinathonGateForm: no mention of keys,
-  allowlists or counts. It is rendered INSTEAD of the portal, never beside it,
-  so an unauthenticated response contains this form and nothing else.
+  Still omits keys, allowlists and counts. It is rendered INSTEAD of the
+  portal, never beside it (no shell, no nav), so an unauthenticated response
+  contains this form and nothing else. Branded "Nova admin" with the Aczen mark
+  at the owner's request (2026-09-29), replacing the opaque "axe" card.
 
   Differs in one place: it calls a Server Action (signInNovaAdmin) rather than
   fetching a /api route, because everything Nova-admin lives under
@@ -55,12 +56,18 @@ export default function NovaAdminGateForm() {
   }
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          {/* Says nothing about what is behind it, like the other gates. */}
-          <CardTitle className="text-2xl">axe</CardTitle>
-          <CardDescription>Enter the password to continue.</CardDescription>
+    // min-h-dvh, not 100vh: mobile browser toolbars would otherwise push the
+    // card off-centre. Muted page ground so the white card stands out.
+    <div className="flex min-h-dvh items-center justify-center bg-muted/40 px-4 py-10">
+      <Card className="w-full max-w-sm shadow-lg">
+        <CardHeader className="items-center space-y-3 text-center">
+          {/* The same mark as the favicon, so the tab and the card match.
+              Plain <img>: a static SVG gains nothing from next/image. */}
+          <img src="/icon.svg" alt="Aczen" width={48} height={48} className="h-12 w-12" />
+          <div className="space-y-1">
+            <CardTitle className="text-2xl">Nova admin</CardTitle>
+            <CardDescription>Enter the admin password to continue.</CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

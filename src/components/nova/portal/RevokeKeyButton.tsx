@@ -9,7 +9,8 @@
 // Pending + error state for this one row.
 import { useState } from "react";
 
-// House button (destructive variant signals the irreversible action).
+// House button; outline + red text signals the irreversible action without a
+// solid red block dominating the key card.
 import { Button } from "@/components/ui/button";
 // Session-checked server action.
 import { revokeKeyAction } from "../../../../app/nova-api/actions";
@@ -40,8 +41,16 @@ export default function RevokeKeyButton({ id, name }: { id: string; name: string
   return (
     <div className="space-y-1">
       {/* aria-label names the key, so a screen reader list of buttons is not
-          five identical "Revoke"s. */}
-      <Button type="button" variant="destructive" size="sm" onClick={revoke} disabled={busy} aria-label={`Revoke key ${name}`}>
+          identical "Revoke"s. */}
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={revoke}
+        disabled={busy}
+        aria-label={`Revoke key ${name}`}
+        className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"
+      >
         {busy ? "Revoking…" : "Revoke"}
       </Button>
       {error ? (

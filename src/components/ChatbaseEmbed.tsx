@@ -28,6 +28,11 @@ const HIDDEN_ON: string[] = [
   // The Finathon campaign page is a single-call-to-action page; a second
   // floating button competing for the same corner works against it.
   "/finathon",
+  // The Nova developer portal and its admin (/nova-api/axe): an app shell with
+  // its own sidebar, where a marketing chat bubble would cover the sign-out
+  // row and the key table. Listed here so the third-party script is not even
+  // loaded, rather than loaded and hidden with CSS.
+  "/nova-api",
 ];
 
 // Compared case-insensitively: the canonical route is "/Finathon", and a

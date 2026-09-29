@@ -40,6 +40,12 @@ export type AllowlistRow = {
   note: string | null;
   // ISO timestamp; rendered by the client in the viewer's locale.
   created_at: string;
+  // Permanent team position, assigned by the database on insert (004). Read
+  // only: the UI never sets it, so two teams can never be handed one slot.
+  slot: number;
+  // Which data slice the team reads: slot % slice_count, the same rule
+  // nova_authenticate_key applies, computed here so the UI cannot disagree.
+  dataSlice: number;
   // Keys this person holds that are not revoked — the useful "is this person
   // actually using it" signal next to a remove button.
   activeKeys: number;
@@ -75,9 +81,19 @@ export type DailyUsage = {
   requests: number;
 };
 
+// The one-row nova_dataset_meta, as Overview shows it.
+export type DatasetMeta = {
+  // How many coherent data slices the seed produced (>= 1 by CHECK).
+  sliceCount: number;
+  // ISO timestamp of the last seed run.
+  seededAt: string;
+};
+
 // Everything the page renders, loaded in one go so the page makes one call.
 export type AdminData = {
   allowlist: AllowlistRow[];
+  // null only if the meta row is missing; the auth function then treats it as 1 slice.
+  dataset: DatasetMeta | null;
   keys: KeyRow[];
   daily: DailyUsage[];
   totals: {
@@ -187,9 +203,12 @@ export async function loadAdminData(now: number = Date.now()): Promise<AdminData
   // or before now-24h, so this one query also feeds the per-key 24h column.
   const windowStart = istMidnight(now) - 6 * DAY_MS;
   // Fired together; each is paged internally.
-  const [allowlist, keys, usage] = await Promise.all([
+  const [allowlist, keys, usage, meta] = await Promise.all([
     // Newest first, so the person just added is at the top of the list.
-    readAll<Omit<AllowlistRow, "activeKeys">>("nova_allowlist", "select=email,note,created_at&order=created_at.desc,email.asc"),
+    readAll<Omit<AllowlistRow, "activeKeys" | "dataSlice">>(
+      "nova_allowlist",
+      "select=email,note,created_at,slot&order=created_at.desc,email.asc",
+    ),
     // key_hash is NOT in the select list — the admin never needs it.
     readAll<Omit<KeyRow, "requests24h">>(
       "nova_api_key",
@@ -200,7 +219,13 @@ export async function loadAdminData(now: number = Date.now()): Promise<AdminData
       "nova_api_usage",
       `select=key_id,window_start,request_count&window_start=gte.${new Date(windowStart).toISOString()}&order=window_start.asc,key_id.asc`,
     ),
+    // One row by design (boolean PK), so a plain read with limit=1 is enough.
+    novaRead<{ slice_count: number; seeded_at: string }>("nova_dataset_meta", "select=slice_count,seeded_at&limit=1"),
   ]);
+  // Missing row → null for the UI, but modulus 1, mirroring the auth function's coalesce.
+  const metaRow = meta.rows[0];
+  // Guarded again here although the CHECK says >= 1: a zero would NaN every slice.
+  const sliceCount = metaRow && metaRow.slice_count >= 1 ? metaRow.slice_count : 1;
   // Sums computed once and shared by the tiles, the chart and the keys table.
   const agg = aggregateUsage(usage, now);
   // Active-key count per email for the allowlist panel.
@@ -209,7 +234,9 @@ export async function loadAdminData(now: number = Date.now()): Promise<AdminData
   for (const k of keys) if (!k.revoked_at) activeByEmail.set(k.email, (activeByEmail.get(k.email) ?? 0) + 1);
   return {
     // `?? 0` so a person with no keys shows 0, not blank.
-    allowlist: allowlist.map((a) => ({ ...a, activeKeys: activeByEmail.get(a.email) ?? 0 })),
+    allowlist: allowlist.map((a) => ({ ...a, dataSlice: a.slot % sliceCount, activeKeys: activeByEmail.get(a.email) ?? 0 })),
+    // Only surfaced when the row exists; the page shows nothing rather than a guess.
+    dataset: metaRow ? { sliceCount: metaRow.slice_count, seededAt: metaRow.seeded_at } : null,
     // A key with no usage rows in the window shows 0.
     keys: keys.map((k) => ({ ...k, requests24h: agg.perKey24h.get(k.id) ?? 0 })),
     daily: agg.daily,

@@ -1,45 +1,51 @@
 -- =============================================================================
--- Nova API — deterministic dummy dataset. Run after 001_schema.sql, in the
--- same Nova Supabase project's SQL editor.
--- Design: docs/nova-api-architecture.md §4.3 (shared read-only dataset).
+-- Nova API — deterministic dummy dataset, cut into 80 per-team slices.
+-- Run AFTER 001_schema.sql, 003 and 004_team_slices.sql (this file writes the
+-- slice_no columns and nova_dataset_meta that 004 adds).
+-- Design: docs/nova-api-architecture.md §4.3; slicing rule: 004 header.
 --
--- Deterministic: setseed() pins the random() stream, and every random draw
--- happens in a statement whose row order is fixed (a plain scan of
--- generate_series or of a temp table), so a rerun produces the same ids,
--- amounts and statuses. Dates are offsets from current_date on purpose: the
--- data keeps "the last 12 months" shape whenever it is loaded, and 'overdue'
--- keeps ageing through the views without a job.
+-- Slices are coherent books: slice s owns 4 clients, 2 vendors and 5 stock
+-- items, and every invoice / quotation / payment / bill / movement inherits
+-- its slice from the client / vendor / item it belongs to. A team therefore
+-- sees a small but complete set of books whose payments reconcile against its
+-- own invoices. Per slice: 30 invoices, 8 quotations, ~22 payments, 15 bills,
+-- 20 expenses, 40 stock movements.
 --
--- Re-runnable: the nine business tables are truncated first, so a rerun
--- replaces the dataset instead of colliding on primary keys.
+-- Deterministic: setseed() pins the random() stream, and random() is only
+-- called in statements that scan generate_series or a temp table with no join
+-- (the "draw, then derive" pattern: *_draw tables hold raw rolls, later
+-- statements join and compute from them without drawing again). Joins can be
+-- planned in either order, so keeping random() out of them is what makes a
+-- rerun byte-identical. Dates are offsets from current_date so the data keeps
+-- its "last 12 months" shape whenever it is loaded.
 --
--- Pattern used throughout: "draw, then derive". A *_draw temp table holds only
--- raw random() rolls; later statements join and compute from those rolls with
--- no further random() calls. Joins may reorder rows between Postgres versions
--- or plans, so keeping random() out of any statement with a join is what makes
--- the stream reproducible.
+-- Statuses are assigned by a row's POSITION inside its slice, not by a random
+-- roll: with only 30 invoices a slice, random statuses leave ~1 slice in 10
+-- with no overdue invoice at all. A fixed pattern guarantees every team gets
+-- paid, partial, pending and overdue invoices and all six quote statuses.
 --
--- GST slabs: only 0 / 5 / 18 are used. The 12% and 28% slabs were folded into
--- 5% and 18% by the GST rate rationalisation effective 22 Sep 2025, and every
--- date here falls after it, so a 12% line would be an anachronism.
+-- GST slabs: only 0 / 5 / 18 are used. 12% and 28% were folded into 5% and
+-- 18% by the rate rationalisation effective 22 Sep 2025; every date here is
+-- later, so a 12% line would be an anachronism.
+--
+-- Re-runnable: the nine business tables are truncated first; nova_dataset_meta
+-- is upserted last, never truncated (the auth function reads it on every call).
 -- =============================================================================
 
--- One transaction: a failure halfway rolls the truncate back too, so the
--- project is never left with an empty or half-seeded dataset.
+-- One transaction: a failure halfway rolls back the truncate too, so teams
+-- never see an empty or half-seeded dataset.
 begin;
 
--- Pins random() so reruns draw the identical sequence (the whole point of a
--- shared fixture integrators write assertions against).
+-- Pins random() so every rerun draws the identical sequence.
 select setseed(0.42);
 
--- Parallel workers each consume random() in a timing-dependent order, which
--- would break determinism; local = reverts at commit, touching nothing else.
+-- Parallel workers consume random() in timing-dependent order; local = the
+-- setting reverts at commit and touches nothing else in the session.
 set local max_parallel_workers_per_gather = 0;
 
--- Wipe only the business tables. Restart identity is harmless here (text ids)
--- but future-proofs a serial column; cascade covers the FKs between the nine.
--- Platform tables (allowlist, keys, usage, sessions) are deliberately absent:
--- reseeding must never sign anyone out or revoke a key.
+-- Wipe only the business tables; cascade covers the FKs among the nine.
+-- Platform tables are deliberately absent: reseeding must never sign a team
+-- out, revoke a key, or reshuffle team slots.
 truncate table
   public.nova_stock_movements,
   public.nova_inventory,
@@ -53,109 +59,203 @@ truncate table
 restart identity cascade;
 
 -- -----------------------------------------------------------------------------
--- Reference data — hand-written, because realistic names and state/code pairs
--- cannot be generated convincingly.
+-- Name and place vocabularies. 320 clients + 160 vendors are too many to
+-- hand-write, so names are composed as "<prefix> <industry> <suffix>". Each
+-- (prefix, industry) pair is used once, and client and vendor industry lists
+-- are disjoint, so no two businesses anywhere share a name.
 -- -----------------------------------------------------------------------------
 
--- Customers. ~Third in Telangana (36) so both CGST+SGST and IGST invoices are
--- common; three unregistered (registered = false) to exercise a null GSTIN.
+-- 40 business-name prefixes: family names, deities and trade words that real
+-- Indian firm names are built from.
+create temp table seed_prefix on commit drop as
+select (ord - 1)::int as p, word
+from unnest(array[
+  'Sharma', 'Reddy', 'Sri Balaji', 'Lakshmi', 'Shree Ganesh', 'Om Sai', 'Patel', 'Gupta',
+  'Agarwal', 'Mehta', 'Iyer', 'Nair', 'Deccan', 'Sunrise', 'Evergreen', 'Pioneer',
+  'Trident', 'Apex', 'Galaxy', 'Royal', 'National', 'Supreme', 'Bharat', 'Hindustan',
+  'Vishnu', 'Krishna', 'Ganga', 'Kaveri', 'Narmada', 'Himalaya', 'Everest', 'Srinivasa',
+  'Venkatesh', 'Jain', 'Kapoor', 'Banerjee', 'Desai', 'Kulkarni', 'Chettiar', 'Malhotra'
+]) with ordinality as t(word, ord);
+
+-- 20 customer industries: the kinds of buyers a B2B seller invoices.
+create temp table seed_client_industry on commit drop as
+select (ord - 1)::int as i, word
+from unnest(array[
+  'Textiles', 'Agro Foods', 'Steel Traders', 'Pharma Distributors', 'Electricals',
+  'Hospitality Services', 'Granite Exports', 'Infosolutions', 'Packaging', 'Auto Parts',
+  'Hardware Mart', 'Printers', 'Poultry Feeds', 'Chemicals', 'Logistics',
+  'Constructions', 'Plastics', 'Spice Traders', 'Engineering Works', 'Furnishings'
+]) with ordinality as t(word, ord);
+
+-- 12 supplier industries. 'Transport Services' and 'Caterers' are there on
+-- purpose: they drive the reverse-charge and blocked-ITC cases on bills.
+create temp table seed_vendor_industry on commit drop as
+select (ord - 1)::int as i, word
+from unnest(array[
+  'Paper Mills', 'Stationery Suppliers', 'Transport Services', 'Power Solutions',
+  'Caterers', 'Steel Suppliers', 'Cement Traders', 'Electronics Components',
+  'Tools Corporation', 'Machinery', 'Warehousing', 'Polymers'
+]) with ordinality as t(word, ord);
+
+-- States with their GST state codes and a few real cities. i = 0 is the
+-- seller's own state (Telangana, 36), which is what makes a sale intra-state.
+create temp table seed_state on commit drop as
+select * from (values
+  (0,  'Telangana',      '36', array['Hyderabad', 'Secunderabad', 'Warangal', 'Karimnagar']),
+  (1,  'Andhra Pradesh', '37', array['Visakhapatnam', 'Vijayawada', 'Guntur']),
+  (2,  'Karnataka',      '29', array['Bengaluru', 'Mysuru', 'Hubballi']),
+  (3,  'Maharashtra',    '27', array['Mumbai', 'Pune', 'Nagpur']),
+  (4,  'Tamil Nadu',     '33', array['Chennai', 'Coimbatore', 'Madurai']),
+  (5,  'Delhi',          '07', array['New Delhi']),
+  (6,  'Gujarat',        '24', array['Ahmedabad', 'Surat', 'Rajkot']),
+  (7,  'West Bengal',    '19', array['Kolkata', 'Howrah']),
+  (8,  'Uttar Pradesh',  '09', array['Lucknow', 'Kanpur', 'Noida']),
+  (9,  'Kerala',         '32', array['Kochi', 'Thiruvananthapuram']),
+  (10, 'Rajasthan',      '08', array['Jaipur', 'Udaipur']),
+  (11, 'Haryana',        '06', array['Gurugram', 'Faridabad']),
+  (12, 'Punjab',         '03', array['Ludhiana', 'Amritsar']),
+  (13, 'Odisha',         '21', array['Bhubaneswar', 'Cuttack']),
+  (14, 'Madhya Pradesh', '23', array['Indore', 'Bhopal'])
+) as s(i, state, state_code, cities);
+
+-- -----------------------------------------------------------------------------
+-- Clients (4 per slice) and vendors (2 per slice).
+-- -----------------------------------------------------------------------------
+
+-- Client roster. j = n - 1 walks prefixes fastest; for a fixed prefix the
+-- industry is (j/40 + p) % 20 with j/40 in 0..7, so the pair never repeats.
+-- Client k = 1 of every slice is in Telangana and k = 3/4 are out of state,
+-- so every team has both CGST+SGST and IGST invoices.
 create temp table seed_client on commit drop as
 select
-  -- n is the join key every later draw picks a client by.
-  c.n,
-  -- md5 of a fixed salt gives a stable, random-looking id that survives reruns.
-  'cli_' || substr(md5('cli' || c.n), 1, 8) as id,
-  c.name, c.city, c.state, c.state_code, c.registered
-from (values
-  (1,  'Sharma Textiles Pvt Ltd',            'Hyderabad',      'Telangana',      '36', true),
-  (2,  'Deccan Agro Foods Pvt Ltd',          'Hyderabad',      'Telangana',      '36', true),
-  (3,  'Kakatiya Steel Traders',             'Warangal',       'Telangana',      '36', true),
-  (4,  'Golconda Pharma Distributors LLP',   'Hyderabad',      'Telangana',      '36', true),
-  (5,  'Charminar Electricals',              'Secunderabad',   'Telangana',      '36', true),
-  (6,  'Nizam Hospitality Services Pvt Ltd', 'Hyderabad',      'Telangana',      '36', true),
-  (7,  'Karimnagar Granite Exports',         'Karimnagar',     'Telangana',      '36', true),
-  (8,  'Hitech City Infosolutions Pvt Ltd',  'Hyderabad',      'Telangana',      '36', true),
-  (9,  'Musi Valley Packaging',              'Nalgonda',       'Telangana',      '36', true),
-  (10, 'Bhagyanagar Auto Parts',             'Hyderabad',      'Telangana',      '36', true),
-  (11, 'Srinivasa Hardware Mart',            'Khammam',        'Telangana',      '36', true),
-  (12, 'Reddy & Sons Retail',                'Hyderabad',      'Telangana',      '36', false),
-  (13, 'Telangana Poultry Feeds Pvt Ltd',    'Siddipet',       'Telangana',      '36', true),
-  (14, 'Lakshmi Printers',                   'Hyderabad',      'Telangana',      '36', true),
-  (15, 'Vizag Marine Supplies Pvt Ltd',      'Visakhapatnam',  'Andhra Pradesh', '37', true),
-  (16, 'Godavari Rice Mills',                'Rajahmundry',    'Andhra Pradesh', '37', true),
-  (17, 'Amaravati Constructions Pvt Ltd',    'Vijayawada',     'Andhra Pradesh', '37', true),
-  (18, 'Bengaluru Cloudworks Pvt Ltd',       'Bengaluru',      'Karnataka',      '29', true),
-  (19, 'Mysore Silk Emporium',               'Mysuru',         'Karnataka',      '29', true),
-  (20, 'Mangalore Cashew Industries',        'Mangaluru',      'Karnataka',      '29', true),
-  (21, 'Patil Engineering Works',            'Pune',           'Maharashtra',    '27', true),
-  (22, 'Mumbai Freight Forwarders Pvt Ltd',  'Mumbai',         'Maharashtra',    '27', true),
-  (23, 'Nagpur Orange Exports',              'Nagpur',         'Maharashtra',    '27', true),
-  (24, 'Deshmukh Pharmaceuticals Ltd',       'Mumbai',         'Maharashtra',    '27', true),
-  (25, 'Chennai Auto Components Pvt Ltd',    'Chennai',        'Tamil Nadu',     '33', true),
-  (26, 'Coimbatore Spinning Mills Ltd',      'Coimbatore',     'Tamil Nadu',     '33', true),
-  (27, 'Madurai Handlooms',                  'Madurai',        'Tamil Nadu',     '33', false),
-  (28, 'Gupta Trading Company',              'New Delhi',      'Delhi',          '07', true),
-  (29, 'Capital Office Solutions Pvt Ltd',   'New Delhi',      'Delhi',          '07', true),
-  (30, 'Patel Chemicals Pvt Ltd',            'Ahmedabad',      'Gujarat',        '24', true),
-  (31, 'Surat Diamond Tools',                'Surat',          'Gujarat',        '24', true),
-  (32, 'Kolkata Jute Products Ltd',          'Kolkata',        'West Bengal',    '19', true),
-  (33, 'Banerjee Tea Traders',               'Siliguri',       'West Bengal',    '19', true),
-  (34, 'Agarwal Brass Works',                'Moradabad',      'Uttar Pradesh',  '09', true),
-  (35, 'Lucknow Chikan Crafts',              'Lucknow',        'Uttar Pradesh',  '09', false),
-  (36, 'Kochi Spice Traders',                'Kochi',          'Kerala',         '32', true),
-  (37, 'Jaipur Marble House',                'Jaipur',         'Rajasthan',      '08', true),
-  (38, 'Gurugram Logistics Pvt Ltd',         'Gurugram',       'Haryana',        '06', true),
-  (39, 'Ludhiana Hosiery Works',             'Ludhiana',       'Punjab',         '03', true),
-  (40, 'Kalinga Minerals Pvt Ltd',           'Bhubaneswar',    'Odisha',         '21', true)
-) as c(n, name, city, state, state_code, registered);
+  x.n, x.slice_no,
+  -- md5 of a salted ordinal: a stable id that survives reruns.
+  'cli_' || substr(md5('cli' || x.n), 1, 8) as id,
+  -- trim() absorbs the empty suffix of a sole proprietorship.
+  trim(p.word || ' ' || ind.word || ' ' || x.suffix) as name,
+  st.state, st.state_code,
+  -- Rotate cities by slice so same-state clients are not all in one town.
+  st.cities[1 + x.slice_no % array_length(st.cities, 1)] as city,
+  -- About 1 in 13 is unregistered (B2C-like), exercising a null GSTIN.
+  x.n % 13 <> 0 as registered
+from (
+  select
+    n, (n - 1) / 4 as slice_no, (n - 1) % 4 + 1 as k, n - 1 as j,
+    -- Legal-form suffix; '' = proprietorship.
+    (array['Pvt Ltd', 'Pvt Ltd', 'LLP', '& Co', '', 'Ltd'])[1 + ((n - 1) * 7 + (n - 1) % 40) % 6] as suffix
+  from generate_series(1, 320) as n
+) x
+join seed_prefix p on p.p = x.j % 40
+join seed_client_industry ind on ind.i = (x.j / 40 + x.j % 40) % 20
+-- k = 1 home state; k = 2 home state every third slice; k = 3/4 elsewhere.
+join seed_state st on st.i = case
+  when x.k = 1 then 0
+  when x.k = 2 and x.slice_no % 3 = 0 then 0
+  else 1 + (x.slice_no * 2 + x.k) % 14
+end;
 
--- Suppliers. vendor 5 (caterer) and 20 (road transport) are unregistered on
--- purpose: they drive the blocked-ITC and reverse-charge cases below.
+-- Vendor roster, same construction. Industry (q*3 + p) % 12 with q = j/40 in
+-- 0..3 keeps each (prefix, industry) pair unique. Vendor k = 1 is local,
+-- k = 2 out of state, so every team has intra- and inter-state bills.
 create temp table seed_vendor on commit drop as
 select
-  -- n is the key bill draws pick a vendor by.
-  v.n,
-  -- Same stable-id scheme as clients, different salt so ids never collide.
-  'ven_' || substr(md5('ven' || v.n), 1, 8) as id,
-  -- state_code is kept here because nova_vendors has no such column, yet a
-  -- bill's CGST/SGST vs IGST split still depends on it.
-  v.name, v.city, v.state, v.state_code, v.registered
-from (values
-  (1,  'Hyderabad Paper Mills Pvt Ltd',        'Hyderabad',    'Telangana',      '36', true),
-  (2,  'Balaji Stationery Suppliers',          'Hyderabad',    'Telangana',      '36', true),
-  (3,  'Sai Krishna Logistics',                'Secunderabad', 'Telangana',      '36', true),
-  (4,  'Telangana Power Solutions Pvt Ltd',    'Hyderabad',    'Telangana',      '36', true),
-  (5,  'Annapurna Caterers',                   'Hyderabad',    'Telangana',      '36', false),
-  (6,  'Venkateswara Steel Pvt Ltd',           'Hyderabad',    'Telangana',      '36', true),
-  (7,  'Andhra Cement Traders',                'Vijayawada',   'Andhra Pradesh', '37', true),
-  (8,  'Guntur Chilli Merchants',              'Guntur',       'Andhra Pradesh', '37', true),
-  (9,  'Bangalore Electronics Components Pvt Ltd', 'Bengaluru', 'Karnataka',     '29', true),
-  (10, 'Karnataka Tools Corporation',          'Hubballi',     'Karnataka',      '29', true),
-  (11, 'Pune Machinery Pvt Ltd',               'Pune',         'Maharashtra',    '27', true),
-  (12, 'Bhiwandi Warehousing LLP',             'Bhiwandi',     'Maharashtra',    '27', true),
-  (13, 'Tiruppur Knit Fabrics',                'Tiruppur',     'Tamil Nadu',     '33', true),
-  (14, 'Chennai Polymers Pvt Ltd',             'Chennai',      'Tamil Nadu',     '33', true),
-  (15, 'Delhi Office Furnishers',              'New Delhi',    'Delhi',          '07', true),
-  (16, 'Rajkot Brass Fittings',                'Rajkot',       'Gujarat',        '24', true),
-  (17, 'Vapi Chemicals Ltd',                   'Vapi',         'Gujarat',        '24', true),
-  (18, 'Howrah Castings',                      'Howrah',       'West Bengal',    '19', true),
-  (19, 'Kanpur Leather Goods',                 'Kanpur',       'Uttar Pradesh',  '09', true),
-  (20, 'Ramesh Transport Services',            'Hyderabad',    'Telangana',      '36', false)
-) as v(n, name, city, state, state_code, registered);
+  x.n, x.slice_no,
+  'ven_' || substr(md5('ven' || x.n), 1, 8) as id,
+  trim(p.word || ' ' || ind.word || ' ' || x.suffix) as name,
+  -- Kept for bill rules below (reverse charge, blocked ITC).
+  ind.word as industry,
+  st.state, st.state_code,
+  st.cities[1 + x.slice_no % array_length(st.cities, 1)] as city,
+  -- Transporters and caterers are often unregistered small operators; half of
+  -- them are here, plus 1 in 17 of everyone else.
+  not ((ind.word in ('Transport Services', 'Caterers') and x.n % 2 = 0) or x.n % 17 = 0) as registered
+from (
+  select
+    n, (n - 1) / 2 as slice_no, (n - 1) % 2 + 1 as k, n - 1 as j,
+    (array['Pvt Ltd', 'Ltd', 'LLP', '& Co', '', 'Pvt Ltd'])[1 + ((n - 1) * 5 + (n - 1) % 40) % 6] as suffix
+  from generate_series(1, 160) as n
+) x
+join seed_prefix p on p.p = x.j % 40
+join seed_vendor_industry ind on ind.i = ((x.j / 40) * 3 + x.j % 40) % 12
+join seed_state st on st.i = case when x.k = 1 then 0 else 1 + (x.slice_no * 5) % 14 end;
 
--- Stock catalogue. Doubles as the product list invoice/quote/bill lines are
--- drawn from, so line HSN codes and rates always match a real inventory row.
-create temp table seed_item on commit drop as
+-- GSTIN = state code + PAN (3 letters, holder-type letter, name initial,
+-- 4 digits, letter) + entity digit + 'Z' + check character. Format-valid only:
+-- the real mod-36 checksum is not computed, which also guarantees no seeded
+-- GSTIN is a real taxpayer's. translate() maps md5 hex onto letters/digits,
+-- giving stable pseudo-random characters without touching random().
+insert into public.nova_clients (id, name, gst_number, email, phone, billing_address, state, state_code, created_at, slice_no)
 select
-  -- n is the key line draws and movements pick an item by.
-  i.n,
-  -- Stable id, same scheme as the other resources.
-  'itm_' || substr(md5('itm' || i.n), 1, 8) as id,
-  i.name, i.hsn_code, i.unit, i.purchase_price, i.gst_rate,
-  -- Markup varies 18–34% by item so margins are not suspiciously uniform;
-  -- rounded to whole rupees because that is how price lists are written.
-  round(i.purchase_price * (1.18 + (i.n % 5) * 0.04), 0) as sale_price
-from (values
+  c.id,
+  c.name,
+  -- Unregistered customers have no GSTIN; the API must return null for them.
+  case when c.registered then
+    c.state_code
+    || translate(substr(md5('pan' || c.id), 1, 3), '0123456789abcdef', 'ABCDEFGHJKLMNPQR')
+    -- PAN 4th letter = holder type: C company, F firm/LLP, P proprietor.
+    || case when c.name ~ 'Ltd$' then 'C' when c.name ~ '(LLP|& Co)$' then 'F' else 'P' end
+    || upper(left(c.name, 1))
+    || substr(translate(md5('pan' || c.id), 'abcdef', '012345'), 4, 4)
+    || translate(substr(md5('pan' || c.id), 8, 1), '0123456789abcdef', 'ABCDEFGHJKLMNPQR')
+    || '1Z'
+    || upper(substr(md5('gstchk' || c.id), 1, 1))
+  end,
+  -- .example is an IANA-reserved TLD: no seeded address can reach a real inbox.
+  'accounts@' || lower(regexp_replace(split_part(c.name, ' ', 1) || split_part(c.name, ' ', 2) || split_part(c.name, ' ', 3), '[^A-Za-z]', '', 'g')) || '.example',
+  -- Indian mobile shape (+91, 10 digits starting 9); digits come from md5.
+  '+91 9' || substr(translate(md5('ph' || c.id), 'abcdef', '012345'), 1, 9),
+  -- Plausible street address; cycling street names avoids a long literal.
+  (12 + c.n * 7 % 480) || '-' || (1 + c.n % 9) || ', '
+    || (array['Industrial Area', 'Main Road', 'MG Road', 'Station Road', 'Market Street', 'Ring Road'])[1 + c.n % 6]
+    || ', ' || c.city || ', ' || c.state,
+  c.state,
+  c.state_code,
+  -- Clients predate their first invoice (which is at most 365 days back).
+  (current_date - 400 - c.n % 30)::timestamptz,
+  c.slice_no
+from seed_client c
+order by c.n;
+
+-- Vendors mirror clients, plus the masked bank details AP integrations need.
+insert into public.nova_vendors (id, name, gst_number, email, phone, address, state, bank_ifsc, bank_account_last4, created_at, slice_no)
+select
+  v.id,
+  v.name,
+  -- Same GSTIN construction; unregistered vendors stay null.
+  case when v.registered then
+    v.state_code
+    || translate(substr(md5('pan' || v.id), 1, 3), '0123456789abcdef', 'ABCDEFGHJKLMNPQR')
+    || case when v.name ~ 'Ltd$' then 'C' when v.name ~ '(LLP|& Co)$' then 'F' else 'P' end
+    || upper(left(v.name, 1))
+    || substr(translate(md5('pan' || v.id), 'abcdef', '012345'), 4, 4)
+    || translate(substr(md5('pan' || v.id), 8, 1), '0123456789abcdef', 'ABCDEFGHJKLMNPQR')
+    || '1Z'
+    || upper(substr(md5('gstchk' || v.id), 1, 1))
+  end,
+  -- Reserved TLD, same can-never-deliver reason.
+  'billing@' || lower(regexp_replace(split_part(v.name, ' ', 1) || split_part(v.name, ' ', 2) || split_part(v.name, ' ', 3), '[^A-Za-z]', '', 'g')) || '.example',
+  '+91 9' || substr(translate(md5('ph' || v.id), 'abcdef', '012345'), 1, 9),
+  (20 + v.n * 11 % 480) || ', '
+    || (array['Industrial Estate', 'Trade Centre', 'Warehouse Road', 'Auto Nagar'])[1 + v.n % 4]
+    || ', ' || v.city || ', ' || v.state,
+  v.state,
+  -- IFSC shape: 4-letter bank code, a literal 0, 6-character branch code.
+  (array['HDFC', 'ICIC', 'SBIN', 'UTIB', 'KKBK'])[1 + v.n % 5] || '0' || substr(translate(md5('ifsc' || v.id), 'abcdef', '012345'), 1, 6),
+  -- Four digits only, satisfying the masking CHECK.
+  substr(translate(md5('acct' || v.id), 'abcdef', '012345'), 1, 4),
+  (current_date - 400 - v.n % 30)::timestamptz,
+  v.slice_no
+from seed_vendor v
+order by v.n;
+
+-- -----------------------------------------------------------------------------
+-- Stock items (5 per slice), picked from a 50-product catalogue.
+-- -----------------------------------------------------------------------------
+
+-- The base catalogue: realistic goods with correct HSN codes and post-2025
+-- GST slabs. Bands of 10 (b = 1..10, 11..20, ...) group similar goods.
+create temp table seed_product on commit drop as
+select * from (values
   (1,  'A4 Copier Paper 75 GSM (5 reams)',   '4802', 'box',   1150.00, 18),
   (2,  'Corrugated Shipping Carton 18x12x12', '4819', 'pcs',    32.00, 18),
   (3,  'Cotton Shirting Fabric',             '5208', 'metre',  145.00,  5),
@@ -206,207 +306,176 @@ from (values
   (48, 'Brass Door Handle Set',              '8302', 'set',    640.00, 18),
   (49, 'Stainless Steel Water Bottle 1L',    '7323', 'pcs',    240.00,  5),
   (50, 'Solar Panel 540W',                   '8541', 'pcs',  13500.00,  5)
-) as i(n, name, hsn_code, unit, purchase_price, gst_rate);
+) as p(b, name, hsn_code, unit, purchase_price, gst_rate);
 
--- -----------------------------------------------------------------------------
--- Clients and vendors.
--- GSTIN = state code + PAN (3 letters, holder-type letter, name initial,
--- 4 digits, letter) + entity number + 'Z' + check character. Format-valid only:
--- the real mod-36 checksum is not computed, so a strict GSTIN validator would
--- reject these — acceptable for a sandbox, and it guarantees no id is a real
--- taxpayer's. translate() maps md5 hex onto letters or digits, which yields
--- stable pseudo-random characters without consuming the random() stream.
--- -----------------------------------------------------------------------------
-
--- Inserted in n order so created_at ordering matches the reference numbering.
-insert into public.nova_clients (id, name, gst_number, email, phone, billing_address, state, state_code, created_at)
+-- A slice's 5 items come one from each band of 10, so every team stocks a
+-- varied range; the offset inside a band shifts with the slice (and every 10
+-- slices by k), so neighbouring teams stock different products. Prices vary
+-- ±10% by slice so two teams selling the same product still differ.
+create temp table seed_item on commit drop as
 select
-  c.id,
-  c.name,
-  -- Unregistered customers have no GSTIN; the API must return null for them.
-  case when c.registered then
-    c.state_code
-    || translate(substr(md5('pan' || c.id), 1, 3), '0123456789abcdef', 'ABCDEFGHJKLMNPQR')
-    -- PAN 4th letter encodes holder type: C company, F firm/LLP, P proprietor.
-    || case when c.name ~ 'Ltd$' then 'C' when c.name ~ 'LLP$' then 'F' else 'P' end
-    || upper(left(c.name, 1))
-    || substr(translate(md5('pan' || c.id), 'abcdef', '012345'), 4, 4)
-    || translate(substr(md5('pan' || c.id), 8, 1), '0123456789abcdef', 'ABCDEFGHJKLMNPQR')
-    || '1Z'
-    || upper(substr(md5('gstchk' || c.id), 1, 1))
-  end,
-  -- .example is an IANA-reserved TLD, so no seeded address can ever reach a
-  -- real inbox if an integrator wires up email sending against this data.
-  'accounts@' || lower(regexp_replace(split_part(c.name, ' ', 1) || split_part(c.name, ' ', 2), '[^A-Za-z]', '', 'g')) || '.example',
-  -- Indian mobile shape (+91, 10 digits starting 9); digits come from md5.
-  '+91 9' || substr(translate(md5('ph' || c.id), 'abcdef', '012345'), 1, 9),
-  -- Plausible street address; cycling street names avoids a 40-row literal.
-  (12 + c.n * 7) || '-' || (1 + c.n % 9) || ', '
-    || (array['Industrial Area', 'Main Road', 'MG Road', 'Station Road', 'Market Street', 'Ring Road'])[1 + c.n % 6]
-    || ', ' || c.city || ', ' || c.state,
-  c.state,
-  c.state_code,
-  -- Clients predate their first invoice (up to 365 days back).
-  (current_date - 420 + c.n)::timestamptz
-from seed_client c
-order by c.n;
-
--- Vendors mirror clients, plus the masked bank details an AP integration needs.
-insert into public.nova_vendors (id, name, gst_number, email, phone, address, state, bank_ifsc, bank_account_last4, created_at)
-select
-  v.id,
-  v.name,
-  -- Same GSTIN construction as clients; unregistered vendors stay null.
-  case when v.registered then
-    v.state_code
-    || translate(substr(md5('pan' || v.id), 1, 3), '0123456789abcdef', 'ABCDEFGHJKLMNPQR')
-    || case when v.name ~ 'Ltd$' then 'C' when v.name ~ 'LLP$' then 'F' else 'P' end
-    || upper(left(v.name, 1))
-    || substr(translate(md5('pan' || v.id), 'abcdef', '012345'), 4, 4)
-    || translate(substr(md5('pan' || v.id), 8, 1), '0123456789abcdef', 'ABCDEFGHJKLMNPQR')
-    || '1Z'
-    || upper(substr(md5('gstchk' || v.id), 1, 1))
-  end,
-  -- Reserved TLD again, for the same can-never-deliver reason.
-  'billing@' || lower(regexp_replace(split_part(v.name, ' ', 1) || split_part(v.name, ' ', 2), '[^A-Za-z]', '', 'g')) || '.example',
-  '+91 9' || substr(translate(md5('ph' || v.id), 'abcdef', '012345'), 1, 9),
-  (20 + v.n * 11) || ', '
-    || (array['Industrial Estate', 'Trade Centre', 'Warehouse Road', 'Auto Nagar'])[1 + v.n % 4]
-    || ', ' || v.city || ', ' || v.state,
-  v.state,
-  -- IFSC shape: 4-letter bank code, a literal 0, 6-character branch code.
-  (array['HDFC', 'ICIC', 'SBIN', 'UTIB', 'KKBK'])[1 + v.n % 5] || '0' || substr(translate(md5('ifsc' || v.id), 'abcdef', '012345'), 1, 6),
-  -- Four digits only, satisfying the masking CHECK.
-  substr(translate(md5('acct' || v.id), 'abcdef', '012345'), 1, 4),
-  (current_date - 420 + v.n)::timestamptz
-from seed_vendor v
-order by v.n;
+  x.n, x.slice_no, x.k,
+  'itm_' || substr(md5('itm' || x.n), 1, 8) as id,
+  p.name, p.hsn_code, p.unit, p.gst_rate,
+  f.purchase_price,
+  -- Markup 18–34% by item so margins are not suspiciously uniform; whole
+  -- rupees, as price lists are written.
+  round(f.purchase_price * (1.18 + (x.n % 5) * 0.04), 0) as sale_price
+from (
+  select n, (n - 1) / 5 as slice_no, (n - 1) % 5 as k from generate_series(1, 400) as n
+) x
+join seed_product p on p.b = x.k * 10 + ((x.slice_no * 7 + (x.slice_no / 10) * (x.k + 1)) % 10) + 1
+-- Whole rupees above ₹100, one decimal below, like a real rate card.
+cross join lateral (select round(p.purchase_price * (0.9 + (x.slice_no % 9) * 0.025), case when p.purchase_price >= 100 then 0 else 1 end) as purchase_price) f;
 
 -- -----------------------------------------------------------------------------
--- Line items, shared by invoices, quotations and bills.
--- One line table for all three keeps the GST-per-line arithmetic in exactly
--- one place, so the three document types cannot round differently.
+-- Random draws, in one fixed order: invoices, invoice lines, quotations,
+-- quotation lines, bills, bill lines, expenses, movements.
 -- -----------------------------------------------------------------------------
 
--- Invoice header rolls. Every random() for invoices is drawn here, left to
--- right per row, so later edits to derivation logic never shift the stream.
+-- Invoice rolls: 30 per slice, slice = (n-1)/30, position pos = (n-1)%30.
 create temp table seed_inv_draw on commit drop as
 select
   n,
-  -- Which client is billed.
-  1 + floor(random() * 40)::int as client_n,
-  -- Payment terms; 30 days doubled because it is the common Indian default.
+  (n - 1) / 30 as slice_no,
+  (n - 1) % 30 as pos,
+  -- Which of the slice's 4 clients is billed.
+  1 + floor(random() * 4)::int as client_k,
+  -- Payment terms; 30 days doubled as the common Indian default.
   (array[15, 30, 30, 45])[1 + floor(random() * 4)::int] as term_days,
-  -- 1–4 lines per document, as the brief requires.
+  -- 1–4 lines per document.
   1 + floor(random() * 4)::int as line_count,
-  -- Picks paid / partial / pending.
-  random() as status_roll,
-  -- Positions the invoice date within its allowed window.
+  -- Positions the invoice date inside its allowed window.
   random() as date_roll,
-  -- Decides whether an unpaid invoice is already past due.
-  random() as overdue_roll,
-  -- Decides whether a paid invoice was settled in two instalments.
+  -- Whether a paid invoice was settled in two instalments.
   random() as split_roll,
   -- Fraction of the total covered by the first payment.
   random() as frac_roll,
-  -- Delay from invoice date to first payment, and first to second.
+  -- Delay invoice→first payment, first→second.
   random() as lag1_roll,
   random() as lag2_roll,
-  -- Payment rails for the two possible payments.
+  -- Payment rails for the up-to-two payments.
   1 + floor(random() * 8)::int as method1_n,
   1 + floor(random() * 8)::int as method2_n
-from generate_series(1, 300) as n;
+from generate_series(1, 2400) as n;
 
--- Raw line rolls for every document type. Separate statements per type keep
--- the stream order explicit: invoices, then (later) quotations, then bills.
+-- Raw line rolls for every document family, so one pricing step serves all.
 create temp table seed_line_draw (
-  -- 'inv' | 'quo' | 'bil' — which document family the line belongs to.
+  -- 'inv' | 'quo' | 'bil' — the document family.
   doc text not null,
   -- Document ordinal within its family.
   n int not null,
   -- Line position, preserved into the jsonb array order.
   line_no int not null,
-  -- Which catalogue item the line sells or buys.
-  item_n int not null,
+  -- Which of the slice's 5 items the line carries (1..5).
+  item_k int not null,
   -- Scales the quantity; interpreted per family in seed_line.
   qty_roll float8 not null
 ) on commit drop;
 
--- Invoice lines. lateral generate_series forces a nested loop driven by a
--- sequential scan of seed_inv_draw, so rows (and random() calls) stay ordered.
-insert into seed_line_draw (doc, n, line_no, item_n, qty_roll)
-select 'inv', d.n, l.line_no, 1 + floor(random() * 50)::int, random()
+-- Invoice lines. lateral generate_series forces a nested loop over a seq scan
+-- of seed_inv_draw, so rows (and random() calls) stay in insertion order.
+insert into seed_line_draw (doc, n, line_no, item_k, qty_roll)
+select 'inv', d.n, l.line_no, 1 + floor(random() * 5)::int, random()
 from seed_inv_draw d
 cross join lateral generate_series(1, d.line_count) as l(line_no);
 
--- Quotation header rolls, drawn after invoice lines to keep one fixed order.
+-- Quotation rolls: 8 per slice.
 create temp table seed_quo_draw on commit drop as
 select
   n,
+  (n - 1) / 8 as slice_no,
+  (n - 1) % 8 as pos,
   -- Client for non-converted quotes (converted ones inherit the invoice's).
-  1 + floor(random() * 40)::int as client_n,
-  -- 1–4 lines.
+  1 + floor(random() * 4)::int as client_k,
   1 + floor(random() * 4)::int as line_count,
   -- Positions the quotation date inside its status's window.
   random() as date_roll
-from generate_series(1, 80) as n;
+from generate_series(1, 640) as n;
 
--- Quotation lines; drawn for all 80 even though converted quotes copy their
+-- Quotation lines, drawn for all quotes even though converted ones copy their
 -- invoice's lines, so the stream length never depends on status logic.
-insert into seed_line_draw (doc, n, line_no, item_n, qty_roll)
-select 'quo', d.n, l.line_no, 1 + floor(random() * 50)::int, random()
+insert into seed_line_draw (doc, n, line_no, item_k, qty_roll)
+select 'quo', d.n, l.line_no, 1 + floor(random() * 5)::int, random()
 from seed_quo_draw d
 cross join lateral generate_series(1, d.line_count) as l(line_no);
 
--- Purchase-bill header rolls.
+-- Bill rolls: 15 per slice.
 create temp table seed_bil_draw on commit drop as
 select
   n,
-  -- Which vendor issued the bill.
-  1 + floor(random() * 20)::int as vendor_n,
-  -- Supplier credit terms.
+  (n - 1) / 15 as slice_no,
+  (n - 1) % 15 as pos,
+  -- Which of the slice's 2 vendors issued it.
+  1 + floor(random() * 2)::int as vendor_k,
   (array[15, 30, 30, 45])[1 + floor(random() * 4)::int] as term_days,
-  -- Bills are shorter than invoices in practice: 1–3 lines.
+  -- Bills run shorter than invoices: 1–3 lines.
   1 + floor(random() * 3)::int as line_count,
-  random() as status_roll,
   random() as date_roll,
-  random() as overdue_roll,
   random() as frac_roll,
-  -- Extra reverse-charge bills beyond the always-RCM transporter.
+  -- Reverse-charge bills beyond the unregistered-transporter rule.
   random() as rcm_roll,
-  -- Extra ITC-ineligible bills beyond the always-blocked caterer.
+  -- ITC-ineligible bills beyond the caterer rule.
   random() as itc_roll
-from generate_series(1, 150) as n;
+from generate_series(1, 1200) as n;
 
 -- Bill lines.
-insert into seed_line_draw (doc, n, line_no, item_n, qty_roll)
-select 'bil', d.n, l.line_no, 1 + floor(random() * 50)::int, random()
+insert into seed_line_draw (doc, n, line_no, item_k, qty_roll)
+select 'bil', d.n, l.line_no, 1 + floor(random() * 5)::int, random()
 from seed_bil_draw d
 cross join lateral generate_series(1, d.line_count) as l(line_no);
 
--- Priced lines. GST is computed and rounded PER LINE, then summed — the order
--- a GST invoice is legally drawn up in, and the only order that makes the
--- header equal the sum of its printed lines to the paisa.
+-- Expense rolls: 20 per slice. Repeated categories weight the mix.
+create temp table seed_exp_draw on commit drop as
+select
+  n,
+  (n - 1) / 20 as slice_no,
+  (array['rent', 'travel', 'travel', 'software', 'software', 'utilities', 'office_supplies',
+         'professional_fees', 'professional_fees', 'marketing', 'meals', 'meals', 'salaries', 'other'])[1 + floor(random() * 14)::int] as category,
+  -- Scales the amount around the category's typical size.
+  random() as amount_roll,
+  -- One of three payees for the category.
+  1 + floor(random() * 3)::int as payee_n,
+  -- Rail when the category does not force one.
+  1 + floor(random() * 7)::int as method_n,
+  -- Spreads expenses across the year.
+  random() as date_roll
+from generate_series(1, 1600) as n;
+
+-- Movement rolls: 8 per item x 400 items. One flat series (item = g/8,
+-- k = g%8) rather than a cross join, which could be planned either way round.
+create temp table seed_mov_draw on commit drop as
+select g, random() as type_roll, random() as qty_roll, random() as sign_roll, random() as day_roll
+from generate_series(0, 3199) as g;
+
+-- -----------------------------------------------------------------------------
+-- Line pricing, shared by invoices, quotations and bills. GST is computed and
+-- rounded PER LINE, then summed: the order a GST invoice is legally drawn up
+-- in, and the only order where the header equals its printed lines exactly.
+-- -----------------------------------------------------------------------------
+
+-- Each line's slice is its document's slice; it carries that slice's item k.
 create temp table seed_line on commit drop as
 select
   l.doc, l.n, l.line_no,
   i.name, i.hsn_code, q.qty, p.rate, i.gst_rate,
-  -- qty is an integer and rate has 2 dp, so this product is already exact.
+  -- Integer qty x 2-dp rate: already exact, no rounding needed.
   q.qty * p.rate as amount,
   round(q.qty * p.rate * i.gst_rate / 100, 2) as gst_amount
 from seed_line_draw l
-join seed_item i on i.n = l.item_n
--- Bills buy at cost, invoices and quotes sell at list price.
+-- Slice of the owning document, recovered from its ordinal and slice size.
+cross join lateral (select case l.doc when 'inv' then (l.n - 1) / 30 when 'quo' then (l.n - 1) / 8 else (l.n - 1) / 15 end as slice_no) s
+join seed_item i on i.slice_no = s.slice_no and i.k = l.item_k - 1
+-- Bills buy at cost; invoices and quotes sell at list price.
 cross join lateral (select case when l.doc = 'bil' then i.purchase_price else i.sale_price end as rate) p
--- Big-ticket items sell in ones and twos; cheap stock moves in bulk, and
--- purchases are larger than sales because stock is bought in lots.
+-- Big-ticket goods move in ones and twos; purchases come in bulk lots.
 cross join lateral (select case
   when p.rate > 5000 then 1 + floor(l.qty_roll * 4)::int
   when l.doc = 'bil' then 10 + floor(l.qty_roll * 90)::int
   else 1 + floor(l.qty_roll * 24)::int
 end as qty) q;
 
--- Document totals and the jsonb items array in the API's line shape.
+-- Document totals plus the jsonb items array in the API's line shape.
 create temp table seed_doc_total on commit drop as
 select
   doc, n,
@@ -425,34 +494,40 @@ group by doc, n;
 -- Invoices and payments.
 -- -----------------------------------------------------------------------------
 
--- Status and dates. Unpaid invoices are dated so ~85% are still inside terms
--- and ~15% are past due: without this, a year-wide date spread would make
--- almost every unpaid invoice overdue and the view's derivation untestable.
+-- Status by position in the slice: 0–14 paid, 15–19 partial, 20–29 pending;
+-- positions 19 and 29 are dated past due, so each team has 2 of 15 unpaid
+-- invoices overdue (~13%) and the rest still inside terms. Without the
+-- in-terms dating, a year-wide spread would make nearly every unpaid invoice
+-- overdue and the view's derivation untestable.
 create temp table seed_inv on commit drop as
 select
   d.*, s.status, t.total_amount,
+  c.id as client_id, c.state_code,
   current_date - case
-    -- Paid invoices: anywhere from 10 to 364 days old.
+    -- Paid: 10 to 364 days old.
     when s.status = 'paid' then 10 + floor(d.date_roll * 355)::int
     -- Overdue: older than its terms by 1–300 days.
-    when d.overdue_roll < 0.15 then d.term_days + 1 + floor(d.date_roll * 300)::int
-    -- Still in terms: issued within the last term_days, so due_date >= today.
+    when d.pos in (19, 29) then d.term_days + 1 + floor(d.date_roll * 300)::int
+    -- In terms: issued within the last term_days, so due_date >= today.
     else floor(d.date_roll * d.term_days)::int
   end as invoice_date
 from seed_inv_draw d
 join seed_doc_total t on t.doc = 'inv' and t.n = d.n
--- 50% paid, 16% partial, 34% pending — yields ~220 payments with the splits.
+-- The client comes from the invoice's own slice: this is what keeps a
+-- team's books closed.
+join seed_client c on c.n = d.slice_no * 4 + d.client_k
 cross join lateral (select case
-  when d.status_roll < 0.50 then 'paid'
-  when d.status_roll < 0.66 then 'partial'
+  when d.pos < 15 then 'paid'
+  when d.pos < 20 then 'partial'
   else 'pending'
 end as status) s;
 
 -- First payment per paid/partial invoice. Money is cast to numeric before
--- rounding because random() is float8 and round(float8, int) does not exist.
+-- rounding: random() is float8, and round(float8, int) does not exist.
 create temp table seed_pay on commit drop as
 select
   i.n as inv_n,
+  i.slice_no,
   1 as seq,
   case
     -- Partial: 20–80% received, strictly between 0 and the total.
@@ -462,18 +537,17 @@ select
     -- Paid in one go.
     else i.total_amount
   end as amount,
-  -- Between invoice date and the earlier of due date or today: no payment is
-  -- ever dated in the future.
+  -- Between invoice date and the earlier of due date or today: never future.
   i.invoice_date + floor(i.lag1_roll * least(i.term_days, current_date - i.invoice_date))::int as payment_date,
   i.method1_n as method_n
 from seed_inv i
 where i.status in ('paid', 'partial');
 
--- Second instalment carries exactly the remainder, so a paid invoice's
--- payments sum to its total with no rounding residue.
-insert into seed_pay (inv_n, seq, amount, payment_date, method_n)
+-- Second instalment is exactly the remainder, so a paid invoice's payments sum
+-- to its total with no rounding residue.
+insert into seed_pay (inv_n, slice_no, seq, amount, payment_date, method_n)
 select
-  i.n, 2, i.total_amount - p.amount,
+  i.n, i.slice_no, 2, i.total_amount - p.amount,
   -- After the first payment, never after today.
   p.payment_date + floor(i.lag2_roll * (current_date - p.payment_date))::int,
   i.method2_n
@@ -481,23 +555,23 @@ from seed_inv i
 join seed_pay p on p.inv_n = i.n and p.seq = 1
 where i.status = 'paid' and i.split_roll < 0.15;
 
--- Invoices. paid_amount is summed from seed_pay, the same rows inserted into
+-- Invoices. paid_amount is summed from seed_pay, the very rows inserted into
 -- nova_payments below, so the two can never disagree.
 insert into public.nova_invoices (
   id, invoice_number, client_id, client_name, client_gst_number, items,
   amount, gst_amount, cgst_amount, sgst_amount, igst_amount, intra_state,
-  total_amount, paid_amount, status, invoice_date, due_date, created_at
+  total_amount, paid_amount, status, invoice_date, due_date, created_at, slice_no
 )
 select
   'inv_' || substr(md5('inv' || i.n), 1, 8),
-  -- Numbered in date order, as a real sequential GST invoice series must be.
-  -- Ordering by the date offset (not the date) means reruns on later days
-  -- keep every invoice on the same number.
-  'INV-' || lpad(row_number() over (order by i.invoice_date, i.n)::text, 5, '0'),
+  -- A gap-free series per slice (each team is its own seller), in date order
+  -- as a GST invoice series must be; the slice infix keeps it globally
+  -- unique. Ordering by the date offset keeps numbers stable across days.
+  'INV-' || lpad(i.slice_no::text, 2, '0') || '-' || lpad(row_number() over (partition by i.slice_no order by i.invoice_date, i.n)::text, 4, '0'),
   c.id, c.name, c.gst_number, t.items,
   t.amount, t.gst_amount,
-  -- Intra-state (seller is Telangana, 36): half each to CGST and SGST, with
-  -- SGST taking the odd paisa so the three still sum to gst_amount exactly.
+  -- Intra-state (seller in Telangana, 36): half each to CGST and SGST, SGST
+  -- taking the odd paisa so the three still sum to gst_amount exactly.
   case when x.intra then round(t.gst_amount / 2, 2) else 0 end,
   case when x.intra then t.gst_amount - round(t.gst_amount / 2, 2) else 0 end,
   -- Inter-state: all IGST.
@@ -507,21 +581,22 @@ select
   coalesce(p.paid, 0),
   i.status, i.invoice_date, i.invoice_date + i.term_days,
   -- Recorded mid-morning IST on its invoice date.
-  (i.invoice_date + time '11:00') at time zone 'Asia/Kolkata'
+  (i.invoice_date + time '11:00') at time zone 'Asia/Kolkata',
+  -- Inherited from the client, never computed independently.
+  c.slice_no
 from seed_inv i
 join seed_doc_total t on t.doc = 'inv' and t.n = i.n
-join seed_client sc on sc.n = i.client_n
-join public.nova_clients c on c.id = sc.id
-cross join lateral (select sc.state_code = '36' as intra) x
+join public.nova_clients c on c.id = i.client_id
+cross join lateral (select i.state_code = '36' as intra) x
 left join (select inv_n, sum(amount) as paid from seed_pay group by inv_n) p on p.inv_n = i.n;
 
--- Payments, with client fields copied from their invoice so the denormalised
--- name can never contradict the invoice it pays.
-insert into public.nova_payments (id, payment_number, invoice_id, client_id, client_name, amount, payment_date, method, reference, created_at)
+-- Payments copy client and slice from their invoice, so a payment can never
+-- name a different customer, or land in a different team, than what it pays.
+insert into public.nova_payments (id, payment_number, invoice_id, client_id, client_name, amount, payment_date, method, reference, created_at, slice_no)
 select
   x.id,
-  -- Receipt numbers follow receipt order, like a real cash book.
-  'PAY-' || lpad(row_number() over (order by p.payment_date, p.inv_n, p.seq)::text, 5, '0'),
+  -- Receipt numbers follow receipt order within the team's cash book.
+  'PAY-' || lpad(inv.slice_no::text, 2, '0') || '-' || lpad(row_number() over (partition by inv.slice_no order by p.payment_date, p.inv_n, p.seq)::text, 4, '0'),
   inv.id, inv.client_id, inv.client_name,
   p.amount, p.payment_date, m.method,
   -- The identifier reconciliation matches on, shaped per rail; cash has none.
@@ -533,7 +608,8 @@ select
     -- NEFT/RTGS/IMPS: a bank-prefixed UTR.
     else 'HDFC' || upper(left(m.method, 1)) || substr(translate(md5('ref' || x.id), 'abcdef', '012345'), 1, 11)
   end,
-  (p.payment_date + time '15:00') at time zone 'Asia/Kolkata'
+  (p.payment_date + time '15:00') at time zone 'Asia/Kolkata',
+  inv.slice_no
 from seed_pay p
 cross join lateral (select 'pay_' || substr(md5('pay' || p.inv_n || '-' || p.seq), 1, 8) as id) x
 join public.nova_invoices inv on inv.id = 'inv_' || substr(md5('inv' || p.inv_n), 1, 8)
@@ -541,15 +617,15 @@ join public.nova_invoices inv on inv.id = 'inv_' || substr(md5('inv' || p.inv_n)
 cross join lateral (select (array['upi', 'neft', 'neft', 'rtgs', 'imps', 'cheque', 'cash', 'card'])[p.method_n] as method) m;
 
 -- -----------------------------------------------------------------------------
--- Quotations.
+-- Quotations: 8 per slice. Positions 0–7 map to draft, sent, accepted,
+-- rejected, expired, converted, accepted, converted, so every team sees all
+-- six lifecycle states. The two converted quotes point at the slice's
+-- invoices at positions 2 (paid) and 16 (partial): distinct invoices, and the
+-- quote takes the invoice's client, so it is the same client and slice.
 -- -----------------------------------------------------------------------------
-
--- Status cycles through all six so every lifecycle branch has ~13 rows.
--- Every 6th quote is 'converted' and points at invoice (n/6)*20 — distinct
--- invoices, so no invoice is claimed by two quotes.
 create temp table seed_quo on commit drop as
 select
-  q.n, s.status,
+  q.n, q.slice_no, s.status,
   case when s.status = 'converted' then inv.client_id else c.id end as client_id,
   case when s.status = 'converted' then inv.client_name else c.name end as client_name,
   -- A converted quote carries the exact lines the invoice was raised from.
@@ -569,124 +645,115 @@ select
     else current_date - floor(q.date_roll * 330)::int
   end as quotation_date
 from seed_quo_draw q
-cross join lateral (select (array['draft', 'sent', 'accepted', 'rejected', 'expired', 'converted'])[1 + (q.n - 1) % 6] as status) s
-join seed_client sc on sc.n = q.client_n
+cross join lateral (select (array['draft', 'sent', 'accepted', 'rejected', 'expired', 'converted', 'accepted', 'converted'])[q.pos + 1] as status) s
+-- Same-slice client for the non-converted case.
+join seed_client sc on sc.n = q.slice_no * 4 + q.client_k
 join public.nova_clients c on c.id = sc.id
 join seed_doc_total t on t.doc = 'quo' and t.n = q.n
-left join public.nova_invoices inv on s.status = 'converted' and inv.id = 'inv_' || substr(md5('inv' || (q.n / 6) * 20), 1, 8);
+-- Same-slice invoice for the converted case (ordinal slice*30 + pos + 1).
+left join public.nova_invoices inv on s.status = 'converted'
+  and inv.id = 'inv_' || substr(md5('inv' || (q.slice_no * 30 + case when q.pos = 5 then 3 else 17 end)), 1, 8);
 
--- Quotations, numbered in date order like invoices.
+-- Quotations, numbered per slice in date order like invoices.
 insert into public.nova_quotations (
   id, quotation_number, client_id, client_name, items, amount, gst_amount, total_amount,
-  status, quotation_date, valid_until, converted_invoice_id, created_at
+  status, quotation_date, valid_until, converted_invoice_id, created_at, slice_no
 )
 select
   'quo_' || substr(md5('quo' || q.n), 1, 8),
-  'QT-' || lpad(row_number() over (order by q.quotation_date, q.n)::text, 5, '0'),
+  'QT-' || lpad(q.slice_no::text, 2, '0') || '-' || lpad(row_number() over (partition by q.slice_no order by q.quotation_date, q.n)::text, 4, '0'),
   q.client_id, q.client_name, q.items, q.amount, q.gst_amount, q.amount + q.gst_amount,
   q.status, q.quotation_date,
   -- 30-day validity, the usual Indian B2B quote term.
   q.quotation_date + 30,
   q.converted_invoice_id,
-  (q.quotation_date + time '10:00') at time zone 'Asia/Kolkata'
-from seed_quo q;
+  (q.quotation_date + time '10:00') at time zone 'Asia/Kolkata',
+  -- Inherited from the client row (the quote's slice by construction).
+  c.slice_no
+from seed_quo q
+join public.nova_clients c on c.id = q.client_id;
 
 -- -----------------------------------------------------------------------------
--- Purchase bills. No payments table exists for AP, so paid_amount is the only
--- record of settlement and is derived straight from status.
+-- Purchase bills: 15 per slice. No AP payments table exists, so paid_amount
+-- is derived straight from status. Positions 0–7 paid, 8–9 partial, 10–14
+-- pending; 9 and 14 are dated past due so every team has overdue payables.
 -- -----------------------------------------------------------------------------
 insert into public.nova_purchase_bills (
   id, bill_number, vendor_id, vendor_name, vendor_gst_number, items,
   amount, gst_amount, cgst_amount, sgst_amount, igst_amount, total_amount, paid_amount,
-  status, bill_date, due_date, reverse_charge, itc_eligible, created_at
+  status, bill_date, due_date, reverse_charge, itc_eligible, created_at, slice_no
 )
 select
   'bil_' || substr(md5('bil' || b.n), 1, 8),
-  -- Our internal purchase register number, in bill-date order.
-  'BILL-' || lpad(row_number() over (order by d.bill_date, b.n)::text, 5, '0'),
+  -- The team's purchase-register number, in bill-date order.
+  'BILL-' || lpad(b.slice_no::text, 2, '0') || '-' || lpad(row_number() over (partition by b.slice_no order by d.bill_date, b.n)::text, 4, '0'),
   v.id, v.name, v.gst_number, t.items,
   t.amount, t.gst_amount,
-  -- Same split rule as invoices; the place of supply is the vendor's state.
+  -- Same split rule as invoices; place of supply is the vendor's state.
   case when sv.state_code = '36' then round(t.gst_amount / 2, 2) else 0 end,
   case when sv.state_code = '36' then t.gst_amount - round(t.gst_amount / 2, 2) else 0 end,
   case when sv.state_code = '36' then 0 else t.gst_amount end,
   t.total_amount,
   case s.status
     when 'paid' then t.total_amount
-    -- Numeric cast for the same round(float8) reason as invoice payments.
+    -- Numeric cast for the same round(float8) reason as payments.
     when 'partial' then round(t.total_amount * (0.2 + 0.6 * b.frac_roll)::numeric, 2)
     else 0
   end,
   s.status, d.bill_date, d.bill_date + b.term_days,
-  -- Goods transport by an unregistered transporter is a classic RCM case
-  -- (vendor 20); ~10% more are random so the flag is not vendor-only.
-  b.vendor_n = 20 or b.rcm_roll < 0.10,
-  -- Food and catering credit is blocked under section 17(5) (vendor 5); ~12%
-  -- more are random so ineligible bills span vendors.
-  not (b.vendor_n = 5 or b.itc_roll < 0.12),
-  (d.bill_date + time '12:00') at time zone 'Asia/Kolkata'
+  -- Goods transport by an unregistered transporter is the textbook RCM case;
+  -- ~10% more are random so the flag is not vendor-only.
+  (sv.industry = 'Transport Services' and not sv.registered) or b.rcm_roll < 0.10,
+  -- Food and catering credit is blocked under section 17(5); ~12% more are
+  -- random so ineligible bills span vendors.
+  not (sv.industry = 'Caterers' or b.itc_roll < 0.12),
+  (d.bill_date + time '12:00') at time zone 'Asia/Kolkata',
+  -- Inherited from the vendor.
+  v.slice_no
 from seed_bil_draw b
 join seed_doc_total t on t.doc = 'bil' and t.n = b.n
-join seed_vendor sv on sv.n = b.vendor_n
+-- Vendor from the bill's own slice.
+join seed_vendor sv on sv.n = b.slice_no * 2 + b.vendor_k
 join public.nova_vendors v on v.id = sv.id
--- 55% paid, 15% partial, 30% pending.
 cross join lateral (select case
-  when b.status_roll < 0.55 then 'paid'
-  when b.status_roll < 0.70 then 'partial'
+  when b.pos < 8 then 'paid'
+  when b.pos < 10 then 'partial'
   else 'pending'
 end as status) s
 -- Same in-terms / overdue dating rule as invoices, for the same reason.
 cross join lateral (select current_date - case
   when s.status = 'paid' then 10 + floor(b.date_roll * 355)::int
-  when b.overdue_roll < 0.15 then b.term_days + 1 + floor(b.date_roll * 300)::int
+  when b.pos in (9, 14) then b.term_days + 1 + floor(b.date_roll * 300)::int
   else floor(b.date_roll * b.term_days)::int
 end as bill_date) d;
 
 -- -----------------------------------------------------------------------------
--- Expenses.
+-- Expenses: 20 per slice. Rates and TDS come from the category, the way a
+-- bookkeeper applies them.
 -- -----------------------------------------------------------------------------
-
--- Expense rolls. The category array repeats common categories to weight them.
-create temp table seed_exp_draw on commit drop as
-select
-  n,
-  (array['rent', 'travel', 'travel', 'software', 'software', 'utilities', 'office_supplies',
-         'professional_fees', 'professional_fees', 'marketing', 'meals', 'meals', 'salaries', 'other'])[1 + floor(random() * 14)::int] as category,
-  -- Scales the amount around the category's typical size.
-  random() as amount_roll,
-  -- Picks one of three payees for the category.
-  1 + floor(random() * 3)::int as payee_n,
-  -- Payment rail when the category does not force one.
-  1 + floor(random() * 7)::int as method_n,
-  -- Spreads expenses across the year.
-  random() as date_roll
-from generate_series(1, 200) as n;
-
--- Expenses. Rates and TDS come from the category, the way a bookkeeper
--- applies them.
 insert into public.nova_expenses (
   id, expense_number, category, vendor_name, description, amount, gst_amount, total_amount,
-  tds_rate, tds_amount, payment_method, expense_date, created_at
+  tds_rate, tds_amount, payment_method, expense_date, created_at, slice_no
 )
 select
   'exp_' || substr(md5('exp' || e.n), 1, 8),
-  'EXP-' || lpad(row_number() over (order by x.expense_date, e.n)::text, 5, '0'),
+  'EXP-' || lpad(e.slice_no::text, 2, '0') || '-' || lpad(row_number() over (partition by e.slice_no order by x.expense_date, e.n)::text, 4, '0'),
   e.category,
-  -- Invented payee names: realistic, but never a real brand.
+  -- Invented payee names: realistic, never a real brand.
   (case e.category
     when 'rent'              then array['Banjara Estates LLP', 'Madhapur Properties', 'Jubilee Hills Realty']
     when 'travel'            then array['Skyline Travels', 'Metro Cabs Hyderabad', 'Redline Tours and Travels']
     when 'software'          then array['CloudStack Software Pvt Ltd', 'Zenith SaaS Solutions', 'CodeForge Tools']
     when 'utilities'         then array['City Power Distribution', 'Metro Water Board', 'FiberNet Broadband']
-    when 'office_supplies'   then array['Balaji Stationery Suppliers', 'Office Mart', 'Supreme Stationers']
+    when 'office_supplies'   then array['Office Mart', 'Supreme Stationers', 'Paper Point']
     when 'professional_fees' then array['Rao and Associates Chartered Accountants', 'Menon Legal LLP', 'Iyer Tax Consultants']
     when 'marketing'         then array['Pixel Bloom Digital', 'Deccan Print Media', 'Brandwave Events']
-    when 'meals'             then array['Hyderabad House Caterers', 'Annapurna Caterers', 'Cafe Nirvana']
+    when 'meals'             then array['Hyderabad House Caterers', 'Spice Route Kitchen', 'Cafe Nirvana']
     when 'salaries'          then array['Staff payroll', 'Staff payroll', 'Contract staff payroll']
     else                          array['Speedpost Couriers', 'Bank charges', 'Local vendor']
   end)[e.payee_n],
   case e.category
-    when 'rent'              then 'Office rent - Madhapur'
+    when 'rent'              then 'Office rent'
     when 'travel'            then 'Client visit travel'
     when 'software'          then 'Monthly software subscription'
     when 'utilities'         then 'Office utilities bill'
@@ -707,7 +774,8 @@ select
   case when e.category in ('rent', 'salaries', 'professional_fees') then 'neft'
        else (array['upi', 'upi', 'card', 'card', 'neft', 'cash', 'imps'])[e.method_n] end,
   x.expense_date,
-  (x.expense_date + time '16:00') at time zone 'Asia/Kolkata'
+  (x.expense_date + time '16:00') at time zone 'Asia/Kolkata',
+  e.slice_no
 from seed_exp_draw e
 -- Typical size per category, varied 50–150%.
 cross join lateral (select round((case e.category
@@ -715,8 +783,8 @@ cross join lateral (select round((case e.category
   when 'utilities' then 9000 when 'office_supplies' then 4500 when 'professional_fees' then 40000
   when 'marketing' then 30000 when 'meals' then 3200 when 'salaries' then 350000 else 2500
 end) * (0.5 + e.amount_roll)::numeric, 2) as amount) a
--- GST slab per category: electricity/water and salaries are outside GST,
--- transport and restaurant services sit at 5%, the rest at 18%.
+-- GST slab per category: power/water and salaries are outside GST, transport
+-- and restaurant services sit at 5%, the rest at 18%.
 cross join lateral (select case e.category
   when 'utilities' then 0 when 'salaries' then 0 when 'other' then 0
   when 'travel' then 5 when 'meals' then 5 else 18
@@ -730,46 +798,36 @@ end)::numeric(5,2) as tds_rate) r
 cross join lateral (select current_date - floor(e.date_roll * 365)::int as expense_date) x;
 
 -- -----------------------------------------------------------------------------
--- Inventory and stock movements.
--- 8 movements per item (50 x 8 = 400). Movement 1 is always a purchase of
--- q0 units; every later outflow is capped at q0/8 (sales) or q0/16
--- (adjustments), so at most 7/8 of the opening stock can ever leave and the
--- running balance cannot go negative at any point — no procedural loop needed.
+-- Inventory and stock movements: 8 per item. Movement 1 is always a purchase
+-- of q0 units; later outflows are capped at q0/8 (sales) or q0/16
+-- (adjustments), so at most 7/8 of opening stock can ever leave and the
+-- running balance can never go negative — no procedural loop needed.
 -- -----------------------------------------------------------------------------
 
--- Movement rolls; one flat series (item = g/8, k = g%8) instead of a cross
--- join, because a join of two series could be planned in either order.
-create temp table seed_mov_draw on commit drop as
-select
-  g,
-  random() as type_roll,
-  random() as qty_roll,
-  random() as sign_roll,
-  random() as day_roll
-from generate_series(0, 399) as g;
-
--- Derived movements, before inventory exists, so quantity_on_hand can be
--- inserted as their sum instead of patched with an UPDATE afterwards.
+-- Derived movements, built before inventory so quantity_on_hand can be
+-- inserted as their sum rather than patched by an UPDATE afterwards.
 create temp table seed_mov on commit drop as
 select
   m.g,
   i.id as item_id,
   i.n as item_n,
+  i.slice_no,
   k.k,
   t.movement_type,
-  -- Fractional units carry 3 dp (the column's scale); countable ones are whole.
+  -- Fractional units carry 3 dp (the column scale); countable ones are whole.
   case when t.movement_type = 'sale' or (t.movement_type = 'adjustment' and m.sign_roll < 0.6) then -1 else 1 end
     * case when i.unit in ('kg', 'litre', 'metre') then round(mag.v::numeric, 3) else floor(mag.v)::numeric end as quantity,
-  -- Reference points at a document number that exists in this seed.
+  -- Points at a document number that exists in the SAME slice (each slice
+  -- has invoices 0001–0030 and bills 0001–0015).
   case
     when k.k = 1 then 'Opening stock purchase'
-    when t.movement_type = 'purchase' then 'BILL-' || lpad((1 + m.g % 150)::text, 5, '0')
-    when t.movement_type = 'sale' then 'INV-' || lpad((1 + m.g % 300)::text, 5, '0')
+    when t.movement_type = 'purchase' then 'BILL-' || lpad(i.slice_no::text, 2, '0') || '-' || lpad((1 + m.g % 15)::text, 4, '0')
+    when t.movement_type = 'sale' then 'INV-' || lpad(i.slice_no::text, 2, '0') || '-' || lpad((1 + m.g % 30)::text, 4, '0')
     when m.sign_roll < 0.6 then 'Damaged stock written off'
     else 'Stock count gain'
   end as reference,
-  -- Movement k lands in a 30-day window 45 days after movement k-1's window,
-  -- so dates are strictly increasing and the opening purchase is the oldest.
+  -- Movement k sits in a 30-day window 45 days after movement k-1's, so dates
+  -- strictly increase and the opening purchase is always the oldest.
   current_date - (365 - (k.k - 1) * 45) + floor(m.day_roll * 30)::int as movement_date
 from seed_mov_draw m
 cross join lateral (select m.g / 8 + 1 as item_n, m.g % 8 + 1 as k) k
@@ -782,7 +840,7 @@ cross join lateral (select case
   when m.type_roll < 0.85 then 'sale'
   else 'adjustment'
 end as movement_type) t
--- Magnitude (always >= 1, so the quantity <> 0 CHECK holds).
+-- Magnitude, always >= 1 so the quantity <> 0 CHECK holds.
 cross join lateral (select case
   when k.k = 1 then q.q0 + m.qty_roll * 50
   when t.movement_type = 'purchase' then 20 + m.qty_roll * (q.q0 / 2.0 - 20)
@@ -790,30 +848,44 @@ cross join lateral (select case
   else 1 + m.qty_roll * (q.q0 / 16.0 - 1)
 end as v) mag;
 
--- Inventory, with quantity_on_hand equal to its movement ledger by
--- construction. Every 5th item gets a reorder level above its stock so the
--- view's below_reorder_level flag has true rows to test against.
-insert into public.nova_inventory (id, sku, name, hsn_code, unit, sale_price, purchase_price, gst_rate, quantity_on_hand, reorder_level, created_at)
+-- Inventory, with quantity_on_hand equal to its ledger by construction. Item
+-- k = 4 of every slice gets a reorder level above its stock, so each team's
+-- below_reorder_level flag has a true row to test against.
+insert into public.nova_inventory (id, sku, name, hsn_code, unit, sale_price, purchase_price, gst_rate, quantity_on_hand, reorder_level, created_at, slice_no)
 select
   i.id,
-  -- SKU embeds the HSN so a human can read the tax class off the code.
-  'ACZ-' || i.hsn_code || '-' || lpad(i.n::text, 3, '0'),
+  -- SKU embeds the HSN so a human can read the tax class off the code; the
+  -- item ordinal keeps it globally unique.
+  'ACZ-' || i.hsn_code || '-' || lpad(i.n::text, 4, '0'),
   i.name, i.hsn_code, i.unit, i.sale_price, i.purchase_price, i.gst_rate,
   s.qoh,
-  case when i.n % 5 = 0 then s.qoh + 25 else round(s.qoh * 0.25, 0) end,
-  (current_date - 400)::timestamptz
+  case when i.k = 4 then s.qoh + 25 else round(s.qoh * 0.25, 0) end,
+  (current_date - 400)::timestamptz,
+  i.slice_no
 from seed_item i
 join (select item_n, sum(quantity) as qoh from seed_mov group by item_n) s on s.item_n = i.n;
 
--- The ledger itself.
-insert into public.nova_stock_movements (id, item_id, movement_type, quantity, reference, movement_date, created_at)
+-- The ledger itself; slice copied from the item row it moves.
+insert into public.nova_stock_movements (id, item_id, movement_type, quantity, reference, movement_date, created_at, slice_no)
 select
   'mov_' || substr(md5('mov' || m.g), 1, 8),
   m.item_id, m.movement_type, m.quantity, m.reference, m.movement_date,
-  (m.movement_date + time '09:30') at time zone 'Asia/Kolkata'
+  (m.movement_date + time '09:30') at time zone 'Asia/Kolkata',
+  inv.slice_no
 from seed_mov m
+join public.nova_inventory inv on inv.id = m.item_id
 order by m.g;
 
--- Temp tables drop here (on commit drop); nothing of the seed's scaffolding
--- outlives the transaction.
+-- -----------------------------------------------------------------------------
+-- Publish the modulus. Upsert, not truncate + insert: the auth function reads
+-- this row on every request, and it must never be observed missing. Written
+-- in the same transaction as the data, so slice_count and the slices it
+-- describes always change together.
+-- -----------------------------------------------------------------------------
+insert into public.nova_dataset_meta (id, slice_count, seeded_at)
+values (true, 80, now())
+on conflict (id) do update set slice_count = excluded.slice_count, seeded_at = excluded.seeded_at;
+
+-- Temp tables drop here (on commit drop); none of the scaffolding outlives
+-- the transaction.
 commit;

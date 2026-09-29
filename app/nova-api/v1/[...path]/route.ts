@@ -11,20 +11,26 @@
     2. Authenticate + meter in one RPC. DB down → 502 (fail closed).
     3. Rate limit, using the count the RPC just returned.
     4. Route + validate the query against the allowlist → 400/404 before any read.
-    5. One read from a nova_*_v view.
+    5. One read from a nova_*_v view, always pinned to the key's slice_no
+       (004_team_slices.sql) — the per-team tenant boundary.
 
-  READ-ONLY BY CONSTRUCTION: this file imports novaRead only — never novaWrite
-  (a grep for "novaWrite" under app/nova-api/v1 must stay empty) — and every
+  READ-ONLY BY CONSTRUCTION: this file imports novaRead + novaRpc only — never
+  novaWrite. novaRpc reaches exactly two functions: nova_authenticate_key and
+  the append-only audit log nova_log_request; neither touches business data.
+  (Check: `grep -rn "^import.*novaWrite" app/nova-api/v1` prints nothing.) And every
   write verb answers 405.
 */
 
 // NextResponse for parity with the rest of app/api.
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 // Node's randomUUID for request ids (Edge has it too, but we are on nodejs).
 import { randomUUID } from "node:crypto";
 
 // Read surface only; NovaDbError is how upstream failures are recognised.
-import { novaRead, NovaDbError } from "@/lib/nova/db";
+// novaRpc is used for exactly two functions: authenticate-and-meter (inside
+// apiKeys.ts) and nova_log_request below — an append-only audit log, never
+// business data, so the read-only guarantee on the dataset still holds.
+import { novaRead, novaRpc, NovaDbError } from "@/lib/nova/db";
 // Bearer parsing + authenticate-and-meter.
 import { authenticateApiKey, type AuthenticatedKey } from "@/lib/nova/apiKeys";
 // Registry and the untrusted-query translator.
@@ -139,11 +145,14 @@ async function listRows(
   requestId: string,
   // Rate-limit headers to carry on the response.
   headers: Record<string, string>,
+  // The caller's team slice; required so no list can be built without it.
+  sliceNo: number,
   // Parent pin for child routes.
-  fixed?: { field: string; value: string },
+  parent?: { field: string; value: string },
 ): Promise<NextResponse> {
-  // Validate + translate before touching the database.
-  const built = buildListQuery(resource, params, fixed);
+  // Validate + translate before touching the database; the slice pin is added
+  // by the translator, never from the query string.
+  const built = buildListQuery(resource, params, sliceNo, parent);
   // 400 with the translator's code and issues.
   if (built.ok === false) return jsonError(400, built.error.code, built.error.message, requestId, headers, built.error.details);
   // One read; count=exact gives the total for pagination.
@@ -159,8 +168,13 @@ async function listRows(
   );
 }
 
+// Filled in by handle() once the caller is known, so GET can attribute the log
+// row. A side channel rather than a changed return type keeps every early
+// `return jsonError(...)` in handle() untouched.
+type CallContext = { key: AuthenticatedKey | null };
+
 // Core handler; HEAD reuses it and drops the body.
-async function handle(request: Request, path: string[]): Promise<NextResponse> {
+async function handle(request: Request, path: string[], ctx: CallContext): Promise<NextResponse> {
   // Generated first so even a failure before auth can be traced.
   const requestId = randomUUID();
 
@@ -186,6 +200,10 @@ async function handle(request: Request, path: string[]): Promise<NextResponse> {
       "WWW-Authenticate": 'Bearer realm="nova-api"',
     });
   }
+
+  // From here on the caller is known, so the response gets logged — including
+  // the 429 below, which is exactly the failure a user most needs to see.
+  ctx.key = key;
 
   // --- 3. Rate limit --------------------------------------------------------
   const { headers, resetSeconds } = rateLimitHeaders(key);
@@ -213,6 +231,11 @@ async function handle(request: Request, path: string[]): Promise<NextResponse> {
             prefix: key.prefix,
             rate_limit_per_min: key.rateLimitPerMin,
             created_at: key.createdAt,
+            // Which team position this key's email holds.
+            team_slot: key.teamSlot,
+            // Which data slice every read below is pinned to, so a team can
+            // tell why its numbers differ from another team's.
+            dataset_slice: key.sliceNo,
           },
         },
         requestId,
@@ -228,7 +251,7 @@ async function handle(request: Request, path: string[]): Promise<NextResponse> {
     const params = new URL(request.url).searchParams;
 
     // /{resource}
-    if (path.length === 1) return await listRows(resource, params, requestId, headers);
+    if (path.length === 1) return await listRows(resource, params, requestId, headers, key.sliceNo);
 
     // /{resource}/{id}[/...]: malformed ids 404 without a DB call.
     const id = path[1];
@@ -236,9 +259,10 @@ async function handle(request: Request, path: string[]): Promise<NextResponse> {
 
     // /{resource}/{id}
     if (path.length === 2) {
-      // Primary-key lookup.
-      const { rows } = await novaRead<Record<string, unknown>>(resource.view, buildGetQuery(id));
-      // No row → 404, same shape as an unknown path.
+      // Primary-key lookup, slice-pinned.
+      const { rows } = await novaRead<Record<string, unknown>>(resource.view, buildGetQuery(id, key.sliceNo));
+      // No row (missing, or in another team's slice) → 404, same shape as an
+      // unknown path, so a slice boundary is indistinguishable from absence.
       if (rows.length === 0) return notFound(requestId, headers);
       // Single-object envelope.
       return jsonOk({ data: tagRow(resource, rows[0]) }, requestId, headers);
@@ -251,7 +275,8 @@ async function handle(request: Request, path: string[]): Promise<NextResponse> {
       if (sub === null) return notFound(requestId, headers);
       // ponytail: a nonexistent parent returns an empty list, not 404 — a
       // 404 would cost a second read; add a parent lookup if clients need it.
-      return await listRows(sub.resource, params, requestId, headers, { field: sub.parentField, value: id });
+      // Slice pin applies too: another slice's parent id yields an empty list.
+      return await listRows(sub.resource, params, requestId, headers, key.sliceNo, { field: sub.parentField, value: id });
     }
 
     // Anything deeper.
@@ -276,8 +301,61 @@ type RouteContext = { params: Promise<{ path: string[] }> };
 export async function GET(request: Request, { params }: RouteContext): Promise<NextResponse> {
   // Catch-all always has ≥1 segment, but default defensively.
   const { path } = await params;
+  // Started before any work so duration_ms covers auth + read.
+  const startedAt = Date.now();
+  // handle() fills this in once the key is authenticated.
+  const ctx: CallContext = { key: null };
   // Delegate to the shared handler.
-  return handle(request, path ?? []);
+  const response = await handle(request, path ?? [], ctx);
+  // Unauthenticated calls are not logged: no key to attribute them to, and
+  // logging them would let anyone write rows (see 003_*.sql).
+  if (ctx.key !== null) logCall(ctx.key, request, path ?? [], response, Date.now() - startedAt);
+  return response;
+}
+
+/*
+  Appends one row to nova_api_request for the user's success/failure dashboard.
+  Runs in after(): the response is already on its way, so logging adds no
+  latency, and a logging failure can never turn a good response into an error.
+*/
+function logCall(key: AuthenticatedKey, request: Request, path: string[], response: NextResponse, durationMs: number): void {
+  // Cloned NOW, before the body streams to the client; a consumed body cannot be read later.
+  const errorBody = response.status >= 400 ? response.clone() : null;
+  // Request id is already on the response header; reuse it so the log row and
+  // the header the user sees are the same id.
+  const requestId = response.headers.get("X-Request-Id") ?? randomUUID();
+  // Split once; the query string is stored separately so a 400 can show it.
+  const url = new URL(request.url);
+  after(async () => {
+    try {
+      // Only error responses carry { error: { code, message } } worth storing.
+      let code: string | null = null;
+      let message: string | null = null;
+      if (errorBody !== null) {
+        // Our own JSON, so parsing is safe; a failure just leaves both null.
+        const parsed = (await errorBody.json().catch(() => null)) as { error?: { code?: string; message?: string } } | null;
+        code = parsed?.error?.code ?? null;
+        message = parsed?.error?.message ?? null;
+      }
+      await novaRpc("nova_log_request", {
+        p_key_id: key.keyId,
+        p_email: key.email,
+        p_method: request.method,
+        // Path relative to /v1, e.g. "/invoices/inv_8f2c91a4".
+        p_path: `/${path.join("/")}`,
+        // Without the leading "?"; null when there was none.
+        p_query: url.search.length > 1 ? url.search.slice(1) : null,
+        p_status: response.status,
+        p_error_code: code,
+        p_error_message: message,
+        p_duration_ms: durationMs,
+        p_request_id: requestId,
+      });
+    } catch (error) {
+      // Server log only: a lost log row must never surface to the API caller.
+      console.error(`[nova-api/v1] ${requestId} could not log request:`, error);
+    }
+  });
 }
 
 // HEAD: same status and headers as GET, no body (RFC 9110 §9.3.2).

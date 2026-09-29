@@ -2,6 +2,8 @@
 
 /*
   The sign-in card on /nova-api: allowlisted email + password → dashboard.
+  The whole screen is this card — the brand header lives inside it so the
+  page itself stays a bare centring wrapper.
 
   Calls the server action directly from the submit handler (no
   useActionState) because the repo is on React 18 types; a plain async call
@@ -15,9 +17,11 @@ import { useState, type FormEvent } from "react";
 
 // House shadcn primitives, same as the Finathon/axe gate forms.
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+// Padlock glyph for the invite-only note.
+import { Lock } from "lucide-react";
 // Server action; importing it into a client component makes it an RPC stub.
 // Relative path: the repo has no "@/app/…" import precedent to rely on.
 import { signInAction } from "../../../../app/nova-api/actions";
@@ -61,10 +65,17 @@ export default function SignInCard() {
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="text-xl">Sign in to get an API key</CardTitle>
-        <CardDescription>Access is invite-only — ask the Aczen team for credentials.</CardDescription>
+    // shadow-sm + border: the same flat card style as dashboard.aczen.in.
+    <Card className="w-full shadow-sm">
+      <CardHeader className="items-center space-y-3 pb-4 text-center">
+        {/* The Aczen mark (public/icon.svg), decorative next to the title. */}
+        <img src="/icon.svg" alt="" width={44} height={44} className="h-11 w-11 rounded-lg" />
+        <div className="space-y-1">
+          {/* The product name is the page's h1; the card is the whole screen. */}
+          {/* A real <h1>, not CardTitle (an h3 with no asChild), with its styles. */}
+          <h1 className="text-2xl font-semibold leading-none tracking-tight">Nova API</h1>
+          <CardDescription>Sign in to manage your sandbox API key and read the docs.</CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -113,6 +124,11 @@ export default function SignInCard() {
           </Button>
         </form>
       </CardContent>
+      {/* Says up front that there is no self-serve sign-up, so nobody hunts for one. */}
+      <CardFooter className="justify-center gap-1.5 border-t pt-4 text-xs text-muted-foreground">
+        <Lock aria-hidden className="h-3.5 w-3.5" />
+        Invite-only access. Ask the Aczen team for credentials.
+      </CardFooter>
     </Card>
   );
 }

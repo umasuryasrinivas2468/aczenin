@@ -12,8 +12,8 @@
   TWO SURFACES, ON PURPOSE (design §4.2 layer 2):
   - novaRead / novaRpc  — what the public /v1 API imports. GET + RPC only.
   - novaWrite           — insert/update/delete for the portals. /v1 must never
-                          import it; a grep for "novaWrite" under app/nova-api/v1
-                          must stay empty.
+                          import it; `grep -rn "^import.*novaWrite"` under
+                          app/nova-api/v1 must stay empty.
 */
 
 // Runtime guard, same as the axe modules: turns a leak of the service key into

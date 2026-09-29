@@ -371,26 +371,48 @@ function parseOffset(raw: string | null): number | string {
   return Number(raw);
 }
 
+// The per-team slice column (supabase/nova/004_team_slices.sql). Server-set
+// only: it is never in any resource's filters or sort, and never returned.
+export const SLICE_FIELD = "slice_no";
+
+/*
+  The mandatory slice pin, as a PostgREST clause. Throws rather than returns a
+  400 on a bad value: sliceNo comes from the auth RPC, never the caller, so a
+  non-integer here is a server bug and must fail closed (the route → 502)
+  instead of silently reading an unpinned query.
+*/
+function slicePin(sliceNo: number): string {
+  // Integer >= 0 is what the DB CHECK allows; anything else is a bug upstream.
+  if (!Number.isSafeInteger(sliceNo) || sliceNo < 0) throw new Error(`Invalid slice number: ${String(sliceNo)}`);
+  // Number → decimal string: no user bytes, nothing to encode.
+  return `${SLICE_FIELD}=eq.${sliceNo}`;
+}
+
 /*
   Turns the caller's query string into a PostgREST query string, or a 400.
 
-  `fixed` pins a parent filter for child routes (/invoices/{id}/payments). It
-  is applied in addition to — not instead of — any user filters, so a user
-  cannot widen it: PostgREST ANDs every filter.
+  `sliceNo` is REQUIRED, not optional, so no call site can forget the team
+  pin: it is the tenant boundary between teams (004_team_slices.sql).
+  `parent` pins a parent filter for child routes (/invoices/{id}/payments).
+  Both are applied in addition to — not instead of — any user filters, and
+  the caller cannot name slice_no at all, so neither pin can be widened:
+  PostgREST ANDs every filter.
 */
 export function buildListQuery(
   // The resource whose allowlist governs this request.
   resource: Resource,
   // The raw request query; URLSearchParams has already percent-decoded it.
   params: URLSearchParams,
+  // The authenticated key's slice, from nova_authenticate_key.
+  sliceNo: number,
   // Optional parent pin for child routes.
-  fixed?: { field: string; value: string },
+  parent?: { field: string; value: string },
 ): ListQueryResult {
-  // Filter clauses, in request order.
-  const clauses: string[] = [];
+  // Filter clauses; the slice pin first so it is present on every query built.
+  const clauses: string[] = [slicePin(sliceNo)];
 
-  // The pin goes first so it is present even if the loop below returns early.
-  if (fixed !== undefined) clauses.push(`${fixed.field}=eq.${encodeValue(fixed.value)}`);
+  // The parent pin next, likewise independent of anything the caller sends.
+  if (parent !== undefined) clauses.push(`${parent.field}=eq.${encodeValue(parent.value)}`);
 
   // Every non-reserved key must be a known field with an allowed operator.
   for (const [key, rawValue] of params) {
@@ -405,8 +427,10 @@ export function buildListQuery(
     const op = parts.length === 1 ? "eq" : parts[1];
 
     // Unknown field (including select/or/and — PostgREST's own syntax keys —
-    // and prototype names, thanks to hasOwn) → unknown_filter.
-    if (!Object.hasOwn(resource.filters, field)) {
+    // and prototype names, thanks to hasOwn) → unknown_filter. slice_no is
+    // refused by name too, so even a future registry entry that lists it by
+    // mistake cannot let a caller add a second, conflicting slice filter.
+    if (field === SLICE_FIELD || !Object.hasOwn(resource.filters, field)) {
       // List the real filters so the error is self-serve.
       return {
         ok: false,
@@ -492,13 +516,18 @@ export function buildListQuery(
 }
 
 // Single-row query for GET /{resource}/{id}; callers check isValidId first.
-export function buildGetQuery(id: string): string {
+// Slice-pinned like lists, so another team's id reads as zero rows → the same
+// 404 as a missing row, and ids cannot be probed across slices.
+export function buildGetQuery(id: string, sliceNo: number): string {
   // limit=1: ids are primary keys, so one row is the most there can be.
-  return `id=eq.${encodeValue(id)}&limit=1`;
+  return `${slicePin(sliceNo)}&id=eq.${encodeValue(id)}&limit=1`;
 }
 
-// Prepends the `"object"` tag as the first key, as the reference API does.
+// Shapes a view row for the client: `"object"` tag first (as the reference
+// API does) and slice_no removed, so the partitioning never leaks into JSON.
 export function tagRow(resource: Resource, row: Record<string, unknown>): Record<string, unknown> {
+  // Destructure slice_no out; the rest is the public shape.
+  const { [SLICE_FIELD]: _slice, ...rest } = row;
   // Spread after, so object is first in key order; views have no "object" column.
-  return { object: resource.object, ...row };
+  return { object: resource.object, ...rest };
 }

@@ -13,7 +13,7 @@ import { useState, type FormEvent } from "react";
 // shadcn primitives.
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -94,13 +94,11 @@ export default function KeysPanel({ rows }: { rows: KeyRow[] }) {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">API keys</CardTitle>
-        <CardDescription>
-          Every key across all users. Revoking takes effect on the key&apos;s next request.
-        </CardDescription>
+      <CardHeader className="pb-2">
+        {/* The page header explains revocation; the card only counts what it lists. */}
+        <CardTitle className="text-base">All keys ({rows.length})</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {/* Polite live region for the revoke confirmation. */}
         <div aria-live="polite" className="text-sm text-muted-foreground">
           {revoked ? <p>{revoked.message}</p> : null}
@@ -109,18 +107,17 @@ export default function KeysPanel({ rows }: { rows: KeyRow[] }) {
         {rows.length === 0 ? (
           <p className="text-sm text-muted-foreground">No keys have been created yet.</p>
         ) : (
-          // Wide table; scrolls inside its wrapper on narrow screens.
+          // Six columns, not nine: name+status+prefix and last-used+created
+          // share cells, so the table fits beside the sidebar at 1366px. Below
+          // that it scrolls inside the Table's own overflow wrapper.
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Owner</TableHead>
-                <TableHead>Name</TableHead>
                 <TableHead>Key</TableHead>
-                <TableHead>Created</TableHead>
+                <TableHead>Owner</TableHead>
                 <TableHead>Last used</TableHead>
                 <TableHead className="text-right">Requests (24h)</TableHead>
                 <TableHead>Rate limit / min</TableHead>
-                <TableHead>Status</TableHead>
                 {/* Named for screen readers even though visually blank. */}
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -136,19 +133,30 @@ export default function KeysPanel({ rows }: { rows: KeyRow[] }) {
                   // shows the typed (now stored) value, and not remounting keeps
                   // the row's "Saved" confirmation on screen.
                   <TableRow key={row.id}>
-                    <TableCell className="break-all">{row.email}</TableCell>
-                    <TableCell className="font-medium">{row.name}</TableCell>
-                    {/* Monospace + ellipsis signals "this is a truncated secret". */}
-                    <TableCell className="whitespace-nowrap font-mono text-xs">{row.prefix}…</TableCell>
-                    <TableCell className="whitespace-nowrap">{formatDateTime(row.created_at)}</TableCell>
-                    <TableCell className="whitespace-nowrap">{formatDateTime(row.last_used_at)}</TableCell>
+                    <TableCell>
+                      {/* The human name leads; the prefix is what an admin matches against a log. */}
+                      {/* A div, not a p: Badge renders a div, which a p may not contain. */}
+                      <div className="flex flex-wrap items-center gap-1.5 font-medium">
+                        {row.name}
+                        {/* Text label, never colour alone: "Active" / "Revoked". Beside
+                            the name rather than in its own column, to save width. */}
+                        <Badge variant={active ? "secondary" : "outline"}>{active ? "Active" : "Revoked"}</Badge>
+                      </div>
+                      {/* Monospace + ellipsis signals "this is a truncated secret". */}
+                      <p className="whitespace-nowrap font-mono text-xs text-muted-foreground">{row.prefix}…</p>
+                    </TableCell>
+                    {/* min-w-44 keeps a normal address on one line (break-all alone let
+                        the auto table layout squeeze it to three); break-all
+                        still wraps a pathological one instead of widening the table. */}
+                    <TableCell className="min-w-44 break-all">{row.email}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      {/* Last used is the question an admin asks; created is context under it. */}
+                      <p>{formatDateTime(row.last_used_at)}</p>
+                      <p className="text-xs text-muted-foreground">Created {formatDateTime(row.created_at)}</p>
+                    </TableCell>
                     <TableCell className="text-right tabular-nums">{formatCount(row.requests24h)}</TableCell>
                     <TableCell>
                       <RateLimitForm row={row} />
-                    </TableCell>
-                    <TableCell>
-                      {/* Text label, never colour alone: "Active" / "Revoked". */}
-                      <Badge variant={active ? "secondary" : "outline"}>{active ? "Active" : "Revoked"}</Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       {/* Nothing to revoke on a revoked key; no dead button. */}

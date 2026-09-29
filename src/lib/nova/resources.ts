@@ -292,6 +292,13 @@ import { ORG_RESOURCES, ORG_SUB_RESOURCES } from "./resources.org.ts";
 import { PROCUREMENT_RESOURCES, PROCUREMENT_SUB_RESOURCES } from "./resources.procurement.ts";
 import { BANKING_RESOURCES, BANKING_SUB_RESOURCES } from "./resources.banking.ts";
 import { PAYABLES_RESOURCES, PAYABLES_SUB_RESOURCES } from "./resources.payables.ts";
+// Tier 2 domains (docs/nova-tier2-build-contract.md), pre-wired empty on
+// 2026-09-29 so their five parallel builders never edit this shared file.
+import { SPEND_RESOURCES, SPEND_SUB_RESOURCES } from "./resources.spend.ts";
+import { GATEWAY_RESOURCES, GATEWAY_SUB_RESOURCES } from "./resources.gateway.ts";
+import { SOURCING_RESOURCES, SOURCING_SUB_RESOURCES } from "./resources.sourcing.ts";
+import { LEDGER_RESOURCES, LEDGER_SUB_RESOURCES } from "./resources.ledger.ts";
+import { DEBT_RESOURCES, DEBT_SUB_RESOURCES } from "./resources.debt.ts";
 
 // Merges maps and THROWS on a duplicate key at module load. Without the guard,
 // a later spread would silently replace an earlier resource — e.g. a domain
@@ -318,6 +325,12 @@ export const RESOURCES: Record<string, Resource> = mergeUnique("resource", [
   PROCUREMENT_RESOURCES,
   BANKING_RESOURCES,
   PAYABLES_RESOURCES,
+  // Tier 2, in run order (contract §2); order only matters for error messages.
+  SPEND_RESOURCES,
+  GATEWAY_RESOURCES,
+  SOURCING_RESOURCES,
+  DEBT_RESOURCES,
+  LEDGER_RESOURCES,
 ]);
 
 // Every child route, keyed "<parent segment>/<child segment>".
@@ -327,6 +340,12 @@ const SUB_RESOURCES: Record<string, SubResource> = mergeUnique("child route", [
   PROCUREMENT_SUB_RESOURCES,
   BANKING_SUB_RESOURCES,
   PAYABLES_SUB_RESOURCES,
+  // Tier 2 child routes, same order as the resource merge above.
+  SPEND_SUB_RESOURCES,
+  GATEWAY_SUB_RESOURCES,
+  SOURCING_SUB_RESOURCES,
+  DEBT_SUB_RESOURCES,
+  LEDGER_SUB_RESOURCES,
 ]);
 
 /*

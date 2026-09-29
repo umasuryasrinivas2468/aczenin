@@ -13,7 +13,9 @@ import type { Metadata } from "next";
 // Server-side redirect for developers who are already signed in.
 import { redirect } from "next/navigation";
 
-// The email + password form, with the brand header built in.
+// The split-screen frame (brand panel + form column), matching AI Studio's.
+import NovaAuthFrame from "@/components/nova/portal/NovaAuthFrame";
+// The email + password form that sits in the frame's right column.
 import SignInCard from "@/components/nova/portal/SignInCard";
 // Server-side session read (hashes the cookie, looks up the row).
 import { getPortalUser } from "@/lib/nova/portalAuth";
@@ -40,14 +42,9 @@ export default async function NovaSignInPage() {
   if (user) redirect("/nova-api/dashboard");
 
   return (
-    // min-h-dvh + grid centring: the card sits dead centre on a laptop and
-    // still scrolls (instead of clipping) on a short landscape phone.
-    // The faint top wash is the smebank tint the old hero used, kept for continuity.
-    <main className="grid min-h-dvh place-items-center bg-gradient-to-b from-smebank-50/60 to-background px-4 py-10">
-      {/* 24rem wide max: a comfortable form width, full-width minus gutter on phones. */}
-      <div className="w-full max-w-sm">
-        <SignInCard />
-      </div>
-    </main>
+    // The AI Studio split layout: brand panel left, this form right.
+    <NovaAuthFrame>
+      <SignInCard />
+    </NovaAuthFrame>
   );
 }

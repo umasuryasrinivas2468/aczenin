@@ -1186,29 +1186,27 @@ left join (
 ) x on x.department_id = d.id and x.category = c.category and x.m = m.m
 where m.k <= 11;
 
--- Which categories each department budgets: payroll, materials, its biggest
--- expense category, and a second one for the slice's biggest expense spender.
--- 8 departments × 3 + 1 = 25 lines × 12 months = 300 rows a slice.
+-- Which categories each department budgets: payroll, materials, and every
+-- expense category it books spend in. Budgeting only the top category left
+-- utilities, meals and 'other' (never a department's biggest) with spend but
+-- no budget line, so a team could not compare them against anything.
 create temp table bk_pair on commit drop as
 with spend as (
-  -- Annual spend per expense category, ranked inside the department.
-  select department_id, slice_no, category, sum(committed) as total,
-    row_number() over (partition by department_id order by sum(committed) desc, category) as rk
-  from bk_commit where category not in ('payroll', 'materials') group by department_id, slice_no, category
-), dept as (
-  -- The department with the most expense spend gets the extra category.
-  select department_id, slice_no, row_number() over (partition by slice_no order by sum(total) desc, department_id) as drk
-  from spend group by department_id, slice_no
+  -- Expense categories with real spend in the year; a zero line would be a budget for nothing.
+  select department_id, category
+  from bk_commit where category not in ('payroll', 'materials') group by department_id, category
+  having sum(committed) > 0
 )
 select d.id as department_id, d.slice_no, c.category
 from public.nova_departments d
 cross join lateral (
+  -- Every department has staff and may raise POs, so these two are always budgeted.
   select 'payroll' as category union all select 'materials'
-  -- Top expense category; with no expenses at all, a stable default.
-  union all select coalesce((select s.category from spend s where s.department_id = d.id and s.rk = 1 and s.total > 0),
-    (array['travel', 'office_supplies', 'software'])[1 + floor(pg_temp.h(d.id || 'cat') * 3)::int])
-  union all select s.category from spend s join dept x on x.department_id = s.department_id
-    where s.department_id = d.id and x.drk = 1 and s.rk = 2
+  -- One line per expense category the department actually spends in.
+  union all select s.category from spend s where s.department_id = d.id
+  -- With no expenses at all, one stable default line, as before the fix.
+  union all select (array['travel', 'office_supplies', 'software'])[1 + floor(pg_temp.h(d.id || 'cat') * 3)::int]
+    where not exists (select 1 from spend s where s.department_id = d.id)
 ) c;
 
 -- A18 targets per slice: Y overruns via commitments (the department with the
@@ -1327,6 +1325,9 @@ select distinct on (b.slice_no) b.slice_no, 'A18', 'budgets', array[b.id], 'A18-
 from public.nova_budgets b
 join bk_a18 a on a.slice_no = b.slice_no and b.department_id not in (a.dep_x, a.dep_y)
 where b.committed > b.amount
+  -- The note calls it a one-off purchase: a bill, a meal or misc spend is not a
+  -- bulk buy, and their small lines would otherwise win on ratio alone.
+  and b.category not in ('utilities', 'meals', 'other')
   and (select sum(b2.committed) from public.nova_budgets b2 where b2.department_id = b.department_id)
     < (select sum(b2.amount) from public.nova_budgets b2 where b2.department_id = b.department_id)
 order by b.slice_no, b.committed / b.amount desc, b.id;

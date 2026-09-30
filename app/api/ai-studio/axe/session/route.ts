@@ -44,8 +44,11 @@ export async function POST(request: Request): Promise<NextResponse> {
   if (!adminIpAllowed(clientIp(request.headers))) return new NextResponse("Not Found", { status: 404 });
   if (!isSameOriginJson(request)) return FORBIDDEN_ORIGIN();
 
-  const ipHash = ipHashOf(request);
   try {
+    // Inside the try: ipHashOf throws when AI_STUDIO_KEY_PEPPER is unset, and
+    // outside it that became an unhandled 500 the form showed as "Something
+    // went wrong" instead of the logged, explained 503 below.
+    const ipHash = ipHashOf(request);
     const { blocked, global } = await adminLoginBlocked(ipHash);
     // Refused attempts are not recorded: the lock already holds, and a write
     // per refused request would let a flood grow the ledger without bound.

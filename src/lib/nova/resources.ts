@@ -300,6 +300,12 @@ import { SOURCING_RESOURCES, SOURCING_SUB_RESOURCES } from "./resources.sourcing
 import { LEDGER_RESOURCES, LEDGER_SUB_RESOURCES } from "./resources.ledger.ts";
 import { DEBT_RESOURCES, DEBT_SUB_RESOURCES } from "./resources.debt.ts";
 
+// ponytail: ledger (pack 012) is hidden because its tables are not loaded in the
+// live Nova DB. Off here, its routes fall through to the normal 404 unknown-resource
+// and the docs generator (which reads RESOURCES) omits them too — one switch for both.
+// To re-enable: apply 012_ledger.sql, flip to true, run scripts/nova-docs/build.mjs.
+const LEDGER_LIVE = false;
+
 // Merges maps and THROWS on a duplicate key at module load. Without the guard,
 // a later spread would silently replace an earlier resource — e.g. a domain
 // file redefining "invoices" — and the first sign would be wrong API output.
@@ -330,7 +336,8 @@ export const RESOURCES: Record<string, Resource> = mergeUnique("resource", [
   GATEWAY_RESOURCES,
   SOURCING_RESOURCES,
   DEBT_RESOURCES,
-  LEDGER_RESOURCES,
+  // Empty map while hidden, so the keys are simply absent (not a stub that 503s).
+  LEDGER_LIVE ? LEDGER_RESOURCES : {},
 ]);
 
 // Every child route, keyed "<parent segment>/<child segment>".
@@ -345,7 +352,8 @@ const SUB_RESOURCES: Record<string, SubResource> = mergeUnique("child route", [
   GATEWAY_SUB_RESOURCES,
   SOURCING_SUB_RESOURCES,
   DEBT_SUB_RESOURCES,
-  LEDGER_SUB_RESOURCES,
+  // Same switch, so /accounting-periods/{id}/journal-entries cannot outlive its parent.
+  LEDGER_LIVE ? LEDGER_SUB_RESOURCES : {},
 ]);
 
 /*

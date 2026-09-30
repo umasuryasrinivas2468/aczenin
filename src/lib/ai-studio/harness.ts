@@ -50,7 +50,9 @@ export function harnessConfig(): HarnessConfig | null {
 
   const common = {
     authHeader: (process.env.AI_HARNESS_AUTH_HEADER || "authorization").toLowerCase(),
-    authScheme: process.env.AI_HARNESS_AUTH_SCHEME ?? "Bearer",
+    // "none" means send the bare key (the harness wants `x-api-key: <key>`) —
+    // Vercel refuses empty values, so an empty string alone can't express it.
+    authScheme: process.env.AI_HARNESS_AUTH_SCHEME?.trim().toLowerCase() === "none" ? "" : (process.env.AI_HARNESS_AUTH_SCHEME ?? "Bearer"),
     allowedPaths,
     maxTokensField: process.env.AI_HARNESS_MAX_TOKENS_FIELD || "max_tokens",
     model: process.env.AI_HARNESS_MODEL?.trim() || null,

@@ -9,33 +9,33 @@ import { getUserSession } from "@/lib/ai-studio/session";
 export const runtime = "nodejs";
 export const metadata: Metadata = { title: "Quickstart" };
 
-const BASE = "https://aczen.in/api/ai/v1";
+// www, not the bare domain: aczen.in 308-redirects to www and HTTP clients
+// drop the Authorization header on a host change, so every call would 401.
+const BASE = "https://www.aczen.in/api/ai/v1";
 
+// The upstream harness serves one route, POST /v1/ask {question, mode}; the
+// gateway only forwards AI_HARNESS_ALLOWED_PATHS (set to "ask"), so these
+// samples must match it rather than the OpenAI chat-completions shape.
 const SAMPLES = [
   {
     label: "cURL",
-    code: `curl ${BASE}/chat/completions \\
+    code: `curl ${BASE}/ask \\
   -H "Authorization: Bearer $ACZEN_API_KEY" \\
   -H "Content-Type: application/json" \\
-  -d '{
-    "messages": [
-      { "role": "user", "content": "Summarise GST e-invoicing rules in 3 bullets." }
-    ],
-    "max_tokens": 512
-  }'`,
+  -d '{ "question": "Summarise GST e-invoicing rules in 3 bullets.", "mode": "short" }'`,
   },
   {
     label: "JavaScript",
     code: `// Server-side only (Node 18+). Never ship your key to a browser.
-const response = await fetch("${BASE}/chat/completions", {
+const response = await fetch("${BASE}/ask", {
   method: "POST",
   headers: {
     Authorization: \`Bearer \${process.env.ACZEN_API_KEY}\`,
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    messages: [{ role: "user", content: "Summarise GST e-invoicing rules in 3 bullets." }],
-    max_tokens: 512,
+    question: "Summarise GST e-invoicing rules in 3 bullets.",
+    mode: "short", // or "detailed"
   }),
 });
 
@@ -45,35 +45,23 @@ if (!response.ok) {
   throw new Error(\`\${response.status} \${error.code}: \${error.message}\`);
 }
 const data = await response.json();
-console.log(data.choices[0].message.content);`,
+console.log(data.answer); // data.status is "answered" when the model replied`,
   },
   {
     label: "Python",
     code: `import os, requests
 
 resp = requests.post(
-    "${BASE}/chat/completions",
+    "${BASE}/ask",
     headers={"Authorization": f"Bearer {os.environ['ACZEN_API_KEY']}"},
-    json={
-        "messages": [{"role": "user", "content": "Summarise GST e-invoicing rules in 3 bullets."}],
-        "max_tokens": 512,
-    },
+    json={"question": "Summarise GST e-invoicing rules in 3 bullets.", "mode": "short"},
     timeout=60,
 )
 if resp.status_code == 429:
     retry_after = int(resp.headers.get("Retry-After", "1"))
     # back off and retry after retry_after seconds
 resp.raise_for_status()
-print(resp.json()["choices"][0]["message"]["content"])`,
-  },
-  {
-    label: "Streaming",
-    code: `curl -N ${BASE}/chat/completions \\
-  -H "Authorization: Bearer $ACZEN_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{ "stream": true, "messages": [{ "role": "user", "content": "Hello" }] }'
-
-# Server-sent events: each "data:" line is a JSON chunk; the stream ends with "data: [DONE]".`,
+print(resp.json()["answer"])`,
   },
 ];
 
@@ -109,7 +97,7 @@ export default async function QuickstartPage() {
         <PageHeader
           eyebrow="Docs"
           title="Quickstart"
-          description="Aczen AI speaks the familiar chat-completions format. Retrieval, the system prompt, prompt-injection defence and input/output guardrails run on our side of every call."
+          description="Send a question, get a grounded answer. Retrieval, the system prompt, prompt-injection defence and input/output guardrails run on our side of every call."
         />
       </Reveal>
 
@@ -117,7 +105,7 @@ export default async function QuickstartPage() {
         {[
           ["1", "Create a key", "On the API keys page. Copy it once, into your server's secret store."],
           ["2", "Set ACZEN_API_KEY", "Read it from the environment. Never hard-code or commit it."],
-          ["3", "Call the API", `POST ${BASE}/chat/completions with a Bearer token.`],
+          ["3", "Call the API", `POST ${BASE}/ask with a Bearer token.`],
         ].map(([step, title, body]) => (
           <div key={step} className="rounded-2xl border border-slate-200/80 bg-white p-5">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-smeorange-50 text-sm font-semibold text-smeorange-700 ring-1 ring-inset ring-smeorange-200">

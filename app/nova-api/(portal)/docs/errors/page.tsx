@@ -39,6 +39,8 @@ const ROUTE_ERRORS: ErrorRow[] = [
   { status: 405, type: "invalid_request", code: "method_not_allowed", message: "The Nova API is read-only. Allowed methods: GET, HEAD, OPTIONS.", when: "Any write verb (POST, PUT, PATCH, DELETE).", retry: false },
   { status: 429, type: "rate_limit_error", code: "rate_limit_exceeded", message: "Rate limit of 120 requests per minute exceeded.", when: "Over your key's per-minute limit.", retry: true },
   { status: 502, type: "api_error", code: "upstream_error", message: "The API is temporarily unavailable.", when: "The Nova database did not answer.", retry: true },
+  // Permanent until the dataset ships that view, hence retry: false.
+  { status: 503, type: "api_error", code: "resource_not_provisioned", message: "This resource is not available in the sandbox dataset yet.", when: "The route exists but its data has not been loaded into the sandbox yet.", retry: false },
 ];
 
 // Status order, the way readers look codes up.

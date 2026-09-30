@@ -79,6 +79,13 @@ export const STATUS_CODES: CodeInfo[] = [
     meaning: "Our database could not be reached or failed. Not caused by your request.",
     fix: "Retry after a short back-off. Quote the request id to support if it persists.",
   },
+  // Distinct from 502 so the dashboard tells users NOT to retry this one.
+  {
+    status: 503,
+    code: "resource_not_provisioned",
+    meaning: "The route exists, but its data is not in the sandbox dataset yet.",
+    fix: "Do not retry; the endpoint starts working once its data is loaded.",
+  },
 ];
 
 // Error code → fix, for the "top failure reasons" list.

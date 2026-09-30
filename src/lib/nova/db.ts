@@ -28,18 +28,37 @@ const NOVA_URL = process.env.NOVA_SUPABASE_URL;
 const NOVA_KEY = process.env.NOVA_SUPABASE_SERVICE_ROLE_KEY;
 
 // Thrown for any non-2xx from PostgREST, carrying the status so /v1 can map
-// it to 502 upstream_error without string-matching messages.
+// it to 502 upstream_error (or 503 resource_not_provisioned, via its code)
+// without string-matching messages.
 export class NovaDbError extends Error {
   // The HTTP status PostgREST returned (0 when the fetch itself failed).
   status: number;
-  constructor(message: string, status: number) {
+  // PostgREST/Postgres error code from the body (e.g. "42P01"), or null. Kept so
+  // callers can tell a permanent condition from a transient one without
+  // string-matching the message.
+  code: string | null;
+  constructor(message: string, status: number, code: string | null = null) {
     // Standard Error message, so logs show what failed.
     super(message);
     // Named so instanceof-free checks (error.name) also work across bundles.
     this.name = "NovaDbError";
     // Kept for the caller's status mapping.
     this.status = status;
+    // Kept for isNotProvisioned below.
+    this.code = code;
   }
+}
+
+// Codes meaning "the relation or function does not exist": 42P01 is Postgres
+// undefined_table; PGRST205/PGRST202 are PostgREST's schema-cache misses for a
+// table/view and a function. Retrying cannot fix any of them.
+const NOT_PROVISIONED_CODES = new Set(["42P01", "PGRST205", "PGRST202"]);
+
+// True when a route is valid but its backing view has not been created yet, so
+// /v1 can answer a non-retryable 503 instead of a 502 clients retry in a loop.
+export function isNotProvisioned(error: unknown): boolean {
+  // Only our own error carries a trustworthy code.
+  return error instanceof NovaDbError && error.code !== null && NOT_PROVISIONED_CODES.has(error.code);
 }
 
 // Builds the REST URL, failing loudly when the project is not configured.
@@ -78,7 +97,19 @@ async function call(url: string, init: RequestInit): Promise<Response> {
   }
   // PostgREST puts the reason in the body; include it for the server log only.
   if (!response.ok) {
-    throw new NovaDbError(`Nova DB ${response.status}: ${await response.text()}`, response.status);
+    // Read once: the body is both the log text and the source of the code.
+    const body = await response.text();
+    // PostgREST errors are JSON with a `code`; a non-JSON body (gateway HTML)
+    // just yields no code, which keeps the default 502 mapping.
+    let code: string | null = null;
+    try {
+      // Only a string code is meaningful; anything else stays null.
+      const parsed = JSON.parse(body) as { code?: unknown };
+      code = typeof parsed?.code === "string" ? parsed.code : null;
+    } catch {
+      // Not JSON: nothing to extract.
+    }
+    throw new NovaDbError(`Nova DB ${response.status}: ${body}`, response.status, code);
   }
   return response;
 }

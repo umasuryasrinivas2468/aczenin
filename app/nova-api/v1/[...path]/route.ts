@@ -30,7 +30,8 @@ import { randomUUID } from "node:crypto";
 // novaRpc is used for exactly two functions: authenticate-and-meter (inside
 // apiKeys.ts) and nova_log_request below — an append-only audit log, never
 // business data, so the read-only guarantee on the dataset still holds.
-import { novaRead, novaRpc, NovaDbError } from "@/lib/nova/db";
+// isNotProvisioned separates "view not created yet" from a transient outage.
+import { novaRead, novaRpc, NovaDbError, isNotProvisioned } from "@/lib/nova/db";
 // Bearer parsing + authenticate-and-meter.
 import { authenticateApiKey, type AuthenticatedKey } from "@/lib/nova/apiKeys";
 // Registry and the untrusted-query translator.
@@ -293,6 +294,12 @@ async function handle(request: Request, path: string[], ctx: CallContext): Promi
     if (error instanceof NovaDbError) {
       // Status kept in the log for diagnosis.
       console.error(`[nova-api/v1] ${requestId} read failed (${error.status}):`, error.message);
+      // Valid route, backing view not created yet: 503 with its own code (not
+      // 404, the path exists; not 502, which clients read as "retry now"), and
+      // no Retry-After because no wait will make it appear.
+      if (isNotProvisioned(error)) {
+        return jsonError(503, "resource_not_provisioned", "This resource is not available in the sandbox dataset yet.", requestId, headers);
+      }
       return jsonError(502, "upstream_error", "The API is temporarily unavailable.", requestId, headers);
     }
     // A bug of ours: still no internals to the client, still logged.

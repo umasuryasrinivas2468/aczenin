@@ -18,6 +18,14 @@ Each claim below carries a tag:
 - That code comes from the `harnessConfig()` gate ([gateway.ts:222-226](../src/lib/ai-studio/gateway.ts#L222-L226)). It runs before the key check.
 - So `AI_HARNESS_URL` / `AI_HARNESS_API_KEY` are **not set in Vercel production**. The kill switch would have returned `service_paused` instead.
 
+**Update 15:20 IST: root cause of the login 503 found.**
+- VERIFIED: `POST /api/ai-studio/auth/login` returns 503 even for a made-up email, so the failure comes before any user lookup.
+- [vercel-env-upload.env](../vercel-env-upload.env) has only the two Supabase variables, and they point at the correct project. There are no `AI_STUDIO_*` or `AI_HARNESS_*` variables.
+- So `hashEmail()` throws `AI_STUDIO_KEY_PEPPER is not set`, and the route turns that into the 503.
+- `bb6efcd` (pushed) adds `AI_HARNESS_AUTH_SCHEME=none`, because the harness wants a bare `x-api-key`. It also moves the quickstart to `POST /ask {question, mode}` on `www`.
+- Harness wiring follows `aczen_slm` Q-14: `AI_HARNESS_URL=https://aczen-finance-api-114219376928.asia-south1.run.app/v1`, `ALLOWED_PATHS=ask`, `AUTH_HEADER=x-api-key`, `AUTH_SCHEME=none`, and an org key from the harness `API_KEYS` secret.
+- Streaming is gone from the quickstart: the harness doesn't stream.
+
 ## Progress by area
 
 | Area | State | Evidence |

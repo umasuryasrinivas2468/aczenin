@@ -25,20 +25,18 @@ const DEVNOVATE_URL = "https://devnovate.co/event/finthon-2o";
 
 /* The payment QR, as a file in public/. Rendered through next/image for the
    automatic sizing and lazy behaviour; it is a static asset, not user content. */
-const QR_IMAGE_SRC = "/images/finathon/payment-qr.png";
+const QR_IMAGE_SRC = "/images/finathon/payment-qr.jpg";
 
 /* Shown beside the QR. A figure the person can check against what their app
    offers to send is the difference between a correct payment and a support
    thread about a wrong amount. */
-const AMOUNT_LABEL = "₹499 per team";
+const AMOUNT_LABEL = "₹699 per team";
 
-type FieldName = "teamLeadName" | "rollNumber" | "email" | "phone" | "utr";
+type FieldName = "teamLeadName" | "rollNumber" | "utr";
 
 export default function RegistrationForm() {
   const [teamLeadName, setTeamLeadName] = useState("");
   const [rollNumber, setRollNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [utr, setUtr] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
@@ -54,8 +52,6 @@ export default function RegistrationForm() {
   const refs = {
     teamLeadName: useRef<HTMLInputElement>(null),
     rollNumber: useRef<HTMLInputElement>(null),
-    email: useRef<HTMLInputElement>(null),
-    phone: useRef<HTMLInputElement>(null),
     utr: useRef<HTMLInputElement>(null),
   };
 
@@ -74,7 +70,7 @@ export default function RegistrationForm() {
       const response = await fetch("/api/finathon/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ teamLeadName, rollNumber, email, phone, utr }),
+        body: JSON.stringify({ teamLeadName, rollNumber, utr }),
       });
 
       const body = (await response.json().catch(() => null)) as
@@ -82,24 +78,7 @@ export default function RegistrationForm() {
         | null;
 
       if (response.ok && body?.ok) {
-        /*
-          Saved, so hand the team straight on to Devnovate.
-
-          The success panel is still rendered underneath rather than skipped,
-          for three cases the redirect does not cover: a browser that blocks
-          the navigation, a connection that drops between the save and the
-          hop, and the person who presses Back. Any of those without a panel
-          would leave someone who has just paid staring at a form again, with
-          no confirmation their UTR was recorded.
-
-          setSubmitted BEFORE the navigation, so the panel is already the
-          committed state if the browser comes back to this page.
-        */
         setSubmitted(true);
-        // assign(), not replace(): Back should return here, to the confirmation
-        // that the payment was recorded, rather than skipping past it to the
-        // empty form.
-        window.location.assign(DEVNOVATE_URL);
         return;
       }
 
@@ -137,15 +116,16 @@ export default function RegistrationForm() {
         <p className="fin-meta">Registration recorded</p>
         <h2 className="fin-serif fin-h2 mt-3">You&rsquo;re in, {teamLeadName.split(" ")[0]}.</h2>
         <p className="fin-body mt-4">
-          We have your details and your payment reference. Taking you to Devnovate now, where
-          problem statements and submissions are handled — if nothing happens, use the button
-          below.
+          We have your payment reference. One last step: complete your team&rsquo;s entry on
+          Devnovate, which is where problem statements and submissions are handled.
         </p>
 
-        {/* No target="_blank". The redirect above navigates this tab, so the
-            button is the same journey by hand rather than a second one in a
-            new tab. */}
-        <a className="fin-cta mt-8" href={DEVNOVATE_URL} rel="noreferrer noopener">
+        <a
+          className="fin-cta mt-8"
+          href={DEVNOVATE_URL}
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           Continue on Devnovate
         </a>
 
@@ -193,32 +173,6 @@ export default function RegistrationForm() {
           // compares case-insensitively, so this is purely so the person sees
           // the value in the form their college writes it.
           className="uppercase"
-          required
-        />
-
-        <Field
-          id="email"
-          label="Email"
-          hint="Where the shortlist and offer letters go. Use one you check."
-          value={email}
-          onChange={setEmail}
-          inputRef={refs.email}
-          invalid={errorField === "email"}
-          type="email"
-          autoComplete="email"
-          required
-        />
-
-        <Field
-          id="phone"
-          label="Phone"
-          hint="For day-of logistics — judging calls, venue changes."
-          value={phone}
-          onChange={setPhone}
-          inputRef={refs.phone}
-          invalid={errorField === "phone"}
-          type="tel"
-          autoComplete="tel"
           required
         />
 
@@ -306,20 +260,15 @@ export default function RegistrationForm() {
         // that cannot possibly succeed should not spend one of the five the
         // rate limiter allows this network in an hour.
         disabled={
-          submitting ||
-          !teamLeadName.trim() ||
-          !rollNumber.trim() ||
-          !email.trim() ||
-          !phone.trim() ||
-          !utr.trim()
+          submitting || !teamLeadName.trim() || !rollNumber.trim() || !utr.trim()
         }
       >
         {submitting ? "Saving…" : "Register now"}
       </button>
 
       <p className="fin-meta mt-6">
-        We store your name, roll number, email, phone and UTR to confirm your entry, reach you
-        about the event, and reconcile payment. Nothing else.
+        We store your name, roll number and UTR to confirm your entry and reconcile payment.
+        Nothing else.
       </p>
     </form>
   );
@@ -343,10 +292,6 @@ function Field({
   invalid,
   autoComplete,
   inputMode,
-  // "email" and "tel" are what make a phone show the right keyboard and let the
-  // browser offer a saved address. Defaulted to "text" rather than made
-  // required, because most fields here genuinely are text.
-  type = "text",
   className = "",
   required,
 }: {
@@ -359,7 +304,6 @@ function Field({
   invalid: boolean;
   autoComplete: string;
   inputMode?: "numeric" | "text";
-  type?: "text" | "email" | "tel";
   className?: string;
   required?: boolean;
 }) {
@@ -377,7 +321,6 @@ function Field({
         <input
           id={id}
           ref={inputRef}
-          type={type}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           autoComplete={autoComplete}

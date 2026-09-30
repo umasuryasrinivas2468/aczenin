@@ -147,7 +147,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     // Set on the response rather than through cookies() from next/headers: in a
     // Route Handler this is the form that reliably attaches Set-Cookie to the
     // outgoing response.
-    response.cookies.set(AXE_COOKIE_NAME, mintSessionCookie(), AXE_COOKIE_OPTIONS);
+    response.cookies.set(AXE_COOKIE_NAME, mintSessionCookie("axe"), AXE_COOKIE_OPTIONS);
     return response;
   } catch (error) {
     // No error detail reaches the caller. On an auth endpoint the error text is

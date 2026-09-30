@@ -39,3 +39,11 @@ next-env.d.ts
 studio/
 # Playwright MCP screenshot/debug artifacts
 .playwright-mcp/
+migrate-data-payload.sql
+vercel-env-upload.env
+
+# TypeScript incremental build cache — machine-local, never shared
+tsconfig.tsbuildinfo
+
+# rendered email previews (scripts/preview-finathon-mail.mjs)
+.mail-preview/

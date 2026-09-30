@@ -389,10 +389,17 @@ When all 12 checks pass, put `-- STATUS: VERIFIED <YYYY-MM-DD>` on **line 1** of
 
 ## 9. Deviations as built
 
-*Empty until builders report.* Record here, in the Tier 1 §9 format (`# | Contract said | As built | Why / consequence`), every place a built file differs from §1–§8. The SQL files are the source of truth for these points.
+*Filled as builders report.* Record here, in the Tier 1 §9 format (`# | Contract said | As built | Why / consequence`), every place a built file differs from §1–§8. The SQL files are the source of truth for these points.
 
 | # | Contract said | As built | Why / consequence |
 |---|---|---|---|
+| 2b-1 | Cards go to "G4+ staff and frequent travellers" (§4.1). | Cards go to G5+ staff plus 1–3 G3–G4 Sales/Ops travellers per slice. | This keeps the programme within 15–20 cards per slice. The SQL comment says so. |
+| 2b-2 | §6 gives no decoy count for A16. | Each slice has 5 decoys: 2 declined blocked-MCC attempts, 2 night-time airline charges, and 1 recurring charge at 95% of the limit. | The A16(c) decoy is one ground-truth row that lists all its monthly charges. |
+| 2b-3 | `category` is "the claim category or the card MCC group". | The two card-programme rules use `category = 'all'`. | They cover the whole card, not one MCC group. |
+| 2b-4 | `decline_reason` lists `over_monthly_limit`. | No row uses it. | `monthly_limit` is 1.25× the holder's heaviest month, so no approved month exceeds it. The value stays valid in the CHECK and the registry. |
+| 2b-5 | "Hours cluster from 09:00 to 21:00 IST." | Everyday spend runs 07:00–22:59 IST, peaking mid-afternoon. Subscription charges post 06:00–10:00 IST. | 07:00–23:00 is also the window the retail and entertainment policies allow. |
+
+Deviations for 2a, 2d and 2e are not yet recorded here: their builders' reports were lost when those sessions ended; the SQL files' comments are the source of truth until they are.
 
 ## 10. Known gaps and open questions
 

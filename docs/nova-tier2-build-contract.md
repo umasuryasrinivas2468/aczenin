@@ -398,6 +398,12 @@ When all 12 checks pass, put `-- STATUS: VERIFIED <YYYY-MM-DD>` on **line 1** of
 | 2b-3 | `category` is "the claim category or the card MCC group". | The two card-programme rules use `category = 'all'`. | They cover the whole card, not one MCC group. |
 | 2b-4 | `decline_reason` lists `over_monthly_limit`. | No row uses it. | `monthly_limit` is 1.25× the holder's heaviest month, so no approved month exceeds it. The value stays valid in the CHECK and the registry. |
 | 2b-5 | "Hours cluster from 09:00 to 21:00 IST." | Everyday spend runs 07:00–22:59 IST, peaking mid-afternoon. Subscription charges post 06:00–10:00 IST. | 07:00–23:00 is also the window the retail and entertainment policies allow. |
+| 2c-1 | Document-level entries for the last 7 periods (§4.5). | Last 4 periods (2026-06 → 2026-09); earlier months are monthly_summary entries. | About 200 documents a month would push each slice past 1,100 entries and the 55 MB budget at 7 months; §4.5 allows cutting to 3. |
+| 2c-2 | §6 gives no decoy count for A19. | 3 per slice, one per pattern: a round-off decoy, a (b) decoy listing [journal, bill], and an approved post-close audit adjustment. | One decoy per pattern, as §6 lists them. |
+| 2c-3 | Card statement = one entry per card per month. | Approved card spend only, dated at month end (or at as_of for the open month). A `cash` merchant-group withdrawal debits 1000 cash on hand, not an expense. | Declined transactions never moved money, and a cash withdrawal is not spend. |
+| 2c-4 | Settlement journal (§4.5). | Lines: 1400 net, 8000 fees + GST, 4110 refunds + chargebacks − adjustments, 4100 gross (credit). | Posts the reported components, so A11 leakage shows only when a team recomputes them from the gateway transactions, as §4.2 intends. |
+| 2c-5 | Reimbursed-claim batches per department per payroll. | source_id is the payroll run (`prl_`); department_id is on the cost lines. | A claim batch has no id of its own. |
+| 2c-6 | (observation, no 012 change) | 16 of 80 A19(b) decoys sit on bills that also carry a correctly capitalised line of ₹10,000 or more. | The decoy's below-threshold line is still expensed correctly, so the decoy stays valid. |
 
 Deviations for 2a, 2d and 2e are not yet recorded here: their builders' reports were lost when those sessions ended; the SQL files' comments are the source of truth until they are.
 

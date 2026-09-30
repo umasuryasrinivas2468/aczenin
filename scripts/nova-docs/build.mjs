@@ -37,15 +37,12 @@ register(
 
 // The live registry and its child-route lookup; imported after register() so the alias resolves.
 const { RESOURCES, childRoutesOf, DEFAULT_LIMIT, MAX_LIMIT } = await import(pathToFileURL(path.join(ROOT, "src/lib/nova/resources.ts")).href);
-// Ledger is registered in code but its migration (012) is not live yet; skip it so no reader codes against a 502.
-const { LEDGER_RESOURCES } = await import(pathToFileURL(path.join(ROOT, "src/lib/nova/resources.ledger.ts")).href);
 // Per-resource prose and the shared constants the portal pages already use.
 const { BASE_URL, SAMPLE_KEY, resourceDoc } = await import(pathToFileURL(path.join(ROOT, "src/components/nova/docs/content.ts")).href);
 
-// ponytail: hard skip of ledger; delete this line once 012_ledger.sql is applied to the live DB.
-const PENDING = new Set(Object.keys(LEDGER_RESOURCES));
-// Documented resources, in registry order (the same order as the portal sidebar).
-const SLUGS = Object.keys(RESOURCES).filter((slug) => !PENDING.has(slug));
+// Every registered resource, in registry order (the portal sidebar's order). No skip list: a
+// resource whose data is not loaded yet answers 503 resource_not_provisioned, documented in Section 6.
+const SLUGS = Object.keys(RESOURCES);
 // Build date, stamped on the cover so a reader can tell a stale copy.
 const TODAY = new Date().toISOString().slice(0, 10);
 
@@ -159,7 +156,7 @@ Follow these exactly when generating code that calls Nova. Each rule prevents a 
 10. **Dates are ${c("YYYY-MM-DD")}.** Ranges: ${c("invoice_date.gte=2026-01-01&invoice_date.lte=2026-03-31")}. Booleans are literal ${c("true")} / ${c("false")}. Numbers are plain decimals (no ${c("1e5")}).
 11. **Sort** with ${c("sort=<column>&order=asc|desc")}; only the listed sort columns work. Default order is newest first.
 12. **Handle errors by ${c("error.code")}, not by message text.** Envelope: ${c("{ error: { type, code, message, details? }, request_id }")}. Log ${c("request_id")}.
-13. **On ${c("429")} wait ${c("Retry-After")} seconds, then retry.** Retry ${c("502")} with exponential backoff (e.g. 1s, 2s, 4s, max 3 tries). Never retry ${c("400")}, ${c("401")}, ${c("404")} or ${c("405")} — they will fail the same way.
+13. **On ${c("429")} wait ${c("Retry-After")} seconds, then retry.** Retry ${c("502")} with exponential backoff (e.g. 1s, 2s, 4s, max 3 tries). Never retry ${c("400")}, ${c("401")}, ${c("404")}, ${c("405")} or ${c("503 resource_not_provisioned")} — they will fail the same way.
 14. **Default limit is 120 requests/minute per key.** Read ${c("RateLimit-Remaining")} and slow down near 0. Prefer one ${c("limit=200")} page over many small calls.
 15. **${c("404 resource_not_found")} means "not visible to you"** — a missing id, a malformed id, and another team's id all look the same. Treat it as absent.
 16. **Money:** amounts are INR JSON numbers. Sum in integer paise (${c("Math.round(x * 100)")}) or a decimal library, not raw floats. GST is split CGST + SGST (intra-state) or IGST (inter-state); the other side is ${c("0")}.
@@ -299,6 +296,7 @@ Every error uses one envelope:
 | 405 | invalid_request | ${c("method_not_allowed")} | Any write verb | No |
 | 429 | rate_limit_error | ${c("rate_limit_exceeded")} | Over the per-minute limit | Yes, after ${c("Retry-After")} |
 | 502 | api_error | ${c("upstream_error")} | Temporary upstream problem | Yes, with backoff |
+| 503 | api_error | ${c("resource_not_provisioned")} | Resource exists but its data isn't loaded yet | No — it will not appear by retrying |
 
 Error messages never contain database text. Quote the ${c("request_id")} when asking for help. Your own calls and their errors are listed on the **Usage** page of the portal.
 

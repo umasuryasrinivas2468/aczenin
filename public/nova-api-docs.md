@@ -17,7 +17,7 @@ This document is written for two readers: **developers** integrating Nova, and *
 7. Rate limits
 8. Your team's data
 9. Code examples
-10. Resource reference (42 resources)
+10. Resource reference (45 resources)
 
 ---
 
@@ -60,7 +60,7 @@ Follow these exactly when generating code that calls Nova. Each rule prevents a 
 10. **Dates are `YYYY-MM-DD`.** Ranges: `invoice_date.gte=2026-01-01&invoice_date.lte=2026-03-31`. Booleans are literal `true` / `false`. Numbers are plain decimals (no `1e5`).
 11. **Sort** with `sort=<column>&order=asc|desc`; only the listed sort columns work. Default order is newest first.
 12. **Handle errors by `error.code`, not by message text.** Envelope: `{ error: { type, code, message, details? }, request_id }`. Log `request_id`.
-13. **On `429` wait `Retry-After` seconds, then retry.** Retry `502` with exponential backoff (e.g. 1s, 2s, 4s, max 3 tries). Never retry `400`, `401`, `404` or `405` — they will fail the same way.
+13. **On `429` wait `Retry-After` seconds, then retry.** Retry `502` with exponential backoff (e.g. 1s, 2s, 4s, max 3 tries). Never retry `400`, `401`, `404`, `405` or `503 resource_not_provisioned` — they will fail the same way.
 14. **Default limit is 120 requests/minute per key.** Read `RateLimit-Remaining` and slow down near 0. Prefer one `limit=200` page over many small calls.
 15. **`404 resource_not_found` means "not visible to you"** — a missing id, a malformed id, and another team's id all look the same. Treat it as absent.
 16. **Money:** amounts are INR JSON numbers. Sum in integer paise (`Math.round(x * 100)`) or a decimal library, not raw floats. GST is split CGST + SGST (intra-state) or IGST (inter-state); the other side is `0`.
@@ -200,6 +200,7 @@ Every error uses one envelope:
 | 405 | invalid_request | `method_not_allowed` | Any write verb | No |
 | 429 | rate_limit_error | `rate_limit_exceeded` | Over the per-minute limit | Yes, after `Retry-After` |
 | 502 | api_error | `upstream_error` | Temporary upstream problem | Yes, with backoff |
+| 503 | api_error | `resource_not_provisioned` | Resource exists but its data isn't loaded yet | No — it will not appear by retrying |
 
 Error messages never contain database text. Quote the `request_id` when asking for help. Your own calls and their errors are listed on the **Usage** page of the portal.
 
@@ -358,6 +359,9 @@ All paths are relative to `https://www.aczen.in/nova-api/v1`. Every list endpoin
 | Source records | `/source-records` | `source_record` |
 | Loans | `/loans` | `loan` |
 | Loan schedules | `/loan-schedules` | `loan_schedule` |
+| Chart of accounts | `/chart-of-accounts` | `chart_of_account` |
+| Accounting periods | `/accounting-periods` | `accounting_period` |
+| Journal entries | `/journal-entries` | `journal_entry` |
 
 ### Invoices
 
@@ -1415,6 +1419,77 @@ The loan schedules in your team's books.
 | `bank_transaction_id` | string | `eq` `in` |
 
 **Sort by:** `due_date`, `instalment_no` — default `due_date`, newest first.
+
+### Chart of accounts
+
+The chart of accounts in your team's books.
+
+| Endpoint | Returns |
+|---|---|
+| `GET /chart-of-accounts` | Paged list of `chart_of_account` objects |
+| `GET /chart-of-accounts/{id}` | One `chart_of_account`, or 404 |
+
+**Filters**
+
+| Field | Type | Operators |
+|---|---|---|
+| `account_code` | string | `eq` `in` |
+| `parent_code` | string | `eq` `in` |
+| `account_type` | enum: `asset` `liability` `equity` `income` `expense` | `eq` `in` |
+| `sub_type` | enum: `bank` `cash` `receivable` `inventory` `fixed_asset` `accumulated_depreciation` `tax_asset` `clearing` `payable` `tax_payable` `loan` `equity` `revenue` `other_income` `cogs` `opex` `payroll` `finance_cost` `depreciation` | `eq` `in` |
+| `is_control` | boolean | `eq` |
+| `bank_account_id` | string | `eq` `in` |
+| `name` | string | `eq` `in` `ilike` |
+
+**Sort by:** `account_code` — default `account_code`, newest first.
+
+### Accounting periods
+
+The accounting periods in your team's books.
+
+| Endpoint | Returns |
+|---|---|
+| `GET /accounting-periods` | Paged list of `accounting_period` objects |
+| `GET /accounting-periods/{id}` | One `accounting_period`, or 404 |
+| `GET /accounting-periods/{id}/journal-entries` | Paged list of `journal_entry` for that accounting_period |
+
+**Filters**
+
+| Field | Type | Operators |
+|---|---|---|
+| `period` | string | `eq` `in` |
+| `status` | enum: `open` `closed` | `eq` `in` |
+| `start_date` | date (YYYY-MM-DD) | `eq` `gte` `lte` `gt` `lt` |
+| `closed_at` | timestamp (YYYY-MM-DD or ISO 8601 with Z/offset) | `eq` `gte` `lte` `gt` `lt` |
+
+**Sort by:** `start_date`, `period` — default `start_date`, newest first.
+
+### Journal entries
+
+The journal entries in your team's books.
+
+| Endpoint | Returns |
+|---|---|
+| `GET /journal-entries` | Paged list of `journal_entry` objects |
+| `GET /journal-entries/{id}` | One `journal_entry`, or 404 |
+
+**Filters**
+
+| Field | Type | Operators |
+|---|---|---|
+| `period_id` | string | `eq` `in` |
+| `source_type` | enum: `invoice` `credit_note` `customer_receipt` `purchase_bill` `vendor_payment` `expense` `payroll` `statutory` `bank_charge` `bank_interest` `loan_emi` `loan_drawdown` `internal_transfer` `gateway_settlement` `card_statement` `expense_claim` `depreciation` `accrual` `opening_balance` `monthly_summary` `manual` | `eq` `in` |
+| `source_id` | string | `eq` `in` |
+| `status` | enum: `posted` `reversed` | `eq` `in` |
+| `entry_date` | date (YYYY-MM-DD) | `eq` `gte` `lte` `gt` `lt` |
+| `posted_at` | timestamp (YYYY-MM-DD or ISO 8601 with Z/offset) | `eq` `gte` `lte` `gt` `lt` |
+| `posted_by` | string | `eq` `in` |
+| `approved_by` | string | `eq` `in` |
+| `total_debit` | number | `eq` `gte` `lte` `gt` `lt` |
+| `total_credit` | number | `eq` `gte` `lte` `gt` `lt` |
+| `reversal_of` | string | `eq` `in` |
+
+**Sort by:** `entry_date`, `posted_at`, `entry_number`, `total_debit` — default `entry_date`, newest first.
 
 ---
 

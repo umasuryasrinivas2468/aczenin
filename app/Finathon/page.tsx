@@ -36,7 +36,7 @@ const archivo = Archivo({
 
 const PAGE_TITLE = "Finathon 2026 — 36-Hour Fintech Hackathon by Aczen at MLRIT";
 const PAGE_DESCRIPTION =
-  "Finathon is Aczen's 36-hour hiring hackathon at MLR Institute of Technology, Hyderabad, 30 September to 1 October 2026. Three tracks: finance, CRM and HRM. Open to third and fourth year students from any college in Telangana. Standout builders are offered a paid internship at Aczen.";
+  "Finathon is Aczen's 36-hour hiring hackathon at MLR Institute of Technology, Hyderabad, 30 September to 1 October 2026. Three tracks: finance, CRM and HRM. Open only to 3rd year students of MLRIT. Standout builders are offered a paid internship at Aczen.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,

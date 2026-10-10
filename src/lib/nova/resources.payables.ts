@@ -8,7 +8,7 @@
 
 // Shared types and field shorthands; fields.ts imports nothing, so no cycle
 // (importing resources.ts here would be circular — it imports this file).
-import { bool, code, date, number, oneOf, text, type Resource } from "./fields.ts";
+import { bool, code, date, number, oneOf, text, timestamp, type Resource } from "./fields.ts";
 
 // GET /vendor-bank-accounts — a vendor's bank-account history, one row per validity window.
 const VENDOR_BANK_ACCOUNTS: Resource = {
@@ -58,8 +58,8 @@ const VENDOR_PAYMENTS: Resource = {
     // Maker and checker, for segregation-of-duties queries.
     initiated_by: code,
     approved_by: code,
-    // timestamptz filtered by YYYY-MM-DD; PostgREST casts the date to midnight.
-    initiated_at: date,
+    // timestamptz: a YYYY-MM-DD value matches that whole UTC day, not midnight.
+    initiated_at: timestamp,
     // Outcome; failed and reversed rows never settled.
     status: oneOf(["success", "failed", "reversed"]),
     // Link to the bank statement line (filled by the banking seed).
@@ -84,8 +84,8 @@ const APPROVALS: Resource = {
     action: oneOf(["approve", "reject", "escalate"]),
     // Who acted.
     actor_id: code,
-    // When; date-granular filter on a timestamptz, as above.
-    acted_at: date,
+    // When; timestamptz, so day-widened like initiated_at.
+    acted_at: timestamp,
     // The actor's approval limit that applied; compare with the document amount.
     threshold_applied: number,
   },
@@ -107,8 +107,8 @@ const MASTER_DATA_CHANGES: Resource = {
     // Maker and (optional) checker.
     changed_by: code,
     approved_by: code,
-    // When the change was made.
-    changed_at: date,
+    // When the change was made; timestamptz, day-widened like initiated_at.
+    changed_at: timestamp,
   },
   sort: ["changed_at", "field"],
   defaultSort: "changed_at",

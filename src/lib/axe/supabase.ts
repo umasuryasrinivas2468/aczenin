@@ -62,7 +62,10 @@ export type AxeTable =
   // the one table in this group that carries nothing identifying.
   | "finathon_register_attempt"
   // Which team picked which challenge. Read for per-track seat counts only.
-  | "finathon_challenge_claim";
+  | "finathon_challenge_claim"
+  // Job applications from /careers. Personal data (name, email, phone), so the
+  // same describeFailure discipline applies.
+  | "career_application";
 
 /*
   A write failure, carrying the SQLSTATE separately from the message.

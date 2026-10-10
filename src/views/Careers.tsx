@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import ApplicationForm from "@/components/careers/ApplicationForm";
 import {
   Carousel,
   CarouselContent,
@@ -73,6 +74,12 @@ const Careers = () => {
               <p className="text-lg text-gray-600 mb-8">
                 At Aczen, we believe in empowering businesses with cutting-edge solutions. Our team is growing, and we're looking for talented individuals who want to be part of this journey.
               </p>
+              <a
+                href="#apply"
+                className="inline-block bg-[#ff914d] hover:bg-[#f57f35] text-white font-bold py-3 px-10 rounded-md transition-colors"
+              >
+                Apply Now
+              </a>
             </div>
             <div className="md:w-1/2">
               <img
@@ -172,19 +179,18 @@ const Careers = () => {
         </section>
 
         {/* Call to Action */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl text-white text-center">
-          <h2 className="text-4xl font-bold mb-4">Ready to Make an Impact?</h2>
-          <p className="text-xl mb-8 text-red-50">
-            If you don't see a perfect match, we'd still love to hear from you. Send us your resume and let's explore opportunities together.
-          </p>
-          <a 
-            href="https://tally.so/r/3XB2PO" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-block bg-white text-red-600 hover:bg-red-50 font-bold py-4 px-12 rounded-md uppercase tracking-wide transition-colors"
-          >
-            Apply Now
-          </a>
+        <section id="apply" className="container mx-auto px-4 scroll-mt-28">
+          <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-[#ff914d] to-[#2e77ff] px-6 md:px-10 py-8 text-white">
+              <h2 className="text-3xl md:text-4xl font-bold mb-2">Ready to Make an Impact?</h2>
+              <p className="text-white/90">
+                Tell us about yourself and what you've built. We read every application.
+              </p>
+            </div>
+            <div className="px-6 md:px-10 py-8">
+              <ApplicationForm />
+            </div>
+          </div>
         </section>
 
         {/* Culture Section */}

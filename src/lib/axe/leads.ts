@@ -74,7 +74,7 @@ const PAGE_SIZE = 50;
   the PostgREST analogue of SQL injection — it cannot reach raw SQL through
   PostgREST, but it can still change which rows come back.
 */
-function escapeFilterValue(term: string): string {
+export function escapeFilterValue(term: string): string {
   return (
     term
       // TRUNCATED FIRST, THEN ESCAPED — the order matters. Escaping first and

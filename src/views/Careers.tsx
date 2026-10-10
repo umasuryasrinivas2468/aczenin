@@ -6,13 +6,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import ApplicationForm from "@/components/careers/ApplicationForm";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
 
 const Careers = () => {
   const benefits = [
@@ -63,8 +56,8 @@ const Careers = () => {
 
         {/* Hero Section */}
         <section className="container mx-auto px-4 mb-16">
-          <div className="flex flex-col md:flex-row gap-12 items-center">
-            <div className="md:w-1/2">
+          <div className="max-w-3xl mx-auto text-center">
+            <div>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 Join Our Team
               </h1>
@@ -80,13 +73,6 @@ const Careers = () => {
               >
                 Apply Now
               </a>
-            </div>
-            <div className="md:w-1/2">
-              <img
-                src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1761177600&v=beta&t=bR3Mmhfbl9B69wGPt5vAYUdwCYIQWLsvyOw-5duYs98" 
-                alt="Team"
-                className="rounded-lg shadow-xl w-full"
-              />
             </div>
           </div>
         </section>
@@ -106,75 +92,6 @@ const Careers = () => {
                 <p className="text-gray-600">{benefit.description}</p>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Life at Aczen */}
-        <section className="container mx-auto px-4 mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Life at Aczen</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Get a glimpse into our vibrant workplace culture and see what it's like to be part of the Aczen family.
-            </p>
-          </div>
-          <div className="relative px-12">
-            <Carousel
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-              className="w-full"
-            >
-              <CarouselContent>
-                <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
-                    <img
-                      src="https://media.licdn.com/dms/image/v2/D5622AQHVM2fPE9-cEw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1730377880596?e=1761177600&v=beta&t=bR3Mmhfbl9B69wGPt5vAYUdwCYIQWLsvyOw-5duYs98"
-                      alt="Team collaboration"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </CarouselItem>
-                <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
-                    <img
-                      src="https://media.licdn.com/dms/image/v2/D5622AQE8JP5bQuO5JA/feedshare-shrink_1280/feedshare-shrink_1280/0/1688715217408?e=1761177600&v=beta&t=hQzvPFD9Wd6QZawT6P8n3XLauc0Nql2e8HPZeydI-sM"
-                      alt="Team meeting"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </CarouselItem>
-                <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
-                    <img
-                      src="https://media.licdn.com/dms/image/v2/D4E22AQGJ1_wbVotLLg/feedshare-shrink_800/B4EZVx0uoaGYAk-/0/1741371404086?e=1761177600&v=beta&t=CWYUNg79c_MTWh0g0XWu_TuKGZrz763fs2LgAkZPKMM"
-                      alt="Office space"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </CarouselItem>
-                <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
-                    <img
-                      src="https://media.licdn.com/dms/image/v2/D5622AQHd6LWc_SfL2g/feedshare-shrink_1280/feedshare-shrink_1280/0/1725199566804?e=1761177600&v=beta&t=ph1tXzQR9or_fg07u5HHVAW7tGX2L-ixxPQ_pViHn4Q"
-                      alt="Team building"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </CarouselItem>
-                <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="rounded-lg overflow-hidden shadow-lg h-80">
-                    <img
-                      src="https://media.licdn.com/dms/image/v2/D5622AQFCCpmcJsFmew/feedshare-shrink_1280/feedshare-shrink_1280/0/1729187811377?e=1761177600&v=beta&t=jsdnz7L4Lqk8F-VVfSi7s3wj9k2VoLZ-Sm1K8NQ12mY"
-                      alt="Office culture"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
           </div>
         </section>
 

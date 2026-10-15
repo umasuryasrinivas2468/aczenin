@@ -47,6 +47,8 @@ const CANONICAL_CHILDREN: Record<string, string> = {
   axe: "axe",
   // The first-come-first-served challenge picker, /Finathon/challenges.
   challenges: "challenges",
+  // Open roles and job descriptions, /Finathon/careers.
+  careers: "careers",
 };
 
 /*

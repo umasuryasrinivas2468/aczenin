@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { hasAxeSession } from "@/lib/axe/guard";
 import { getApplications } from "@/lib/careers/applications";
+import { findRole } from "@/lib/careers/roles";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -74,7 +75,7 @@ export default async function AxeCareersPage({
             id="axe-careers-q"
             name="q"
             defaultValue={q ?? ""}
-            placeholder="Name, email or skill"
+            placeholder="Name, email, skill or role ID"
           />
         </div>
         <Button type="submit" variant="secondary">
@@ -103,6 +104,11 @@ export default async function AxeCareersPage({
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
                       <h2 className="text-base font-semibold">{app.full_name}</h2>
+                      <p className="mt-0.5 text-xs font-medium text-muted-foreground">
+                        {app.role_id
+                          ? `${app.role_id} · ${findRole(app.role_id)?.title ?? "Retired role"}`
+                          : "General application"}
+                      </p>
                       <div className="mt-0.5 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
                         <a href={`mailto:${app.email}`} className="break-all hover:text-foreground hover:underline">
                           {app.email}

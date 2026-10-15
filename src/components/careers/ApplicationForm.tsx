@@ -22,16 +22,24 @@ const EMPTY: Record<Field, string> = {
   skills: "",
   projects: "",
   resumeUrl: "",
+  roleId: "",
 };
 
-const ApplicationForm = () => {
-  const [values, setValues] = useState(EMPTY);
+type ApplicationFormProps = {
+  // When given, the form shows a role picker and submits the chosen role ID.
+  // The general /careers page passes nothing and submits no role.
+  roles?: { id: string; title: string }[];
+  defaultRoleId?: string;
+};
+
+const ApplicationForm = ({ roles, defaultRoleId }: ApplicationFormProps) => {
+  const [values, setValues] = useState({ ...EMPTY, roleId: defaultRoleId ?? "" });
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const [formError, setFormError] = useState("");
   const [status, setStatus] = useState<Status>("idle");
 
   const update = (field: Field) => (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     setValues((prev) => ({ ...prev, [field]: event.target.value }));
     // Clear a field's error as soon as the applicant starts fixing it.
@@ -43,9 +51,11 @@ const ApplicationForm = () => {
     setFormError("");
 
     const parsed = careerApplicationSchema.safeParse(values);
-    if (parsed.success === false) {
+    const roleMissing = Boolean(roles?.length) && !values.roleId;
+    if (parsed.success === false || roleMissing) {
       const next: Partial<Record<Field, string>> = {};
-      for (const issue of parsed.error.issues) {
+      if (roleMissing) next.roleId = "Choose the role you are applying for.";
+      for (const issue of parsed.success ? [] : parsed.error.issues) {
         const field = issue.path[0] as Field;
         if (!next[field]) next[field] = issue.message;
       }
@@ -110,6 +120,24 @@ const ApplicationForm = () => {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
+      {roles && roles.length > 0 ? (
+        <div>
+          <Label htmlFor="roleId">Role applying for *</Label>
+          <select
+            {...a11y("roleId")}
+            className={`mt-1.5 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${fieldClass("roleId")}`}
+          >
+            <option value="">Select a role</option>
+            {roles.map((role) => (
+              <option key={role.id} value={role.id}>
+                {role.title} — {role.id}
+              </option>
+            ))}
+          </select>
+          {renderError("roleId")}
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
           <Label htmlFor="fullName">Full name *</Label>

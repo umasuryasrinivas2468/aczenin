@@ -85,6 +85,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       skills: application.skills,
       projects: application.projects,
       resume_url: application.resumeUrl,
+      role_id: application.roleId || null,
       ip_hash: ipHash,
     });
 

@@ -6,6 +6,8 @@
 
 import { z } from "zod";
 
+import { ROLE_IDS } from "@/lib/careers/roles";
+
 export const careerApplicationSchema = z.object({
   fullName: z
     .string()
@@ -40,6 +42,13 @@ export const careerApplicationSchema = z.object({
     .max(500, "Link is too long.")
     .url("Enter a full link, starting with https://")
     .refine((value) => /^https?:\/\//i.test(value), "Link must start with http:// or https://"),
+  // Optional: the general /careers form has no role picker, so "" or absent
+  // means a general application. When present it must be a published role ID.
+  roleId: z
+    .string()
+    .trim()
+    .optional()
+    .refine((value) => !value || ROLE_IDS.includes(value), "Choose one of the open roles."),
 });
 
 export type CareerApplication = z.infer<typeof careerApplicationSchema>;

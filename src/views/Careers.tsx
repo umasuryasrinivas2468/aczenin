@@ -10,10 +10,6 @@ import ApplicationForm from "@/components/careers/ApplicationForm";
 const Careers = () => {
   const benefits = [
     {
-      title: "Competitive Salary",
-      description: "We offer industry-competitive compensation packages."
-    },
-    {
       title: "Health & Wellness",
       description: "Comprehensive health insurance and wellness programs for you and your family."
     },

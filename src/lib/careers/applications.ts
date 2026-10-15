@@ -14,7 +14,7 @@ if (typeof window !== "undefined") {
   throw new Error("src/lib/careers/applications.ts is server-only and must never reach the browser.");
 }
 
-const COLUMNS = ["id", "submitted_at", "full_name", "email", "phone", "skills", "projects", "resume_url"];
+const COLUMNS = ["id", "submitted_at", "full_name", "email", "phone", "skills", "projects", "resume_url", "role_id"];
 
 export type ApplicationRecord = {
   id: number;
@@ -25,6 +25,7 @@ export type ApplicationRecord = {
   skills: string;
   projects: string;
   resume_url: string;
+  role_id: string | null;
 };
 
 export type ApplicationPage = {
@@ -55,7 +56,7 @@ export async function getApplications(q?: string, page = 1): Promise<Application
     const value = escapeFilterValue(term);
     params.set(
       "or",
-      `(full_name.ilike.*${value}*,email.ilike.*${value}*,skills.ilike.*${value}*)`,
+      `(full_name.ilike.*${value}*,email.ilike.*${value}*,skills.ilike.*${value}*,role_id.ilike.*${value}*)`,
     );
   }
 

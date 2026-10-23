@@ -30,10 +30,13 @@ if (typeof window !== "undefined") {
 /*
   A distinct cookie name, so the two gates hold independent sessions.
 
-  If both used AXE_COOKIE_NAME, passing either password would open both
-  dashboards — the cookie carries only an expiry and a signature, with nothing
-  in it that says which gate issued it. Separate names are what keep the two
-  sessions from being interchangeable.
+  The name alone is NOT what keeps the two sessions apart — it used to be,
+  and that was a vulnerability. A cookie name is not signed, so anyone could
+  rename fin_session to axe_session in DevTools and open the founder analytics
+  dashboard; httpOnly stops JavaScript reading a cookie, not a person editing
+  one. The gate is now bound INTO the signed payload (see SessionGate in
+  @/lib/axe/session), so the name is a convenience and the signature is the
+  control.
 */
 export const FINATHON_COOKIE_NAME = "fin_session";
 
@@ -61,5 +64,5 @@ export function verifyFinathonPassword(submitted: string): boolean {
 export async function hasFinathonSession(): Promise<boolean> {
   // Awaited: cookies() is async in Next 15.
   const cookieStore = await cookies();
-  return verifySessionCookie(cookieStore.get(FINATHON_COOKIE_NAME)?.value);
+  return verifySessionCookie("finathon", cookieStore.get(FINATHON_COOKIE_NAME)?.value);
 }

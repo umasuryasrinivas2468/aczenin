@@ -112,6 +112,12 @@ export default function AxeBeacon() {
       return;
     }
 
+    // Aczen AI Studio is a signed-in developer console, not marketing traffic,
+    // and its admin path should not appear in anyone's top-pages table.
+    if (pathname === "/ai-studio" || pathname.startsWith("/ai-studio/")) {
+      return;
+    }
+
     // The guard itself. Identical URL means this is a re-run, not a new
     // pageview, and a re-run must not produce a row.
     if (lastReported.current === url) {

@@ -28,13 +28,31 @@ const HIDDEN_ON: string[] = [
   // The Finathon campaign page is a single-call-to-action page; a second
   // floating button competing for the same corner works against it.
   "/finathon",
+  // The Nova developer portal and its admin (/nova-api/axe): an app shell with
+  // its own sidebar, where a marketing chat bubble would cover the sign-out
+  // row and the key table. Listed here so the third-party script is not even
+  // loaded, rather than loaded and hidden with CSS.
+  "/nova-api",
+  // A third-party widget has no business on pages that display API keys, and
+  // the studio's CSP would block it anyway.
+  "/ai-studio",
 ];
 
 // Compared case-insensitively: the canonical route is "/Finathon", and a
 // case-sensitive list would silently stop matching if that spelling ever
 // changed again.
-const isHidden = (pathname: string | null) =>
-  Boolean(pathname) && HIDDEN_ON.includes(pathname!.toLowerCase());
+// Matched as a PREFIX, not an exact string. The old exact match meant only
+// /finathon itself was covered, so the widget reappeared on
+// /Finathon/register — a payment page, where a floating chat bubble sits over
+// the submit button and competes with the one action that matters. The whole
+// campaign subtree opts out, including the admin dashboard underneath it.
+const isHidden = (pathname: string | null) => {
+  if (!pathname) return false;
+  const lower = pathname.toLowerCase();
+  // Either the route itself, or anything nested below it. Compared with a
+  // trailing slash so "/finathon-results" would NOT match "/finathon".
+  return HIDDEN_ON.some((route) => lower === route || lower.startsWith(route + "/"));
+};
 
 /* The ids Chatbase gives its own injected nodes, confirmed by inspecting the
    live page rather than taken from documentation. */

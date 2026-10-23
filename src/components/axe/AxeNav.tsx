@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 const SECTIONS = [
   { href: "/axe", label: "Overview" },
   { href: "/axe/leads", label: "Leads" },
+  { href: "/axe/careers", label: "Careers" },
 ];
 
 export default function AxeNav() {

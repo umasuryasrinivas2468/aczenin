@@ -1,0 +1,27 @@
+# Dependabot config schema v2 — the only version GitHub accepts
+version: 2
+# One entry per package ecosystem Dependabot should watch
+updates:
+  # This repo is npm-managed (package-lock.json), so Dependabot uses the npm updater
+  - package-ecosystem: "npm"
+    # package.json and package-lock.json live at the repo root
+    directory: "/"
+    # Open PRs against main, not the repo's current default branch (nextjs-migration)
+    target-branch: "main"
+    # Weekly keeps PR noise low for a small team while still catching security fixes
+    schedule:
+      # Batch update checks once a week
+      interval: "weekly"
+    # Cap open PRs so a backlog of updates can't flood the PR list
+    open-pull-requests-limit: 5
+    # Group minor/patch bumps into one PR; majors stay separate because they can break the build
+    groups:
+      # Single PR name for all low-risk bumps
+      minor-and-patch:
+        # Match every dependency
+        patterns:
+          - "*"
+        # Only non-breaking update types go in the group
+        update-types:
+          - "minor"
+          - "patch"
